@@ -1,2 +1,3 @@
-# Local config — contains real credentials, do NOT commit
+# Local config — contains real Cloudinary credentials
+# GitHub Actions will inject these during deployment
 config.js
