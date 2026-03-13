@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>eDM Tool Suite — Advantech IoTMart</title>
+  <style>
+    .mi { font-family: 'Material Symbols Outlined'; font-size: 18px; vertical-align: -4px; margin-right: 4px; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; }
+    .top-bar .mi { font-size: 22px; vertical-align: -5px; }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5; color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Thin Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+    * { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.15) transparent; }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #ffffff; color: #1a1a2e; padding: 0 32px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0,0,0,.08); border-bottom: 1px solid #e5e7eb;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
+    .top-bar-logo { height: 20px; display: block; }
+    .top-bar-divider { width: 1px; height: 24px; background: #e0e0e0; }
+    .top-bar h1 { font-size: 15px; font-weight: 700; color: #333; letter-spacing: .3px; }
+
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Language Switcher ── */
+    .lang-switcher { position: relative; }
+    .lang-switcher-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 6px 12px; font-size: 13px; font-weight: 500; cursor: pointer;
+      color: #555; font-family: inherit; transition: all .15s;
+    }
+    .lang-switcher-btn:hover { background: #eee; border-color: #ccc; }
+    .lang-switcher-dropdown {
+      display: none; position: absolute; top: 100%; right: 0; margin-top: 4px;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.12); min-width: 150px;
+      padding: 4px; z-index: 1001;
+    }
+    .lang-switcher.open .lang-switcher-dropdown { display: block; }
+    .lang-option {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 8px 12px; border: none; background: none;
+      font-size: 13px; cursor: pointer; border-radius: 6px; font-family: inherit;
+      color: #333; transition: background .1s;
+    }
+    .lang-option:hover { background: #f5f5f5; }
+    .lang-option .mi { font-size: 16px; margin-right: 0; color: transparent; }
+    .lang-option.active { font-weight: 600; }
+    .lang-option.active .mi { color: #0059ff; }
+
+    /* ── Hero Section ── */
+    .hero {
+      text-align: center;
+      padding: 80px 32px 40px;
+    }
+    .hero h2 {
+      font-size: 32px; font-weight: 800; color: #1a1a2e;
+      margin-bottom: 12px; letter-spacing: -.5px;
+    }
+    .hero p {
+      font-size: 15px; color: #888; max-width: 520px; margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Tool Cards Grid ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 28px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 32px 80px;
+    }
+
+    .tool-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      transition: all .25s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.1);
+      border-color: #d0d5dd;
+    }
+
+    .tool-card-icon {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card-icon .mi {
+      font-size: 56px;
+      margin: 0;
+      color: #fff;
+      opacity: .95;
+    }
+
+    .tool-card-icon.blue {
+      background: linear-gradient(135deg, #0059ff 0%, #4d8cff 100%);
+    }
+    .tool-card-icon.orange {
+      background: linear-gradient(135deg, #F39800 0%, #f5b342 100%);
+    }
+
+    /* floating decorative shapes */
+    .tool-card-icon::before,
+    .tool-card-icon::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: .12;
+      background: #fff;
+    }
+    .tool-card-icon::before {
+      width: 200px; height: 200px;
+      top: -60px; right: -40px;
+    }
+    .tool-card-icon::after {
+      width: 120px; height: 120px;
+      bottom: -30px; left: -20px;
+    }
+
+    .tool-card-body {
+      padding: 24px 28px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .tool-card-body h3 {
+      font-size: 18px; font-weight: 700; color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+    .tool-card-body p {
+      font-size: 13px; color: #888; line-height: 1.6;
+      flex: 1;
+    }
+
+    .tool-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0059ff;
+    }
+    .tool-card.orange-card .tool-card-footer { color: #e57b03; }
+
+    .tool-card-footer .mi {
+      font-size: 16px;
+      margin: 0;
+      transition: transform .2s;
+    }
+    .tool-card:hover .tool-card-footer .mi {
+      transform: translateX(4px);
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center;
+      padding: 24px 32px;
+      font-size: 12px;
+      color: #bbb;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .tools-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .hero h2 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
+    <span class="top-bar-divider"></span>
+    <h1 data-i18n="topbar.title">eDM Tool Suite</h1>
+  </div>
+  <div class="top-bar-right">
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-switcher-btn" onclick="toggleLangDropdown()">
+        <span id="currentLangLabel">English</span>
+        <span class="mi">expand_more</span>
+      </button>
+      <div class="lang-switcher-dropdown" id="langDropdown">
+        <button class="lang-option active" data-lang="en" onclick="setLanguage('en')">
+          <span class="lang-name">English</span>
+          <span class="mi">check</span>
+        </button>
+        <button class="lang-option" data-lang="zh-TW" onclick="setLanguage('zh-TW')">
+          <span class="lang-name">繁體中文</span>
+          <span class="mi">check</span>
+        </button>
+        <button class="lang-option" data-lang="ko" onclick="setLanguage('ko')">
+          <span class="lang-name">한국어</span>
+          <span class="mi">check</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hero Section ── -->
+<div class="hero">
+  <h2 data-i18n="home.title">eDM Tool Suite</h2>
+  <p data-i18n="home.subtitle">Choose a tool to build and customise your email campaigns.</p>
+</div>
+
+<!-- ── Tool Cards ── -->
+<div class="tools-grid">
+
+  <!-- Component Customizer -->
+  <a class="tool-card" href="ComponentCustomizer.html">
+    <div class="tool-card-icon blue">
+      <span class="mi">dashboard_customize</span>
+    </div>
+    <div class="tool-card-body">
+      <h3 data-i18n="home.comp.title">Component Customizer</h3>
+      <p data-i18n="home.comp.desc">Browse, customize, and compose eDM components with drag-and-drop. Adjust colors, text, images, and export production-ready HTML.</p>
+      <div class="tool-card-footer">
+        <span data-i18n="home.open">Open Tool</span>
+        <span class="mi">arrow_forward</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- Newsletter Customizer -->
+  <a class="tool-card orange-card" href="NewsletterCustomizer.html">
+    <div class="tool-card-icon orange">
+      <span class="mi">newspaper</span>
+    </div>
+    <div class="tool-card-body">
+      <h3 data-i18n="home.news.title">Newsletter Customizer</h3>
+      <p data-i18n="home.news.desc">Design and customise newsletter emails with articles, insights, and data center sections. Inline-edit content and export complete HTML.</p>
+      <div class="tool-card-footer">
+        <span data-i18n="home.open">Open Tool</span>
+        <span class="mi">arrow_forward</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<!-- ── Footer ── -->
+<div class="page-footer">
+  Advantech IoTMart · eDM Tool Suite · Internal Use
+</div>
+
+<script>
+// ══════════════════════════════════════
+// i18n — Lightweight for Landing Page
+// ══════════════════════════════════════
+let currentLang = 'en';
+
+const TRANSLATIONS = {
+  'en': {
+    'topbar.title': 'eDM Tool Suite',
+    'home.title': 'eDM Tool Suite',
+    'home.subtitle': 'Choose a tool to build and customise your email campaigns.',
+    'home.comp.title': 'Component Customizer',
+    'home.comp.desc': 'Browse, customise, and compose eDM components with drag-and-drop. Adjust colors, text, images, and export production-ready HTML.',
+    'home.news.title': 'Newsletter Customizer',
+    'home.news.desc': 'Design and customise newsletter emails with articles, insights, and data center sections. Inline-edit content and export complete HTML.',
+    'home.open': 'Open Tool',
+  },
+  'zh-TW': {
+    'topbar.title': 'eDM 工具集',
+    'home.title': 'eDM 工具集',
+    'home.subtitle': '選擇工具來建立和自訂您的電子郵件行銷內容。',
+    'home.comp.title': '元件自訂工具',
+    'home.comp.desc': '瀏覽、自訂和組合 eDM 元件，支援拖放操作。可調整顏色、文字、圖片，並匯出正式 HTML。',
+    'home.news.title': '電子報自訂工具',
+    'home.news.desc': '設計和自訂電子報郵件，包含文章、趨勢觀點和數據中心區塊。支援即時編輯內容並匯出完整 HTML。',
+    'home.open': '開啟工具',
+  },
+  'ko': {
+    'topbar.title': 'eDM 도구 모음',
+    'home.title': 'eDM 도구 모음',
+    'home.subtitle': '이메일 캠페인을 구축하고 맞춤 설정할 도구를 선택하세요.',
+    'home.comp.title': '컴포넌트 커스터마이저',
+    'home.comp.desc': '드래그 앤 드롭으로 eDM 컴포넌트를 탐색, 맞춤 설정 및 조합하세요. 색상, 텍스트, 이미지를 조정하고 프로덕션 HTML을 내보내세요.',
+    'home.news.title': '뉴스레터 커스터마이저',
+    'home.news.desc': '기사, 인사이트 및 데이터 센터 섹션이 포함된 뉴스레터 이메일을 디자인하고 맞춤 설정하세요. 콘텐츠를 인라인 편집하고 완전한 HTML을 내보내세요.',
+    'home.open': '도구 열기',
+  }
+};
+
+function t(key) {
+  const dict = TRANSLATIONS[currentLang] || TRANSLATIONS['en'];
+  return dict[key] || TRANSLATIONS['en'][key] || key;
+}
+
+function applyStaticTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+}
+
+function toggleLangDropdown() {
+  document.getElementById('langSwitcher').classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const sw = document.getElementById('langSwitcher');
+  if (sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+
+function setLanguage(lang) {
+  currentLang = lang;
+  const labels = { 'en': 'English', 'zh-TW': '繁體中文', 'ko': '한국어' };
+  document.getElementById('currentLangLabel').textContent = labels[lang] || 'English';
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === lang);
+  });
+  document.getElementById('langSwitcher').classList.remove('open');
+  applyStaticTranslations();
+  document.documentElement.lang = lang === 'zh-TW' ? 'zh-TW' : lang === 'ko' ? 'ko' : 'en';
+  if (lang === 'ko') {
+    document.body.style.fontFamily = "'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  } else {
+    document.body.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  }
+}
+
+applyStaticTranslations();
+</script>
+
+</body>
+</html>

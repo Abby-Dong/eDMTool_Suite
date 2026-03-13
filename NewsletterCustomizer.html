@@ -1,0 +1,3036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>eDM Component Customizer</title>
+  <style>
+    .mi { font-family: 'Material Symbols Outlined'; font-size: 18px; vertical-align: -4px; margin-right: 4px; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; }
+    .top-bar .mi { font-size: 22px; vertical-align: -5px; }
+    .toast .mi { font-size: 16px; vertical-align: -3px; }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5; color: #1a1a2e;
+      min-width: 1350px;
+    }
+
+    /* ── Thin Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+    * { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.15) transparent; }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #ffffff; color: #1a1a2e; padding: 0 32px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0,0,0,.08); border-bottom: 1px solid #e5e7eb;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
+    .top-bar-logo { height: 20px; display: block; }
+    .top-bar-divider { width: 1px; height: 24px; background: #e0e0e0; }
+    .top-bar h1 { font-size: 15px; font-weight: 700; color: #333; letter-spacing: .3px; }
+    .top-bar .subtitle { font-size: 11px; color: #999; }
+    .top-bar .badge {
+      background: #f0f2f5; color: #888; font-size: 10px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px;
+    }
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+
+    [contenteditable="true"] {
+      outline: 1px dashed transparent; transition: outline-color .15s;
+      cursor: text !important; min-height: 1em;
+    }
+    [contenteditable="true"]:hover { outline-color: rgba(0,89,255,.35); }
+    [contenteditable="true"]:focus {
+      outline: 2px solid #0059ff; outline-offset: 2px; border-radius: 2px;
+    }
+    img[data-editable] {
+      cursor: pointer; transition: outline .15s;
+      outline: 2px solid transparent;
+    }
+    img[data-editable]:hover { outline-color: rgba(0,89,255,.4); }
+
+    /* Format Toolbar */
+    .format-bar {
+      position: fixed; z-index: 10001; background: #1a1a2e; border-radius: 8px;
+      padding: 4px; display: none; align-items: center; gap: 2px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .format-bar.visible { display: flex; }
+    .format-bar button {
+      background: none; border: none; color: #fff; cursor: pointer;
+      width: 30px; height: 28px; border-radius: 4px;
+      font-size: 13px; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; transition: background .1s;
+    }
+    .format-bar button:hover { background: rgba(255,255,255,.15); }
+    .format-bar button.active { background: rgba(0,89,255,.5); }
+    .format-bar .sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); margin: 0 2px; }
+    .format-bar .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+
+    /* Image / Link Edit Popover */
+    .edit-popover {
+      position: fixed; z-index: 10002; background: #fff; border-radius: 10px;
+      padding: 14px 16px; box-shadow: 0 8px 30px rgba(0,0,0,.18);
+      display: none; min-width: 280px; max-width: 360px;
+      border: 1px solid #e5e7eb;
+    }
+    .edit-popover.visible { display: block; }
+    .edit-popover-title {
+      font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase;
+      letter-spacing: .5px; margin-bottom: 10px;
+    }
+    .edit-popover-row { margin-bottom: 8px; }
+    .edit-popover-row label {
+      display: block; font-size: 11px; color: #888; font-weight: 600; margin-bottom: 3px;
+    }
+    .edit-popover-row input {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 6px;
+      padding: 7px 10px; font-size: 12px; font-family: 'Inter', sans-serif;
+      box-sizing: border-box; background: #fafafa; color: #333;
+    }
+    .edit-popover-row input:focus {
+      outline: none; border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); background: #fff;
+    }
+    .edit-popover-row input::placeholder { color: #d0d0d0; }
+    .edit-popover-row input[type="url"] {
+      font-family: 'SF Mono','Menlo','Consolas',monospace; font-size: 10px;
+    }
+    .edit-popover-preview {
+      margin-bottom: 10px; border-radius: 6px; overflow: hidden;
+      background: #f5f5f5; border: 1px solid #e5e7eb;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 60px; max-height: 140px;
+    }
+    .edit-popover-preview img {
+      max-width: 100%; max-height: 140px; object-fit: contain; display: block;
+    }
+    .edit-popover-preview .preview-placeholder {
+      color: #bbb; font-size: 11px; padding: 16px; text-align: center;
+    }
+    .preview-dimensions {
+      font-size: 10px; color: #999; text-align: center; margin: -6px 0 8px;
+      font-family: 'SF Mono','Menlo','Consolas',monospace; letter-spacing: .3px;
+    }
+    .pop-upload-row {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+    }
+    .pop-upload-btn {
+      flex-shrink: 0; display: flex; align-items: center; gap: 4px;
+      padding: 5px 10px; border-radius: 6px; border: 1px dashed #c5d4ff;
+      background: #f0f4ff; color: #0059ff; font-size: 11px; font-weight: 600;
+      cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+    .pop-upload-btn:hover { background: #dce8ff; border-color: #0059ff; }
+    .pop-upload-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .pop-upload-btn .mi { font-size: 14px; margin-right: 0; }
+    .pop-upload-divider {
+      font-size: 10px; color: #bbb; flex-shrink: 0;
+    }
+    .pop-upload-error {
+      font-size: 10px; color: #e03131; margin: -4px 0 6px; min-height: 0;
+      display: none;
+    }
+    .pop-upload-error.visible { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .edit-popover-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 10px; }
+    .pop-cancel, .pop-save {
+      padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      cursor: pointer; border: none; transition: all .12s; font-family: 'Inter', sans-serif;
+    }
+    .pop-cancel { background: #f0f0f0; color: #666; }
+    .pop-cancel:hover { background: #e0e0e0; }
+    .pop-save { background: #0059ff; color: #fff; }
+    .pop-save:hover { background: #003fcc; }
+
+    /* Crop Modal */
+    #cropModal { display:none; position:fixed; inset:0; background:rgba(7,7,26,0.6); z-index:99999; align-items:center; justify-content:center; }
+    #cropModal.visible { display:flex; }
+    .crop-modal-box {
+      background:#fff; border-radius:10px; padding:0;
+      max-width:680px; width:90vw;
+      box-shadow:0 8px 40px rgba(0,0,0,.22);
+      border:1px solid #e5e7eb;
+      overflow:hidden;
+    }
+    .crop-modal-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px 10px;
+      border-bottom:1px solid #f0f0f0;
+    }
+    .crop-modal-title {
+      font-size:11px; font-weight:700; color:#999;
+      text-transform:uppercase; letter-spacing:.5px; margin:0;
+    }
+    .crop-modal-close {
+      background:none; border:none; cursor:pointer;
+      color:#bbb; font-size:16px; padding:0; line-height:1;
+      display:flex; align-items:center;
+    }
+    .crop-modal-close:hover { color:#555; }
+    .crop-modal-body { padding:14px 16px; }
+    .crop-stage { position:relative; overflow:hidden; background:#f5f5f5; border-radius:6px; border:1px solid #e5e7eb; line-height:0; user-select:none; }
+    #cropSourceImg { display:block; max-width:100%; max-height:52vh; margin:0 auto; }
+    .crop-box { position:absolute; border:2px solid #F39800; cursor:move; box-sizing:border-box; box-shadow:0 0 0 9999px rgba(0,0,0,0.45); }
+    .crop-modal-footer {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 16px 14px;
+    }
+    .crop-hint { font-size:10px; color:#bbb; font-family:"Inter",sans-serif; }
+    .crop-handle { position:absolute; width:9px; height:9px; background:#fff; border:2px solid #F39800; border-radius:1px; box-sizing:border-box; z-index:10; }
+    .crop-handle[data-handle="nw"] { top:-5px; left:-5px; cursor:nw-resize; }
+    .crop-handle[data-handle="n"]  { top:-5px; left:calc(50% - 4px); cursor:n-resize; }
+    .crop-handle[data-handle="ne"] { top:-5px; right:-5px; cursor:ne-resize; }
+    .crop-handle[data-handle="e"]  { top:calc(50% - 4px); right:-5px; cursor:e-resize; }
+    .crop-handle[data-handle="se"] { bottom:-5px; right:-5px; cursor:se-resize; }
+    .crop-handle[data-handle="s"]  { bottom:-5px; left:calc(50% - 4px); cursor:s-resize; }
+    .crop-handle[data-handle="sw"] { bottom:-5px; left:-5px; cursor:sw-resize; }
+    .crop-handle[data-handle="w"]  { top:calc(50% - 4px); left:-5px; cursor:w-resize; }
+
+    .detail-sidebar-header {
+      padding: 20px 20px 16px; border-bottom: 1px solid #f0f0f0;
+    }
+    .detail-sidebar-header h3 {
+      font-size: 16px; font-weight: 700; color: #07071a; margin-bottom: 2px;
+    }
+    .detail-sidebar-header .comp-id {
+      font-size: 11px; color: #999; font-weight: 500;
+    }
+    .sidebar-section { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; }
+    .sidebar-section-title {
+      font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase;
+      letter-spacing: .8px; margin-bottom: 12px;
+    }
+    .sidebar-color-ctrl {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0;
+    }
+    .sidebar-color-ctrl .ctrl-label {
+      font-size: 12px; color: #555; font-weight: 500;
+    }
+    .sidebar-color-ctrl .ctrl-swatch {
+      width: 32px; height: 24px; border: 1px solid #ddd; border-radius: 4px;
+      cursor: pointer; transition: box-shadow .15s;
+    }
+    .sidebar-color-ctrl .ctrl-swatch:hover {
+      box-shadow: 0 0 0 2px rgba(0,89,255,.35);
+    }
+    .sidebar-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none; margin-bottom: 12px;
+    }
+    .sidebar-section-header .sidebar-section-title { margin-bottom: 0; }
+    .sidebar-section-header:hover .sidebar-section-title { color: #0059ff; }
+    .sidebar-section-header .section-arrow {
+      font-size: 18px; color: #ccc; transition: color .15s; margin-right: 0;
+    }
+    .sidebar-section-header:hover .section-arrow { color: #0059ff; }
+    .sidebar-section.collapsed .sidebar-section-body { display: none; }
+    .sidebar-section.collapsed .sidebar-section-header { margin-bottom: 0; }
+
+    .sidebar-toggle-ctrl {
+      display: flex; align-items: center; justify-content: space-between; padding: 6px 0;
+    }
+    .sidebar-toggle-ctrl .ctrl-label {
+      font-size: 12px; color: #555; font-weight: 500;
+    }
+    .toggle-switch {
+      position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background: #ddd; border-radius: 20px; transition: .2s;
+    }
+    .toggle-slider:before {
+      position: absolute; content: ""; height: 14px; width: 14px;
+      left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: #0059ff; }
+    .toggle-switch input:checked + .toggle-slider:before { transform: translateX(16px); }
+
+    .sidebar-actions {
+      padding: 16px 20px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .sidebar-actions button {
+      padding: 10px 16px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; display: flex; align-items: center;
+      justify-content: center; gap: 6px; transition: all .15s;
+    }
+    .btn-reset { background: #f0f0f0; color: #666; }
+    .btn-reset:hover { background: #e0e0e0; }
+
+
+    /* Device Toggle (desktop / mobile) */
+    .device-toggle {
+      display: inline-flex; border: 1px solid #e0e0e0; border-radius: 8px;
+      overflow: hidden; margin-left: 8px;
+    }
+    .device-toggle button {
+      background: #fafafa; border: none; cursor: pointer;
+      padding: 5px 10px; font-size: 12px; font-weight: 600; color: #888;
+      display: flex; align-items: center; gap: 3px; transition: all .12s;
+      font-family: inherit;
+    }
+    .device-toggle button .mi { font-size: 16px; margin-right: 0; }
+    .device-toggle button:first-child { border-right: 1px solid #e0e0e0; }
+    .device-toggle button.active { background: #07071a; color: #fff; }
+    .device-toggle button:not(.active):hover { background: #eef3ff; color: #0059ff; }
+
+    .detail-preview-body {
+      padding: 24px; background: #D6D9DD; overflow-x: auto;
+      display: flex; justify-content: center;
+    }
+    .detail-preview-body .inner-wrap {
+      width: 750px; min-width: 750px;
+      transition: width .3s ease, min-width .3s ease;
+    }
+    .detail-preview-body .inner-wrap.mobile-preview {
+      width: 375px; min-width: 375px;
+    }
+
+    /* Code Panel */
+    .code-panel {
+      display: none; flex: 1; overflow: auto;
+      background: #1e1e2e; padding: 20px;
+    }
+    .code-panel.open { display: block; }
+    .code-panel pre {
+      color: #cdd6f4; font-size: 12px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      white-space: pre-wrap; word-break: break-all;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: #07071a; color: #fff; padding: 12px 28px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .3s;
+      pointer-events: none; z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .toast.show { opacity: 1; }
+
+
+    /* ── Custom Color Picker Popup ── */
+    .color-popup-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10000;
+    }
+    .color-popup-overlay.open { display: block; }
+    .color-popup {
+      position: fixed; z-index: 10001;
+      background: #fff; border-radius: 12px; padding: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+      width: 320px; max-height: 480px; overflow-y: auto;
+      display: none;
+    }
+    .color-popup.open { display: block; }
+
+    .brand-group { margin-bottom: 10px; }
+    .brand-group-label {
+      font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase;
+      letter-spacing: .5px; margin-bottom: 6px;
+    }
+    .brand-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+    .brand-swatch {
+      width: 32px; height: 32px; border-radius: 6px; cursor: pointer;
+      border: 2px solid transparent; transition: all .12s;
+      position: relative;
+    }
+    .brand-swatch:hover { transform: scale(1.15); border-color: #0059ff; z-index: 1; }
+    .brand-swatch.active { border-color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.3); }
+    .brand-swatch[data-hex="#ffffff"],
+    .brand-swatch[data-hex="#faf3e6"],
+    .brand-swatch[data-hex="#f6f7f9"],
+    .brand-swatch[data-hex="#ffeeee"],
+    .brand-swatch[data-hex="#d0e6d4"],
+    .brand-swatch[data-hex="#fdeacc"],
+    .brand-swatch[data-hex="#fbe0b2"],
+    .brand-swatch[data-hex="#dfebf7"] {
+      border-color: #ddd;
+    }
+    .brand-swatch-tooltip {
+      display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: #222; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px;
+      white-space: nowrap; pointer-events: none;
+    }
+    .brand-swatch:hover .brand-swatch-tooltip { display: block; }
+
+    .popup-divider { border: none; border-top: 1px solid #eee; margin: 12px 0; }
+    .other-color-btn {
+      display: block; width: 100%; padding: 8px; margin-top: 4px;
+      background: #f5f6f8; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 12px; font-weight: 600; color: #555; cursor: pointer;
+      text-align: center; transition: background .12s;
+    }
+    .other-color-btn:hover { background: #eee; }
+
+    /* RGB Picker Panel */
+    .popup-panel { display: none; }
+    .popup-panel.active { display: block; }
+    .rgb-back-btn {
+      display: flex; align-items: center; gap: 4px; background: none; border: none;
+      font-size: 12px; font-weight: 600; color: #0059ff; cursor: pointer;
+      padding: 0 0 12px 0; transition: color .12s;
+    }
+    .rgb-back-btn:hover { color: #003fcc; }
+    .rgb-back-btn .mi { font-size: 18px; margin-right: 2px; }
+    .rgb-preview-strip {
+      width: 100%; height: 48px; border-radius: 8px; border: 1px solid #e0e0e0;
+      margin-bottom: 16px; transition: background-color .1s;
+    }
+    .rgb-slider-group { margin-bottom: 12px; }
+    .rgb-slider-label {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 4px;
+    }
+    .rgb-slider-label span {
+      font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .rgb-slider-label .rgb-val {
+      font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 12px;
+      color: #333; font-weight: 600; min-width: 28px; text-align: right;
+    }
+    .rgb-slider {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+      border-radius: 4px; outline: none; border: none;
+    }
+    .rgb-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; border: 2px solid #ccc;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2); cursor: pointer;
+    }
+    .rgb-slider.r-slider { background: linear-gradient(to right, #000, #f00); }
+    .rgb-slider.g-slider { background: linear-gradient(to right, #000, #0f0); }
+    .rgb-slider.b-slider { background: linear-gradient(to right, #000, #00f); }
+    .rgb-hex-row {
+      display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    }
+    .rgb-hex-row input[type="text"] {
+      flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 14px;
+      text-transform: uppercase; font-weight: 600; color: #333;
+    }
+    .rgb-hex-row input[type="text"]:focus { outline: none; border-color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.15); }
+    .rgb-apply-btn {
+      padding: 8px 18px; background: #0059ff; color: #fff; border: none;
+      border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .12s;
+    }
+    .rgb-apply-btn:hover { background: #003fcc; }
+
+    /* ══════════════════════════════════
+       BUILDER VIEW — Drag & Drop eDM Builder
+       ══════════════════════════════════ */
+    .builder-view { display: block; }
+    
+
+    .builder-layout {
+      display: flex; height: calc(100vh - 56px); overflow: hidden;
+    }
+
+    /* Builder Left Sidebar — Component List */
+    .builder-left {
+      width: 300px; min-width: 300px; background: #fff;
+      border-right: 1px solid #e5e7eb;
+      height: 100%; overflow-y: auto;
+      display: flex; flex-direction: column;
+    }
+    .builder-left-header {
+      padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0;
+    }
+    .builder-left-header h3 {
+      font-size: 14px; font-weight: 700; color: #07071a; margin-bottom: 2px;
+    }
+    .builder-left-header p { font-size: 11px; color: #999; margin: 0; }
+    .builder-comp-list { padding: 8px 10px; flex: 1; overflow-y: auto; }
+    .builder-comp-item {
+      display: flex; align-items: center; gap: 0;
+      border-radius: 8px; cursor: grab; overflow: hidden;
+      border: 1px solid #ebebeb; margin-bottom: 6px;
+      background: #fff; transition: all .15s; user-select: none;
+    }
+    .builder-comp-item:hover { border-color: #c5d4ff; box-shadow: 0 2px 8px rgba(0,89,255,.08); }
+    .builder-comp-item:active { cursor: grabbing; opacity: .7; }
+    /* thumbnail slot */
+    .bci-thumb {
+      width: 88px; min-width: 88px; height: 56px;
+      overflow: hidden; background: #f5f6f8; position: relative; flex-shrink: 0;
+      border-right: 1px solid #ebebeb;
+    }
+    .bci-thumb-inner {
+      position: absolute; top: 0; left: 0;
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    /* right meta area */
+    .bci-meta {
+      flex: 1; min-width: 0; padding: 8px 8px 8px 10px;
+      display: flex; flex-direction: column; justify-content: center; gap: 3px;
+    }
+    .bci-num {
+      font-size: 10px; font-weight: 700; color: #0059ff;
+      background: #eef3ff; padding: 1px 5px; border-radius: 6px;
+      display: inline-block; align-self: flex-start;
+    }
+    .bci-name { font-size: 12px; font-weight: 600; color: #222; line-height: 1.3; }
+    .bci-add {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      background: #eef3ff; color: #0059ff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; transition: all .12s; flex-shrink: 0; margin-right: 8px;
+    }
+    .bci-add:hover { background: #0059ff; color: #fff; }
+    .bci-add .mi { font-size: 18px; margin-right: 0; vertical-align: 0; }
+    /* canvas drop-line indicator */
+    .builder-drop-line {
+      width: 750px; height: 4px; background: #0059ff; border-radius: 2px;
+      margin: 0; pointer-events: none; display: none;
+      box-shadow: 0 0 0 2px rgba(0,89,255,.2);
+    }
+    .builder-drop-line.visible { display: block; }
+
+    /* Theme Dropdown (in center header) */
+    .theme-select-wrap {
+      display: flex; align-items: center; gap: 6px; margin-left: 12px;
+    }
+    .theme-select-wrap .theme-select-label {
+      font-size: 12px; font-weight: 600; color: #999;
+    }
+    .theme-select {
+      font-size: 12px; font-weight: 600; color: #333;
+      border: 1px solid #e0e0e0; border-radius: 6px;
+      padding: 4px 24px 4px 8px; background: #f8f8f8;
+      cursor: pointer; outline: none; font-family: 'Inter', sans-serif;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+    }
+    .theme-select:hover { border-color: #c5d4ff; background: #f0f4ff; }
+    .theme-select:focus { border-color: #0059ff; }
+
+    /* Builder Center — Canvas */
+    .builder-center {
+      flex: 1; display: flex; flex-direction: column;
+      background: #eef0f3; min-width: 0; position: relative;
+      overflow: hidden;
+    }
+    .builder-canvas-wrap {
+      flex: 1; position: relative;
+      display: flex; flex-direction: column; min-height: 0;
+    }
+    .builder-float-ur {
+      position: absolute; top: 16px; right: 16px; z-index: 60;
+      display: flex; align-items: center; gap: 6px;
+      pointer-events: none;
+    }
+    .builder-float-ur button { pointer-events: auto; }
+    .builder-float-br {
+      position: absolute; bottom: 16px; right: 16px; z-index: 60;
+    }
+    .builder-floating-source, .builder-floating-btn {
+      background: rgba(255,255,255,.92); color: #555; border: 1px solid #ddd;
+      font-size: 12px; padding: 7px 16px; border-radius: 8px; cursor: pointer;
+      font-weight: 600; display: flex; align-items: center; gap: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.1); backdrop-filter: blur(6px);
+      transition: all .15s; font-family: 'Inter', sans-serif;
+    }
+    .builder-floating-btn { padding: 7px 10px; }
+    .builder-floating-btn .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .builder-floating-source:hover, .builder-floating-btn:hover { background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+    .builder-floating-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .builder-floating-btn:disabled:hover { background: rgba(255,255,255,.92); box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+    .builder-center-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; background: #fff; border-bottom: 1px solid #e5e7eb;
+      position: sticky; top: 0px; z-index: 50; flex-shrink: 0;
+    }
+    .builder-center-header h3 {
+      font-size: 14px; font-weight: 600; color: #555;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .builder-center-actions { display: flex; gap: 8px; }
+    .builder-center-actions button {
+      font-size: 12px; padding: 6px 16px; border-radius: 6px; cursor: pointer;
+      font-weight: 600; border: none; display: flex; align-items: center; gap: 4px;
+      transition: all .15s;
+    }
+    .builder-copy-btn { background: #07071a; color: #fff; }
+    .builder-copy-btn:hover { background: #222; }
+    .builder-copy-btn.copied { background: #27ae60; }
+    .builder-code-btn { background: #f0f0f0; color: #555; }
+    .builder-code-btn:hover { background: #e0e0e0; }
+    .builder-code-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .builder-code-btn:disabled:hover { background: #f0f0f0; }
+
+    .builder-canvas {
+      flex: 1; padding: 24px 60px 60px 24px; background: #D6D9DD;
+      overflow-y: auto; display: flex; flex-direction: column; align-items: center;
+    }
+    .builder-canvas.drag-over { background: rgba(0,89,255,.04); }
+    .builder-canvas.mobile-preview .builder-stack-item { width: 375px; }
+    .builder-canvas.mobile-preview .builder-drop-line { width: 375px; }
+    .builder-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: #bbb; text-align: center; padding: 60px 0; min-height: 300px;
+    }
+    .builder-empty .mi { font-size: 48px; margin-bottom: 12px; color: #aaa; vertical-align: 0; margin-right: 0; }
+    .builder-empty h4 { font-size: 16px; font-weight: 600; color: #999; margin-bottom: 4px; }
+    .builder-empty p { font-size: 13px; color: #bbb; }
+
+    .builder-stack-item {
+      position: relative; width: 750px;
+      border: 2px solid transparent; border-radius: 0;
+      transition: border-color .15s; cursor: pointer; margin-bottom: 0;
+    }
+    .builder-stack-item:hover { border-color: rgba(0,89,255,.25); }
+    .builder-stack-item.selected { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+    .builder-stack-item .bsi-content { pointer-events: none; }
+    .builder-stack-item.selected .bsi-content { pointer-events: auto; }
+    .builder-stack-item .bsi-toolbar {
+      position: absolute; top: 4px; right: -38px;
+      display: none; flex-direction: column; gap: 4px; z-index: 10;
+    }
+    .builder-stack-item:hover .bsi-toolbar,
+    .builder-stack-item.selected .bsi-toolbar { display: flex; }
+    .bsi-toolbar button {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .12s; padding: 0;
+    }
+    .bsi-toolbar button .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .bsi-btn-move { background: #fff; color: #888; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .bsi-btn-move:hover { color: #0059ff; background: #eef3ff; }
+    .bsi-btn-del { background: #fff; color: #e74c3c; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .bsi-btn-del:hover { background: #fff0f0; }
+    .bsi-btn-dup { background: #fff; color: #0059ff; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    .bsi-btn-dup:hover { background: #eef3ff; }
+
+    /* Builder Right Sidebar — Color Controls */
+    .builder-right {
+      width: 300px; min-width: 300px; background: #fff;
+      border-left: 1px solid #e5e7eb;
+      height: 100%; overflow-y: auto;
+      display: flex; flex-direction: column;
+    }
+    .builder-right-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 20px; text-align: center;
+    }
+    .builder-right-empty .mi {
+      font-size: 36px; color: #ddd; margin-bottom: 8px;
+      vertical-align: 0; margin-right: 0; display: block;
+    }
+    .builder-right-empty p { font-size: 13px; color: #bbb; line-height: 1.5; }
+
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
+    <span class="top-bar-divider"></span>
+    <h1>eDM Component Customizer</h1>
+  </div>
+</div>
+
+
+<!-- ══════════════ BUILDER VIEW ══════════════ -->
+<div class="builder-view" id="builderView">
+  <div class="builder-layout">
+    <!-- Left: Component List -->
+    <aside class="builder-left">
+      <div class="builder-left-header">
+        <h3><span class="mi">widgets</span> <span>Components</span></h3>
+        <p>Drag or click + to add</p>
+      </div>
+      <div class="builder-comp-list" id="builderCompList"></div>
+    </aside>
+    <!-- Center: Canvas / Preview -->
+    <div class="builder-center">
+      <div class="builder-center-header">
+        <div style="display:flex;align-items:center;gap:0;">
+          <h3><span class="mi">preview</span> <span>eDM Preview</span></h3>
+          <div class="device-toggle" id="builderDeviceToggle">
+            <button class="active" onclick="toggleDeviceView('desktop','builder')" title="Desktop">
+              <span class="mi">computer</span>
+            </button>
+            <button onclick="toggleDeviceView('mobile','builder')" title="Mobile">
+              <span class="mi">phone_iphone</span>
+            </button>
+          </div>
+          <div class="theme-select-wrap">
+            <span class="theme-select-label">Theme</span>
+            <select class="theme-select" id="themeSelect" onchange="applyTheme(this.value)"></select>
+          </div>
+        </div>
+        <div class="builder-center-actions">
+          <button class="builder-copy-btn" id="builderCopyBtn" onclick="copyBuilderHtml()">
+            <span class="mi">content_copy</span><span>Copy Full HTML</span>
+          </button>
+          <button class="builder-code-btn" onclick="downloadBuilderHtml()" title="Download HTML">
+            <span class="mi" style="margin-right:0">download</span>
+          </button>
+        </div>
+      </div>
+      <div class="builder-canvas-wrap">
+        <div class="builder-canvas" id="builderCanvas"></div>
+        <div class="code-panel" id="builderCodePanel">
+          <pre id="builderCode"></pre>
+        </div>
+        <div class="builder-float-ur">
+          <button class="builder-floating-btn" id="builderUndoBtn" onclick="undoBuilder()" title="Undo (Ctrl+Z)" disabled>
+            <span class="mi">undo</span>
+          </button>
+          <button class="builder-floating-btn" id="builderRedoBtn" onclick="redoBuilder()" title="Redo (Ctrl+Y)" disabled>
+            <span class="mi">redo</span>
+          </button>
+        </div>
+        <div class="builder-float-br">
+          <button class="builder-floating-source" onclick="toggleBuilderCode()">
+            <span class="mi">code</span><span>View Source</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Right: Color Controls -->
+    <aside class="builder-right" id="builderRight">
+      <div id="builderRightContent">
+        <div class="builder-right-empty">
+          <span class="mi">touch_app</span>
+          <p>Click a component in the<br>preview to customize its colors</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Color Popup Overlay -->
+<div class="color-popup-overlay" id="colorPopupOverlay" onclick="closeColorPopup()"></div>
+<div class="color-popup" id="colorPopup"></div>
+
+
+<!-- Format Toolbar -->
+<div class="format-bar" id="formatBar">
+  <button title="Bold" onmousedown="event.preventDefault(); execFormat('bold')"><b>B</b></button>
+  <button title="Italic" onmousedown="event.preventDefault(); execFormat('italic')"><i>I</i></button>
+  <button title="Strikethrough" onmousedown="event.preventDefault(); execFormat('strikeThrough')"><s>S</s></button>
+  <span class="sep"></span>
+  <button title="Bullet Points" onmousedown="event.preventDefault(); execBullet()"><span class="mi">format_list_bulleted</span></button>
+  <span class="sep"></span>
+  <button title="Clear Formatting" onmousedown="event.preventDefault(); execFormat('removeFormat')"><span class="mi">format_clear</span></button>
+</div>
+
+<!-- Edit Popover (for images & links) -->
+<div class="edit-popover" id="editPopover"></div>
+
+<!-- Crop Modal -->
+<div id="cropModal">
+  <div class="crop-modal-box">
+    <div class="crop-modal-header">
+      <span class="crop-modal-title" id="cropModalTitle">Crop Image</span>
+      <button class="crop-modal-close" onclick="cancelCrop()" title="Cancel"><span class="mi">close</span></button>
+    </div>
+    <div class="crop-modal-body">
+      <div class="crop-stage" id="cropStage">
+        <img id="cropSourceImg" draggable="false" alt="Crop source">
+        <div class="crop-box" id="cropBox"></div>
+      </div>
+    </div>
+    <div class="crop-modal-footer">
+      <span class="crop-hint">Drag to move &middot; drag handles to resize</span>
+      <div style="display:flex;gap:6px;">
+        <button class="pop-cancel" onclick="cancelCrop()">Cancel</button>
+        <button class="pop-save" onclick="confirmCrop()">Crop &amp; Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+// ══════════════════════════════════════
+
+// ══════════════════════════════════════
+// Brand Color Swatches
+// ══════════════════════════════════════
+const BRAND_COLORS = [
+  { group: 'Primary', colors: [
+    { hex: '#F39800', name: 'Primary' },
+    { hex: '#e57b03', name: 'Primary Dark' },
+    { hex: '#f7c265', name: 'Primary Light 70' },
+    { hex: '#fbe0b2', name: 'Primary Light 50' },
+    { hex: '#fdeacc', name: 'Primary Light 30' },
+    { hex: '#faf3e6', name: 'Primary Light 10' },
+  ]},
+  { group: 'Brand', colors: [
+    { hex: '#004280', name: 'Brand' },
+    { hex: '#003160', name: 'Brand Dark' },
+    { hex: '#336899', name: 'Brand Light 75' },
+    { hex: '#80a0bf', name: 'Brand Light 50' },
+    { hex: '#dfebf7', name: 'Brand Light 30' },
+  ]},
+  { group: 'Gray', colors: [
+    { hex: '#0c0c0c', name: 'Gray 90' },
+    { hex: '#434447', name: 'Gray 80' },
+    { hex: '#737b7d', name: 'Gray 70' },
+    { hex: '#b6bfc1', name: 'Gray 60' },
+    { hex: '#cfd2d5', name: 'Gray 50' },
+    { hex: '#e8ecef', name: 'Gray 40' },
+    { hex: '#f6f7f9', name: 'Gray 30' },
+    { hex: '#ffffff', name: 'White' },
+  ]},
+  { group: 'Status', colors: [
+    { hex: '#b52f2f', name: 'Error Dark' },
+    { hex: '#db3a3a', name: 'Error' },
+    { hex: '#ffeeee', name: 'Error Light' },
+    { hex: '#025324', name: 'Success Dark' },
+    { hex: '#00893a', name: 'Success' },
+    { hex: '#d0e6d4', name: 'Success Light' },
+    { hex: '#006EFF', name: 'Link' },
+  ]},
+];
+
+let _popupActiveKey = null;
+let _popupActiveCompId = null;
+let _popupActiveTrigger = null;
+
+function buildBrandPanelHtml(currentColor) {
+  let html = '';
+  BRAND_COLORS.forEach(g => {
+    html += `<div class="brand-group">`;
+    html += `<div class="brand-group-label">${g.group}</div>`;
+    html += `<div class="brand-swatches">`;
+    g.colors.forEach(c => {
+      const active = currentColor && currentColor.toLowerCase() === c.hex.toLowerCase() ? ' active' : '';
+      html += `<div class="brand-swatch${active}" style="background:${c.hex}" data-hex="${c.hex}" onclick="pickBrandColor('${c.hex}')" title="${c.hex}">`;
+      html += `<span class="brand-swatch-tooltip">${c.name} ${c.hex}</span>`;
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `<hr class="popup-divider" />`;
+  html += `<button class="other-color-btn" onclick="showRgbPicker()"><span class="mi">palette</span>${'Pick Other Color'}</button>`;
+  return html;
+}
+
+function buildRgbPanelHtml(hexColor) {
+  const r = parseInt(hexColor.slice(1,3), 16) || 0;
+  const g = parseInt(hexColor.slice(3,5), 16) || 0;
+  const b = parseInt(hexColor.slice(5,7), 16) || 0;
+  let html = '';
+  html += `<button class="rgb-back-btn" onclick="showBrandPanel()"><span class="mi">arrow_back</span>${'Brand Colors'}</button>`;
+  html += `<div class="rgb-preview-strip" id="rgbPreview" style="background-color:${hexColor}"></div>`;
+  // R slider
+  html += `<div class="rgb-slider-group">`;
+  html += `<div class="rgb-slider-label"><span>Red</span><span class="rgb-val" id="rVal">${r}</span></div>`;
+  html += `<input type="range" min="0" max="255" value="${r}" class="rgb-slider r-slider" id="rSlider" oninput="onRgbSliderChange()" />`;
+  html += `</div>`;
+  // G slider
+  html += `<div class="rgb-slider-group">`;
+  html += `<div class="rgb-slider-label"><span>Green</span><span class="rgb-val" id="gVal">${g}</span></div>`;
+  html += `<input type="range" min="0" max="255" value="${g}" class="rgb-slider g-slider" id="gSlider" oninput="onRgbSliderChange()" />`;
+  html += `</div>`;
+  // B slider
+  html += `<div class="rgb-slider-group">`;
+  html += `<div class="rgb-slider-label"><span>Blue</span><span class="rgb-val" id="bVal">${b}</span></div>`;
+  html += `<input type="range" min="0" max="255" value="${b}" class="rgb-slider b-slider" id="bSlider" oninput="onRgbSliderChange()" />`;
+  html += `</div>`;
+  // Hex input + Apply
+  html += `<div class="rgb-hex-row">`;
+  html += `<input type="text" id="rgbHexInput" value="${hexColor}" onkeydown="if(event.key==='Enter')applyRgbColor()" oninput="onRgbHexInput()" />`;
+  html += `<button class="rgb-apply-btn" onclick="applyRgbColor()">Apply</button>`;
+  html += `</div>`;
+  return html;
+}
+
+function openColorPopup(key, compId, triggerEl) {
+  _popupActiveKey = key;
+  _popupActiveCompId = compId;
+  _popupActiveTrigger = triggerEl;
+
+  const currentColor = compId ? colorState[key] : triggerEl.getAttribute('data-value');
+  _popupCurrentColor = currentColor || '#000000';
+  const popup = document.getElementById('colorPopup');
+  const overlay = document.getElementById('colorPopupOverlay');
+
+  popup.innerHTML = `<div class="popup-panel active" id="brandPanel">${buildBrandPanelHtml(currentColor)}</div>`
+                  + `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(_popupCurrentColor)}</div>`;
+
+  // Position popup near trigger
+  const rect = triggerEl.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left;
+  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
+  if (left < 10) left = 10;
+  if (top + 400 > window.innerHeight) top = rect.top - 410;
+  if (top < 10) top = 10;
+
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+
+  overlay.classList.add('open');
+  popup.classList.add('open');
+}
+
+function closeColorPopup() {
+  document.getElementById('colorPopup').classList.remove('open');
+  document.getElementById('colorPopupOverlay').classList.remove('open');
+  _popupActiveKey = null;
+  _popupActiveCompId = null;
+  _popupActiveTrigger = null;
+}
+
+function showRgbPicker() {
+  // Refresh RGB panel with current color before switching
+  document.getElementById('rgbPanel').innerHTML = buildRgbPanelHtml(_popupCurrentColor);
+  document.getElementById('brandPanel').classList.remove('active');
+  document.getElementById('rgbPanel').classList.add('active');
+}
+
+function showBrandPanel() {
+  document.getElementById('rgbPanel').classList.remove('active');
+  document.getElementById('brandPanel').classList.add('active');
+}
+
+function pickBrandColor(hex) {
+  applyPickedColor(hex);
+}
+
+function applyPickedColor(hex) {
+  hex = hex.trim();
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) { alert('Please enter a valid 6-digit hex code, e.g. #F39800'); return; }
+
+  if (_popupActiveCompId) {
+    colorState[_popupActiveKey] = hex;
+    // Sync linked keys
+    const comp = COMPONENTS.find(c => c.id === _popupActiveCompId);
+    if (comp) {
+      const entry = comp.colorMap.find(c => c.key === _popupActiveKey);
+      if (entry && entry.linked) {
+        entry.linked.forEach(lk => { colorState[lk] = hex; });
+      }
+      if (entry && entry.linkedAlpha) {
+        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+        Object.entries(entry.linkedAlpha).forEach(([lk, alpha]) => {
+          const br = Math.round(r + (255 - r) * (1 - alpha));
+          const bg = Math.round(g + (255 - g) * (1 - alpha));
+          const bb = Math.round(b + (255 - b) * (1 - alpha));
+          colorState[lk] = '#' + [br,bg,bb].map(v => v.toString(16).padStart(2,'0')).join('');
+        });
+      }
+    }
+    const swatch = document.getElementById('swatch-' + _popupActiveKey);
+    if (swatch) swatch.style.backgroundColor = hex;
+    const bswatch = document.getElementById('bswatch-' + _popupActiveKey);
+    if (bswatch) bswatch.style.backgroundColor = hex;
+    renderBuilderPreview();
+  } else {
+    const el = document.getElementById(_popupActiveKey);
+    if (el) {
+      el.style.backgroundColor = hex;
+      el.setAttribute('data-value', hex);
+    }
+  }
+  closeColorPopup();
+}
+
+// ── RGB Slider Interactions ──
+function onRgbSliderChange() {
+  const r = parseInt(document.getElementById('rSlider').value);
+  const g = parseInt(document.getElementById('gSlider').value);
+  const b = parseInt(document.getElementById('bSlider').value);
+  document.getElementById('rVal').textContent = r;
+  document.getElementById('gVal').textContent = g;
+  document.getElementById('bVal').textContent = b;
+  const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+  document.getElementById('rgbHexInput').value = hex;
+  document.getElementById('rgbPreview').style.backgroundColor = hex;
+  _popupCurrentColor = hex;
+}
+
+function onRgbHexInput() {
+  let val = document.getElementById('rgbHexInput').value.trim();
+  if (!val.startsWith('#')) val = '#' + val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    const r = parseInt(val.slice(1,3), 16);
+    const g = parseInt(val.slice(3,5), 16);
+    const b = parseInt(val.slice(5,7), 16);
+    document.getElementById('rSlider').value = r;
+    document.getElementById('gSlider').value = g;
+    document.getElementById('bSlider').value = b;
+    document.getElementById('rVal').textContent = r;
+    document.getElementById('gVal').textContent = g;
+    document.getElementById('bVal').textContent = b;
+    document.getElementById('rgbPreview').style.backgroundColor = val;
+    _popupCurrentColor = val;
+  }
+}
+
+function applyRgbColor() {
+  let val = document.getElementById('rgbHexInput').value.trim();
+  if (!val.startsWith('#')) val = '#' + val;
+  applyPickedColor(val);
+}
+
+let _popupCurrentColor = '#000000';
+
+// ══════════════════════════════════════
+// Component Registry — 5 Components
+// Each defines: id, name, html (raw email HTML fragment), colorMap
+// colorMap: array of { label, targets: [{selector, attr}], default }
+// ══════════════════════════════════════
+
+const COMPONENTS = [
+  // ─── 01 Header ───
+  {
+    id: 'header',
+    num: '01',
+    name: 'Header',
+    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
+  <tr>
+    <td width="750" align="center" valign="middle"
+        style="width: 750px; background-color: #ffffff; padding: 20px 30px 20px 30px;" data-color="headerBg">
+      <table border="0" cellpadding="0" cellspacing="0" width="690" class="split-table" style="width: 690px;">
+        <tr>
+          <td align="left" valign="middle" width="200" class="logo-td" style="width: 200px;">
+            <img mc:edit="header_logo" src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png"
+                 width="180" alt="Advantech IoTMart" data-crop="free"
+                 style="display: block; width: 180px; max-width: 180px; height: auto;" />
+          </td>
+          <td width="490" align="right" valign="middle" class="nav-links" style="width: 490px;">
+            <span class="email-desktop" mc:edit="header_date" style="font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: none; color: inherit;">IoTMart.Express@advantech.com</a></span><span class="email-mobile" style="display: none; max-height: 0; overflow: hidden; font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: none; color: inherit;">Contact us</a></span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Background', key: 'headerBg', type: 'bg', default: '#ffffff' },
+      { label: 'Email Text', key: 'headerDateColor', type: 'color', default: '#434447' }
+    ]
+  },
+
+  // ─── 02 Banner ───
+  {
+    id: 'banner',
+    num: '02',
+    name: 'Banner',
+    optionMap: [
+      { key: 'showCta', label: 'CTA Button', default: false }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px; border-collapse: collapse; border-spacing: 0;">
+  <tr>
+    <td width="450" height="300" align="left" valign="middle" class="hero-td"
+        style="width: 450px; height: 300px; padding: 0 36px; overflow: hidden; mso-padding-alt: 0 36px 0 36px;" data-color="bannerBg">
+      <p mc:edit="banner_eyebrow"
+         style="margin: 0 0 12px 0; font-size: 12px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="bannerEyebrow">
+        Newsletter January 2026
+      </p>
+      <h1 mc:edit="banner_title" class="hero-title"
+          style="margin: 0 0 16px 0; font-size: 30px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.2;" data-color="bannerTitle">
+        Global Reach,<br/>Instant Connection.
+      </h1>
+      <p mc:edit="banner_subtitle"
+         style="margin: 0${opts.showCta ? ' 0 20px 0' : ''}; font-size: 15px; font-family: Arial, sans-serif; line-height: 1.6; letter-spacing: 0.5px;" data-color="bannerSubtitle">
+        Global gateway for direct-to-end-user IoT commerce.
+      </p>
+      ${opts.showCta ? `<table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding: 12px 28px;" data-color="bannerCtaBg">
+            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="banner_cta"
+               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, sans-serif;" data-color="bannerCtaText">
+              Learn More &rarr;
+            </a>
+          </td>
+        </tr>
+      </table>` : ''}
+    </td>
+    <td width="300" height="300" align="left" valign="top" class="col-2"
+        style="width: 300px; height: 300px; padding: 0; font-size: 0; line-height: 0; overflow: hidden; background-color: #f6f7f9;"><img mc:edit="banner_image"
+           src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773334182/BannerPlaceholder-global_xls2jy.png"
+           width="300" height="300" alt="IoTMart Global" class="mobile-img" data-crop="300:300"
+           style="display: block; width: 300px; height: 300px; max-width: 100%; object-fit: cover;" /></td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Text Area BG', key: 'bannerBg', type: 'bg', default: '#f6f7f9' },
+      { label: 'Eyebrow', key: 'bannerEyebrow', type: 'color', default: '#F39800' },
+      { label: 'Title', key: 'bannerTitle', type: 'color', default: '#0c0c0c' },
+      { label: 'Subtitle', key: 'bannerSubtitle', type: 'color', default: '#737b7d' },
+      { label: 'CTA BG', key: 'bannerCtaBg', type: 'bg', default: '#F39800', optionGate: 'showCta' },
+      { label: 'CTA Text', key: 'bannerCtaText', type: 'color', default: '#ffffff', optionGate: 'showCta' }
+    ]
+  },
+
+  // ─── 03 Top News ───
+  {
+    id: 'top-news',
+    num: '03',
+    name: 'Top News',
+    optionMap: [
+      { key: 'showImage', label: 'Image', default: false },
+      { key: 'showCta', label: 'CTA Button', default: false }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
+  <tr valign="top">
+    <td width="188" align="left" valign="top" class="news-label-td"
+        style="width: 188px; padding: 32px 24px 32px 32px;" data-color="newsBg">
+      <p mc:edit="news_eyebrow"
+         style="margin: 0 0 12px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="newsEyebrow">
+        Highlight
+      </p>
+      <h2 mc:edit="news_title"
+          style="margin: 0; font-size: 24px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="newsTitle">
+        IoTMart New Store Expansion
+      </h2>
+    </td>
+    <td width="562" align="left" valign="top" class="news-body-td"
+        style="width: 562px; padding: 32px 32px${(opts.showCta || opts.showImage) ? ' 24px' : ' 32px'} 28px; border-left: 1px solid #eeeeee;" data-color="newsBodyBg">
+      <p mc:edit="news_body"
+         style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 20px 0' : ''}; font-size: 14px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="newsBody">
+        We&#8217;re excited to announce that IoTMart Korea is scheduled to go live in April, marking another important milestone in IoTMart&#8217;s global expansion.<br><br>
+        This launch would not have been possible without the incredible collaboration across teams. Since September 2025, many colleagues have contributed their time and expertise through continuous discussions and planning. Our sincere appreciation goes to the Korea team, along with the online sales force (OSF) team, Finance team, Logistics team, and our partners from headquarters&#8217; SAP and IT teams.<br><br>
+        Special thanks to Nadia Kim for leading the strong support, trust, and commitment to the IoTMart vision. Their collaboration has been instrumental in bringing this new store to life. We truly appreciate everyone&#8217;s effort and look forward to continuing to grow IoTMart together.
+      </p>
+      ${opts.showImage ? `<img mc:edit="news_image" src="https://placehold.co/502x100" width="502" height="100" alt="News Image" class="news-img" data-crop="502:100"
+           style="display: block; width: 502px; height: 100px; max-width: 100%; object-fit: cover;${opts.showCta ? ' margin-bottom: 20px;' : ''}" />` : ''}
+      ${opts.showCta ? `<table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding: 12px 28px;" data-color="newsCtaBg">
+            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="news_cta"
+               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, sans-serif;" data-color="newsCtaText">
+              Read More &rarr;
+            </a>
+          </td>
+        </tr>
+      </table>` : ''}
+    </td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Label Area BG', key: 'newsBg', type: 'bg', default: '#0c0c0c' },
+      { label: 'Eyebrow', key: 'newsEyebrow', type: 'color', default: '#F39800' },
+      { label: 'Title', key: 'newsTitle', type: 'color', default: '#ffffff' },
+      { label: 'Body Area BG', key: 'newsBodyBg', type: 'bg', default: '#ffffff' },
+      { label: 'Body Text', key: 'newsBody', type: 'color', default: '#434447' },
+      { label: 'CTA BG', key: 'newsCtaBg', type: 'bg', default: '#F39800', optionGate: 'showCta' },
+      { label: 'CTA Text', key: 'newsCtaText', type: 'color', default: '#ffffff', optionGate: 'showCta' }
+    ]
+  },
+
+  // ─── 04 Stats ───
+  {
+    id: 'stats',
+    num: '04',
+    name: 'Stats',
+    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
+  <tr valign="middle">
+    <td width="233" align="left" valign="middle" class="stats-label-td"
+        style="width: 233px; padding: 24px 24px 24px 32px;" data-color="statsBg">
+      <p mc:edit="stats_title"
+         style="margin: 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="statsTitle">
+        Q1 2026<br/>Breakthrough
+      </p>
+    </td>
+    <td width="172" align="center" valign="middle" class="stats-stat-td"
+        style="width: 172px; padding: 24px 16px;" data-color="statsBg">
+      <p mc:edit="stats_num1"
+         style="margin: 0 0 6px 0; font-size: 28px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="statsNumber">
+        150+
+      </p>
+      <p mc:edit="stats_label1"
+         style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="statsLabel">
+        Orders YTM
+      </p>
+    </td>
+    <td width="172" align="center" valign="middle" class="stats-stat-td"
+        style="width: 172px; padding: 24px 16px;" data-color="statsBg">
+      <p mc:edit="stats_num2"
+         style="margin: 0 0 6px 0; font-size: 28px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="statsNumber">
+        200K+
+      </p>
+      <p mc:edit="stats_label2"
+         style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="statsLabel">
+        Revenue (EN+EU)
+      </p>
+    </td>
+    <td width="173" align="center" valign="middle" class="stats-stat-td"
+        style="width: 173px; padding: 24px 16px;" data-color="statsBg">
+      <p mc:edit="stats_num3"
+         style="margin: 0 0 6px 0; font-size: 28px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="statsNumber">
+        1,300
+      </p>
+      <p mc:edit="stats_label3"
+         style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="statsLabel">
+        Average Order Value
+      </p>
+    </td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Background', key: 'statsBg', type: 'bg', default: '#F39800' },
+      { label: 'Title', key: 'statsTitle', type: 'color', default: '#ffffff' },
+      { label: 'Number', key: 'statsNumber', type: 'color', default: '#ffffff' },
+      { label: 'Stat Label', key: 'statsLabel', type: 'color', default: '#FFE8C0' }
+    ]
+  },
+
+  // ─── 05 Article ───
+  {
+    id: 'article',
+    num: '05',
+    name: 'Article',
+    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
+  <tr>
+    <td align="center" valign="top" class="article-outer-td" bgcolor="#f6f7f9"
+        style="background-image: url('https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773367982/BIBG_fxzalt.png'); background-size: cover; background-position: center top; padding: 32px 32px;" data-color="articleOuterBg">
+      <table border="0" cellpadding="0" cellspacing="0" width="670" class="article-inner" style="width: 670px;">
+        <tr valign="top">
+          <td width="220" align="left" valign="top" class="article-stats-td" bgcolor="#F39800"
+              style="width: 220px; padding: 32px 24px;" data-color="articleStatsBg">
+            <p mc:edit="article_num1"
+               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
+              150+
+            </p>
+            <p mc:edit="article_label1"
+               style="margin: 0 0 24px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
+              Orders YTM
+            </p>
+            <p mc:edit="article_num2"
+               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
+              200K+
+            </p>
+            <p mc:edit="article_label2"
+               style="margin: 0 0 24px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
+              Revenue (EN+EU)
+            </p>
+            <p mc:edit="article_num3"
+               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
+              1,300
+            </p>
+            <p mc:edit="article_label3"
+               style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
+              Average Order Value
+            </p>
+          </td>
+          <td width="450" align="left" valign="top" class="article-body-td" bgcolor="#ffffff"
+              style="width: 450px; padding: 24px;" data-color="articleBodyBg">
+            <p mc:edit="article_eyebrow"
+               style="margin: 0 0 12px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="articleEyebrow">
+              BUSINESS INSIGHTS
+            </p>
+            <h2 mc:edit="article_title"
+                style="margin: 0 0 12px 0; font-size: 24px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="articleTitle">
+              Q1 2026 Breakthrough:<br/>YTD Revenue Exceeds $200K with 63% AOV Growth
+            </h2>
+            <p mc:edit="article_body"
+               style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="articleBody">
+              IoTMart has established significant growth momentum in Q1 2026. As of mid-March, global YTD revenue (EN+EU) has crossed the $200K threshold. This early Q1 performance has already surpassed the total revenue achieved during the entirety of Q4 2025.<br><br>
+              <strong style="font-weight: 700;">Key Performance Metrics</strong><br>
+              &bull;&nbsp;<strong style="font-weight: 700;">AOV Expansion:</strong> We are seeing a structural shift in deal size. The Average Order Value is approaching $1,300. This represents a robust 63% increase compared to Q4.<br>
+              &bull;&nbsp;<strong style="font-weight: 700;">O2O Transition Efficacy:</strong> This milestone is the direct outcome of disciplined O2O transition execution by regional sales teams, particularly in Europe and ASEAN. Furthermore, actively promoting IoTMart&#8217;s global fast delivery has served as a highly effective USP to accelerate offline-to-online customer conversions.<br>
+              &bull;&nbsp;<strong style="font-weight: 700;">Regional Highlights:</strong> Europe currently leads the global execution with 70 secured orders. Meanwhile, ASEAN has demonstrated exceptional digital scalability; through their strategic O2O execution, they achieved 200% revenue growth and elevated their regional AOV to over $2,000.<br><br>
+              These metrics objectively validate that our segmented engagement strategies and digital platforms are successfully capturing and scaling digital &amp; long-tail business.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Outer BG', key: 'articleOuterBg', type: 'bg', default: '#f6f7f9' },
+      { label: 'Stats BG', key: 'articleStatsBg', type: 'bg', default: 'rgba(243,152,0,0.8)' },
+      { label: 'Number', key: 'articleNumber', type: 'color', default: '#ffffff' },
+      { label: 'Stat Label', key: 'articleStatLabel', type: 'color', default: '#FFE8C0' },
+      { label: 'Body Area BG', key: 'articleBodyBg', type: 'bg', default: 'rgba(255,255,255,0.8)' },
+      { label: 'Eyebrow', key: 'articleEyebrow', type: 'color', default: '#F39800' },
+      { label: 'Title', key: 'articleTitle', type: 'color', default: '#0c0c0c' },
+      { label: 'Body Text', key: 'articleBody', type: 'color', default: '#434447' }
+    ]
+  },
+
+  {
+    id: 'feature',
+    num: '06',
+    name: 'Feature(Orange)',
+    optionMap: [
+      { key: 'showCta',  label: 'CTA Button',  default: false },
+      { key: 'imgLeft',  label: 'Image Left',  default: false, exclusiveGroup: 'imgPos' },
+      { key: 'imgRight', label: 'Image Right', default: false, exclusiveGroup: 'imgPos' }
+    ],
+    getHtml: (opts = {}) => { const hasImg = !!(opts.imgLeft || opts.imgRight); const imgRight = !!opts.imgRight; return `<table border="0" cellpadding="0" cellspacing="0" width="750" class="feature-table" style="width: 750px; border-collapse: collapse; border-spacing: 0;${imgRight ? ' direction: rtl;' : ''}">
+  <tr>
+    ${hasImg ? `<td width="300" valign="middle" class="feature-img-td" bgcolor="#f6f7f9"
+        style="width: 300px; padding: 0; font-size: 0; line-height: 0; overflow: hidden; text-align: center; direction: ltr;"><img mc:edit="feature_image"
+           src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773374996/JVCP_nmhbde.png"
+           width="300" alt="Feature" class="feature-img" data-crop="free"
+           style="display: block; width: 300px; max-width: 100%; height: auto;" /></td>` : ''}
+    <td width="${hasImg ? '450' : '750'}" valign="middle" class="feature-body-td" bgcolor="#ffffff"
+        style="width: ${hasImg ? '450' : '750'}px; padding: 32px; direction: ltr;" data-color="featureBodyBg">
+      <h2 mc:edit="feature_title"
+          style="margin: 0 0 12px 0; font-size: 26px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="featureTitle">
+        Empowering Global Growth:<br/>The IoTMart Franchise with JV CP Strategic Program
+      </h2>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="80" height="4" bgcolor="#F39800" data-color="featureAccent"
+              style="width: 80px; height: 4px; font-size: 0; line-height: 0;"></td>
+        </tr>
+        <tr>
+          <td height="16" style="height: 16px; font-size: 0; line-height: 0;">&nbsp;</td>
+        </tr>
+      </table>
+      <p mc:edit="feature_body"
+         style="margin: 0${opts.showCta ? ' 0 24px 0' : ''}; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="featureBody">
+        WWBO-OSF is proud to announce the official launch of the IoTMart Franchise with JV CP program, a transformative strategy designed to bridge our digital capabilities with regional sales execution. Driven by WWBO-OSF, this initiative empowers CSF and OSF teams to move beyond traditional channel management into a high-productivity, Asset-Light operational era. By leveraging our unified AI-powered infrastructure, we are enabling partners to handle long-tail demands through E2E direct shipment, allowing our sales force to focus on high-value sector accounts.<br><br>
+        Our vision for 2030: Establishing 10 digital storefronts (IoTMart franchises) to deliver USD$100M+ in revenue through our scalable OMO ecosystem, 30% contributed by franchise (digital sales). WWBO-OSF will provide the core governance, AI lead-routing, and automated fulfillment systems to ensure seamless global expansion without increasing local operational overhead. We invite all regional leads to align for the upcoming Global Kick-off in April. Together, we will redefine our market footprint and accelerate Advantech&#8217;s digital dominance.
+      </p>
+      ${opts.showCta ? `<table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding: 12px 28px;" data-color="featureCtaBg">
+            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="feature_cta"
+               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, sans-serif;" data-color="featureCtaText">
+              Explore Catalog &rarr;
+            </a>
+          </td>
+        </tr>
+      </table>` : ''}
+    </td>
+  </tr>
+</table>`; },
+    colorMap: [
+      { label: 'Body Area BG', key: 'featureBodyBg',   type: 'bg',    default: '#ffffff' },
+      { label: 'Title',        key: 'featureTitle',    type: 'color', default: '#0c0c0c' },
+      { label: 'Accent Line',  key: 'featureAccent',   type: 'bg',    default: '#F39800' },
+      { label: 'Body Text',    key: 'featureBody',     type: 'color', default: '#434447' },
+      { label: 'CTA BG',       key: 'featureCtaBg',    type: 'bg',    default: '#F39800', optionGate: 'showCta' },
+      { label: 'CTA Text',     key: 'featureCtaText',  type: 'color', default: '#ffffff', optionGate: 'showCta' }
+    ]
+  },
+
+  {
+    id: 'cards',
+    num: '07',
+    name: 'Feature(Blue)',
+    optionMap: [
+      { key: 'showImages', label: 'Images', default: false },
+      { key: 'showCta', label: 'CTA Button', default: false }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="cards-table" style="width: 750px; border-collapse: collapse; border-spacing: 0;">
+  <tr>
+    <td align="center" valign="top" class="cards-outer-td" bgcolor="#e8ecef"
+        style="padding: 32px;" data-color="cardsBg">
+      <p mc:edit="cards_eyebrow" align="center"
+         style="margin: 0 0 24px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; text-align: center;" data-color="cardsEyebrow">
+        PLATFORM DEVELOPMENT
+      </p>
+      <table border="0" cellpadding="0" cellspacing="0" width="686" class="cards-grid" style="width: 686px;">
+        <tr valign="top">
+          <td width="333" valign="top" class="card-col-td" bgcolor="#ffffff"
+              style="width: 333px;" data-color="cardsCardBg">
+            <table border="0" cellpadding="0" cellspacing="0" width="333" style="width: 333px;">
+              <tr>
+                <td style="padding: 20px 20px 16px 0;">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr valign="top">
+                      <td width="8" bgcolor="#006EFF" data-color="cardsAccent"
+                          style="width: 8px; font-size: 0; line-height: 0;"></td>
+                      <td style="padding: 2px 0 2px 10px;">
+                        <h3 mc:edit="card1_title"
+                            style="margin: 0; font-size: 20px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="cardsTitle">
+                          Card Title One
+                        </h3>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              ${opts.showImages ? `<tr><td align="center" style="padding: 0 20px 16px 20px; font-size: 0; line-height: 0; overflow: hidden;"><img mc:edit="card1_image"
+                   src="https://res.cloudinary.com/dhj1ztoeu/image/upload/f_auto,q_auto/v1773385887/eDM/assets/hv6vwlzex66kdhlolq0o.jpg"
+                   width="293" height="176" alt="Card 1" class="card-img" data-crop="293:176"
+                   style="display: block; width: 293px; height: 176px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
+              <tr><td style="padding: 0 20px 16px 20px;">
+                <p mc:edit="card1_body"
+                   style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="cardsBody">
+                  Describe the first highlight here. Share key updates, product features, or campaign details in a concise and compelling way.
+                </p>
+              </td></tr>
+              ${opts.showCta ? `<tr><td style="padding: 0 20px 20px 20px;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 8px 20px;" data-color="cardsCtaBg">
+                      <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="card1_cta"
+                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, sans-serif;" data-color="cardsCtaText">
+                        Read More &rarr;
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td></tr>` : ''}
+            </table>
+          </td>
+          <td width="20" class="card-gap-td" style="width: 20px; font-size: 0; line-height: 0;"></td>
+          <td width="333" valign="top" class="card-col-td" bgcolor="#ffffff"
+              style="width: 333px;" data-color="cardsCardBg">
+            <table border="0" cellpadding="0" cellspacing="0" width="333" style="width: 333px;">
+              <tr>
+                <td style="padding: 20px 20px 16px 0;">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr valign="top">
+                      <td width="8" bgcolor="#006EFF" data-color="cardsAccent"
+                          style="width: 8px; font-size: 0; line-height: 0;"></td>
+                      <td style="padding: 2px 0 2px 10px;">
+                        <h3 mc:edit="card2_title"
+                            style="margin: 0; font-size: 20px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="cardsTitle">
+                          Card Title Two
+                        </h3>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              ${opts.showImages ? `<tr><td align="center" style="padding: 0 20px 16px 20px; font-size: 0; line-height: 0; overflow: hidden;"><img mc:edit="card2_image"
+                   src="https://res.cloudinary.com/dhj1ztoeu/image/upload/f_auto,q_auto/v1773385887/eDM/assets/hv6vwlzex66kdhlolq0o.jpg"
+                   width="293" height="176" alt="Card 2" class="card-img" data-crop="293:176"
+                   style="display: block; width: 293px; height: 176px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
+              <tr><td style="padding: 0 20px 16px 20px;">
+                <p mc:edit="card2_body"
+                   style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="cardsBody">
+                  Describe the second highlight here. Share key updates, product features, or campaign details in a concise and compelling way.
+                </p>
+              </td></tr>
+              ${opts.showCta ? `<tr><td style="padding: 0 20px 20px 20px;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 8px 20px;" data-color="cardsCtaBg">
+                      <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="card2_cta"
+                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, sans-serif;" data-color="cardsCtaText">
+                        Read More &rarr;
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td></tr>` : ''}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`,
+    colorMap: [
+      { label: 'Section BG',  key: 'cardsBg',       type: 'bg',    default: '#e8ecef' },
+      { label: 'Eyebrow',     key: 'cardsEyebrow',  type: 'color', default: '#006EFF' },
+      { label: 'Card BG',     key: 'cardsCardBg',   type: 'bg',    default: '#ffffff' },
+      { label: 'Accent Bar',  key: 'cardsAccent',   type: 'bg',    default: '#006EFF' },
+      { label: 'Card Title',  key: 'cardsTitle',    type: 'color', default: '#0c0c0c' },
+      { label: 'Card Body',   key: 'cardsBody',     type: 'color', default: '#434447' },
+      { label: 'CTA BG',      key: 'cardsCtaBg',    type: 'bg',    default: '#006EFF', gate: 'showCta' },
+      { label: 'CTA Text',    key: 'cardsCtaText',  type: 'color', default: '#ffffff', gate: 'showCta' }
+    ]
+  },
+
+  {
+    id: 'insight',
+    num: '08',
+    name: 'Insight',
+    optionMap: [],
+    getHtml: (opts = {}) => `<!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:750px;"><v:fill type="frame" src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png" color="#003160"/><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0"><![endif]--><table border="0" cellpadding="0" cellspacing="0" width="750" class="insight-table" bgcolor="#003160" background="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png" style="width: 750px; border-collapse: collapse; border-spacing: 0; background-image: url('https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png'); background-size: cover; background-position: center center;" data-color="insightBg">
+  <tr>
+    <td align="center" valign="top" style="padding: 32px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="686" style="width: 686px; background-color: rgba(0,0,0,0.7);" bgcolor="#003160">
+        <tr valign="top">
+          <td width="250" valign="top" class="insight-title-td"
+              style="width: 250px; padding: 32px 16px 32px 32px;">
+            <p mc:edit="insight_eyebrow"
+               style="margin: 0 0 20px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="insightEyebrow">
+              DIGITAL COMMERCE INSIGHT
+            </p>
+            <h2 mc:edit="insight_title"
+                style="margin: 0 0 12px 0; font-size: 28px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.2;" data-color="insightTitle">
+              What Buyer Signals Actually Matter
+            </h2>
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="80" height="4" bgcolor="#F39800" data-color="insightAccent"
+                    style="width: 80px; height: 4px; font-size: 0; line-height: 0;"></td>
+              </tr>
+              <tr>
+                <td height="16" style="height: 16px; font-size: 0; line-height: 0;">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+          <td width="436" valign="middle" class="insight-body-td"
+              style="width: 436px; padding: 32px 32px 32px 16px;">
+            <p mc:edit="insight_body"
+               style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.6;" data-color="insightBody">
+              B2B e-commerce growth does not depend on how much traffic a platform generates, but on whether it can identify the signals that actually move purchase decisions forward: buying intent.<br><br>
+              Because buyers often remain anonymous while researching options, reviewing specifications, and comparing solutions, clicks and page views frequently reflect curiosity rather than real intent. Meaningful signals usually appear through a pattern of evaluation behaviors, such as:<br>
+              &bull;&nbsp;Repeated visits to product pages<br>
+              &bull;&nbsp;Downloading documentation or specifications<br>
+              &bull;&nbsp;Returning to compare multiple products<br>
+              &bull;&nbsp;Deeper exploration within a specific solution category<br><br>
+              A single interaction is often just noise. Real buying intent emerges when multiple evaluation behaviors begin to appear together.<br><br>
+              For global teams, the key question is not which markets generate the most traffic, but where evaluation behaviors begin to appear&#8212;because those signals reveal where real purchasing momentum is forming.<br><br>
+              Scalable growth therefore depends less on attracting more traffic, and more on recognizing which buyer signals actually matter.<br><br>
+              <em>Sources: 6sense | McKinsey | Google B2B Institute</em>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table><!--[if gte mso 9]></v:textbox></v:rect><![endif]-->`,
+    colorMap: [
+      { label: 'BG Fallback',  key: 'insightBg',      type: 'bg',    default: '#003160' },
+      { label: 'Eyebrow',      key: 'insightEyebrow', type: 'color', default: '#F39800' },
+      { label: 'Title',        key: 'insightTitle',   type: 'color', default: '#ffffff' },
+      { label: 'Accent Line',  key: 'insightAccent',  type: 'bg',    default: '#F39800' },
+      { label: 'Body Text',    key: 'insightBody',    type: 'color', default: '#ffffff' }
+    ]
+  }
+];
+
+// Sort components by display order
+COMPONENTS.sort((a, b) => a.num.localeCompare(b.num));
+
+// ══════════════════════════════════════
+// State: current color values per key
+// ══════════════════════════════════════
+const colorState = {};
+function initState() {
+  COMPONENTS.forEach(comp => {
+    comp.colorMap.forEach(c => {
+      colorState[c.key] = c.default;
+    });
+  });
+}
+initState();
+
+// ══════════════════════════════════════
+// Theme Presets (builder-only overlay)
+// ══════════════════════════════════════
+let currentBuilderTheme = 'light-blue';
+
+const THEMES = {
+  'light-blue': {
+    name: 'Blue',
+    swatches: ['#ffffff', '#0059ff', '#07071a', '#1a1a2e'],
+    overrides: null  // null = use component defaults
+  },
+  'light-orange': {
+    name: 'Orange',
+    swatches: ['#ffffff', '#f39800', '#07071a', '#1a1a2e'],
+    overrides: {
+      // Banner
+      bannerBg: '#e57b03', bannerEyebrow: '#f7c265', bannerSubtitle: '#f7c265',
+      bannerCtaText: '#e57b03'
+    }
+  }
+};
+
+function applyTheme(themeName) {
+  // 1. Reset all colors to component defaults
+  initState();
+  // 2. Apply theme overrides (if any)
+  const theme = THEMES[themeName];
+  if (theme && theme.overrides) {
+    Object.entries(theme.overrides).forEach(([key, val]) => {
+      colorState[key] = val;
+    });
+  }
+  // 3. Store current theme
+  currentBuilderTheme = themeName;
+  // 4. Re-render
+  renderThemeSelect();
+  renderBuilderPreview();
+  renderBuilderRight();
+  showToast(`<span class="mi">palette</span>${'Theme'}: ${theme.name}`);
+}
+
+function renderThemeSelect() {
+  const sel = document.getElementById('themeSelect');
+  if (!sel) return;
+  let html = '';
+  Object.entries(THEMES).forEach(([key, theme]) => {
+    const selected = key === currentBuilderTheme ? ' selected' : '';
+    html += `<option value="${key}"${selected}>${theme.name}</option>`;
+  });
+  sel.innerHTML = html;
+}
+
+// ══════════════════════════════════════
+// Edit State: text, links, images, alt
+// ══════════════════════════════════════
+const editState = {};
+
+function humanizeMc(mc) {
+  return mc.replace(/_/g, ' ').replace(/(\d+)/g, ' $1 ').replace(/\s+/g, ' ').trim()
+    .split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+}
+
+function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+function buildComponentEditMap(comp) {
+  if (comp._editMap) return comp._editMap;
+  const w = document.createElement('div');
+  w.innerHTML = comp.getHtml();
+  const map = [];
+  w.querySelectorAll('[mc\\:edit]').forEach(el => {
+    const mc = el.getAttribute('mc:edit');
+    const tag = el.tagName.toLowerCase();
+    const kb = comp.id.replace(/-/g,'_') + '__' + mc;
+    if (tag === 'img') {
+      map.push({ key: kb+'__src', mc, type: 'img', default: el.getAttribute('src')||'' });
+      map.push({ key: kb+'__alt', mc, type: 'alt', default: el.getAttribute('alt')||'' });
+    } else if (tag === 'a') {
+      map.push({ key: kb+'__html', mc, type: 'html', default: el.innerHTML.trim() });
+      map.push({ key: kb+'__href', mc, type: 'link', default: el.getAttribute('href')||'' });
+    } else {
+      map.push({ key: kb+'__html', mc, type: 'html', default: el.innerHTML.trim() });
+    }
+  });
+  comp._editMap = map;
+  return map;
+}
+
+function initEditState() {
+  COMPONENTS.forEach(comp => {
+    buildComponentEditMap(comp).forEach(e => { editState[e.key] = e.default; });
+  });
+}
+initEditState();
+
+function applyEdits(wrapper, comp, overrideEdits) {
+  const _edits = overrideEdits || editState;
+  const prefix = comp.id.replace(/-/g,'_') + '__';
+  wrapper.querySelectorAll('[mc\\:edit]').forEach(el => {
+    const mc = el.getAttribute('mc:edit');
+    const tag = el.tagName.toLowerCase();
+    const kb = prefix + mc;
+    if (tag === 'img') {
+      const srcVal = _edits[kb + '__src'];
+      const altVal = _edits[kb + '__alt'];
+      if (srcVal !== undefined) el.setAttribute('src', srcVal);
+      if (altVal !== undefined) el.setAttribute('alt', altVal);
+    } else if (tag === 'a') {
+      const htmlVal = _edits[kb + '__html'];
+      const hrefVal = _edits[kb + '__href'];
+      if (htmlVal !== undefined) el.innerHTML = htmlVal
+        .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
+        .replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '')
+        .replace(/^<br>/, '');
+      if (hrefVal !== undefined) el.setAttribute('href', hrefVal);
+    } else {
+      const htmlVal = _edits[kb + '__html'];
+      if (htmlVal !== undefined) el.innerHTML = htmlVal
+        .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
+        .replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '')
+        .replace(/^<br>/, '');
+    }
+  });
+}
+
+// ── Inline Editing Setup ──
+let _activeEditableEl = null;
+let _codeDebounce = null;
+let _builderActiveItem = null;
+
+function setupInlineEditing(previewEl, comp, builderItem) {
+  previewEl.querySelectorAll('[mc\\:edit]').forEach(el => {
+    const mc = el.getAttribute('mc:edit');
+    const tag = el.tagName.toLowerCase();
+    const kb = comp.id.replace(/-/g,'_') + '__' + mc;
+
+    if (tag === 'img') {
+      el.setAttribute('data-editable', 'img');
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        if (builderItem) _builderActiveItem = builderItem;
+        showImagePopover(el, kb, comp);
+      });
+    } else {
+      el.setAttribute('contenteditable', 'true');
+      el.addEventListener('paste', (ev) => {
+        ev.preventDefault();
+        const text = (ev.clipboardData || window.clipboardData).getData('text/plain');
+        const lines = text.split(/\r?\n/);
+        lines.forEach((line, i) => {
+          if (i > 0) document.execCommand('insertLineBreak');
+          if (line) document.execCommand('insertText', false, line);
+        });
+      });
+      el.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' && !ev.shiftKey) {
+          ev.preventDefault();
+          document.execCommand('insertLineBreak');
+        }
+      });
+      el.addEventListener('focus', () => {
+        _activeEditableEl = el;
+        if (builderItem) _builderActiveItem = builderItem;
+        showFormatBar(el);
+      });
+      el.addEventListener('input', () => {
+        // Normalize Chrome contenteditable <div> paragraph artifacts to <br>
+        const raw = el.innerHTML;
+        const clean = raw
+          .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
+          .replace(/<div>/gi, '<br>')
+          .replace(/<\/div>/gi, '')
+          .replace(/^<br>/, '');
+        if (builderItem) {
+          builderItem.edits[kb + '__html'] = clean;
+        } else {
+          editState[kb + '__html'] = clean;
+        }
+        clearTimeout(_codeDebounce);
+        _codeDebounce = setTimeout(() => {
+          if (builderItem) {
+            pushBuilderHistory();
+            updateBuilderCode();
+          } else {
+            const codeEl = document.getElementById('code-' + comp.id);
+            if (codeEl) codeEl.textContent = getCleanHtml(comp);
+          }
+        }, 300);
+      });
+      // For <a>, prevent navigation and add link editing
+      if (tag === 'a') {
+        el.addEventListener('click', (ev) => {
+          ev.preventDefault();
+        });
+        el.addEventListener('dblclick', (ev) => {
+          ev.preventDefault(); ev.stopPropagation();
+          if (builderItem) _builderActiveItem = builderItem;
+          showLinkPopover(el, kb, comp);
+        });
+      }
+    }
+  });
+}
+
+// ── Format Toolbar ──
+function showFormatBar(el) {
+  const bar = document.getElementById('formatBar');
+  const rect = el.getBoundingClientRect();
+  let top = rect.top - 40;
+  let left = rect.left;
+  if (top < 8) top = rect.bottom + 6;
+  if (left + 180 > window.innerWidth) left = window.innerWidth - 190;
+  bar.style.top = top + 'px';
+  bar.style.left = left + 'px';
+  bar.classList.add('visible');
+}
+
+function hideFormatBar() {
+  document.getElementById('formatBar').classList.remove('visible');
+  _activeEditableEl = null;
+}
+
+function execFormat(cmd) {
+  function wrapSelection(tag, styleAttr) {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return false;
+    const range = sel.getRangeAt(0);
+    if (range.collapsed) return false;
+    const el = document.createElement(tag);
+    if (styleAttr) el.setAttribute('style', styleAttr);
+    try { range.surroundContents(el); return true; }
+    catch(e) { return false; }
+  }
+
+  if (cmd === 'bold') {
+    if (!wrapSelection('strong', 'font-weight: bold;')) document.execCommand('bold', false, null);
+  } else if (cmd === 'italic') {
+    if (!wrapSelection('em', 'font-style: italic;')) document.execCommand('italic', false, null);
+  } else if (cmd === 'strikeThrough') {
+    if (!wrapSelection('s', 'text-decoration: line-through;')) document.execCommand('strikeThrough', false, null);
+  } else {
+    document.execCommand(cmd, false, null);
+  }
+
+  if (_activeEditableEl) {
+    // Find the comp from the builder stack or from the single customizer
+    let comp = null;
+    let targetEdits = editState;
+    let inBuilder = false;
+    const bsiEl = _activeEditableEl.closest('.builder-stack-item');
+    if (bsiEl) {
+      const uid = bsiEl.dataset.uid;
+      const item = builderStack.find(i => i.uid === uid);
+      if (item) {
+        comp = COMPONENTS.find(c => c.id === item.compId);
+        targetEdits = item.edits;
+        inBuilder = true;
+      }
+    }
+    if (comp) {
+      const mc = _activeEditableEl.getAttribute('mc:edit');
+      const kb = comp.id.replace(/-/g,'_') + '__' + mc + '__html';
+      targetEdits[kb] = _activeEditableEl.innerHTML;
+      clearTimeout(_codeDebounce);
+      _codeDebounce = setTimeout(() => {
+        if (inBuilder) {
+          pushBuilderHistory();
+          updateBuilderCode();
+        } else {
+          const codeEl = document.getElementById('code-' + comp.id);
+          if (codeEl) codeEl.textContent = getCleanHtml(comp);
+        }
+      }, 300);
+    }
+  }
+}
+
+function execBullet() {
+  if (!_activeEditableEl) return;
+  const sel = window.getSelection();
+  const hasSelection = sel && sel.rangeCount > 0 && !sel.getRangeAt(0).collapsed;
+
+  if (hasSelection) {
+    // Convert selected text: split lines, prefix each with bullet
+    const range = sel.getRangeAt(0);
+    const selectedText = range.toString();
+    // Split on newlines or <br> equivalents
+    const lines = selectedText.split(/\n/);
+    const bulleted = lines.map((line, i) => {
+      const trimmed = line.trim();
+      if (!trimmed) return '';
+      return (i === 0 ? '' : '<br>') + '&bull;&nbsp;' + trimmed;
+    }).filter(l => l !== '').join('');
+    // Delete selection and insert bulleted HTML
+    range.deleteContents();
+    const frag = range.createContextualFragment(bulleted);
+    range.insertNode(frag);
+    sel.collapseToEnd();
+  } else {
+    // No selection: insert bullet at cursor
+    document.execCommand('insertHTML', false, '<br>&bull;&nbsp;');
+  }
+
+  // Save edits
+  if (_activeEditableEl) {
+    let comp = null;
+    let targetEdits = editState;
+    let inBuilder = false;
+    const bsiEl = _activeEditableEl.closest('.builder-stack-item');
+    if (bsiEl) {
+      const uid = bsiEl.dataset.uid;
+      const item = builderStack.find(i => i.uid === uid);
+      if (item) {
+        comp = COMPONENTS.find(c => c.id === item.compId);
+        targetEdits = item.edits;
+        inBuilder = true;
+      }
+    }
+    if (comp) {
+      const mc = _activeEditableEl.getAttribute('mc:edit');
+      const kb = comp.id.replace(/-/g,'_') + '__' + mc + '__html';
+      targetEdits[kb] = _activeEditableEl.innerHTML;
+      clearTimeout(_codeDebounce);
+      _codeDebounce = setTimeout(() => {
+        if (inBuilder) { pushBuilderHistory(); updateBuilderCode(); }
+        else { const codeEl = document.getElementById('code-' + comp.id); if (codeEl) codeEl.textContent = getCleanHtml(comp); }
+      }, 300);
+    }
+  }
+}
+
+// Hide format bar when clicking outside contenteditable
+document.addEventListener('mousedown', (ev) => {
+  const bar       = document.getElementById('formatBar');
+  const pop       = document.getElementById('editPopover');
+  const cropModal = document.getElementById('cropModal');
+  // Never close the popover while the crop modal is active
+  if (bar.contains(ev.target) || pop.contains(ev.target) || (cropModal && cropModal.contains(ev.target))) return;
+  const ce = ev.target.closest('[contenteditable="true"]');
+  const img = ev.target.closest('[data-editable]');
+  if (!ce && !img) {
+    hideFormatBar();
+    hideEditPopover();
+  }
+});
+
+// ── Image Popover ──
+function showImagePopover(imgEl, keyBase, comp) {
+  hideFormatBar();
+  const pop = document.getElementById('editPopover');
+  const srcKey = keyBase + '__src';
+  const altKey = keyBase + '__alt';
+  const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
+  const curSrc = _edits[srcKey] || imgEl.getAttribute('src') || '';
+  const curAlt = _edits[altKey] || imgEl.getAttribute('alt') || '';
+  pop.innerHTML = `
+    <div class="edit-popover-title">${'Edit Image'}</div>
+    <div class="edit-popover-preview" id="pop-img-preview">
+      ${curSrc ? `<img src="${escAttr(curSrc)}" alt="Preview" onload="showPreviewDimensions(this)" onerror="this.parentNode.innerHTML='<span class=\'preview-placeholder\'>${'Image not found'}</span>';document.getElementById('pop-img-dims').textContent=''">` : `<span class="preview-placeholder">${'No image URL'}</span>`}
+    </div>
+    <div class="preview-dimensions" id="pop-img-dims"></div>
+    <div class="pop-upload-row">
+      <label class="pop-upload-btn" id="pop-upload-btn" title="${'Upload to Cloudinary'}">
+        <span class="mi">upload</span>${'Upload Image'}
+        <input type="file" id="pop-upload-input" accept="image/jpg,image/jpeg,image/png" style="display:none" onchange="uploadToCloudinary(this)" ${imgEl.dataset.crop ? 'data-crop="' + imgEl.dataset.crop + '"' : ''} data-src-key="${srcKey}" data-alt-key="${altKey}" />
+      </label>
+      <span class="pop-upload-divider">${'or paste URL below'}</span>
+    </div>
+    <div class="pop-upload-error" id="pop-upload-error"></div>
+    <div class="edit-popover-row">
+      <label>${'Image URL'}</label>
+      <input type="url" id="pop-img-src" value="${escAttr(curSrc)}" oninput="updateImagePreview(this.value)" />
+    </div>
+    <div class="edit-popover-row">
+      <label>${'Alt Text'}</label>
+      <input type="text" id="pop-img-alt" value="${escAttr(curAlt)}" />
+      <div style="font-size:10px;color:#aaa;margin-top:4px;line-height:1.5;">${'Displays when the image fails to load, and helps screen readers describe the image. Use a short phrase like \"Product photo\" or \"Banner image\".'}</div>
+    </div>
+    <div class="edit-popover-actions">
+      <button class="pop-cancel" onclick="hideEditPopover()">${'Cancel'}</button>
+      <button class="pop-save" onclick="saveImagePopover('${srcKey}','${altKey}','${comp.id}')">${'Save'}</button>
+    </div>
+  `;
+  const rect = imgEl.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left + rect.width / 2 - 160;
+  if (left < 10) left = 10;
+  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
+  if (top + 340 > window.innerHeight) top = rect.top - 350;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  pop.classList.add('visible');
+}
+
+function showPreviewDimensions(img) {
+  const dims = document.getElementById('pop-img-dims');
+  if (dims) dims.textContent = img.naturalWidth + ' × ' + img.naturalHeight + ' px';
+}
+
+function updateImagePreview(url) {
+  const box = document.getElementById('pop-img-preview');
+  const dims = document.getElementById('pop-img-dims');
+  if (!box) return;
+  if (url && url.trim()) {
+    if (dims) dims.textContent = '';
+    box.innerHTML = `<img src="${url.trim()}" alt="Preview" onload="showPreviewDimensions(this)" onerror="this.parentNode.innerHTML='<span class=\\'preview-placeholder\\'>' + 'Image not found' + '</span>';document.getElementById('pop-img-dims').textContent=''">`;
+  } else {
+    box.innerHTML = '<span class="preview-placeholder">' + 'No image URL' + '</span>';
+    if (dims) dims.textContent = '';
+  }
+}
+
+async function uploadToCloudinary(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const errEl = document.getElementById('pop-upload-error');
+  const showUploadErr = (msg) => { if (errEl) { errEl.textContent = msg; errEl.classList.add('visible'); } };
+  const clearUploadErr = () => { if (errEl) { errEl.textContent = ''; errEl.classList.remove('visible'); } };
+
+  const allowed = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (!allowed.includes(file.type)) { showUploadErr('Only JPG / PNG files are allowed.'); input.value = ''; return; }
+  if (file.size > 5 * 1024 * 1024) { showUploadErr('File must be under 5 MB.'); input.value = ''; return; }
+  clearUploadErr();
+  input.value = '';
+
+  // Capture state NOW (before any async gap or modal interaction clears it)
+  const capturedItem = _builderActiveItem;
+  const srcKey = input.dataset.srcKey || null;
+  const altKey = input.dataset.altKey || null;
+
+  // Called once the URL is ready — writes directly to item.edits and re-renders
+  const applyUpload = (url) => {
+    const srcInput = document.getElementById('pop-img-src');
+    if (srcInput) { srcInput.value = url; updateImagePreview(url); }
+    const _edits = capturedItem ? capturedItem.edits : editState;
+    if (srcKey) _edits[srcKey] = url;
+    hideEditPopover();
+    pushBuilderHistory();
+    renderBuilderPreview();
+  };
+
+  const cropSpec = input.dataset.crop;
+  if (cropSpec) {
+    if (cropSpec === 'free') {
+      showCropModal(file, null, null, blob => _doCloudinaryUpload(blob, 'cropped.jpg', applyUpload));
+    } else {
+      const parts = cropSpec.split(':').map(Number);
+      showCropModal(file, parts[0] || 502, parts[1] || 100, blob => _doCloudinaryUpload(blob, 'cropped.jpg', applyUpload));
+    }
+    return;
+  }
+  await _doCloudinaryUpload(file, file.name, applyUpload);
+}
+
+async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
+
+  const btn = document.getElementById('pop-upload-btn');
+  if (btn) { btn.innerHTML = '<span class="mi" style="animation:spin .8s linear infinite;display:inline-block">progress_activity</span>' + 'Uploading\u2026'; btn.style.pointerEvents = 'none'; }
+
+  try {
+    const formData = new FormData();
+    formData.append('file', fileOrBlob, filename || 'upload.jpg');
+    formData.append('upload_preset', window.CLOUDINARY_PRESET || 'YOUR_UPLOAD_PRESET');
+    formData.append('folder', 'eDM/assets');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/' + (window.CLOUDINARY_CLOUD || 'YOUR_CLOUD_NAME') + '/image/upload', {
+      method: 'POST', body: formData
+    });
+    if (!res.ok) throw new Error('Upload failed: ' + res.status);
+    const data = await res.json();
+    // Insert f_auto,q_auto transformations to minimise bandwidth (auto WebP/AVIF)
+    const url = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+
+    if (onDone) {
+      onDone(url);
+    } else {
+      const srcInput = document.getElementById('pop-img-src');
+      if (srcInput) { srcInput.value = url; updateImagePreview(url); }
+    }
+    showToast('<span class="mi">check_circle</span>' + 'Image uploaded!');
+  } catch (err) {
+    showToast('<span class="mi">error</span>' + 'Upload failed \u2014 check console');
+    console.error(err);
+  } finally {
+    if (btn) { btn.innerHTML = '<span class="mi">upload</span>' + 'Upload Image'; btn.style.pointerEvents = ''; }
+  }
+}
+
+// -- Crop Modal --
+let _cropCallback = null;
+let _cropAspectRatio = null; // null = free, number = locked W/H
+let _cropDragging = false, _cropDragOffsetX = 0, _cropDragOffsetY = 0;
+let _cropResizing = false, _cropResizeHandle = null, _cropResizeStart = null;
+let _cropStageRect = null;
+
+function showCropModal(file, cropW, cropH, callback) {
+  _cropCallback = callback;
+  _cropAspectRatio = (cropW && cropH) ? cropW / cropH : null;
+  const modal = document.getElementById('cropModal');
+  const img   = document.getElementById('cropSourceImg');
+  const title = document.getElementById('cropModalTitle');
+  if (title) title.textContent = cropW && cropH ? 'Crop — ' + cropW + '×' + cropH + ' px' : 'Crop Image';
+  const reader = new FileReader();
+  reader.onload = e => { img.onload = () => initCropBox(cropW, cropH); img.src = e.target.result; modal.classList.add('visible'); };
+  reader.readAsDataURL(file);
+}
+
+function initCropBox(cropW, cropH) {
+  const img = document.getElementById('cropSourceImg');
+  const box = document.getElementById('cropBox');
+  const dW = img.offsetWidth, dH = img.offsetHeight;
+  let bW, bH;
+  if (cropW && cropH) {
+    const ratio = cropW / cropH;
+    if (dW / dH >= ratio) { bH = dH; bW = bH * ratio; } else { bW = dW; bH = bW / ratio; }
+  } else {
+    bW = dW * 0.8; bH = dH * 0.8;
+  }
+  const imgLeft = img.offsetLeft, imgTop = img.offsetTop;
+  box.style.cssText = 'width:' + bW + 'px;height:' + bH + 'px;left:' + (imgLeft + (dW-bW)/2) + 'px;top:' + (imgTop + (dH-bH)/2) + 'px;position:absolute;border:2px solid #F39800;cursor:move;box-sizing:border-box;box-shadow:0 0 0 9999px rgba(0,0,0,0.55);';
+  box.dataset.cropRatioW = cropW || '';
+  box.dataset.cropRatioH = cropH || '';
+  // Build handles
+  box.innerHTML = '';
+  ['nw','n','ne','e','se','s','sw','w'].forEach(pos => {
+    const h = document.createElement('div');
+    h.className = 'crop-handle'; h.dataset.handle = pos;
+    box.appendChild(h);
+  });
+}
+
+function cancelCrop() {
+  document.getElementById('cropModal').classList.remove('visible');
+  _cropCallback = null;
+  const btn = document.getElementById('pop-upload-btn');
+  if (btn) { btn.innerHTML = '<span class="mi">upload</span>Upload Image'; btn.style.pointerEvents = ''; }
+}
+
+function confirmCrop() {
+  const img = document.getElementById('cropSourceImg');
+  const box = document.getElementById('cropBox');
+  const rW = parseInt(box.dataset.cropRatioW);
+  const rH = parseInt(box.dataset.cropRatioH);
+  const scaleX = img.naturalWidth / img.offsetWidth;
+  const scaleY = img.naturalHeight / img.offsetHeight;
+  const sw = parseFloat(box.style.width) * scaleX;
+  const sh = parseFloat(box.style.height) * scaleY;
+  const cW = rW || Math.round(sw);
+  const cH = rH || Math.round(sh);
+  const canvas = document.createElement('canvas');
+  canvas.width = cW; canvas.height = cH;
+  canvas.getContext('2d').drawImage(img,
+    (parseFloat(box.style.left) - img.offsetLeft) * scaleX, (parseFloat(box.style.top) - img.offsetTop) * scaleY,
+    sw, sh, 0, 0, cW, cH);
+  canvas.toBlob(blob => {
+    document.getElementById('cropModal').classList.remove('visible');
+    if (_cropCallback) _cropCallback(blob);
+    _cropCallback = null;
+  }, 'image/jpeg', 0.92);
+}
+
+document.addEventListener('mousedown', e => {
+  const box = document.getElementById('cropBox');
+  if (!box) return;
+  const handleEl = e.target.closest('.crop-handle');
+  if (handleEl) {
+    e.preventDefault(); e.stopPropagation();
+    _cropResizing = true;
+    _cropResizeHandle = handleEl.dataset.handle;
+    _cropStageRect = document.getElementById('cropStage').getBoundingClientRect();
+    _cropResizeStart = { x: e.clientX, y: e.clientY,
+      left: parseFloat(box.style.left), top: parseFloat(box.style.top),
+      width: parseFloat(box.style.width), height: parseFloat(box.style.height) };
+    return;
+  }
+  if (!e.target.closest('#cropBox')) return;
+  e.preventDefault();
+  _cropDragging = true;
+  _cropStageRect = document.getElementById('cropStage').getBoundingClientRect();
+  _cropDragOffsetX = e.clientX - _cropStageRect.left - parseFloat(box.style.left);
+  _cropDragOffsetY = e.clientY - _cropStageRect.top  - parseFloat(box.style.top);
+});
+
+document.addEventListener('mousemove', e => {
+  const box = document.getElementById('cropBox');
+  const img = document.getElementById('cropSourceImg');
+  if (!box || !img) return;
+  if (_cropResizing && _cropResizeStart) {
+    const dx = e.clientX - _cropResizeStart.x;
+    const dy = e.clientY - _cropResizeStart.y;
+    const { left: sL, top: sT, width: sW, height: sH } = _cropResizeStart;
+    const MIN = 20, imgW = img.offsetWidth, imgH = img.offsetHeight;
+    const h = _cropResizeHandle;
+    let nL = sL, nT = sT, nW = sW, nH = sH;
+    if (h.includes('e')) nW = Math.max(MIN, sW + dx);
+    if (h.includes('s')) nH = Math.max(MIN, sH + dy);
+    if (h.includes('w')) { nW = Math.max(MIN, sW - dx); nL = sL + sW - nW; }
+    if (h.includes('n')) { nH = Math.max(MIN, sH - dy); nT = sT + sH - nH; }
+    if (_cropAspectRatio) {
+      if (h === 'e' || h === 'w')      { nH = nW / _cropAspectRatio; }
+      else if (h === 'n' || h === 's') { nW = nH * _cropAspectRatio; }
+      else { nH = nW / _cropAspectRatio; if (h.includes('n')) nT = sT + sH - nH; }
+    }
+    const imgLeft = img.offsetLeft, imgTop = img.offsetTop;
+    nL = Math.max(imgLeft, nL); nT = Math.max(imgTop, nT);
+    if (nL + nW > imgLeft + imgW) nW = imgLeft + imgW - nL;
+    if (nT + nH > imgTop + imgH) nH = imgTop + imgH - nT;
+    box.style.left = nL + 'px'; box.style.top = nT + 'px';
+    box.style.width = nW + 'px'; box.style.height = nH + 'px';
+    return;
+  }
+  if (!_cropDragging) return;
+  const bW = parseFloat(box.style.width), bH = parseFloat(box.style.height);
+  const imgLeft = img.offsetLeft, imgTop = img.offsetTop;
+  box.style.left = Math.max(imgLeft, Math.min(imgLeft + img.offsetWidth  - bW, e.clientX - _cropStageRect.left - _cropDragOffsetX)) + 'px';
+  box.style.top  = Math.max(imgTop,  Math.min(imgTop  + img.offsetHeight - bH, e.clientY - _cropStageRect.top  - _cropDragOffsetY)) + 'px';
+});
+
+document.addEventListener('mouseup', () => { _cropDragging = false; _cropResizing = false; _cropResizeStart = null; });
+
+function saveImagePopover(srcKey, altKey, compId) {
+  const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
+  _edits[srcKey] = document.getElementById('pop-img-src').value;
+  _edits[altKey] = document.getElementById('pop-img-alt').value;
+  hideEditPopover();
+  pushBuilderHistory();
+  renderBuilderPreview();
+}
+
+// ── Link Popover ──
+function showLinkPopover(aEl, keyBase, comp) {
+  const pop = document.getElementById('editPopover');
+  const hrefKey = keyBase + '__href';
+  const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
+  const curHref = _edits[hrefKey] !== undefined ? _edits[hrefKey] : (aEl.getAttribute('href')||'');
+  pop.innerHTML = `
+    <div class="edit-popover-title">${'Edit Link'}</div>
+    <div class="edit-popover-row">
+      <label>${'Link URL'}</label>
+      <input type="url" id="pop-link-href" value="${escAttr(curHref)}" />
+    </div>
+    <div class="edit-popover-actions">
+      <button class="pop-cancel" onclick="hideEditPopover()">${'Cancel'}</button>
+      <button class="pop-save" onclick="saveLinkPopover('${hrefKey}','${comp.id}')">${'Save'}</button>
+    </div>
+  `;
+  const rect = aEl.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left;
+  if (left + 300 > window.innerWidth) left = window.innerWidth - 310;
+  if (top + 160 > window.innerHeight) top = rect.top - 170;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  pop.classList.add('visible');
+}
+
+function saveLinkPopover(hrefKey, compId) {
+  const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
+  _edits[hrefKey] = document.getElementById('pop-link-href').value;
+  hideEditPopover();
+  pushBuilderHistory();
+  renderBuilderPreview();
+}
+
+function hideEditPopover() {
+  document.getElementById('editPopover').classList.remove('visible');
+  _builderActiveItem = null;
+}
+
+function toggleSection(sectionId) {
+  const sec = document.getElementById(sectionId);
+  if (!sec) return;
+  sec.classList.toggle('collapsed');
+  const arrow = sec.querySelector('.section-arrow');
+  if (arrow) arrow.textContent = sec.classList.contains('collapsed') ? 'expand_more' : 'expand_less';
+}
+
+// ══════════════════════════════════════
+// Responsive CSS per component (for full-doc export)
+// ══════════════════════════════════════
+const RESPONSIVE_CSS = {
+  'header': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.split-table { width: 100% !important; }
+      td.hide-sm { display: none !important; }
+      img.mobile-img { width: 100% !important; max-width: 100% !important; height: auto !important; }
+      span.email-desktop { display: none !important; max-height: 0 !important; overflow: hidden !important; }
+      span.email-mobile { display: inline !important; max-height: none !important; overflow: visible !important; }`,
+  'banner': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.split-table { width: 100% !important; }
+      td.hero-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 28px 20px !important; height: auto !important; }
+      td.col-2 { display: block !important; width: 100% !important; box-sizing: border-box; height: auto !important; }
+      h1.hero-title { font-size: 28px !important; line-height: 1.2 !important; }
+      img.mobile-img { width: 100% !important; max-width: 100% !important; height: auto !important; }`,
+  'top-news': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.split-table { width: 100% !important; }
+      td.news-label-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 24px 20px 16px 20px !important; border-left: none !important; }
+      td.news-body-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 20px 20px 24px 20px !important; border-left: none !important; }
+      img.news-img { width: 100% !important; max-width: 100% !important; height: auto !important; }`,
+  'stats': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.split-table { width: 100% !important; }
+      td.stats-label-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 28px 20px 20px 20px !important; }
+      td.stats-stat-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 16px 20px !important; border-left: none !important; border-top: 1px solid rgba(255,255,255,0.35) !important; text-align: left !important; }`,
+  'article': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.split-table { width: 100% !important; }
+      td.article-outer-td { padding: 20px !important; }
+      table.article-inner { width: 100% !important; }
+      td.article-stats-td { display: block !important; width: 100% !important; box-sizing: border-box; }
+      td.article-body-td { display: block !important; width: 100% !important; box-sizing: border-box; }`,
+  'feature': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.feature-table { width: 100% !important; }
+      td.feature-header-td { padding: 12px 20px !important; }
+      td.feature-body-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 24px 20px !important; }
+      td.feature-img-td { display: block !important; width: 100% !important; box-sizing: border-box; }
+      img.feature-img { width: 100% !important; max-width: 100% !important; height: auto !important; }`,
+  'cards': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.cards-table { width: 100% !important; }
+      td.cards-outer-td { padding: 20px !important; }
+      table.cards-grid { width: 100% !important; }
+      td.card-col-td { display: block !important; width: 100% !important; box-sizing: border-box; margin-bottom: 16px; }
+      td.card-gap-td { display: none !important; }
+      img.card-img { width: 100% !important; height: auto !important; }`,
+  'insight': `
+      table.insight-table { width: 100% !important; background-size: cover !important; }
+      td.insight-title-td { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 32px 20px 12px 20px !important; }
+      td.insight-body-td  { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 0 20px 32px 20px !important; }`
+};
+
+// ══════════════════════════════════════
+// Build full HTML document for copy/export
+// ══════════════════════════════════════
+function buildFullDoc(comp, coloredInnerHtml) {
+  const title = 'Component' + ' — ' + comp.name;
+  const css = RESPONSIVE_CSS[comp.id] || '';
+  const isEmailContainer = coloredInnerHtml.indexOf('class="email-container"') !== -1;
+
+  let bodyContent;
+  if (isEmailContainer) {
+    bodyContent = `
+<!-- Outer Wrapper -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #D6D9DD;">
+  <tr>
+    <td align="center" valign="top" class="outer-pad" style="padding: 0 10px;">
+      <!--[if mso]>
+      <table border="0" cellpadding="0" cellspacing="0" width="750">
+      <tr><td>
+      <![endif]-->
+
+      ${coloredInnerHtml}
+
+      <!--[if mso]>
+      </td></tr>
+      </table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>`;
+  } else {
+    bodyContent = `
+<!-- Outer Wrapper -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #D6D9DD;">
+  <tr>
+    <td align="center" valign="top" class="outer-pad" style="padding: 0 10px;">
+      <!--[if mso]>
+      <table border="0" cellpadding="0" cellspacing="0" width="750">
+      <tr><td>
+      <![endif]-->
+      <table border="0" cellpadding="0" cellspacing="0" width="750" class="email-container" style="width: 750px; border-collapse: collapse; border-spacing: 0;">
+
+        <tr>
+          <td width="750" align="center" valign="top" style="width: 750px; padding: 0;">
+            ${coloredInnerHtml}
+          </td>
+        </tr>
+
+      </table>
+      <!--[if mso]>
+      </td></tr>
+      </table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>`;
+  }
+
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <!--[if !mso]><!-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!--<![endif]-->
+  <title>${title}</title>
+  <!--[if mso]>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+    .ExternalClass { width: 100%; }
+    .ExternalClass, .ExternalClass p, .ExternalClass span,
+    .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+    @media only screen and (max-width: 480px) {${css}
+    }
+  </style>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td, p, a, li { font-family: Arial, sans-serif !important; }
+    table { border-collapse: collapse !important; }
+  </style>
+  <![endif]-->
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #D6D9DD; font-family: Arial, Helvetica, sans-serif;">
+${bodyContent}
+
+</body>
+</html>`;
+}
+
+
+// ══════════════════════════════════════
+// Builder — Drag & Drop eDM Composer
+// ══════════════════════════════════════
+let builderStack = [];       // { uid, compId, edits }
+let builderSelectedUid = null;
+let _builderUid = 0;
+let _builderInited = false;
+let builderHistory = [];
+let builderHistoryIdx = -1;
+
+function showBuilder() {
+  // Restore theme colors when entering builder
+  initState();
+  const theme = THEMES[currentBuilderTheme];
+  if (theme && theme.overrides) {
+    Object.entries(theme.overrides).forEach(([key, val]) => { colorState[key] = val; });
+  }
+  if (!_builderInited) { initBuilderDragDrop(); _builderInited = true; pushBuilderHistory(); }
+  renderThemeSelect();
+  renderBuilderLeft();
+  renderBuilderPreview();
+  renderBuilderRight();
+  window.scrollTo(0, 0);
+}
+
+let _dragDropIndex = -1;
+
+function _getDropIndex(canvas, clientY) {
+  const items = canvas.querySelectorAll('.builder-stack-item');
+  if (items.length === 0) return 0;
+  for (let i = 0; i < items.length; i++) {
+    const rect = items[i].getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    if (clientY < mid) return i;
+  }
+  return items.length;
+}
+
+function _showDropLine(canvas, idx) {
+  // Remove existing drop lines
+  canvas.querySelectorAll('.builder-drop-line').forEach(el => el.remove());
+  const items = canvas.querySelectorAll('.builder-stack-item');
+  const line = document.createElement('div');
+  line.className = 'builder-drop-line visible';
+  if (items.length === 0 || idx >= items.length) {
+    canvas.appendChild(line);
+  } else {
+    canvas.insertBefore(line, items[idx]);
+  }
+}
+
+function _clearDropLine(canvas) {
+  canvas.querySelectorAll('.builder-drop-line').forEach(el => el.remove());
+  _dragDropIndex = -1;
+}
+
+function initBuilderDragDrop() {
+  const canvas = document.getElementById('builderCanvas');
+  canvas.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    canvas.classList.add('drag-over');
+    const idx = _getDropIndex(canvas, e.clientY);
+    if (idx !== _dragDropIndex) {
+      _dragDropIndex = idx;
+      _showDropLine(canvas, idx);
+    }
+  });
+  canvas.addEventListener('dragleave', (e) => {
+    if (!canvas.contains(e.relatedTarget)) {
+      canvas.classList.remove('drag-over');
+      _clearDropLine(canvas);
+    }
+  });
+  canvas.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const idx = _getDropIndex(canvas, e.clientY);
+    canvas.classList.remove('drag-over');
+    _clearDropLine(canvas);
+    const compId = e.dataTransfer.getData('text/comp-id');
+    if (compId) addToBuilder(compId, idx);
+  });
+}
+
+function addToBuilder(compId, insertIndex) {
+  const uid = 'b' + (++_builderUid);
+  const comp = COMPONENTS.find(c => c.id === compId);
+  const edits = {};
+  if (comp) buildComponentEditMap(comp).forEach(e => { edits[e.key] = e.default; });
+  const options = {};
+  if (comp && comp.optionMap) comp.optionMap.forEach(o => { options[o.key] = o.default; });
+  const newItem = { uid, compId, edits, options };
+  if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= builderStack.length) {
+    builderStack.splice(insertIndex, 0, newItem);
+  } else {
+    builderStack.push(newItem);
+  }
+  pushBuilderHistory();
+  renderBuilderPreview();
+  selectBuilderItem(uid);
+}
+
+function removeFromBuilder(uid) {
+  builderStack = builderStack.filter(i => i.uid !== uid);
+  if (builderSelectedUid === uid) { builderSelectedUid = null; renderBuilderRight(); }
+  pushBuilderHistory();
+  renderBuilderPreview();
+}
+
+function moveBuilderItem(uid, dir) {
+  const idx = builderStack.findIndex(i => i.uid === uid);
+  if (idx < 0) return;
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= builderStack.length) return;
+  [builderStack[idx], builderStack[newIdx]] = [builderStack[newIdx], builderStack[idx]];
+  pushBuilderHistory();
+  renderBuilderPreview();
+}
+
+function duplicateBuilderItem(uid) {
+  const idx = builderStack.findIndex(i => i.uid === uid);
+  if (idx < 0) return;
+  const src = builderStack[idx];
+  const clone = { compId: src.compId, uid: 'bi_' + Date.now(), edits: JSON.parse(JSON.stringify(src.edits)) };
+  builderStack.splice(idx + 1, 0, clone);
+  pushBuilderHistory();
+  renderBuilderPreview();
+}
+
+function setBuilderOption(uid, key, val) {
+  const item = builderStack.find(i => i.uid === uid);
+  if (!item) return;
+  if (!item.options) item.options = {};
+  item.options[key] = val;
+  if (val === true) {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (comp && comp.optionMap) {
+      const thisOpt = comp.optionMap.find(o => o.key === key);
+      if (thisOpt && thisOpt.exclusiveGroup) {
+        comp.optionMap.forEach(o => {
+          if (o.key !== key && o.exclusiveGroup === thisOpt.exclusiveGroup) {
+            item.options[o.key] = false;
+          }
+        });
+      }
+    }
+  }
+  pushBuilderHistory();
+  renderBuilderPreview();
+  renderBuilderRight();
+}
+
+function selectBuilderItem(uid) {
+  builderSelectedUid = uid;
+  document.querySelectorAll('.builder-stack-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.uid === uid);
+  });
+  renderBuilderRight();
+}
+
+function renderBuilderLeft() {
+  const list = document.getElementById('builderCompList');
+  let html = '';
+  COMPONENTS.forEach(comp => {
+    html += `
+      <div class="builder-comp-item" draggable="true"
+           ondragstart="event.dataTransfer.setData('text/comp-id','${comp.id}'); event.dataTransfer.effectAllowed='copy';">
+        <div class="bci-thumb" id="bci-thumb-${comp.id}"></div>
+        <div class="bci-meta">
+          <span class="bci-num">${comp.num}</span>
+          <span class="bci-name">${comp.name}</span>
+        </div>
+        <button class="bci-add" onclick="event.stopPropagation(); addToBuilder('${comp.id}')" title="${'Add to eDM'}">
+          <span class="mi">add</span>
+        </button>
+      </div>`;
+  });
+  list.innerHTML = html;
+  // Render thumbnails after DOM is ready
+  requestAnimationFrame(() => _renderAllThumbs());
+}
+
+function _renderAllThumbs() {
+  const THUMB_W = 88, THUMB_H = 56, COMP_W = 750;
+  const scale = THUMB_W / COMP_W;
+  COMPONENTS.forEach(comp => {
+    const slot = document.getElementById('bci-thumb-' + comp.id);
+    if (!slot) return;
+    const inner = document.createElement('div');
+    inner.className = 'bci-thumb-inner';
+    inner.style.width = COMP_W + 'px';
+    inner.style.transform = `scale(${scale})`;
+    // Apply current color state to the thumbnail HTML
+    inner.innerHTML = applyColors(comp.getHtml({}), comp);
+    // Remove interactive attributes so they don't interfere
+    inner.querySelectorAll('[mc\\:edit],[contenteditable]').forEach(el => {
+      el.removeAttribute('mc:edit'); el.removeAttribute('contenteditable');
+    });
+    inner.querySelectorAll('[data-color],[data-border-color]').forEach(el => {
+      el.removeAttribute('data-color'); el.removeAttribute('data-border-color');
+    });
+    slot.innerHTML = '';
+    slot.appendChild(inner);
+    // Clip height to show only the top portion that fits THUMB_H
+    slot.style.height = THUMB_H + 'px';
+  });
+}
+
+function renderBuilderPreview() {
+  const canvas = document.getElementById('builderCanvas');
+  const codePanel = document.getElementById('builderCodePanel');
+  const isCodeView = codePanel && codePanel.classList.contains('open');
+  if (builderStack.length === 0) {
+    canvas.innerHTML = `
+      <div class="builder-empty">
+        <span class="mi">add_circle_outline</span>
+        <h4>${'Start Building Your eDM'}</h4>
+        <p>${'Drag components from the left panel<br>or click <b>+</b> to add them here'}</p>
+      </div>`;
+    // If code view was open, switch back to preview since nothing to show
+    if (isCodeView) {
+      codePanel.classList.remove('open');
+      canvas.style.display = '';
+      const btn = document.querySelector('.builder-floating-source');
+      if (btn) btn.innerHTML = '<span class="mi">code</span>' + 'View Source';
+    }
+    return;
+  }
+  let html = '';
+  builderStack.forEach((item, idx) => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (!comp) return;
+    const sel = item.uid === builderSelectedUid ? ' selected' : '';
+    const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits);
+    html += `
+      <div class="builder-stack-item${sel}" data-uid="${item.uid}" onclick="selectBuilderItem('${item.uid}')">
+        <div class="bsi-toolbar">
+          <button class="bsi-btn-move" title="${'Move Up'}" onclick="event.stopPropagation(); moveBuilderItem('${item.uid}', -1)">
+            <span class="mi">arrow_upward</span>
+          </button>
+          <button class="bsi-btn-move" title="${'Move Down'}" onclick="event.stopPropagation(); moveBuilderItem('${item.uid}', 1)">
+            <span class="mi">arrow_downward</span>
+          </button>
+          <button class="bsi-btn-dup" title="${'Duplicate'}" onclick="event.stopPropagation(); duplicateBuilderItem('${item.uid}')">
+            <span class="mi">content_copy</span>
+          </button>
+          <button class="bsi-btn-del" title="${'Remove'}" onclick="event.stopPropagation(); removeFromBuilder('${item.uid}')">
+            <span class="mi">delete</span>
+          </button>
+        </div>
+        <div class="bsi-content">${coloredHtml}</div>
+      </div>`;
+  });
+  canvas.innerHTML = html;
+  // Re-apply mobile preview mode if active
+  if (builderDeviceMode === 'mobile') {
+    canvas.classList.add('mobile-preview');
+    canvas.querySelectorAll('.builder-stack-item').forEach(stackEl => {
+      const uid = stackEl.dataset.uid;
+      const item = builderStack.find(i => i.uid === uid);
+      if (!item) return;
+      const css = RESPONSIVE_CSS[item.compId] || '';
+      if (css) {
+        const ms = document.createElement('style');
+        ms.className = 'bsi-mobile-style';
+        ms.textContent = css;
+        stackEl.appendChild(ms);
+      }
+    });
+  }
+  // Set up inline editing on each stack item
+  builderStack.forEach(item => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    const el = canvas.querySelector(`[data-uid="${item.uid}"] .bsi-content`);
+    if (comp && el) setupInlineEditing(el, comp, item);
+  });
+  // Update builder code panel if open
+  updateBuilderCode();
+}
+
+function renderBuilderRight() {
+  const container = document.getElementById('builderRightContent');
+  if (!builderSelectedUid) {
+    container.innerHTML = `
+      <div class="builder-right-empty">
+        <span class="mi">touch_app</span>
+        <p>${'Click a component in the<br>preview to customize its colors'}</p>
+      </div>`;
+    return;
+  }
+  const item = builderStack.find(i => i.uid === builderSelectedUid);
+  if (!item) { container.innerHTML = ''; return; }
+  const comp = COMPONENTS.find(c => c.id === item.compId);
+  if (!comp) return;
+  let html = '';
+  html += `<div class="detail-sidebar-header"><h3>${comp.name}</h3><div class="comp-id">${'Component'} ${comp.num}</div></div>`;
+  // Options section (if component has optionMap)
+  if (comp.optionMap && comp.optionMap.length) {
+    html += `<div class="sidebar-section" id="sec-opts-${item.uid}">`;
+    html += `<div class="sidebar-section-header" onclick="toggleSection('sec-opts-${item.uid}')">`;
+    html += `<span class="sidebar-section-title">Options</span>`;
+    html += `<span class="mi section-arrow">expand_less</span>`;
+    html += `</div><div class="sidebar-section-body">`;
+    comp.optionMap.forEach(o => {
+      const val = (item.options || {})[o.key];
+      if (o.type === 'select' && o.choices) {
+        const cur = val !== undefined ? val : o.default;
+        html += `<div class="sidebar-toggle-ctrl" style="align-items: flex-start; flex-direction: column; gap: 6px;">`;
+        html += `<span class="ctrl-label">${o.label}</span>`;
+        html += `<div style="display: flex; gap: 4px; flex-wrap: wrap;">`;
+        o.choices.forEach(ch => {
+          const active = cur === ch.value ? 'background:#0059ff;color:#fff;border-color:#0059ff;' : 'background:#fff;color:#434447;border-color:#cfd2d5;';
+          html += `<button onclick="setBuilderOption('${item.uid}','${o.key}','${ch.value}')" style="${active}padding:4px 10px;font-size:11px;font-weight:600;border:1px solid;border-radius:4px;cursor:pointer;font-family:inherit;">${ch.label}</button>`;
+        });
+        html += `</div></div>`;
+      } else {
+        const bval = val !== undefined ? val : o.default;
+        html += `<div class="sidebar-toggle-ctrl">
+        <span class="ctrl-label">${o.label}</span>
+        <label class="toggle-switch">
+          <input type="checkbox" ${bval ? 'checked' : ''} onchange="setBuilderOption('${item.uid}','${o.key}',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>`;
+      }
+    });
+    html += `</div></div>`;
+  }
+  html += `<div class="sidebar-section" id="sec-bc-${item.uid}">`;
+  html += `<div class="sidebar-section-header" onclick="toggleSection('sec-bc-${item.uid}')">`;
+  html += `<span class="sidebar-section-title">${'Colors'}</span>`;
+  html += `<span class="mi section-arrow">expand_less</span>`;
+  html += `</div><div class="sidebar-section-body">`;
+  comp.colorMap.forEach(c => {
+    if (c.hidden) return;
+    if (c.optionGate && !(item.options || {})[c.optionGate]) return;
+    html += `
+      <div class="sidebar-color-ctrl">
+        <span class="ctrl-label">${c.label}</span>
+        <div class="ctrl-swatch" id="bswatch-${c.key}" style="background:${colorState[c.key]}"
+             onclick="openColorPopup('${c.key}', '${comp.id}', this)"></div>
+      </div>`;
+  });
+  html += `</div></div>`;
+  container.innerHTML = html;
+}
+
+function buildFullEdmDoc() {
+  if (builderStack.length === 0) return '';
+  let css = '';
+  const seenCss = new Set();
+  builderStack.forEach(item => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (comp && RESPONSIVE_CSS[comp.id] && !seenCss.has(comp.id)) {
+      css += RESPONSIVE_CSS[comp.id];
+      seenCss.add(comp.id);
+    }
+  });
+  let parts = '';
+  builderStack.forEach(item => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (!comp) return;
+    const w = document.createElement('div');
+    w.innerHTML = comp.getHtml(item.options || {});
+    applyEdits(w, comp, item.edits);
+    comp.colorMap.forEach(c => {
+      const val = colorState[c.key];
+      w.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
+        if (c.type === 'bg') el.style.backgroundColor = val;
+        else el.style.color = val;
+      });
+      w.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
+        el.style.border = `2px solid ${val}`;
+      });
+    });
+    w.querySelectorAll('[data-color]').forEach(el => el.removeAttribute('data-color'));
+    w.querySelectorAll('[data-border-color]').forEach(el => el.removeAttribute('data-border-color'));
+    parts += w.innerHTML + '\n';
+  });
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <!--[if !mso]><!-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!--<![endif]-->
+  <title>Custom eDM</title>
+  <!--[if mso]>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+    .ExternalClass { width: 100%; }
+    .ExternalClass, .ExternalClass p, .ExternalClass span,
+    .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+    @media only screen and (max-width: 480px) {${css}
+    }
+  </style>
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td, p, a, li { font-family: Arial, sans-serif !important; }
+    table { border-collapse: collapse !important; }
+  </style>
+  <![endif]-->
+</head>
+<body style="margin: 0; padding: 0; background-color: #D6D9DD; font-family: Arial, Helvetica, sans-serif;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #D6D9DD;">
+  <tr>
+    <td align="center" valign="top" class="outer-pad" style="padding: 0 10px;">
+      <!--[if mso]>
+      <table border="0" cellpadding="0" cellspacing="0" width="750"><tr><td>
+      <![endif]-->
+${parts}
+      <!--[if mso]>
+      </td></tr></table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
+}
+
+function updateBuilderCode() {
+  const cp = document.getElementById('builderCodePanel');
+  if (cp && cp.classList.contains('open')) {
+    document.getElementById('builderCode').textContent = buildFullEdmDoc();
+  }
+  // If code view is active and canvas is re-rendered, keep canvas hidden
+}
+
+function pushBuilderHistory() {
+  builderHistory = builderHistory.slice(0, builderHistoryIdx + 1);
+  builderHistory.push(JSON.parse(JSON.stringify(builderStack)));
+  builderHistoryIdx = builderHistory.length - 1;
+  updateUndoRedoBtns();
+}
+
+function undoBuilder() {
+  if (builderHistoryIdx <= 0) return;
+  builderHistoryIdx--;
+  builderStack = JSON.parse(JSON.stringify(builderHistory[builderHistoryIdx]));
+  builderSelectedUid = null;
+  renderBuilderPreview();
+  renderBuilderRight();
+  updateUndoRedoBtns();
+}
+
+function redoBuilder() {
+  if (builderHistoryIdx >= builderHistory.length - 1) return;
+  builderHistoryIdx++;
+  builderStack = JSON.parse(JSON.stringify(builderHistory[builderHistoryIdx]));
+  builderSelectedUid = null;
+  renderBuilderPreview();
+  renderBuilderRight();
+  updateUndoRedoBtns();
+}
+
+function updateUndoRedoBtns() {
+  const undoBtn = document.getElementById('builderUndoBtn');
+  const redoBtn = document.getElementById('builderRedoBtn');
+  if (undoBtn) undoBtn.disabled = builderHistoryIdx <= 0;
+  if (redoBtn) redoBtn.disabled = builderHistoryIdx >= builderHistory.length - 1;
+}
+
+// ══════════════════════════════════════
+// Desktop / Mobile Preview Toggle
+// ══════════════════════════════════════
+let builderDeviceMode = 'desktop';
+
+function toggleDeviceView(mode, context) {
+  if (context === 'builder') {
+    builderDeviceMode = mode;
+    const canvas = document.getElementById('builderCanvas');
+    const toggle = document.getElementById('builderDeviceToggle');
+    if (!canvas || !toggle) return;
+    toggle.querySelectorAll('button').forEach((btn, i) => {
+      btn.classList.toggle('active', (i === 0 && mode === 'desktop') || (i === 1 && mode === 'mobile'));
+    });
+    canvas.classList.toggle('mobile-preview', mode === 'mobile');
+    // Inject / remove responsive CSS into each stack item
+    canvas.querySelectorAll('.builder-stack-item').forEach(stackEl => {
+      const uid = stackEl.dataset.uid;
+      const item = builderStack.find(i => i.uid === uid);
+      if (!item) return;
+      let ms = stackEl.querySelector('.bsi-mobile-style');
+      if (mode === 'mobile') {
+        const css = RESPONSIVE_CSS[item.compId] || '';
+        if (css) {
+          if (!ms) {
+            ms = document.createElement('style');
+            ms.className = 'bsi-mobile-style';
+            stackEl.appendChild(ms);
+          }
+          ms.textContent = css;
+        }
+      } else if (ms) {
+        ms.remove();
+      }
+    });
+  }
+}
+
+function toggleBuilderCode() {
+  const canvas = document.getElementById('builderCanvas');
+  const panel = document.getElementById('builderCodePanel');
+  const btn = document.querySelector('.builder-floating-source');
+  if (!panel || !canvas) return;
+  const showing = panel.classList.contains('open');
+  if (showing) {
+    panel.classList.remove('open');
+    canvas.style.display = '';
+    if (btn) btn.innerHTML = '<span class="mi">code</span>' + 'View Source';
+  } else {
+    document.getElementById('builderCode').textContent = buildFullEdmDoc();
+    canvas.style.display = 'none';
+    panel.classList.add('open');
+    if (btn) btn.innerHTML = '<span class="mi">preview</span>' + 'eDM Preview';
+  }
+}
+
+function copyBuilderHtml() {
+  const html = buildFullEdmDoc();
+  if (!html) { showToast('<span class="mi">info</span>' + 'Add some components first!'); return; }
+  navigator.clipboard.writeText(html).then(() => {
+    showToast('<span class="mi">check_circle</span>' + 'Full eDM HTML copied!');
+    const btn = document.getElementById('builderCopyBtn');
+    if (btn) {
+      btn.innerHTML = '<span class="mi">check_circle</span>' + 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerHTML = '<span class="mi">content_copy</span>' + 'Copy Full HTML'; btn.classList.remove('copied'); }, 2000);
+    }
+  });
+}
+
+function downloadBuilderHtml() {
+  const html = buildFullEdmDoc();
+  if (!html) { showToast('<span class="mi">info</span>' + 'Add some components first!'); return; }
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'edm-' + new Date().toISOString().slice(0,10) + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('<span class="mi">download_done</span>' + 'HTML downloaded!');
+}
+
+// ══════════════════════════════════════
+// Apply colors to HTML string via DOM
+// ══════════════════════════════════════
+function applyColors(htmlStr, comp, overrideEdits) {
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = htmlStr;
+
+  applyEdits(wrapper, comp, overrideEdits);
+
+  comp.colorMap.forEach(c => {
+    const val = colorState[c.key];
+    wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
+      if (c.type === 'bg') {
+        el.style.backgroundColor = val;
+      } else {
+        el.style.color = val;
+      }
+    });
+    wrapper.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
+      el.style.border = `2px solid ${val}`;
+    });
+  });
+  return wrapper.innerHTML;
+}
+
+// ══════════════════════════════════════
+// Get clean HTML for copy (remove data- attributes)
+// ══════════════════════════════════════
+function getCleanHtml(comp) {
+  const raw = comp.getHtml();
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = raw;
+
+  applyEdits(wrapper, comp);
+
+  comp.colorMap.forEach(c => {
+    const val = colorState[c.key];
+    wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
+      if (c.type === 'bg') {
+        el.style.backgroundColor = val;
+      } else {
+        el.style.color = val;
+      }
+    });
+    wrapper.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
+      el.style.border = `2px solid ${val}`;
+    });
+  });
+
+  wrapper.querySelectorAll('[data-color]').forEach(el => el.removeAttribute('data-color'));
+  wrapper.querySelectorAll('[data-border-color]').forEach(el => el.removeAttribute('data-border-color'));
+
+  return buildFullDoc(comp, wrapper.innerHTML);
+}
+
+// ══════════════════════════════════════
+// Refresh preview
+// ══════════════════════════════════════
+
+
+// ══════════════════════════════════════
+// Reset All
+// ══════════════════════════════════════
+function resetAll() {
+  initState();
+  COMPONENTS.forEach(comp => {
+    comp._editMap = null;
+    buildComponentEditMap(comp).forEach(e => { editState[e.key] = e.default; });
+  });
+  const bv = document.getElementById('builderView');
+  if (bv && bv.classList.contains('visible')) {
+    currentBuilderTheme = 'light-blue';
+    renderThemeSelect();
+    renderBuilderPreview();
+    renderBuilderRight();
+  }
+  showToast('<span class="mi">restart_alt</span>' + 'All colors reset to defaults!');
+}
+
+// ══════════════════════════════════════
+// Toast
+// ══════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+
+// ══════════════════════════════════════
+// Init — Start with Builder View
+// ══════════════════════════════════════
+showBuilder();
+</script>
+
+</body>
+</html>
