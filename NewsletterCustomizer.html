@@ -433,9 +433,310 @@
     .rgb-apply-btn:hover { background: #003fcc; }
 
     /* ══════════════════════════════════
+       USER PROFILE MODAL (on first visit)
+       ══════════════════════════════════ */
+    #userProfileModal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,7,26,.55); z-index: 30000;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    #userProfileModal.visible { display: flex; }
+    .profile-modal-box {
+      background: #fff; border-radius: 16px; width: 380px; max-width: 92vw;
+      box-shadow: 0 12px 48px rgba(0,0,0,.25); overflow: hidden;
+      animation: profileSlideIn .3s ease;
+    }
+    @keyframes profileSlideIn {
+      from { opacity: 0; transform: translateY(20px) scale(.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .profile-modal-header {
+      text-align: center; padding: 28px 24px 12px;
+    }
+    .profile-modal-header h3 {
+      font-size: 18px; font-weight: 800; color: #07071a; margin: 0 0 4px;
+    }
+    .profile-modal-header p {
+      font-size: 12px; color: #999; margin: 0;
+    }
+    .profile-emoji-grid {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+      padding: 20px 24px 8px; max-width: 280px; margin: 0 auto;
+    }
+    .profile-emoji-btn {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 3px solid transparent; background: #f5f6f8;
+      font-size: 28px; cursor: pointer; transition: all .15s;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .profile-emoji-btn:hover {
+      border-color: #c5d4ff; background: #eef3ff;
+      transform: scale(1.1);
+    }
+    .profile-emoji-btn.selected {
+      border-color: #0059ff; background: #eef3ff;
+      box-shadow: 0 0 0 3px rgba(0,89,255,.2);
+      transform: scale(1.12);
+    }
+    .profile-name-row {
+      padding: 12px 24px;
+    }
+    .profile-name-row label {
+      display: block; font-size: 11px; font-weight: 700; color: #999;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+    }
+    .profile-name-row input {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+      outline: none; text-align: center; color: #333;
+    }
+    .profile-name-row input:focus {
+      border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1);
+    }
+    .profile-name-row input::placeholder { color: #ccc; }
+    .profile-modal-footer {
+      padding: 12px 24px 24px; text-align: center;
+    }
+    .profile-start-btn {
+      width: 100%; padding: 12px; border-radius: 10px; border: none;
+      background: #0059ff; color: #fff; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif;
+    }
+    .profile-start-btn:hover { background: #003fcc; }
+    .profile-start-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Top-bar online presence avatars */
+    .top-bar-online {
+      display: flex; align-items: center; gap: 4px;
+      padding: 2px 6px; border-radius: 20px;
+      background: #f5f6f8; border: 1px solid #e5e7eb;
+      cursor: default; user-select: none;
+    }
+    .top-bar-online-avatars {
+      display: flex; align-items: center;
+    }
+    .top-bar-online-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; line-height: 1;
+      border: 2px solid #fff; margin-left: -5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+      background: #e8eaed; cursor: default;
+      position: relative;
+    }
+    .top-bar-online-avatar:first-child { margin-left: 0; }
+    .top-bar-online-avatar[title]:hover::after {
+      content: attr(title); position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
+      background: #333; color: #fff; padding: 3px 8px; border-radius: 4px;
+      font-size: 10px; white-space: nowrap; z-index: 100; pointer-events: none;
+    }
+
+    /* Top-bar identity chip */
+    .top-bar-identity {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 12px 4px 6px; border-radius: 20px;
+      background: #f5f6f8; border: 1px solid #e5e7eb;
+      cursor: default; user-select: none;
+    }
+    .top-bar-identity-emoji {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; line-height: 1;
+      background: #e8eaed; border: 2px solid #0059ff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .top-bar-identity-name {
+      font-size: 13px; font-weight: 600; color: #333;
+      max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* ══════════════════════════════════
+       PROJECT GALLERY VIEW
+       ══════════════════════════════════ */
+    .project-gallery { padding: 32px 32px 60px; }
+    .project-gallery.hidden { display: none; }
+    .project-gallery-header {
+      text-align: center; padding: 24px 0 36px;
+    }
+    .project-gallery-header h2 {
+      font-size: 28px; font-weight: 800; color: #07071a; margin-bottom: 6px;
+    }
+    .project-gallery-header p {
+      font-size: 14px; color: #888; max-width: 500px; margin: 0 auto;
+    }
+    .project-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .proj-gallery-card {
+      background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
+      cursor: pointer; transition: all .2s ease;
+      display: flex; flex-direction: column;
+    }
+    .proj-gallery-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.15);
+    }
+    .proj-gallery-card-thumb {
+      height: 180px; background: #f7f8fa; overflow: hidden;
+      display: flex; align-items: flex-start; justify-content: center;
+      position: relative;
+    }
+    .proj-gallery-card-thumb .thumb-preview-iframe {
+      width: 750px; border: none; pointer-events: none;
+      transform-origin: top left;
+      position: absolute; top: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.10);
+      border-radius: 4px;
+    }
+    .proj-gallery-card-thumb .thumb-empty {
+      font-size: 13px; color: #bbb; font-style: italic;
+      align-self: center;
+    }
+    .proj-gallery-card-info {
+      padding: 14px 16px; border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .proj-gallery-card-info .card-name {
+      font-size: 13px; font-weight: 600; color: #333;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      max-width: 180px;
+    }
+    .proj-gallery-card-info .card-date {
+      font-size: 10px; color: #999;
+      white-space: nowrap;
+    }
+    .proj-gallery-card-info .card-arrow {
+      color: #bbb; font-size: 18px; transition: color .15s;
+    }
+    .proj-gallery-card:hover .card-arrow { color: #0059ff; }
+    .card-share-btn {
+      position: absolute; top: 8px; left: 8px; z-index: 20;
+      background: rgba(255,255,255,.85); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #888; transition: all .15s;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .card-share-btn:hover { background: #fff; color: #0059ff; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .card-share-btn .mi { font-size: 17px; margin-right: 0; vertical-align: 0; }
+    .card-kebab {
+      position: absolute; top: 8px; right: 8px; z-index: 20;
+    }
+    .card-kebab-btn {
+      background: rgba(255,255,255,.85); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #888; transition: all .15s;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .card-kebab-btn:hover { background: #fff; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+    .card-kebab-btn .mi { font-size: 18px; margin-right: 0; vertical-align: 0; }
+    .card-kebab-menu {
+      display: none; position: absolute; top: 36px; right: 0;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+      min-width: 170px; padding: 6px 0;
+      z-index: 50; font-family: 'Inter', sans-serif;
+    }
+    .card-kebab-menu.open { display: block; }
+    .card-kebab-menu button {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 9px 16px; border: none; background: none;
+      font-size: 13px; font-weight: 500; color: #333;
+      cursor: pointer; text-align: left; font-family: inherit;
+      transition: background .1s;
+    }
+    .card-kebab-menu button:hover { background: #f5f6f8; }
+    .card-kebab-menu button .mi { font-size: 17px; margin-right: 0; color: #888; }
+    .card-kebab-menu button.menu-delete { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete:hover { background: #fff0f0; }
+
+    /* Rename / Duplicate popup modal */
+    .rename-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background: rgba(0,0,0,.35); backdrop-filter: blur(2px);
+      align-items: center; justify-content: center;
+    }
+    .rename-modal-overlay.visible { display: flex; }
+    .rename-modal-box {
+      background: #fff; border-radius: 16px; padding: 28px 28px 24px;
+      width: 360px; max-width: 90vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+      font-family: 'Inter', sans-serif;
+      animation: renameSlideIn .2s ease;
+    }
+    @keyframes renameSlideIn {
+      from { opacity: 0; transform: scale(.95) translateY(-10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .rename-modal-box h3 {
+      margin: 0 0 4px; font-size: 16px; font-weight: 700; color: #222;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .rename-modal-box h3 .mi { font-size: 20px; color: #0059ff; margin-right: 0; }
+    .rename-modal-box p {
+      margin: 0 0 16px; font-size: 12px; color: #999;
+    }
+    .rename-modal-box input {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+      outline: none; color: #333; box-sizing: border-box;
+    }
+    .rename-modal-box input:focus {
+      border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1);
+    }
+    .rename-modal-actions {
+      display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end;
+    }
+    .rename-modal-actions button {
+      padding: 9px 20px; border-radius: 8px; border: none;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all .12s;
+    }
+    .rename-modal-actions .rename-cancel {
+      background: #f0f2f5; color: #555;
+    }
+    .rename-modal-actions .rename-cancel:hover { background: #e5e7eb; }
+    .rename-modal-actions .rename-confirm {
+      background: #0059ff; color: #fff;
+    }
+    .rename-modal-actions .rename-confirm:hover { background: #003fcc; }
+
+    /* "Create New" builder card in gallery */
+    .proj-gallery-card-new .proj-gallery-card-thumb {
+      background: linear-gradient(135deg, #0059ff 0%, #7c3aed 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-gallery-card-new .new-card-content { text-align: center; color: #fff; }
+    .proj-gallery-card-new .new-card-content .mi {
+      font-size: 40px; vertical-align: 0; display: block;
+      margin: 0 auto 8px; color: rgba(255,255,255,.9); margin-right: 0;
+    }
+    .proj-gallery-card-new .new-card-content .new-card-title {
+      font-size: 15px; font-weight: 700; display: block;
+    }
+    .new-card-tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 10px;
+      font-size: 10px; font-weight: 700; letter-spacing: .5px;
+      background: linear-gradient(135deg, #0059ff, #7c3aed);
+      color: #fff; white-space: nowrap; line-height: 1.4;
+    }
+
+    /* ══════════════════════════════════
        BUILDER VIEW — Drag & Drop eDM Builder
        ══════════════════════════════════ */
-    .builder-view { display: block; }
+    .builder-view { display: none; }
+    .builder-view.visible { display: block; }
     
 
     .builder-layout {
@@ -568,13 +869,12 @@
       font-weight: 600; border: none; display: flex; align-items: center; gap: 4px;
       transition: all .15s;
     }
-    .builder-copy-btn { background: #07071a; color: #fff; }
-    .builder-copy-btn:hover { background: #222; }
-    .builder-copy-btn.copied { background: #27ae60; }
+    .builder-download-btn { background: #07071a; color: #fff; }
+    .builder-download-btn:hover { background: #222; }
+    .builder-download-btn.downloaded { background: #27ae60; }
     .builder-code-btn { background: #f0f0f0; color: #555; }
     .builder-code-btn:hover { background: #e0e0e0; }
-    .builder-code-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .builder-code-btn:disabled:hover { background: #f0f0f0; }
+    .builder-code-btn.copied { background: #27ae60; color: #fff; }
 
     .builder-canvas {
       flex: 1; padding: 24px 60px 60px 24px; background: #D6D9DD;
@@ -638,9 +938,240 @@
     }
     .builder-right-empty p { font-size: 13px; color: #bbb; line-height: 1.5; }
 
+    /* ── Collaboration / Project Manager ── */
+    .collab-btn {
+      background: none; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 5px 14px; font-size: 12px; font-weight: 600; color: #555;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      transition: all .15s; font-family: 'Inter', sans-serif;
+    }
+    .collab-btn:hover { background: #eef3ff; border-color: #c5d4ff; color: #0059ff; }
+    .collab-btn .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .collab-save-btn {
+      background: #0059ff; border: none; border-radius: 8px;
+      padding: 5px 16px; font-size: 12px; font-weight: 600; color: #fff;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      transition: all .15s; font-family: 'Inter', sans-serif;
+    }
+    .collab-save-btn:hover { background: #003fcc; }
+    .collab-save-btn.saving { background: #888; pointer-events: none; }
+    .collab-save-btn.saved {
+      background: #27ae60; pointer-events: none;
+    }
+    .collab-save-btn .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .collab-unsaved-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #e03131;
+      display: none; flex-shrink: 0;
+    }
+    .collab-unsaved-dot.visible { display: inline-block; }
+    .collab-project-name {
+      font-size: 12px; font-weight: 600; color: #0059ff;
+      background: #eef3ff; padding: 4px 10px; border-radius: 6px;
+      max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      display: none;
+    }
+    .collab-sync-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #27ae60;
+      display: none; flex-shrink: 0;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .collab-sync-dot.active { display: inline-block; }
+
+    /* Presence Banner */
+    .presence-banner {
+      display: none; position: fixed; top: 64px; left: 50%; transform: translateX(-50%);
+      z-index: 9998;
+      background: linear-gradient(135deg, #eef3ff 0%, #f0e6ff 100%);
+      border: 1px solid #c5d4ff; border-radius: 10px;
+      padding: 10px 20px; min-width: 280px;
+      box-shadow: 0 4px 20px rgba(0,89,255,.12);
+      font-family: 'Inter', sans-serif;
+      animation: presenceSlideIn .3s ease;
+    }
+    .presence-banner.visible { display: flex; align-items: center; gap: 12px; }
+    @keyframes presenceSlideIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    .presence-avatars {
+      display: flex; align-items: center; flex-shrink: 0;
+    }
+    .presence-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: #fff;
+      border: 2px solid #fff; margin-left: -6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+      line-height: 1;
+    }
+    .presence-avatar:first-child { margin-left: 0; }
+    .presence-info {
+      display: flex; flex-direction: column; gap: 1px; min-width: 0;
+    }
+    .presence-title {
+      font-size: 12px; font-weight: 700; color: #333;
+    }
+    .presence-detail {
+      font-size: 10px; color: #888;
+    }
+    .presence-close {
+      background: none; border: none; cursor: pointer; color: #bbb;
+      font-size: 14px; padding: 0; margin-left: auto; flex-shrink: 0;
+      display: flex; align-items: center;
+    }
+    .presence-close:hover { color: #666; }
+    .presence-close .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .presence-pulse {
+      width: 6px; height: 6px; border-radius: 50%; background: #27ae60;
+      animation: presencePulse 1.5s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes presencePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(1.4); }
+    }
+
+    /* Remote Editing Indicators on Canvas */
+    .builder-stack-item.remote-editing {
+      border-color: var(--remote-color, #e03131) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--remote-color, #e03131) 15%, transparent) !important;
+    }
+    .remote-edit-label {
+      position: absolute; top: -26px; left: 0; z-index: 20;
+      padding: 3px 10px 3px 6px; border-radius: 6px 6px 0 0;
+      font-size: 11px; font-weight: 700; color: #fff;
+      white-space: nowrap; pointer-events: none;
+      letter-spacing: .3px;
+      display: flex; align-items: center; gap: 4px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,.1);
+    }
+    .remote-edit-label .remote-emoji {
+      font-size: 14px; line-height: 1;
+    }
+    /* Auto-sync indicator */
+    .auto-sync-badge {
+      font-size: 10px; font-weight: 600; color: #27ae60;
+      background: #e8f5e9; padding: 3px 8px; border-radius: 10px;
+      display: none; align-items: center; gap: 3px;
+    }
+    .auto-sync-badge.active { display: inline-flex; }
+    .auto-sync-badge .mi { font-size: 12px; margin-right: 0; color: #27ae60; }
+
+    /* Project Modal */
+    #projectModal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,7,26,.5); z-index: 20000;
+      align-items: center; justify-content: center;
+    }
+    #projectModal.visible { display: flex; }
+    .proj-modal-box {
+      background: #fff; border-radius: 12px; width: 460px; max-width: 92vw;
+      max-height: 80vh; display: flex; flex-direction: column;
+      box-shadow: 0 8px 40px rgba(0,0,0,.22); overflow: hidden;
+    }
+    .proj-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 14px; border-bottom: 1px solid #f0f0f0;
+    }
+    .proj-modal-header h3 { font-size: 15px; font-weight: 700; color: #07071a; margin: 0; }
+    .proj-modal-close {
+      background: none; border: none; cursor: pointer; color: #bbb;
+      font-size: 16px; padding: 0; line-height: 1; display: flex; align-items: center;
+    }
+    .proj-modal-close:hover { color: #555; }
+    .proj-modal-create {
+      display: flex; gap: 8px; padding: 14px 20px; border-bottom: 1px solid #f0f0f0;
+    }
+    .proj-modal-create input {
+      flex: 1; border: 1px solid #e0e0e0; border-radius: 6px; padding: 8px 12px;
+      font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
+    }
+    .proj-modal-create input:focus { border-color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.12); }
+    .proj-modal-create button {
+      padding: 8px 18px; border-radius: 6px; border: none; background: #0059ff;
+      color: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+      font-family: 'Inter', sans-serif; transition: background .12s;
+    }
+    .proj-modal-create button:hover { background: #003fcc; }
+    .proj-list { flex: 1; overflow-y: auto; padding: 8px 12px; }
+    .proj-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-radius: 8px; margin-bottom: 4px;
+      transition: background .12s; cursor: pointer;
+    }
+    .proj-item:hover { background: #f5f7fa; }
+    .proj-item-active { background: #eef3ff; border: 1px solid #c5d4ff; }
+    .proj-item-info { flex: 1; min-width: 0; }
+    .proj-item-name {
+      display: block; font-size: 13px; font-weight: 600; color: #222;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .proj-item-date { font-size: 10px; color: #999; }
+    .proj-item-meta {
+      display: flex; align-items: center; gap: 8px; margin-top: 2px;
+    }
+    .proj-item-comps {
+      font-size: 10px; color: #666; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      max-width: 220px;
+    }
+    .proj-item-empty { color: #bbb; font-style: italic; }
+    .proj-item-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .proj-item-btn {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      background: transparent; color: #888; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .12s;
+    }
+    .proj-item-btn:hover { background: #eef3ff; color: #0059ff; }
+    .proj-item-btn-del:hover { background: #fff0f0; color: #e74c3c; }
+    .proj-item-btn .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+
   </style>
 </head>
 <body>
+
+<!-- ── User Profile Modal (shown on first visit) ── -->
+<div id="userProfileModal">
+  <div class="profile-modal-box">
+    <div class="profile-modal-header">
+      <h3>Welcome! 👋</h3>
+      <p>Choose your avatar and enter your name</p>
+    </div>
+    <div class="profile-emoji-grid" id="profileEmojiGrid">
+      <button class="profile-emoji-btn" data-emoji="😀" onclick="selectProfileEmoji(this)">😀</button>
+      <button class="profile-emoji-btn" data-emoji="😎" onclick="selectProfileEmoji(this)">😎</button>
+      <button class="profile-emoji-btn" data-emoji="�" onclick="selectProfileEmoji(this)">🥰</button>
+      <button class="profile-emoji-btn" data-emoji="🌟" onclick="selectProfileEmoji(this)">🌟</button>
+      <button class="profile-emoji-btn" data-emoji="🔥" onclick="selectProfileEmoji(this)">🔥</button>
+      <button class="profile-emoji-btn" data-emoji="🦊" onclick="selectProfileEmoji(this)">🦊</button>
+      <button class="profile-emoji-btn" data-emoji="🐱" onclick="selectProfileEmoji(this)">🐱</button>
+      <button class="profile-emoji-btn" data-emoji="🐶" onclick="selectProfileEmoji(this)">🐶</button>
+      <button class="profile-emoji-btn" data-emoji="🐼" onclick="selectProfileEmoji(this)">🐼</button>
+      <button class="profile-emoji-btn" data-emoji="🦋" onclick="selectProfileEmoji(this)">🦋</button>
+    </div>
+    <div class="profile-name-row">
+      <label>Your Display Name</label>
+      <input type="text" id="profileNameInput" placeholder="e.g. Abby" maxlength="20" autocomplete="off" />
+    </div>
+    <div class="profile-modal-footer">
+      <button class="profile-start-btn" id="profileStartBtn" onclick="confirmProfile()">Let's Go!</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename / Duplicate Modal -->
+<div class="rename-modal-overlay" id="renameModal">
+  <div class="rename-modal-box">
+    <h3><span class="mi" id="renameModalIcon">edit</span><span id="renameModalTitle">Rename Project</span></h3>
+    <p id="renameModalDesc">Enter a new name for this project</p>
+    <input type="text" id="renameModalInput" placeholder="Project name" maxlength="50" autocomplete="off" />
+    <div class="rename-modal-actions">
+      <button class="rename-cancel" onclick="closeRenameModal()">Cancel</button>
+      <button class="rename-confirm" id="renameModalConfirm" onclick="confirmRenameModal()">Save</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── Top Bar ── -->
 <div class="top-bar">
@@ -648,9 +1179,75 @@
     <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
     <span class="top-bar-divider"></span>
     <h1>eDM Component Customizer</h1>
+    <span class="collab-sync-dot" id="collabSyncDot" title="Live syncing"></span>
+    <span class="collab-project-name" id="collabProjectName"></span>
+    <span class="auto-sync-badge" id="autoSyncBadge" title="Changes auto-sync to collaborators"><span class="mi">sync</span>Live</span>
+  </div>
+  <div class="top-bar-right">
+    <div class="top-bar-identity" id="topBarIdentity" style="display:none;">
+      <div class="top-bar-identity-emoji" id="topBarIdentityEmoji"></div>
+      <span class="top-bar-identity-name" id="topBarIdentityName"></span>
+    </div>
+    <div class="top-bar-online" id="topBarOnline" style="display:none;">
+      <div class="top-bar-online-avatars" id="topBarOnlineAvatars"></div>
+    </div>
+    <span class="collab-unsaved-dot" id="collabUnsavedDot" title="Unsaved changes"></span>
+    <button class="collab-save-btn" id="collabSaveBtn" onclick="Collab.manualSave()" title="Save project (Ctrl+S)">
+      <span class="mi">save</span><span>Save</span>
+    </button>
+    <button class="collab-btn" id="collabShareBtn" style="display:none" onclick="Collab.shareCurrentProject()" title="Copy share link">
+      <span class="mi">link</span><span>Share</span>
+    </button>
+    <button class="collab-btn" id="backToProjectBtn" style="display:none" onclick="saveAndBackToGallery()" title="Save & back to gallery">
+      <span class="mi">arrow_back</span><span>Back to Gallery</span>
+    </button>
   </div>
 </div>
 
+<!-- ── Project Manager Modal ── -->
+<div id="projectModal">
+  <div class="proj-modal-box">
+    <div class="proj-modal-header">
+      <h3><span class="mi">folder_shared</span> Shared Projects</h3>
+      <button class="proj-modal-close" onclick="Collab.closeManager()" title="Close"><span class="mi">close</span></button>
+    </div>
+    <div class="proj-modal-create">
+      <input type="text" id="newProjectName" placeholder="New project name…" onkeydown="if(event.key==='Enter')Collab.createNew()" />
+      <button onclick="Collab.createNew()"><span class="mi">add</span>Create</button>
+    </div>
+    <div class="proj-list" id="projectList">
+      <div style="text-align:center;padding:24px;color:#bbb;">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Presence Banner -->
+<div class="presence-banner" id="presenceBanner">
+  <div class="presence-avatars" id="presenceAvatars"></div>
+  <div class="presence-pulse"></div>
+  <div class="presence-info">
+    <span class="presence-title" id="presenceTitle"></span>
+    <span class="presence-detail" id="presenceDetail">Co-editing this project</span>
+  </div>
+  <button class="presence-close" onclick="document.getElementById('presenceBanner').classList.remove('visible')" title="Dismiss">
+    <span class="mi">close</span>
+  </button>
+</div>
+
+
+<!-- ══════════════ PROJECT GALLERY VIEW ══════════════ -->
+<div class="project-gallery" id="projectGallery">
+  <div class="project-gallery-header">
+    <h2><span class="mi" style="font-size:32px;vertical-align:-6px;margin-right:8px">dashboard</span>IoTMart Newsletter Project Gallery</h2>
+    <p>Open an existing project or create a new one to start building your newsletter.</p>
+  </div>
+  <div class="project-gallery-grid" id="projectGalleryGrid">
+    <div style="text-align:center;padding:60px 20px;color:#bbb;grid-column:1/-1;">
+      <span class="mi" style="font-size:40px;display:block;margin-bottom:8px;color:#ddd;margin-right:0">hourglass_empty</span>
+      Loading projects…
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════ BUILDER VIEW ══════════════ -->
 <div class="builder-view" id="builderView">
@@ -676,17 +1273,17 @@
               <span class="mi">phone_iphone</span>
             </button>
           </div>
-          <div class="theme-select-wrap">
+          <div class="theme-select-wrap" style="display:none">
             <span class="theme-select-label">Theme</span>
             <select class="theme-select" id="themeSelect" onchange="applyTheme(this.value)"></select>
           </div>
         </div>
         <div class="builder-center-actions">
-          <button class="builder-copy-btn" id="builderCopyBtn" onclick="copyBuilderHtml()">
-            <span class="mi">content_copy</span><span>Copy Full HTML</span>
+          <button class="builder-download-btn" id="builderDownloadBtn" onclick="downloadBuilderZip()">
+            <span class="mi">folder_zip</span><span>Download HTML Zip</span>
           </button>
-          <button class="builder-code-btn" onclick="downloadBuilderHtml()" title="Download HTML">
-            <span class="mi" style="margin-right:0">download</span>
+          <button class="builder-code-btn" id="builderCopyBtn" onclick="copyBuilderHtml()" title="Copy full HTML">
+            <span class="mi">content_copy</span><span>Copy HTML</span>
           </button>
         </div>
       </div>
@@ -768,6 +1365,13 @@
 </div>
 
 <script src="config.js"></script>
+<!-- Firebase SDK (v9 compat — CDN, free) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<!-- JSZip for HTML zip download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <script>
 // ══════════════════════════════════════
 
@@ -945,6 +1549,7 @@ function applyPickedColor(hex) {
     const bswatch = document.getElementById('bswatch-' + _popupActiveKey);
     if (bswatch) bswatch.style.backgroundColor = hex;
     renderBuilderPreview();
+    if (window.Collab) Collab.markUnsaved();
   } else {
     const el = document.getElementById(_popupActiveKey);
     if (el) {
@@ -996,12 +1601,12 @@ function applyRgbColor() {
 let _popupCurrentColor = '#000000';
 
 // ══════════════════════════════════════
-// Component Registry — 5 Components
+// Component Registry — 9 Components
 // Each defines: id, name, html (raw email HTML fragment), colorMap
 // colorMap: array of { label, targets: [{selector, attr}], default }
 // ══════════════════════════════════════
 
-const COMPONENTS = [
+var COMPONENTS = [
   // ─── 01 Header ───
   {
     id: 'header',
@@ -1069,7 +1674,7 @@ const COMPONENTS = [
     </td>
     <td width="300" height="300" align="left" valign="top" class="col-2"
         style="width: 300px; height: 300px; padding: 0; font-size: 0; line-height: 0; overflow: hidden; background-color: #f6f7f9;"><img mc:edit="banner_image"
-           src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773334182/BannerPlaceholder-global_xls2jy.png"
+           src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773641260/globaleCommerce_l0hby4.png"
            width="300" height="300" alt="IoTMart Global" class="mobile-img" data-crop="300:300"
            style="display: block; width: 300px; height: 300px; max-width: 100%; object-fit: cover;" /></td>
   </tr>
@@ -1114,7 +1719,7 @@ const COMPONENTS = [
         This launch would not have been possible without the incredible collaboration across teams. Since September 2025, many colleagues have contributed their time and expertise through continuous discussions and planning. Our sincere appreciation goes to the Korea team, along with the online sales force (OSF) team, Finance team, Logistics team, and our partners from headquarters&#8217; SAP and IT teams.<br><br>
         Special thanks to Nadia Kim for leading the strong support, trust, and commitment to the IoTMart vision. Their collaboration has been instrumental in bringing this new store to life. We truly appreciate everyone&#8217;s effort and look forward to continuing to grow IoTMart together.
       </p>
-      ${opts.showImage ? `<img mc:edit="news_image" src="https://placehold.co/502x100" width="502" height="100" alt="News Image" class="news-img" data-crop="502:100"
+      ${opts.showImage ? `<img mc:edit="news_image" src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773640818/Top_News-BG_fzfwht.png" width="502" height="100" alt="News Image" class="news-img" data-crop="502:100"
            style="display: block; width: 502px; height: 100px; max-width: 100%; object-fit: cover;${opts.showCta ? ' margin-bottom: 20px;' : ''}" />` : ''}
       ${opts.showCta ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
@@ -1202,7 +1807,30 @@ const COMPONENTS = [
     id: 'article',
     num: '05',
     name: 'Article',
-    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
+    optionMap: [
+      { key: 'statCount', label: 'Stats Count', type: 'select', default: '3', choices: [
+        { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
+      ]}
+    ],
+    getHtml: (opts = {}) => {
+      var count = parseInt(opts.statCount) || 3;
+      if (count < 3) count = 3;
+      if (count > 5) count = 5;
+      var defaultStats = [
+        { num: '150+', label: 'Orders YTM' },
+        { num: '200K+', label: 'Revenue (EN+EU)' },
+        { num: '1,300', label: 'Average Order Value' },
+        { num: '63%', label: 'AOV Growth QoQ' },
+        { num: '200%', label: 'ASEAN Revenue Growth' }
+      ];
+      var statsHtml = '';
+      for (var i = 0; i < count; i++) {
+        var s = defaultStats[i];
+        var isLast = (i === count - 1);
+        statsHtml += '<p mc:edit="article_num' + (i+1) + '"\n               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">\n              ' + s.num + '\n            </p>\n';
+        statsHtml += '<p mc:edit="article_label' + (i+1) + '"\n               style="margin: 0' + (isLast ? '' : ' 0 24px 0') + '; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">\n              ' + s.label + '\n            </p>\n';
+      }
+      return `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
   <tr>
     <td align="center" valign="top" class="article-outer-td" bgcolor="#f6f7f9"
         style="background-image: url('https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773367982/BIBG_fxzalt.png'); background-size: cover; background-position: center top; padding: 32px 32px;" data-color="articleOuterBg">
@@ -1210,30 +1838,7 @@ const COMPONENTS = [
         <tr valign="top">
           <td width="220" align="left" valign="top" class="article-stats-td" bgcolor="#F39800"
               style="width: 220px; padding: 32px 24px;" data-color="articleStatsBg">
-            <p mc:edit="article_num1"
-               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
-              150+
-            </p>
-            <p mc:edit="article_label1"
-               style="margin: 0 0 24px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
-              Orders YTM
-            </p>
-            <p mc:edit="article_num2"
-               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
-              200K+
-            </p>
-            <p mc:edit="article_label2"
-               style="margin: 0 0 24px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
-              Revenue (EN+EU)
-            </p>
-            <p mc:edit="article_num3"
-               style="margin: 0 0 6px 0; font-size: 26px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="articleNumber">
-              1,300
-            </p>
-            <p mc:edit="article_label3"
-               style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="articleStatLabel">
-              Average Order Value
-            </p>
+            ${statsHtml}
           </td>
           <td width="450" align="left" valign="top" class="article-body-td" bgcolor="#ffffff"
               style="width: 450px; padding: 24px;" data-color="articleBodyBg">
@@ -1259,7 +1864,8 @@ const COMPONENTS = [
       </table>
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Outer BG', key: 'articleOuterBg', type: 'bg', default: '#f6f7f9' },
       { label: 'Stats BG', key: 'articleStatsBg', type: 'bg', default: 'rgba(243,152,0,0.8)' },
@@ -1457,11 +2063,16 @@ const COMPONENTS = [
     id: 'insight',
     num: '08',
     name: 'Insight',
-    optionMap: [],
-    getHtml: (opts = {}) => `<!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:750px;"><v:fill type="frame" src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png" color="#003160"/><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0"><![endif]--><table border="0" cellpadding="0" cellspacing="0" width="750" class="insight-table" bgcolor="#003160" background="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png" style="width: 750px; border-collapse: collapse; border-spacing: 0; background-image: url('https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png'); background-size: cover; background-position: center center;" data-color="insightBg">
+    optionMap: [
+      { key: 'showImage', label: 'Image', default: false },
+      { key: 'showCta', label: 'CTA Button', default: false }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table" style="width: 750px;">
   <tr>
-    <td align="center" valign="top" style="padding: 32px;">
-      <table border="0" cellpadding="0" cellspacing="0" width="686" style="width: 686px; background-color: rgba(0,0,0,0.7);" bgcolor="#003160">
+    <td align="center" valign="top" class="insight-outer-td" bgcolor="#003160"
+        background="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png"
+        style="background-image: url('https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773386744/DCBG_ptyxut.png'); background-size: cover; background-position: center center; padding: 32px;" data-color="insightBg">
+      <table border="0" cellpadding="0" cellspacing="0" width="686" class="insight-inner" style="width: 686px; background-color: rgba(0,0,0,0.7);" bgcolor="#003160">
         <tr valign="top">
           <td width="250" valign="top" class="insight-title-td"
               style="width: 250px; padding: 32px 16px 32px 32px;">
@@ -1486,7 +2097,7 @@ const COMPONENTS = [
           <td width="436" valign="middle" class="insight-body-td"
               style="width: 436px; padding: 32px 32px 32px 16px;">
             <p mc:edit="insight_body"
-               style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.6;" data-color="insightBody">
+               style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 20px 0' : ''}; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.6;" data-color="insightBody">
               B2B e-commerce growth does not depend on how much traffic a platform generates, but on whether it can identify the signals that actually move purchase decisions forward: buying intent.<br><br>
               Because buyers often remain anonymous while researching options, reviewing specifications, and comparing solutions, clicks and page views frequently reflect curiosity rather than real intent. Meaningful signals usually appear through a pattern of evaluation behaviors, such as:<br>
               &bull;&nbsp;Repeated visits to product pages<br>
@@ -1498,18 +2109,78 @@ const COMPONENTS = [
               Scalable growth therefore depends less on attracting more traffic, and more on recognizing which buyer signals actually matter.<br><br>
               <em>Sources: 6sense | McKinsey | Google B2B Institute</em>
             </p>
+            ${opts.showImage ? `<img mc:edit="insight_image" src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773640818/Insight-BG_azqsnc.png" width="404" height="162" alt="Insight Image" class="insight-img" data-crop="5:2"
+                 style="display: block; width: 404px; height: auto; max-width: 100%; object-fit: cover; border-radius: 4px;${opts.showCta ? ' margin-bottom: 20px;' : ''}" />` : ''}
+            ${opts.showCta ? `<table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding: 12px 28px;" data-color="insightCtaBg">
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="insight_cta"
+                     style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, sans-serif;" data-color="insightCtaText">
+                    Learn More &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>` : ''}
           </td>
         </tr>
       </table>
     </td>
   </tr>
-</table><!--[if gte mso 9]></v:textbox></v:rect><![endif]-->`,
+</table>`,
     colorMap: [
       { label: 'BG Fallback',  key: 'insightBg',      type: 'bg',    default: '#003160' },
       { label: 'Eyebrow',      key: 'insightEyebrow', type: 'color', default: '#F39800' },
       { label: 'Title',        key: 'insightTitle',   type: 'color', default: '#ffffff' },
       { label: 'Accent Line',  key: 'insightAccent',  type: 'bg',    default: '#F39800' },
-      { label: 'Body Text',    key: 'insightBody',    type: 'color', default: '#ffffff' }
+      { label: 'Body Text',    key: 'insightBody',    type: 'color', default: '#ffffff' },
+      { label: 'CTA BG',       key: 'insightCtaBg',   type: 'bg',    default: '#F39800', optionGate: 'showCta' },
+      { label: 'CTA Text',     key: 'insightCtaText', type: 'color', default: '#ffffff', optionGate: 'showCta' }
+    ]
+  },
+  // ─── 09 Footer ───
+  {
+    id: 'footer',
+    num: '09',
+    name: 'Footer',
+    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="750" class="split-table"
+       style="width: 750px;" data-color="footerBg">
+  <tr><td align="center" style="padding: 24px 30px 14px 30px;">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" width="160" alt="Advantech IoTMart" style="display: block; margin: 0 auto; width: 160px; max-width: 160px; height: auto;" />
+  </td></tr>
+  <tr><td align="center" style="padding: 0 30px 14px 30px;">
+    <table border="0" cellpadding="0" cellspacing="0" align="center">
+      <tr>
+        <td style="padding: 0 5px;"><a href="https://www.facebook.com/Advantech.Corp" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-fb.png" width="24" height="24" alt="Facebook" style="display: block; width: 24px; height: 24px;" /></a></td>
+        <td style="padding: 0 5px;"><a href="https://www.youtube.com/@AdvantechCorp" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-youtube.png" width="24" height="24" alt="YouTube" style="display: block; width: 24px; height: 24px;" /></a></td>
+        <td style="padding: 0 5px;"><a href="https://www.linkedin.com/company/advantech/" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-linkdin.png" width="24" height="24" alt="LinkedIn" style="display: block; width: 24px; height: 24px;" /></a></td>
+      </tr>
+    </table>
+  </td></tr>
+  <tr><td align="center" style="padding: 0 30px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="690" class="split-table" style="width: 690px;">
+      <tr><td height="14" style="height: 14px; font-size: 14px; line-height: 14px;">&nbsp;</td></tr>
+      <tr><td height="1" style="height: 1px; font-size: 1px; line-height: 1px;" data-color="footerDivider">&nbsp;</td></tr>
+      <tr><td height="14" style="height: 14px; font-size: 14px; line-height: 14px;">&nbsp;</td></tr>
+    </table>
+  </td></tr>
+  <tr><td align="center" style="padding: 4px 30px 8px 30px;">
+    <p mc:edit="footer_legal_links" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif;">
+      <a href="https://www.advantech.com/en/legal/privacy" style="text-decoration: none;" data-color="footerLink">Privacy Policy</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="https://www.iotmart.com/en-en/s/terms-conditions?language=en_US" style="text-decoration: none;" data-color="footerLink">Terms &amp; Conditions</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="https://www.iotmart.com/en-en/s/faq?language=en_US" style="text-decoration: none;" data-color="footerLink">Shopping FAQ</a>
+    </p>
+  </td></tr>
+  <tr><td align="center" style="padding: 4px 30px 24px 30px;">
+    <p mc:edit="footer_copyright" style="margin: 0; font-size: 10px; font-family: Arial, sans-serif; line-height: 1.8;" data-color="footerCopyright">Copyright &copy; 1983 - 2026 Advantech Co., Ltd.<br/>All Rights Reserved</p>
+  </td></tr>
+</table>`,
+    colorMap: [
+      { label: 'Background', key: 'footerBg', type: 'bg', default: '#f0f0f0' },
+      { label: 'Divider', key: 'footerDivider', type: 'bg', default: '#dddddd' },
+      { label: 'Link Color', key: 'footerLink', type: 'color', default: '#888888' },
+      { label: 'Copyright', key: 'footerCopyright', type: 'color', default: '#aaaaaa' }
     ]
   }
 ];
@@ -1520,7 +2191,7 @@ COMPONENTS.sort((a, b) => a.num.localeCompare(b.num));
 // ══════════════════════════════════════
 // State: current color values per key
 // ══════════════════════════════════════
-const colorState = {};
+var colorState = {};
 function initState() {
   COMPONENTS.forEach(comp => {
     comp.colorMap.forEach(c => {
@@ -1533,9 +2204,9 @@ initState();
 // ══════════════════════════════════════
 // Theme Presets (builder-only overlay)
 // ══════════════════════════════════════
-let currentBuilderTheme = 'light-blue';
+var currentBuilderTheme = 'light-blue';
 
-const THEMES = {
+var THEMES = {
   'light-blue': {
     name: 'Blue',
     swatches: ['#ffffff', '#0059ff', '#07071a', '#1a1a2e'],
@@ -1569,6 +2240,7 @@ function applyTheme(themeName) {
   renderBuilderPreview();
   renderBuilderRight();
   showToast(`<span class="mi">palette</span>${'Theme'}: ${theme.name}`);
+  if (window.Collab) Collab.markUnsaved();
 }
 
 function renderThemeSelect() {
@@ -2267,9 +2939,11 @@ const RESPONSIVE_CSS = {
       td.card-gap-td { display: none !important; }
       img.card-img { width: 100% !important; height: auto !important; }`,
   'insight': `
-      table.insight-table { width: 100% !important; background-size: cover !important; }
-      td.insight-title-td { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 32px 20px 12px 20px !important; }
-      td.insight-body-td  { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 0 20px 32px 20px !important; }`
+      table.split-table { width: 100% !important; }
+      td.insight-outer-td { padding: 20px !important; background-size: cover !important; }
+      table.insight-inner { width: 100% !important; }
+      td.insight-title-td { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 24px 20px 12px 20px !important; }
+      td.insight-body-td  { display: block !important; width: 100% !important; box-sizing: border-box !important; padding: 0 20px 24px 20px !important; }`
 };
 
 // ══════════════════════════════════════
@@ -2378,12 +3052,12 @@ ${bodyContent}
 // ══════════════════════════════════════
 // Builder — Drag & Drop eDM Composer
 // ══════════════════════════════════════
-let builderStack = [];       // { uid, compId, edits }
+var builderStack = [];       // { uid, compId, edits }
 let builderSelectedUid = null;
-let _builderUid = 0;
+var _builderUid = 0;
 let _builderInited = false;
-let builderHistory = [];
-let builderHistoryIdx = -1;
+var builderHistory = [];
+var builderHistoryIdx = -1;
 
 function showBuilder() {
   // Restore theme colors when entering builder
@@ -2533,6 +3207,11 @@ function selectBuilderItem(uid) {
     el.classList.toggle('selected', el.dataset.uid === uid);
   });
   renderBuilderRight();
+  // Broadcast which component this user is editing
+  if (window.Collab && Collab.getCurrentProjectId()) {
+    const item = builderStack.find(i => i.uid === uid);
+    Collab.updateEditing(uid, item ? item.compId : null);
+  }
 }
 
 function renderBuilderLeft() {
@@ -2651,6 +3330,35 @@ function renderBuilderPreview() {
     const el = canvas.querySelector(`[data-uid="${item.uid}"] .bsi-content`);
     if (comp && el) setupInlineEditing(el, comp, item);
   });
+  // Re-apply remote editing indicators after DOM rebuild
+  if (window.Collab && typeof Collab.getRemoteEditors === 'function') {
+    const editors = Collab.getRemoteEditors();
+    if (editors && editors.length > 0) {
+      // Trigger remote indicator rendering (use internal function via re-read of presence)
+      document.querySelectorAll('.builder-stack-item.remote-editing').forEach(el => {
+        el.classList.remove('remote-editing');
+        el.style.removeProperty('--remote-color');
+      });
+      document.querySelectorAll('.remote-edit-label').forEach(el => el.remove());
+      const COMP_NAMES = { header:'Header', banner:'Banner', 'top-news':'Top News', stats:'Stats',
+        article:'Article', feature:'Feature', cards:'Cards', insight:'Insight' };
+      editors.forEach(p => {
+        if (!p.editingUid) return;
+        const stackEl = canvas.querySelector(`[data-uid="${p.editingUid}"]`);
+        if (!stackEl) return;
+        const color = p.color || '#e03131';
+        stackEl.classList.add('remote-editing');
+        stackEl.style.setProperty('--remote-color', color);
+        const label = document.createElement('div');
+        label.className = 'remote-edit-label';
+        label.style.backgroundColor = color;
+        const emojiHtml = p.emoji ? '<span class="remote-emoji">' + p.emoji + '</span>' : '';
+        label.innerHTML = emojiHtml + (p.name || 'Anonymous') + ' is editing';
+        stackEl.style.position = 'relative';
+        stackEl.appendChild(label);
+      });
+    }
+  }
   // Update builder code panel if open
   updateBuilderCode();
 }
@@ -2822,6 +3530,11 @@ function pushBuilderHistory() {
   builderHistory.push(JSON.parse(JSON.stringify(builderStack)));
   builderHistoryIdx = builderHistory.length - 1;
   updateUndoRedoBtns();
+  // Mark as having unsaved changes + trigger auto-sync
+  if (window.Collab) {
+    Collab.markUnsaved();
+    Collab.triggerAutoSave();
+  }
 }
 
 function undoBuilder() {
@@ -2914,26 +3627,45 @@ function copyBuilderHtml() {
     showToast('<span class="mi">check_circle</span>' + 'Full eDM HTML copied!');
     const btn = document.getElementById('builderCopyBtn');
     if (btn) {
-      btn.innerHTML = '<span class="mi">check_circle</span>' + 'Copied!';
+      btn.innerHTML = '<span class="mi">check_circle</span>' + '<span>Copied!</span>';
       btn.classList.add('copied');
-      setTimeout(() => { btn.innerHTML = '<span class="mi">content_copy</span>' + 'Copy Full HTML'; btn.classList.remove('copied'); }, 2000);
+      setTimeout(() => { btn.innerHTML = '<span class="mi">content_copy</span>' + '<span>Copy HTML</span>'; btn.classList.remove('copied'); }, 2000);
     }
   });
 }
 
-function downloadBuilderHtml() {
+function downloadBuilderZip() {
   const html = buildFullEdmDoc();
   if (!html) { showToast('<span class="mi">info</span>' + 'Add some components first!'); return; }
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'edm-' + new Date().toISOString().slice(0,10) + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('<span class="mi">download_done</span>' + 'HTML downloaded!');
+  var projectName = '';
+  if (window.Collab && Collab.getCurrentProjectId()) {
+    var nameEl = document.getElementById('collabProjectName');
+    if (nameEl) projectName = nameEl.textContent.trim();
+  }
+  var safeName = (projectName || 'edm').replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_');
+  var dateSuffix = new Date().toISOString().slice(0,10);
+  var zipName = safeName + '-' + dateSuffix + '.zip';
+  var htmlName = safeName + '.html';
+
+  var zip = new JSZip();
+  zip.file(htmlName, html);
+  zip.generateAsync({ type: 'blob' }).then(function(blob) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = zipName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('<span class="mi">download_done</span>' + 'ZIP downloaded!');
+    var btn = document.getElementById('builderDownloadBtn');
+    if (btn) {
+      btn.innerHTML = '<span class="mi">check_circle</span>' + '<span>Downloaded!</span>';
+      btn.classList.add('downloaded');
+      setTimeout(function() { btn.innerHTML = '<span class="mi">folder_zip</span>' + '<span>Download HTML Zip</span>'; btn.classList.remove('downloaded'); }, 2000);
+    }
+  });
 }
 
 // ══════════════════════════════════════
@@ -3027,9 +3759,554 @@ function showToast(msg) {
 
 
 // ══════════════════════════════════════
-// Init — Start with Builder View
+// Project Gallery — View Switching
 // ══════════════════════════════════════
-showBuilder();
+async function saveAndBackToGallery() {
+  // Auto-save before leaving
+  if (window.Collab && Collab.getCurrentProjectId()) {
+    try {
+      await Collab.manualSave();
+    } catch (_) {}
+  }
+  showProjectGallery();
+}
+
+function showProjectGallery() {
+  // If a project is open, close it first
+  if (window.Collab && Collab.getCurrentProjectId()) {
+    Collab.close();
+  }
+  // Hide builder, show gallery
+  document.getElementById('builderView').classList.remove('visible');
+  document.getElementById('projectGallery').classList.remove('hidden');
+  // Hide builder-only buttons
+  const backBtn = document.getElementById('backToProjectBtn');
+  if (backBtn) backBtn.style.display = 'none';
+  const saveBtn = document.getElementById('collabSaveBtn');
+  if (saveBtn) saveBtn.style.display = 'none';
+  // Gallery: show identity chip, hide online avatars
+  var onlineEl = document.getElementById('topBarOnline');
+  if (onlineEl) onlineEl.style.display = 'none';
+  updateTopBarIdentity();
+  window.scrollTo(0, 0);
+  // Render the gallery
+  renderProjectGallery();
+}
+
+function enterBuilder() {
+  // Hide gallery, show builder
+  document.getElementById('projectGallery').classList.add('hidden');
+  document.getElementById('builderView').classList.add('visible');
+  // Show builder-only buttons
+  const backBtn = document.getElementById('backToProjectBtn');
+  if (backBtn) backBtn.style.display = '';
+  const saveBtn = document.getElementById('collabSaveBtn');
+  if (saveBtn) saveBtn.style.display = '';
+  // Builder: show online avatars, hide identity chip
+  var identityEl = document.getElementById('topBarIdentity');
+  if (identityEl) identityEl.style.display = 'none';
+  showBuilder();
+}
+
+function resetCanvasToBlank() {
+  // Reset all builder state to blank for a truly new project
+  builderStack = [];
+  builderSelectedUid = null;
+  _builderUid = 0;
+  currentBuilderTheme = 'light-blue';
+  initState();
+  builderHistory = [];
+  builderHistoryIdx = -1;
+}
+
+async function createNewFromGallery() {
+  openRenameModal({
+    icon: 'add_circle',
+    title: 'New Project',
+    desc: 'Enter a name for your new project',
+    value: 'Untitled eDM',
+    placeholder: 'Project name',
+    confirmText: 'Create',
+    onConfirm: async function(name) {
+      resetCanvasToBlank();
+      enterBuilder();
+      if (window.Collab && Collab.ready()) {
+        const id = await Collab.save(name.trim() || 'Untitled eDM');
+        if (id) {
+          showToast('<span class="mi">check_circle</span>Project "' + name + '" created!');
+        }
+      }
+    }
+  });
+}
+
+async function openProjectFromGallery(projectId) {
+  enterBuilder();
+  if (window.Collab) {
+    await Collab.load(projectId);
+  }
+}
+
+function renderProjectGallery() {
+  const grid = document.getElementById('projectGalleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#bbb;grid-column:1/-1;"><span class="mi" style="font-size:40px;display:block;margin-bottom:8px;color:#ddd;margin-right:0">hourglass_empty</span>Loading projects…</div>';
+
+  if (!window.Collab || !Collab.ready()) {
+    grid.innerHTML = `
+      <div style="text-align:center;padding:60px 20px;color:#bbb;grid-column:1/-1;">
+        <span class="mi" style="font-size:40px;display:block;margin-bottom:8px;color:#ddd;margin-right:0">cloud_off</span>
+        Firebase not configured.<br>Check config.js to enable project saving.
+        <br><br>
+        <button onclick="resetCanvasToBlank();enterBuilder();" style="padding:10px 24px;border-radius:8px;border:none;background:#0059ff;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+          <span class="mi" style="font-size:16px;vertical-align:-3px">add</span> Start without saving
+        </button>
+      </div>`;
+    return;
+  }
+
+  Collab.list().then(projects => {
+    grid.innerHTML = '';
+
+    // ── "Create New Project" card ──
+    const newCard = document.createElement('div');
+    newCard.className = 'proj-gallery-card proj-gallery-card-new';
+    newCard.onclick = () => createNewFromGallery();
+    newCard.innerHTML = `
+      <div class="proj-gallery-card-thumb">
+        <div class="new-card-content">
+          <span class="mi">add_circle</span>
+          <span class="new-card-title">Create New Project</span>
+        </div>
+      </div>
+      <div class="proj-gallery-card-info">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">auto_awesome</span>NEW</span>
+          <span class="card-name">Blank eDM</span>
+        </div>
+        <span class="mi card-arrow">arrow_forward</span>
+      </div>`;
+    grid.appendChild(newCard);
+
+    if (projects.length === 0) {
+      const emptyMsg = document.createElement('div');
+      emptyMsg.style.cssText = 'text-align:center;padding:40px 20px;color:#bbb;grid-column:2/-1;';
+      emptyMsg.innerHTML = '<span class="mi" style="font-size:32px;display:block;margin-bottom:6px;color:#ddd;margin-right:0">folder_off</span>No saved projects yet.<br>Create one to get started!';
+      grid.appendChild(emptyMsg);
+      return;
+    }
+
+    // ── Project cards ──
+    projects.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'proj-gallery-card';
+
+      // Thumbnail area — live preview of first 2 components
+      const thumb = document.createElement('div');
+      thumb.className = 'proj-gallery-card-thumb';
+      if (p.componentCount > 0 && p.builderStack && p.builderStack.length > 0) {
+        // Build color state: defaults + theme overrides + project overrides
+        const savedColors = Object.assign({}, colorState); // backup current colorState
+        const previewColors = {};
+        COMPONENTS.forEach(comp => comp.colorMap.forEach(c => { previewColors[c.key] = c.default; }));
+        const themeObj = THEMES[p.theme];
+        if (themeObj && themeObj.overrides) Object.assign(previewColors, themeObj.overrides);
+        if (p.colorState) Object.assign(previewColors, p.colorState);
+        // Temporarily set global colorState for applyColors
+        Object.assign(colorState, previewColors);
+
+        // Render first 2 components' HTML
+        let previewHtml = '';
+        const maxPreview = Math.min(p.builderStack.length, 2);
+        for (let i = 0; i < maxPreview; i++) {
+          const item = p.builderStack[i];
+          const comp = COMPONENTS.find(c => c.id === item.compId);
+          if (!comp) continue;
+          previewHtml += applyColors(comp.getHtml(item.options || {}), comp, item.edits);
+        }
+
+        // Restore original colorState
+        Object.keys(colorState).forEach(k => delete colorState[k]);
+        Object.assign(colorState, savedColors);
+
+        // Wrap in a full HTML document for the iframe
+        const iframeSrc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;padding:0;overflow:hidden;background:#fff;}</style></head><body>' + previewHtml + '</body></html>';
+        const iframe = document.createElement('iframe');
+        iframe.className = 'thumb-preview-iframe';
+        iframe.setAttribute('sandbox', 'allow-same-origin');
+        iframe.setAttribute('scrolling', 'no');
+        iframe.setAttribute('tabindex', '-1');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.srcdoc = iframeSrc;
+
+        // After load, scale to 70% of thumb width and center
+        iframe.onload = function() {
+          const thumbW = thumb.offsetWidth || 280;
+          const scale = (thumbW * 0.7) / 750;
+          const scaledW = 750 * scale;
+          const offsetX = (thumbW - scaledW) / 2;
+          this.style.transform = 'scale(' + scale + ')';
+          this.style.left = offsetX + 'px';
+          this.style.height = (180 / scale) + 'px';
+        };
+        thumb.appendChild(iframe);
+      } else {
+        thumb.innerHTML = '<span class="thumb-empty">Empty project</span>';
+      }
+      card.appendChild(thumb);
+
+      // Info bar
+      const info = document.createElement('div');
+      info.className = 'proj-gallery-card-info';
+      const dateStr = p.updatedAt ? p.updatedAt.toLocaleDateString() : '';
+      info.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+          <span class="card-name" title="${p.name}">${escapeHtml(p.name)}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="card-date">${dateStr}</span>
+          <span class="mi card-arrow">arrow_forward</span>
+        </div>`;
+      card.appendChild(info);
+
+      // Share link button (top-left of thumb)
+      const shareBtn = document.createElement('button');
+      shareBtn.className = 'card-share-btn';
+      shareBtn.title = 'Copy share link';
+      shareBtn.innerHTML = '<span class="mi">link</span>';
+      shareBtn.onclick = (e) => { e.stopPropagation(); Collab.copyShareLink(p.id); };
+      thumb.appendChild(shareBtn);
+
+      // Kebab menu (three dots)
+      const kebab = document.createElement('div');
+      kebab.className = 'card-kebab';
+      const safeId = p.id;
+      const safeName = escapeHtml(p.name);
+      kebab.innerHTML = `
+        <button class="card-kebab-btn" onclick="event.stopPropagation();toggleCardMenu(this)" title="More options">
+          <span class="mi">more_vert</span>
+        </button>
+        <div class="card-kebab-menu">
+          <button onclick="event.stopPropagation();renameFromGallery('${safeId}')">
+            <span class="mi">edit</span>Rename
+          </button>
+          <button onclick="event.stopPropagation();duplicateFromGallery('${safeId}')">
+            <span class="mi">content_copy</span>Duplicate
+          </button>
+          <button class="menu-delete" onclick="event.stopPropagation();deleteFromGallery('${safeId}','${safeName}')">
+            <span class="mi">delete</span>Delete
+          </button>
+        </div>`;
+      // Put kebab inside thumb so it overlays the preview
+      thumb.appendChild(kebab);
+
+      // Click card → open project
+      card.onclick = () => openProjectFromGallery(p.id);
+      grid.appendChild(card);
+    });
+  });
+}
+
+function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Card kebab menu helpers ──
+function toggleCardMenu(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  // Close all open menus first
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) menu.classList.add('open');
+}
+// Close menus when clicking outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+});
+
+// ── Rename / Duplicate modal ──
+var _renameModalCallback = null;
+
+function openRenameModal(opts) {
+  const overlay = document.getElementById('renameModal');
+  const icon = document.getElementById('renameModalIcon');
+  const title = document.getElementById('renameModalTitle');
+  const desc = document.getElementById('renameModalDesc');
+  const input = document.getElementById('renameModalInput');
+  const confirmBtn = document.getElementById('renameModalConfirm');
+  if (!overlay) return;
+  icon.textContent = opts.icon || 'edit';
+  title.textContent = opts.title || 'Rename Project';
+  desc.textContent = opts.desc || 'Enter a new name for this project';
+  input.value = opts.value || '';
+  input.placeholder = opts.placeholder || 'Project name';
+  confirmBtn.textContent = opts.confirmText || 'Save';
+  _renameModalCallback = opts.onConfirm || null;
+  overlay.classList.add('visible');
+  setTimeout(() => { input.focus(); input.select(); }, 150);
+}
+
+function closeRenameModal() {
+  const overlay = document.getElementById('renameModal');
+  if (overlay) overlay.classList.remove('visible');
+  _renameModalCallback = null;
+}
+
+function confirmRenameModal() {
+  const input = document.getElementById('renameModalInput');
+  const val = input ? input.value.trim() : '';
+  if (!val) { input.focus(); return; }
+  if (_renameModalCallback) _renameModalCallback(val);
+  closeRenameModal();
+}
+
+// Allow Enter key in rename modal
+document.addEventListener('keydown', (e) => {
+  const overlay = document.getElementById('renameModal');
+  if (!overlay || !overlay.classList.contains('visible')) return;
+  if (e.key === 'Enter') { e.preventDefault(); confirmRenameModal(); }
+  if (e.key === 'Escape') { closeRenameModal(); }
+});
+
+async function renameFromGallery(id) {
+  // Get current name from Firestore
+  let currentName = '';
+  try {
+    const doc = await window._db.collection('edm_projects').doc(id).get();
+    if (doc.exists) currentName = doc.data().name || '';
+  } catch (_) {}
+  openRenameModal({
+    icon: 'edit',
+    title: 'Rename Project',
+    desc: 'Enter a new name for this project',
+    value: currentName,
+    confirmText: 'Rename',
+    onConfirm: async (newName) => {
+      if (window.Collab) {
+        await Collab.rename(id, newName);
+        renderProjectGallery();
+      }
+    }
+  });
+}
+
+async function duplicateFromGallery(id) {
+  if (!window.Collab) return;
+  try {
+    const newId = await Collab.duplicate(id);
+    if (newId) {
+      showToast('<span class="mi">content_copy</span>Project duplicated!');
+      renderProjectGallery();
+      // Open rename modal for the new copy
+      let copyName = '';
+      try {
+        const doc = await window._db.collection('edm_projects').doc(newId).get();
+        if (doc.exists) copyName = doc.data().name || '';
+      } catch (_) {}
+      openRenameModal({
+        icon: 'content_copy',
+        title: 'Rename Duplicated Project',
+        desc: 'Give your new copy a name',
+        value: copyName,
+        placeholder: 'New project name',
+        confirmText: 'Save',
+        onConfirm: async (newName) => {
+          await Collab.rename(newId, newName);
+          renderProjectGallery();
+        }
+      });
+    }
+  } catch (e) {
+    showToast('<span class="mi">error</span>Duplicate failed');
+  }
+}
+
+async function deleteFromGallery(id, name) {
+  if (!confirm('Delete project "' + name + '"?\nThis cannot be undone.')) return;
+  if (window.Collab) {
+    await Collab.delete(id);
+    renderProjectGallery();
+  }
+}
+
+// ══════════════════════════════════════
+// User Profile Modal
+// ══════════════════════════════════════
+var _userEmoji = null;
+var _userDisplayName = null;
+
+function _loadUserProfile() {
+  const saved = localStorage.getItem('edm_user_profile');
+  if (saved) {
+    try {
+      const p = JSON.parse(saved);
+      if (p.emoji && p.name) {
+        _userEmoji = p.emoji;
+        _userDisplayName = p.name;
+        updateTopBarOnline();
+        updateTopBarIdentity();
+        return true;
+      }
+    } catch (_) {}
+  }
+  return false;
+}
+
+function updateTopBarIdentity() {
+  const el = document.getElementById('topBarIdentity');
+  if (!el) return;
+  const emojiEl = document.getElementById('topBarIdentityEmoji');
+  const nameEl = document.getElementById('topBarIdentityName');
+  if (_userEmoji && _userDisplayName) {
+    emojiEl.textContent = _userEmoji;
+    nameEl.textContent = _userDisplayName;
+    // Only show when gallery is visible (builder uses top-bar-online instead)
+    const gallery = document.getElementById('projectGallery');
+    if (gallery && !gallery.classList.contains('hidden')) {
+      el.style.display = '';
+    }
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function updateTopBarOnline(allUsers) {
+  const container = document.getElementById('topBarOnline');
+  const avatarsEl = document.getElementById('topBarOnlineAvatars');
+  if (!container || !avatarsEl) return;
+
+  // No users passed (e.g. gallery / no project) — show only self
+  if (!allUsers || allUsers.length === 0) {
+    if (_userEmoji) {
+      avatarsEl.innerHTML = '<div class="top-bar-online-avatar" title="' + (_userDisplayName || 'Me') + ' (you)" style="border-color:#0059ff;">' + _userEmoji + '</div>';
+      container.style.display = '';
+    } else {
+      container.style.display = 'none';
+    }
+    return;
+  }
+
+  // Sort: self first, then others
+  const sorted = allUsers.slice().sort((a, b) => (b._isSelf ? 1 : 0) - (a._isSelf ? 1 : 0));
+  let html = '';
+  const max = 5;
+  sorted.forEach((p, i) => {
+    if (i >= max) return;
+    const emoji = p.emoji || '😀';
+    const name = p.name || 'Anonymous';
+    const isSelf = p._isSelf;
+    const borderColor = isSelf ? '#0059ff' : (p.color || '#e8eaed');
+    const bg = isSelf ? '' : 'background:' + (p.color || '#e8eaed') + ';';
+    const label = isSelf ? name + ' (you)' : name;
+    html += '<div class="top-bar-online-avatar" style="' + bg + 'border-color:' + borderColor + ';" title="' + label + '">' + emoji + '</div>';
+  });
+  if (sorted.length > max) {
+    html += '<div class="top-bar-online-avatar" style="font-size:10px;font-weight:700;color:#666;">+' + (sorted.length - max) + '</div>';
+  }
+  avatarsEl.innerHTML = html;
+  container.style.display = '';
+}
+
+function showUserProfileModal() {
+  const modal = document.getElementById('userProfileModal');
+  if (modal) modal.classList.add('visible');
+  // Auto-select first emoji
+  const firstBtn = document.querySelector('.profile-emoji-btn');
+  if (firstBtn) selectProfileEmoji(firstBtn);
+  // Focus name input
+  setTimeout(() => {
+    const input = document.getElementById('profileNameInput');
+    if (input) input.focus();
+  }, 300);
+}
+
+function selectProfileEmoji(btn) {
+  document.querySelectorAll('.profile-emoji-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function confirmProfile() {
+  const selectedBtn = document.querySelector('.profile-emoji-btn.selected');
+  const nameInput = document.getElementById('profileNameInput');
+  const emoji = selectedBtn ? selectedBtn.dataset.emoji : '😀';
+  const name = (nameInput ? nameInput.value.trim() : '') || 'Anonymous';
+
+  _userEmoji = emoji;
+  _userDisplayName = name;
+
+  // Persist to localStorage
+  localStorage.setItem('edm_user_profile', JSON.stringify({ emoji: emoji, name: name }));
+  // Also store in sessionStorage for firebase-collab.js backward compat
+  sessionStorage.setItem('collab_name', name);
+  sessionStorage.setItem('collab_emoji', emoji);
+
+  // Update identity chip
+  updateTopBarIdentity();
+
+  // Close modal
+  const modal = document.getElementById('userProfileModal');
+  if (modal) modal.classList.remove('visible');
+
+  // Now proceed to gallery
+  _afterProfileReady();
+}
+
+// Allow Enter key to confirm in name input
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('profileNameInput');
+  if (input) input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmProfile();
+  });
+});
+
+// ══════════════════════════════════════
+// Init — Start with Project Gallery
+// ══════════════════════════════════════
+// Don't show builder initially — gallery is the landing page
+// showBuilder() will be called when user opens/creates a project
+</script>
+
+<!-- Collaboration module (depends on globals above) -->
+<script src="firebase-collab.js"></script>
+<script>
+  // ─── Startup Flow ───
+  // 1. If user has profile → go to gallery (or URL project)
+  // 2. If no profile → show profile modal first
+
+  function _afterProfileReady() {
+    const params = new URLSearchParams(window.location.search);
+    const pid = params.get('project');
+    if (pid && window.Collab) {
+      // Hide gallery, show builder, load project
+      document.getElementById('projectGallery').classList.add('hidden');
+      document.getElementById('builderView').classList.add('visible');
+      showBuilder();
+      Collab.load(pid);
+      // Clean URL
+      const clean = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, '', clean);
+    } else {
+      // Default: show project gallery
+      updateTopBarIdentity();
+      renderProjectGallery();
+    }
+  }
+
+  (function() {
+    if (_loadUserProfile()) {
+      // Profile exists → proceed directly
+      _afterProfileReady();
+    } else {
+      // No profile → show modal, _afterProfileReady called on confirm
+      showUserProfileModal();
+    }
+  })();
+
+  // Ctrl+S / Cmd+S → manual save
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      if (window.Collab && Collab.getCurrentProjectId()) Collab.manualSave();
+    }
+  });
 </script>
 
 </body>
