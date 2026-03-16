@@ -327,6 +327,7 @@
   }
 
   function startPresence(projectId) {
+    console.log('[Presence] startPresence called for project:', projectId);
     stopPresence();
     _presenceDismissed = false;
     _loadProfile();
@@ -389,6 +390,7 @@
   }
 
   function stopPresence() {
+    console.log('[Presence] stopPresence called', new Error().stack?.split('\n')[2]?.trim());
     if (_heartbeatTimer) { clearInterval(_heartbeatTimer); _heartbeatTimer = null; }
     if (_unsubPresence) { _unsubPresence(); _unsubPresence = null; }
     if (_currentProjectId) {

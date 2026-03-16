@@ -4177,15 +4177,16 @@ function updateTopBarIdentity() {
 function updateTopBarOnline(allUsers) {
   const container = document.getElementById('topBarOnline');
   const avatarsEl = document.getElementById('topBarOnlineAvatars');
-  if (!container || !avatarsEl) return;
+  if (!container || !avatarsEl) { console.warn('[TopBar] container or avatarsEl missing'); return; }
+
+  console.log('[TopBar] updateTopBarOnline called, allUsers:', allUsers ? allUsers.length : 'none', '_userEmoji:', _userEmoji, 'container.display:', container.style.display);
 
   // No users passed (e.g. gallery / no project) — show only self
   if (!allUsers || allUsers.length === 0) {
     if (_userEmoji) {
       avatarsEl.innerHTML = '<div class="top-bar-online-avatar" title="' + (_userDisplayName || 'Me') + ' (you)" style="border-color:#0059ff;">' + _userEmoji + '</div>';
-      container.style.display = '';
     } else {
-      container.style.display = 'none';
+      avatarsEl.innerHTML = '<div class="top-bar-online-avatar" title="Me" style="border-color:#0059ff;">😀</div>';
     }
     return;
   }
@@ -4208,7 +4209,7 @@ function updateTopBarOnline(allUsers) {
     html += '<div class="top-bar-online-avatar" style="font-size:10px;font-weight:700;color:#666;">+' + (sorted.length - max) + '</div>';
   }
   avatarsEl.innerHTML = html;
-  container.style.display = '';
+  console.log('[TopBar] rendered', sorted.length, 'avatars');
 }
 
 function showUserProfileModal() {
@@ -4281,10 +4282,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const pid = params.get('project');
     if (pid && window.Collab) {
-      // Hide gallery, show builder, load project
-      document.getElementById('projectGallery').classList.add('hidden');
-      document.getElementById('builderView').classList.add('visible');
-      showBuilder();
+      // Use enterBuilder() so topBarOnline and buttons are properly shown
+      enterBuilder();
       Collab.load(pid);
       // Clean URL
       const clean = window.location.origin + window.location.pathname;
