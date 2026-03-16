@@ -3805,6 +3805,10 @@ function enterBuilder() {
   // Builder: show online avatars, hide identity chip
   var identityEl = document.getElementById('topBarIdentity');
   if (identityEl) identityEl.style.display = 'none';
+  // Immediately show topBarOnline with self avatar (presence snapshot will update later)
+  updateTopBarOnline();
+  var onlineEl = document.getElementById('topBarOnline');
+  if (onlineEl) onlineEl.style.display = '';
   showBuilder();
 }
 

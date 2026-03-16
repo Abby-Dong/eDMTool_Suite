@@ -366,8 +366,9 @@
           const d = doc.data();
           const isSelf = (d.sessionId === SESSION_ID);
           // Consider stale if lastSeen > 30s ago
-          const lastSeen = d.lastSeen ? d.lastSeen.toDate().getTime() : 0;
-          if (now - lastSeen > 30000 && !isSelf) {
+          // null lastSeen means serverTimestamp is pending — treat as alive
+          const lastSeenTs = d.lastSeen ? d.lastSeen.toDate().getTime() : null;
+          if (lastSeenTs !== null && now - lastSeenTs > 30000 && !isSelf) {
             // Clean up stale session
             doc.ref.delete().catch(() => {});
             return;
