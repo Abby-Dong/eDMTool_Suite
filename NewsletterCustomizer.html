@@ -4416,9 +4416,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function _afterProfileReady() {
     // Start global presence tracking (shows who's online app-wide)
-    if (window.Collab && Collab.ready()) {
-      Collab.startGlobalPresence();
-    }
+    try {
+      if (window.Collab && typeof Collab.startGlobalPresence === 'function') {
+        Collab.startGlobalPresence();
+      }
+    } catch (e) { console.warn('[GlobalPresence] start failed:', e); }
     const params = new URLSearchParams(window.location.search);
     const pid = params.get('project');
     if (pid && window.Collab) {
