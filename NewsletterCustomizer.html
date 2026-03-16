@@ -1335,6 +1335,8 @@
   <span class="sep"></span>
   <button title="Bullet Points" onmousedown="event.preventDefault(); execBullet()"><span class="mi">format_list_bulleted</span></button>
   <span class="sep"></span>
+  <button title="Insert Link" onmousedown="event.preventDefault(); execLink()"><span class="mi">link</span></button>
+  <span class="sep"></span>
   <button title="Clear Formatting" onmousedown="event.preventDefault(); execFormat('removeFormat')"><span class="mi">format_clear</span></button>
 </div>
 
@@ -2476,6 +2478,103 @@ function execFormat(cmd) {
         }
       }, 300);
     }
+  }
+}
+
+function execLink() {
+  if (!_activeEditableEl) return;
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+
+  // Check if cursor/selection is already inside an <a> tag
+  let existingLink = null;
+  let node = sel.anchorNode;
+  while (node && node !== _activeEditableEl) {
+    if (node.nodeType === 1 && node.tagName === 'A') { existingLink = node; break; }
+    node = node.parentNode;
+  }
+
+  if (existingLink) {
+    // Editing existing link — pre-fill the URL
+    _showLinkPrompt(existingLink.getAttribute('href') || '', function(url) {
+      if (url === null) return; // cancelled
+      if (!url.trim()) {
+        // Empty URL → unwrap the link (keep text)
+        const parent = existingLink.parentNode;
+        while (existingLink.firstChild) parent.insertBefore(existingLink.firstChild, existingLink);
+        parent.removeChild(existingLink);
+      } else {
+        existingLink.setAttribute('href', url.trim());
+      }
+      _saveLinkEdit();
+    });
+  } else if (!range.collapsed) {
+    // Has selection — wrap in link
+    _showLinkPrompt('', function(url) {
+      if (!url || !url.trim()) return;
+      const a = document.createElement('a');
+      a.href = url.trim();
+      a.style.cssText = 'color: #0059ff; text-decoration: underline;';
+      try {
+        range.surroundContents(a);
+      } catch(e) {
+        // If surroundContents fails (partial selection across tags), use insertHTML
+        const text = range.toString();
+        range.deleteContents();
+        const frag = range.createContextualFragment(
+          '<a href="' + url.trim().replace(/"/g, '&quot;') + '" style="color: #0059ff; text-decoration: underline;">' + text.replace(/</g, '&lt;') + '</a>'
+        );
+        range.insertNode(frag);
+      }
+      sel.collapseToEnd();
+      _saveLinkEdit();
+    });
+  } else {
+    // No selection — prompt for URL and insert link text
+    _showLinkPrompt('', function(url) {
+      if (!url || !url.trim()) return;
+      document.execCommand('insertHTML', false,
+        '<a href="' + url.trim().replace(/"/g, '&quot;') + '" style="color: #0059ff; text-decoration: underline;">' + url.trim().replace(/</g, '&lt;') + '</a>'
+      );
+      _saveLinkEdit();
+    });
+  }
+}
+
+function _showLinkPrompt(currentUrl, callback) {
+  // Use the existing renameModal infrastructure for a polished prompt
+  window.openRenameModal({
+    icon: 'link',
+    title: currentUrl ? 'Edit Link' : 'Insert Link',
+    desc: 'Enter the URL for this link',
+    value: currentUrl || 'https://',
+    placeholder: 'https://example.com',
+    confirmText: currentUrl ? 'Update' : 'Insert',
+    onConfirm: function(url) { callback(url); }
+  });
+}
+
+function _saveLinkEdit() {
+  if (!_activeEditableEl) return;
+  let comp = null;
+  let targetEdits = editState;
+  let inBuilder = false;
+  const bsiEl = _activeEditableEl.closest('.builder-stack-item');
+  if (bsiEl) {
+    const uid = bsiEl.dataset.uid;
+    const item = builderStack.find(i => i.uid === uid);
+    if (item) {
+      comp = COMPONENTS.find(c => c.id === item.compId);
+      targetEdits = item.edits;
+      inBuilder = true;
+    }
+  }
+  if (comp) {
+    const mc = _activeEditableEl.getAttribute('mc:edit');
+    const kb = comp.id.replace(/-/g,'_') + '__' + mc + '__html';
+    targetEdits[kb] = _activeEditableEl.innerHTML;
+    if (inBuilder) { pushBuilderHistory(); updateBuilderCode(); }
   }
 }
 
