@@ -1624,7 +1624,7 @@ var COMPONENTS = [
                  style="display: block; width: 180px; max-width: 180px; height: auto;" />
           </td>
           <td width="490" align="right" valign="middle" class="nav-links" style="width: 490px;">
-            <span class="email-desktop" mc:edit="header_date" style="font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: none; color: inherit;">IoTMart.Express@advantech.com</a></span><span class="email-mobile" style="display: none; max-height: 0; overflow: hidden; font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: none; color: inherit;">Contact us</a></span>
+            <span class="email-desktop" mc:edit="header_date" style="font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: underline; color: inherit;">IoTMart.Express@advantech.com</a></span><span class="email-mobile" style="display: none; max-height: 0; overflow: hidden; font-size: 14px; font-family: Arial, sans-serif; font-weight: 400; letter-spacing: 0.3px;" data-color="headerDateColor"><a href="mailto:IoTMart.Express@advantech.com" style="text-decoration: underline; color: inherit;">Contact us</a></span>
           </td>
         </tr>
       </table>
@@ -1980,7 +1980,7 @@ var COMPONENTS = [
                    style="display: block; width: 293px; height: 176px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 20px 16px 20px;">
                 <p mc:edit="card1_body"
-                   style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="cardsBody">
+                   style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="cardsBody">
                   Describe the first highlight here. Share key updates, product features, or campaign details in a concise and compelling way.
                 </p>
               </td></tr>
@@ -2024,7 +2024,7 @@ var COMPONENTS = [
                    style="display: block; width: 293px; height: 176px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 20px 16px 20px;">
                 <p mc:edit="card2_body"
-                   style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="cardsBody">
+                   style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="cardsBody">
                   Describe the second highlight here. Share key updates, product features, or campaign details in a concise and compelling way.
                 </p>
               </td></tr>
@@ -2485,17 +2485,55 @@ function execBullet() {
   const hasSelection = sel && sel.rangeCount > 0 && !sel.getRangeAt(0).collapsed;
 
   if (hasSelection) {
-    // Convert selected text: split lines, prefix each with bullet
+    // Work with innerHTML to preserve <br> structure
+    // Get the selected HTML via a temporary container
     const range = sel.getRangeAt(0);
-    const selectedText = range.toString();
-    // Split on newlines or <br> equivalents
-    const lines = selectedText.split(/\n/);
-    const bulleted = lines.map((line, i) => {
-      const trimmed = line.trim();
-      if (!trimmed) return '';
-      return (i === 0 ? '' : '<br>') + '&bull;&nbsp;' + trimmed;
-    }).filter(l => l !== '').join('');
-    // Delete selection and insert bulleted HTML
+    const container = document.createElement('div');
+    container.appendChild(range.cloneContents());
+    let html = container.innerHTML;
+
+    // Split on <br> variants while keeping them as separators
+    const parts = html.split(/(<br\s*\/?>)/gi);
+    // Rebuild: for each text segment (not a <br> tag), toggle bullet
+    const bulletRe = /^(\s*)(&bull;|•)(\s|&nbsp;)*/;
+    let allHaveBullets = true;
+    const textParts = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (/^<br\s*\/?>$/i.test(parts[i])) continue; // skip <br> tags
+      const stripped = parts[i].replace(/<[^>]*>/g, '').trim();
+      if (stripped) {
+        textParts.push(parts[i]);
+        if (!bulletRe.test(parts[i].replace(/^\s*(<[^>]*>\s*)*/, ''))) {
+          allHaveBullets = false;
+        }
+      }
+    }
+
+    // Rebuild HTML
+    let result = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (/^<br\s*\/?>$/i.test(parts[i])) {
+        result.push('<br>');
+        continue;
+      }
+      const stripped = parts[i].replace(/<[^>]*>/g, '').trim();
+      if (!stripped) { result.push(parts[i]); continue; }
+      if (allHaveBullets) {
+        // Remove bullets (toggle off)
+        result.push(parts[i].replace(/(&bull;|•)(\s|&nbsp;)*/g, ''));
+      } else {
+        // Add bullet if not already present
+        const leading = parts[i].match(/^(\s*(?:<[^>]*>\s*)*)/);
+        const prefix = leading ? leading[0] : '';
+        const rest = parts[i].substring(prefix.length);
+        if (bulletRe.test(rest)) {
+          result.push(parts[i]); // already has bullet
+        } else {
+          result.push(prefix + '&bull;&nbsp;' + rest);
+        }
+      }
+    }
+    const bulleted = result.join('');
     range.deleteContents();
     const frag = range.createContextualFragment(bulleted);
     range.insertNode(frag);
