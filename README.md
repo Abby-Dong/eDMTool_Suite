@@ -9,12 +9,17 @@ Open `index.html` in any modern browser and choose a tool to start building.
 ## Project Structure
 
 ```
-eDM-ComponentCustomizer/
+eDM Tool Suite/
 ├── index.html                  ← Landing page — tool selector
 ├── ComponentCustomizer.html    ← Component Customizer (19 components)
-├── NewsletterCustomizer.html   ← Newsletter Customizer (8 components)
-├── config.js                   ← 🔒 Cloudinary credentials (gitignored)
+├── NewsletterCustomizer.html   ← Newsletter Customizer (9 components)
+├── firebase-config.js          ← Firebase SDK init (reads from config.js)
+├── firebase-collab.js          ← Real-time collaboration module
+├── firestore.rules             ← Firestore security rules
+├── firebase.json               ← Firebase project config
+├── config.js                   ← 🔒 Credentials (gitignored)
 ├── config.example.js           ← Template — copy to config.js
+├── .github/workflows/deploy.yml ← GitHub Pages auto-deploy
 ├── .gitignore
 └── README.md
 ```
@@ -25,10 +30,23 @@ eDM-ComponentCustomizer/
 
 1. Clone the repo
 2. Copy `config.example.js` → `config.js`
-3. Fill in your Cloudinary cloud name and upload preset
-4. Open `index.html` in a browser
+3. Fill in your **Cloudinary** cloud name and upload preset
+4. *(Optional — for collaboration)* Add your **Firebase** config to `config.js`:
+   ```js
+   window.FIREBASE_CONFIG = {
+     apiKey:            'YOUR_API_KEY',
+     authDomain:        'YOUR_PROJECT.firebaseapp.com',
+     projectId:         'YOUR_PROJECT',
+     storageBucket:     'YOUR_PROJECT.appspot.com',
+     messagingSenderId: '000000000000',
+     appId:             '1:000000000000:web:xxxxxxxxxxxx'
+   };
+   ```
+5. Open `index.html` in a browser
 
 > **Local server:** If your browser restricts local file access, run `python3 -m http.server 8765` from the project root and open `http://localhost:8765`.
+
+> **Collaboration features** (project gallery, real-time sync, multi-user presence) require a Firebase project with Firestore enabled. Without `FIREBASE_CONFIG`, the tool still works fully as a standalone single-user builder.
 
 ---
 
@@ -94,30 +112,43 @@ Full-email assembly workspace:
 
 ## Tool 2 — Newsletter Customizer
 
-A dedicated builder for **internal newsletter emails** with **8 components**, designed around a 750px layout:
+A dedicated builder for **internal newsletter emails** with **9 components**, designed around a 750px layout:
+
+### Builder Features
 
 - Drag-and-drop component assembly with reorder, duplicate, and remove
 - Per-component color palette editing via sidebar
 - Inline text, image, and link editing directly in the preview
-- **Component option toggles** — show/hide CTA buttons, images, or switch layout variants per block
+- **Component option toggles** — show/hide CTA buttons, images, select stat count (3–5), or switch layout variants per block
 - **Image crop modal** — crop images to component-specific aspect ratios before uploading
 - **Cloudinary upload** with auto-optimization
 - **Desktop / Mobile preview toggle**
-- **Copy Full HTML** / **Download HTML** — exports a dated `.html` file
+- **Download HTML Zip** — primary action, exports a ZIP with the project name
+- **Copy HTML** — secondary action, copies output to clipboard
 - **Undo / Redo** with full history
 
-### The 8 Newsletter Components
+### Real-Time Collaboration (Firebase)
+
+- **Project Gallery** — create, rename, duplicate, and delete newsletter projects stored in Firestore
+- **Auto-sync** — changes are saved automatically as you edit; manual Save also available
+- **Multi-user presence** — see who is currently editing the same project (Google Docs–style avatars)
+- **Share link** — generate a direct URL to any project for collaborators
+- **User profiles** — pick an emoji avatar and display name (stored locally)
+- **Last-edit indicator** — see who last edited each project and when
+
+### The 9 Newsletter Components
 
 | # | Component | Purpose |
 |---|-----------|---------|
 | 01 | Header | Logo + contact email |
-| 02 | Banner | Split hero — text left, image right |
+| 02 | Banner | Split hero — text left, image right, optional CTA |
 | 03 | Top News | Highlight label + body with optional image/CTA |
 | 04 | Stats | Metrics bar with 3 key numbers |
-| 05 | Article | Stats sidebar + long-form content with background image |
+| 05 | Article | Stats sidebar (3–5 stats) + long-form content with background image |
 | 06 | Feature (Orange) | Single feature article with optional image placement (left/right) and CTA |
-| 07 | Feature (Blue) | Two-card layout with accent bars, optional images and CTAs |
-| 08 | Insight | Full-width background image section with editorial content |
+| 07 | Product Cards | Card layout (3 or 4 cards) with accent bars, optional images and CTAs |
+| 08 | Insight | Full-width background image section with optional image and CTA |
+| 09 | Footer | Copyright and legal text |
 
 ---
 
@@ -190,6 +221,8 @@ window.CLOUDINARY_PRESET = 'your_upload_preset';
 
 A `config.example.js` template is included in the repo. Copy it to `config.js` and fill in your values. All other features work without Cloudinary — only the image upload button requires it.
 
+For collaboration features, also add `FIREBASE_CONFIG` to the same file (see [Setup](#setup)).
+
 ---
 
 ## How to Use
@@ -213,10 +246,12 @@ A `config.example.js` template is included in the repo. Copy it to `config.js` a
 ### Path C — Build a newsletter
 
 1. Open **Newsletter Customizer** from the landing page
-2. Drag newsletter components into the canvas
-3. Toggle component options (CTA, images, layout variants) as needed
-4. Edit content inline and adjust colors
-5. Click **Copy Full HTML** or **Download HTML**
+2. Create a new project or open an existing one from the **Project Gallery**
+3. Drag newsletter components into the canvas
+4. Toggle component options (CTA, images, stat count, layout variants) as needed
+5. Edit content inline and adjust colors
+6. Click **Download HTML Zip** or **Copy HTML**
+7. Changes are auto-saved to Firestore — collaborators see updates in real time
 
 ---
 
@@ -224,4 +259,5 @@ A `config.example.js` template is included in the repo. Copy it to `config.js` a
 
 - Not a replacement for MCE — it is a **pre-production customization and assembly layer**
 - Not a general-purpose design tool — components follow a fixed brand structure
-- Not cloud-synced or multi-user — state is not persisted between sessions
+
+> **Note:** The Newsletter Customizer supports cloud sync and multi-user collaboration via Firebase Firestore. The Component Customizer remains a standalone single-session tool.
