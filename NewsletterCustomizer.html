@@ -3933,8 +3933,10 @@ function renderProjectGallery() {
         Object.keys(colorState).forEach(k => delete colorState[k]);
         Object.assign(colorState, savedColors);
 
+        // Strip any <script> tags from preview (thumbnails don't need scripts)
+        const cleanHtml = previewHtml.replace(/<script[\s\S]*?<\/script>/gi, '');
         // Wrap in a full HTML document for the iframe
-        const iframeSrc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;padding:0;overflow:hidden;background:#fff;}</style></head><body>' + previewHtml + '</body></html>';
+        const iframeSrc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;padding:0;overflow:hidden;background:#fff;}</style></head><body>' + cleanHtml + '</body></html>';
         const iframe = document.createElement('iframe');
         iframe.className = 'thumb-preview-iframe';
         iframe.setAttribute('sandbox', 'allow-same-origin');
