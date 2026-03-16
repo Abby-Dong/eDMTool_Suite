@@ -14,9 +14,12 @@
 
   const COLLECTION = 'edm_projects';
   const PRESENCE_COL = 'presence';   // sub-collection under each project
+  const GLOBAL_ONLINE_COL = 'edm_online'; // top-level collection for global presence
   let _currentProjectId = null;
   let _unsubscribe = null;          // Firestore onSnapshot listener
   let _unsubPresence = null;        // presence listener
+  let _unsubGlobalPresence = null;  // global online listener
+  let _globalHeartbeatTimer = null; // global heartbeat
   let _autoSaveTimer = null;
   let _heartbeatTimer = null;
   let _isSyncing = false;           // prevent echo loop
@@ -887,6 +890,83 @@
   }
 
   // ══════════════════════════════════════
+  // Global Online Presence (app-wide, independent of project)
+  // ══════════════════════════════════════
+  function startGlobalPresence() {
+    if (!ready()) return;
+    stopGlobalPresence();
+    _loadProfile();
+    const ref = db().collection(GLOBAL_ONLINE_COL).doc(SESSION_ID);
+    ref.set({
+      sessionId: SESSION_ID,
+      name: _userName,
+      emoji: _userEmoji,
+      color: getSessionColor(),
+      lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(e => console.warn('[GlobalPresence] write error', e));
+
+    // Heartbeat every 20s
+    _globalHeartbeatTimer = setInterval(() => {
+      ref.update({
+        lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+        name: _userName,
+        emoji: _userEmoji
+      }).catch(() => {});
+    }, 20000);
+
+    // Listen to all online users
+    _unsubGlobalPresence = db().collection(GLOBAL_ONLINE_COL)
+      .onSnapshot((snapshot) => {
+        const now = Date.now();
+        const allOnline = [];
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          const isSelf = (d.sessionId === SESSION_ID);
+          const lastSeenTs = d.lastSeen ? d.lastSeen.toDate().getTime() : null;
+          // Stale if lastSeen > 45s ago (heartbeat is 20s, so 2x + margin)
+          if (lastSeenTs !== null && now - lastSeenTs > 45000 && !isSelf) {
+            doc.ref.delete().catch(() => {});
+            return;
+          }
+          d._isSelf = isSelf;
+          allOnline.push(d);
+        });
+        console.log('[GlobalPresence] online users:', allOnline.length);
+        if (typeof updateTopBarOnline === 'function') updateTopBarOnline(allOnline);
+      }, (err) => console.warn('[GlobalPresence] listen error', err));
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', _cleanupGlobalPresence);
+  }
+
+  function stopGlobalPresence() {
+    if (_globalHeartbeatTimer) { clearInterval(_globalHeartbeatTimer); _globalHeartbeatTimer = null; }
+    if (_unsubGlobalPresence) { _unsubGlobalPresence(); _unsubGlobalPresence = null; }
+    db().collection(GLOBAL_ONLINE_COL).doc(SESSION_ID).delete().catch(() => {});
+    window.removeEventListener('beforeunload', _cleanupGlobalPresence);
+  }
+
+  function _cleanupGlobalPresence() {
+    if (ready()) {
+      db().collection(GLOBAL_ONLINE_COL).doc(SESSION_ID).delete().catch(() => {});
+    }
+  }
+
+  function refreshGlobalProfile() {
+    // Called when user updates their profile — re-read and push to Firestore
+    _userName = null;
+    _userEmoji = null;
+    _loadProfile();
+    if (ready()) {
+      db().collection(GLOBAL_ONLINE_COL).doc(SESSION_ID).update({
+        name: _userName,
+        emoji: _userEmoji,
+        lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(() => {});
+    }
+  }
+
+  // ══════════════════════════════════════
   // Expose public API on window.Collab
   // ══════════════════════════════════════
   window.Collab = {
@@ -912,7 +992,10 @@
     checkUrlProject: checkUrlProject,
     updateEditing: updateEditingComponent,
     getRemoteEditors: () => _remoteEditors,
-    ready: ready
+    ready: ready,
+    startGlobalPresence: startGlobalPresence,
+    stopGlobalPresence: stopGlobalPresence,
+    refreshGlobalProfile: refreshGlobalProfile
   };
 
 })();

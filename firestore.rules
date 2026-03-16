@@ -39,15 +39,31 @@ service cloud.firestore {
 
         // Create / update — validate shape
         allow create, update: if
-          request.resource.data.keys().hasAll(['uid', 'name', 'emoji', 'color', 'ts'])
-          && request.resource.data.uid   is string
-          && request.resource.data.name  is string
-          && request.resource.data.emoji is string
-          && request.resource.data.color is string;
+          request.resource.data.keys().hasAll(['sessionId', 'name', 'emoji', 'color'])
+          && request.resource.data.sessionId is string
+          && request.resource.data.name      is string
+          && request.resource.data.emoji     is string
+          && request.resource.data.color     is string;
 
         // Delete — stale session cleanup + own leave
         allow delete: if true;
       }
+    }
+
+    // ──────────────────────────────────────
+    // edm_online — global presence (app-wide)
+    // ──────────────────────────────────────
+    match /edm_online/{sessionId} {
+      allow read: if true;
+
+      allow create, update: if
+        request.resource.data.keys().hasAll(['sessionId', 'name', 'emoji', 'color'])
+        && request.resource.data.sessionId is string
+        && request.resource.data.name      is string
+        && request.resource.data.emoji     is string
+        && request.resource.data.color     is string;
+
+      allow delete: if true;
     }
 
     // Deny everything else
