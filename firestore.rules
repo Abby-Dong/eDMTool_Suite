@@ -66,6 +66,65 @@ service cloud.firestore {
       allow delete: if true;
     }
 
+    // ──────────────────────────────────────
+    // edm_component_projects collection
+    // (Component Customizer — same schema as edm_projects)
+    // ──────────────────────────────────────
+    match /edm_component_projects/{projectId} {
+
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'builderStack', 'colorState', 'theme', 'createdAt', 'updatedAt'])
+        && request.resource.data.name        is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.builderStack is list
+        && request.resource.data.colorState   is map
+        && request.resource.data.theme        is string
+        && request.resource.data.createdAt    == request.time
+        && request.resource.data.updatedAt    == request.time;
+
+      allow update: if
+        request.resource.data.name        is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if true;
+
+      // ── presence sub-collection ──
+      match /presence/{sessionId} {
+        allow read: if true;
+
+        allow create, update: if
+          request.resource.data.keys().hasAll(['sessionId', 'name', 'emoji', 'color'])
+          && request.resource.data.sessionId is string
+          && request.resource.data.name      is string
+          && request.resource.data.emoji     is string
+          && request.resource.data.color     is string;
+
+        allow delete: if true;
+      }
+    }
+
+    // ──────────────────────────────────────
+    // edm_component_online — global presence (Component Customizer)
+    // ──────────────────────────────────────
+    match /edm_component_online/{sessionId} {
+      allow read: if true;
+
+      allow create, update: if
+        request.resource.data.keys().hasAll(['sessionId', 'name', 'emoji', 'color'])
+        && request.resource.data.sessionId is string
+        && request.resource.data.name      is string
+        && request.resource.data.emoji     is string
+        && request.resource.data.color     is string;
+
+      allow delete: if true;
+    }
+
     // Deny everything else
     match /{document=**} {
       allow read, write: if false;

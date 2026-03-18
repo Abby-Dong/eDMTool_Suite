@@ -12,9 +12,12 @@
 (function () {
   'use strict';
 
-  const COLLECTION = 'edm_projects';
+  // i18n helper — uses global t() from i18n-component.js if available
+  function _t(key) { return (typeof window.t === 'function') ? window.t(key) : key; }
+
+  const COLLECTION = window._collabCollection || 'edm_projects';
   const PRESENCE_COL = 'presence';   // sub-collection under each project
-  const GLOBAL_ONLINE_COL = 'edm_online'; // top-level collection for global presence
+  const GLOBAL_ONLINE_COL = window._collabOnlineCollection || 'edm_online'; // top-level collection for global presence
   let _currentProjectId = null;
   let _unsubscribe = null;          // Firestore onSnapshot listener
   let _unsubPresence = null;        // presence listener
@@ -109,8 +112,8 @@
   // ══════════════════════════════════════
   // Save to Firestore
   // ══════════════════════════════════════
-  async function saveProject(name) {
-    if (!ready()) { showToast('<span class="mi">error</span>Firebase not configured'); return null; }
+  async function saveProject(name, extra) {
+    if (!ready()) { showToast('<span class="mi">error</span>' + _t('collab.firebaseNotReady')); return null; }
     const snap = captureSnapshot();
     const nowJson = JSON.stringify(snap);
     // If we already have a project open, just update it
@@ -127,7 +130,7 @@
           colorState:   snap.colorState,
           theme:        snap.theme,
           _builderUid:  snap._builderUid,
-          lastEditBy:   _userName || 'Anonymous',
+          lastEditBy:   _userName || _t('collab.anonymous'),
           lastEditEmoji: _userEmoji || '😀',
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -136,7 +139,7 @@
                     Object.keys(snap.colorState).length, 'colors, theme:', snap.theme);
       } catch (e) {
         console.error('[Collab] ❌ save error', e);
-        showToast('<span class="mi">error</span>Save failed — ' + e.message);
+        showToast('<span class="mi">error</span>' + _t('collab.saveFailed') + e.message);
       }
       // Release sync lock after a short delay to let onSnapshot echo pass
       setTimeout(() => { _isSyncing = false; }, 800);
@@ -147,29 +150,38 @@
     _isSyncing = true; // suppress onSnapshot echo from startRealtimeSync
     try {
       _loadProfile();
-      await db().collection(COLLECTION).doc(id).set({
-        name: name || 'Untitled eDM',
+      const docData = {
+        name: name || _t('collab.untitledEdm'),
         builderStack: snap.builderStack,
         colorState:   snap.colorState,
         theme:        snap.theme,
         _builderUid:  snap._builderUid,
-        lastEditBy:   _userName || 'Anonymous',
+        lastEditBy:   _userName || _t('collab.anonymous'),
         lastEditEmoji: _userEmoji || '😀',
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      };
+      // Add extra fields like site
+      if (extra && typeof extra === 'object') {
+        Object.assign(docData, extra);
+      }
+      await db().collection(COLLECTION).doc(id).set(docData);
       _currentProjectId = id;
       _lastSyncJson = nowJson;
+      // Store site in global for survey editor
+      if (extra && extra.site) {
+        window._currentProjectSite = extra.site;
+      }
       startRealtimeSync(id);
       updateProjectUI();
-      console.log('[Collab] ✅ created project', id, '—', snap.builderStack.length, 'components');
+      console.log('[Collab] ✅ created project', id, '—', snap.builderStack.length, 'components, site:', extra && extra.site);
       // Release sync lock after a short delay
       setTimeout(() => { _isSyncing = false; }, 800);
       return id;
     } catch (e) {
       _isSyncing = false;
       console.error('[Collab] ❌ create error', e);
-      showToast('<span class="mi">error</span>Save failed — ' + e.message);
+      showToast('<span class="mi">error</span>' + _t('collab.saveFailed') + e.message);
       return null;
     }
   }
@@ -182,7 +194,7 @@
     try {
       const doc = await db().collection(COLLECTION).doc(id).get();
       if (!doc.exists) {
-        showToast('<span class="mi">error</span>Project not found');
+        showToast('<span class="mi">error</span>' + _t('collab.projectNotFound'));
         return false;
       }
       const record = doc.data();
@@ -208,6 +220,9 @@
         snap = { builderStack: [], colorState: {}, theme: 'light-blue', _builderUid: 0 };
         console.warn('[Collab] ⚠️ loaded empty project — no builderStack or data field found');
       }
+      // Restore site for survey editor
+      window._currentProjectSite = record.site || 'global';
+      console.log('[Collab] site:', window._currentProjectSite);
       // Suppress onSnapshot echo during load
       _isSyncing = true;
       applySnapshot(snap);
@@ -216,11 +231,11 @@
       updateProjectUI();
       // Release sync lock after onSnapshot echo passes
       setTimeout(() => { _isSyncing = false; }, 800);
-      showToast('<span class="mi">folder_open</span>Opened: ' + (record.name || id));
+      showToast('<span class="mi">folder_open</span>' + _t('collab.opened') + (record.name || id));
       return true;
     } catch (e) {
       console.error('[Collab] ❌ load error', e);
-      showToast('<span class="mi">error</span>Load failed — ' + e.message);
+      showToast('<span class="mi">error</span>' + _t('collab.loadFailed') + e.message);
       return false;
     }
   }
@@ -233,7 +248,7 @@
     try {
       await db().collection(COLLECTION).doc(id).delete();
       if (_currentProjectId === id) closeProject();
-      showToast('<span class="mi">delete</span>Project deleted');
+      showToast('<span class="mi">delete</span>' + _t('collab.projectDeleted'));
     } catch (e) { console.error('[Collab] delete error', e); }
   }
 
@@ -290,7 +305,7 @@
       applySnapshot(snap);
       _isSyncing = false; // release lock after applying remote changes
       console.log('[Collab] 🔄 synced from collaborator —', snap.builderStack.length, 'components');
-      if (typeof showToast === 'function') showToast('<span class="mi">sync</span>Synced from collaborator');
+      if (typeof showToast === 'function') showToast('<span class="mi">sync</span>' + _t('collab.syncedFromCollaborator'));
     }, (err) => {
       console.error('[Collab] sync error', err);
     });
@@ -319,13 +334,13 @@
       const saved = localStorage.getItem('edm_user_profile');
       if (saved) {
         const p = JSON.parse(saved);
-        _userName = p.name || 'Anonymous';
+        _userName = p.name || _t('collab.anonymous');
         _userEmoji = p.emoji || '😀';
         return;
       }
     } catch (_) {}
     // Fallback to sessionStorage
-    _userName = sessionStorage.getItem('collab_name') || 'Anonymous';
+    _userName = sessionStorage.getItem('collab_name') || _t('collab.anonymous');
     _userEmoji = sessionStorage.getItem('collab_emoji') || '😀';
   }
 
@@ -432,9 +447,14 @@
       return;
     }
 
-    // Component names for display
-    const COMP_NAMES = { header:'Header', banner:'Banner', 'top-news':'Top News', stats:'Stats',
-      article:'Article', feature:'Feature', cards:'Cards', insight:'Insight' };
+    // Use tCompName from i18n if available, else fallback
+    function _compLabel(compId) {
+      if (typeof window.tCompName === 'function' && typeof window.COMPONENTS !== 'undefined') {
+        const comp = window.COMPONENTS.find(c => c.id === compId);
+        if (comp) return window.tCompName(comp);
+      }
+      return compId;
+    }
 
     // Build avatar circles with emoji
     let avatarHtml = '';
@@ -442,26 +462,26 @@
     others.forEach((p, i) => {
       if (i < 5) {
         const emoji = p.emoji || '😀';
-        avatarHtml += `<div class="presence-avatar" style="background:${p.color || '#0059ff'}" title="${escHtml(p.name || 'Anonymous')}">${emoji}</div>`;
+        avatarHtml += `<div class="presence-avatar" style="background:${p.color || '#0059ff'}" title="${escHtml(p.name || _t('collab.anonymous'))}">${emoji}</div>`;
       }
       if (p.editingCompId) {
-        const compName = COMP_NAMES[p.editingCompId] || p.editingCompId;
-        editingDetails.push((p.emoji || '') + ' ' + (p.name || 'Someone') + ' → ' + compName);
+        const compName = _compLabel(p.editingCompId);
+        editingDetails.push((p.emoji || '') + ' ' + (p.name || _t('collab.someone')) + ' → ' + compName);
       }
     });
     avatarsEl.innerHTML = avatarHtml;
 
     // Title text
-    const names = others.map(p => p.name || 'Anonymous');
+    const names = others.map(p => p.name || _t('collab.anonymous'));
     if (others.length === 1) {
-      titleEl.textContent = names[0] + ' is editing with you';
+      titleEl.textContent = names[0] + _t('collab.isEditingWithYou');
     } else {
-      titleEl.textContent = names.slice(0, 2).join(', ') + (others.length > 2 ? ' +' + (others.length - 2) : '') + ' are editing';
+      titleEl.textContent = names.slice(0, 2).join(', ') + (others.length > 2 ? ' +' + (others.length - 2) : '') + _t('collab.areEditing');
     }
 
     // Detail line — show what they're editing
     if (detailEl) {
-      detailEl.textContent = editingDetails.length > 0 ? editingDetails.join(' · ') : 'Co-editing this project';
+      detailEl.textContent = editingDetails.length > 0 ? editingDetails.join(' · ') : _t('collab.coEditing');
     }
 
     banner.classList.add('visible');
@@ -480,8 +500,14 @@
 
     if (!others || others.length === 0) return;
 
-    const COMP_NAMES = { header:'Header', banner:'Banner', 'top-news':'Top News', stats:'Stats',
-      article:'Article', feature:'Feature', cards:'Cards', insight:'Insight' };
+    // Use tCompName from i18n if available
+    function _compLabel2(compId) {
+      if (typeof window.tCompName === 'function' && typeof window.COMPONENTS !== 'undefined') {
+        const comp = window.COMPONENTS.find(c => c.id === compId);
+        if (comp) return window.tCompName(comp);
+      }
+      return compId;
+    }
 
     others.forEach(p => {
       if (!p.editingUid) return;
@@ -497,7 +523,7 @@
       label.className = 'remote-edit-label';
       label.style.backgroundColor = color;
       const emojiSpan = p.emoji ? `<span class="remote-emoji">${p.emoji}</span>` : '';
-      label.innerHTML = emojiSpan + (p.name || 'Anonymous') + ' is editing';
+      label.innerHTML = emojiSpan + (p.name || _t('collab.anonymous')) + _t('collab.isEditing');
       stackEl.style.position = 'relative';
       stackEl.appendChild(label);
     });
@@ -550,10 +576,10 @@
         if (btn && btn.classList.contains('visible')) {
           btn.classList.remove('saving');
           btn.classList.add('saved');
-          btn.innerHTML = '<span class="mi">check_circle</span> Saved';
+          btn.innerHTML = '<span class="mi">check_circle</span> ' + _t('collab.saved');
           setTimeout(() => {
             btn.classList.remove('saved');
-            btn.innerHTML = '<span class="mi">save</span> Save';
+            btn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save');
           }, 1200);
         }
       });
@@ -577,34 +603,34 @@
       if (window.openRenameModal) {
         window.openRenameModal({
           icon: 'add_circle',
-          title: 'New Project',
-          desc: 'Enter a name for your new project',
-          value: 'Untitled eDM',
-          placeholder: 'Project name',
-          confirmText: 'Create',
+          title: _t('collab.newProject'),
+          desc: _t('collab.newProjectDesc'),
+          value: _t('collab.untitledEdm'),
+          placeholder: _t('collab.projectNamePlaceholder'),
+          confirmText: _t('collab.create'),
           onConfirm: async function(name) {
             const btn = document.getElementById('collabSaveBtn');
             const dot = document.getElementById('collabUnsavedDot');
-            if (btn) { btn.classList.add('saving'); btn.innerHTML = '<span class="mi">hourglass_empty</span> Creating…'; }
+            if (btn) { btn.classList.add('saving'); btn.innerHTML = '<span class="mi">hourglass_empty</span> ' + _t('collab.creating'); }
             try {
-              const id = await saveProject(name.trim() || 'Untitled eDM');
+              const id = await saveProject(name.trim() || _t('collab.untitledEdm'));
               if (id) {
                 if (dot) dot.classList.remove('visible');
                 if (btn) {
                   btn.classList.remove('saving');
                   btn.classList.add('saved');
-                  btn.innerHTML = '<span class="mi">check_circle</span> Created!';
+                  btn.innerHTML = '<span class="mi">check_circle</span> ' + _t('collab.created');
                   setTimeout(() => {
                     btn.classList.remove('saved');
-                    btn.innerHTML = '<span class="mi">save</span> Save';
+                    btn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save');
                   }, 1500);
                 }
                 flashSyncDot();
-                showToast('<span class="mi">check_circle</span>Project "' + escHtml(name) + '" created!');
+                showToast('<span class="mi">check_circle</span>' + _t('collab.projectCreated').replace('${name}', escHtml(name)));
               }
             } catch (e) {
               console.error('[Collab] create error', e);
-              if (btn) { btn.classList.remove('saving'); btn.innerHTML = '<span class="mi">save</span> Save'; }
+              if (btn) { btn.classList.remove('saving'); btn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save'); }
             }
           }
         });
@@ -617,7 +643,7 @@
     const dot = document.getElementById('collabUnsavedDot');
 
     // Indicate "saving…"
-    if (btn) { btn.classList.add('saving'); btn.innerHTML = '<span class="mi">hourglass_empty</span> Saving…'; }
+    if (btn) { btn.classList.add('saving'); btn.innerHTML = '<span class="mi">hourglass_empty</span> ' + _t('collab.saving'); }
 
     try {
       await saveProject();
@@ -630,18 +656,18 @@
       if (btn) {
         btn.classList.remove('saving');
         btn.classList.add('saved');
-        btn.innerHTML = '<span class="mi">check_circle</span> Saved';
+        btn.innerHTML = '<span class="mi">check_circle</span> ' + _t('collab.saved');
         setTimeout(() => {
           btn.classList.remove('saved');
-          btn.innerHTML = '<span class="mi">save</span> Save';
+          btn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save');
         }, 1500);
       }
     } catch (e) {
       console.error('[Collab] manual save error', e);
       if (btn) {
         btn.classList.remove('saving');
-        btn.innerHTML = '<span class="mi">error</span> Error';
-        setTimeout(() => { btn.innerHTML = '<span class="mi">save</span> Save'; }, 2000);
+        btn.innerHTML = '<span class="mi">error</span> ' + _t('collab.error');
+        setTimeout(() => { btn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save'); }, 2000);
       }
     }
   }
@@ -713,7 +739,7 @@
       const d = doc.data();
       const newId = generateShareId();
       await db().collection(COLLECTION).doc(newId).set({
-        name: (d.name || 'Untitled') + ' (copy)',
+        name: (d.name || _t('collab.untitledEdm')) + _t('collab.copySuffix'),
         builderStack: d.builderStack || [],
         colorState: d.colorState || {},
         theme: d.theme || 'light-blue',
@@ -742,31 +768,35 @@
   function updateProjectUI() {
     const indicator = document.getElementById('collabProjectName');
     const shareBtn = document.getElementById('collabShareBtn');
+    const breadcrumbName = document.getElementById('breadcrumbName');
     if (indicator) {
       if (_currentProjectId) {
         // Fetch name
         db().collection(COLLECTION).doc(_currentProjectId).get().then(doc => {
           const name = doc.exists ? (doc.data().name || _currentProjectId) : _currentProjectId;
           indicator.textContent = name;
-          indicator.title = 'Project: ' + name;
+          indicator.title = name;
+          // Sync breadcrumb with project name
+          if (breadcrumbName) breadcrumbName.textContent = name;
         });
         indicator.style.display = '';
       } else {
         indicator.textContent = '';
         indicator.style.display = 'none';
+        if (breadcrumbName) breadcrumbName.textContent = '';
       }
     }
     if (shareBtn) shareBtn.style.display = _currentProjectId ? '' : 'none';
     // Reset save button when switching projects
     const saveBtn = document.getElementById('collabSaveBtn');
     const unsavedDot = document.getElementById('collabUnsavedDot');
-    if (saveBtn) { saveBtn.classList.remove('visible', 'saving', 'saved'); saveBtn.innerHTML = '<span class="mi">save</span> Save'; }
+    if (saveBtn) { saveBtn.classList.remove('visible', 'saving', 'saved'); saveBtn.innerHTML = '<span class="mi">save</span> ' + _t('collab.save'); }
     if (unsavedDot) unsavedDot.classList.remove('visible');
   }
 
   async function openProjectManager() {
     if (!ready()) {
-      showToast('<span class="mi">error</span>Firebase not configured — check config.js');
+      showToast('<span class="mi">error</span>' + _t('collab.firebaseNotConfigured'));
       return;
     }
     const modal = document.getElementById('projectModal');
@@ -783,15 +813,20 @@
   async function refreshProjectList() {
     const listEl = document.getElementById('projectList');
     if (!listEl) return;
-    listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#bbb;">Loading…</div>';
+    listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#bbb;">' + _t('collab.loading') + '</div>';
     const projects = await listProjects();
     if (projects.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#bbb;">No saved projects yet</div>';
+      listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#bbb;">' + _t('collab.noSavedProjects') + '</div>';
       return;
     }
-    // Component ID → readable name map
-    const COMP_NAMES = { header:'Header', banner:'Banner', 'top-news':'Top News', stats:'Stats',
-      article:'Article', feature:'Feature', cards:'Cards', insight:'Insight' };
+    // Component ID → readable name (use i18n if available)
+    function _compName(compId) {
+      if (typeof window.tCompName === 'function' && typeof window.COMPONENTS !== 'undefined') {
+        const comp = window.COMPONENTS.find(c => c.id === compId);
+        if (comp) return window.tCompName(comp);
+      }
+      return compId;
+    }
 
     let html = '';
     projects.forEach(p => {
@@ -800,14 +835,14 @@
       // Build component summary line
       let compSummary = '';
       if (p.componentCount > 0) {
-        const compNames = p.components.map(c => COMP_NAMES[c] || c);
+        const compNames = p.components.map(c => _compName(c));
         // Deduplicate and show count if repeated
         const counts = {};
         compNames.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
         const parts = Object.entries(counts).map(([n, c]) => c > 1 ? n + ' ×' + c : n);
         compSummary = '<span class="proj-item-comps">' + parts.join(' · ') + '</span>';
       } else {
-        compSummary = '<span class="proj-item-comps proj-item-empty">Empty project</span>';
+        compSummary = '<span class="proj-item-comps proj-item-empty">' + _t('collab.emptyProject') + '</span>';
       }
       html += `<div class="proj-item${active}" data-id="${p.id}">
         <div class="proj-item-info" onclick="window.Collab.loadAndClose('${p.id}')">
@@ -815,10 +850,10 @@
           <span class="proj-item-meta">${compSummary}<span class="proj-item-date">${dateStr}</span></span>
         </div>
         <div class="proj-item-actions">
-          <button class="proj-item-btn" title="Copy share link" onclick="window.Collab.copyShareLink('${p.id}')">
+          <button class="proj-item-btn" title="${_t('collab.copyShareLink')}" onclick="window.Collab.copyShareLink('${p.id}')">
             <span class="mi">link</span>
           </button>
-          <button class="proj-item-btn proj-item-btn-del" title="Delete" onclick="window.Collab.confirmDelete('${p.id}','${escAttr(p.name)}')">
+          <button class="proj-item-btn proj-item-btn-del" title="${_t('collab.delete')}" onclick="window.Collab.confirmDelete('${p.id}','${escAttr(p.name)}')">
             <span class="mi">delete</span>
           </button>
         </div>
@@ -832,7 +867,7 @@
 
   async function createNewProject() {
     const input = document.getElementById('newProjectName');
-    const name = (input ? input.value.trim() : '') || 'Untitled eDM';
+    const name = (input ? input.value.trim() : '') || _t('collab.untitledEdm');
     // CRITICAL: close any open project so saveProject creates a NEW doc
     if (_currentProjectId) {
       stopRealtimeSync();
@@ -859,7 +894,7 @@
   function copyShareLink(id) {
     const url = getShareUrl(id);
     navigator.clipboard.writeText(url).then(() => {
-      showToast('<span class="mi">check_circle</span>Share link copied!');
+      showToast('<span class="mi">check_circle</span>' + _t('collab.shareLinkCopied'));
     });
   }
 
@@ -869,7 +904,7 @@
   }
 
   async function confirmDelete(id, name) {
-    if (!confirm('Delete project "' + name + '"?\nThis cannot be undone.')) return;
+    if (!confirm(_t('collab.confirmDelete').replace('${name}', name))) return;
     await deleteProject(id);
     await refreshProjectList();
   }
