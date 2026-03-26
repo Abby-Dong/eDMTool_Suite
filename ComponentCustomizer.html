@@ -4149,17 +4149,17 @@ function renderBuilderRight() {
       if (o.type === 'select') {
         const curVal = opts[o.key] !== undefined ? opts[o.key] : o.default;
         html += `<div class="sidebar-select-ctrl">`;
-        html += `<span class="ctrl-label">${o.label}</span>`;
+        html += `<span class="ctrl-label">${tOptionLabel(o.label)}</span>`;
         html += `<div class="select-btn-group">`;
         o.choices.forEach(ch => {
           const active = String(curVal) === String(ch.value) ? ' active' : '';
-          html += `<button class="select-btn${active}" onclick="setBuilderOption('${item.uid}','${o.key}','${ch.value}')">${ch.label}</button>`;
+          html += `<button class="select-btn${active}" onclick="setBuilderOption('${item.uid}','${o.key}','${ch.value}')">${tOptionLabel(ch.label)}</button>`;
         });
         html += `</div></div>`;
       } else {
         const checked = opts[o.key] ? ' checked' : '';
         html += `<div class="sidebar-toggle-ctrl">`;
-        html += `<span class="ctrl-label">${o.label}</span>`;
+        html += `<span class="ctrl-label">${tOptionLabel(o.label)}</span>`;
         html += `<label class="toggle-switch"><input type="checkbox"${checked} onchange="setBuilderOption('${item.uid}','${o.key}',this.checked)"><span class="toggle-slider"></span></label>`;
         html += `</div>`;
       }
@@ -4933,17 +4933,17 @@ function renderCustomizer(compId) {
       if (o.type === 'select') {
         const curVal = opts[o.key] !== undefined ? opts[o.key] : o.default;
         sidebarHtml += `<div class="sidebar-select-ctrl">`;
-        sidebarHtml += `<span class="ctrl-label">${o.label}</span>`;
+        sidebarHtml += `<span class="ctrl-label">${tOptionLabel(o.label)}</span>`;
         sidebarHtml += `<div class="select-btn-group">`;
         o.choices.forEach(ch => {
           const active = String(curVal) === String(ch.value) ? ' active' : '';
-          sidebarHtml += `<button class="select-btn${active}" onclick="setCustOption('${comp.id}','${o.key}','${ch.value}')">${ch.label}</button>`;
+          sidebarHtml += `<button class="select-btn${active}" onclick="setCustOption('${comp.id}','${o.key}','${ch.value}')">${tOptionLabel(ch.label)}</button>`;
         });
         sidebarHtml += `</div></div>`;
       } else {
         const checked = opts[o.key] ? ' checked' : '';
         sidebarHtml += `<div class="sidebar-toggle-ctrl">`;
-        sidebarHtml += `<span class="ctrl-label">${o.label}</span>`;
+        sidebarHtml += `<span class="ctrl-label">${tOptionLabel(o.label)}</span>`;
         sidebarHtml += `<label class="toggle-switch"><input type="checkbox"${checked} onchange="setCustOption('${comp.id}','${o.key}',this.checked)"><span class="toggle-slider"></span></label>`;
         sidebarHtml += `</div>`;
       }

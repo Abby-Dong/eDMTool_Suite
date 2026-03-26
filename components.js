@@ -712,7 +712,7 @@ var COMPONENTS = [
   // ─── 17 Promo Code Single ───
   {
     id: 'coupon-v1',
-    num: '17',
+    num: '19',
     name: 'Promo Code — Single',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
@@ -749,7 +749,7 @@ var COMPONENTS = [
   // ─── 15 Coupon Single ───
   {
     id: 'coupon-single',
-    num: '15',
+    num: '17',
     name: 'Coupon — Single',
     optionMap: [
       { key: 'showImage', label: 'Image', default: true },
@@ -819,7 +819,7 @@ var COMPONENTS = [
   // ─── 16 Coupon v2 ───
   {
     id: 'coupon-v2',
-    num: '16',
+    num: '18',
     name: 'Coupon — Dual',
     optionMap: [
       { key: 'showImage', label: 'Image', default: true },
@@ -932,7 +932,7 @@ var COMPONENTS = [
   // ─── 18 Promo Code Dual ───
   {
     id: 'promo-code-dual',
-    num: '18',
+    num: '20',
     name: 'Promo Code — Dual',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true }
@@ -1010,7 +1010,7 @@ var COMPONENTS = [
   // ─── 19 Service Benefits ───
   {
     id: 'service-benefits',
-    num: '19',
+    num: '21',
     name: 'Service Benefits — 4-Col',
     optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
@@ -1052,7 +1052,7 @@ var COMPONENTS = [
   // ─── 20 Other Activities ───
   {
     id: 'other-activities',
-    num: '20',
+    num: '22',
     name: 'Other Activities — 3-Col Cards',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow + Headline', default: true },
@@ -1143,25 +1143,37 @@ var COMPONENTS = [
   // ─── 24 Footer ───
   {
     id: 'footer',
-    num: '24',
+    num: '27',
     name: 'Footer',
     optionMap: [
       { key: 'showSocial', label: 'Social Icons', default: true },
+      { key: 'socialCount', label: 'Social Count', type: 'select', default: '3', optionGate: 'showSocial', choices: [
+        { label: '1', value: '1' }, { label: '2', value: '2' }, { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
+      ]},
       { key: 'showLegalLinks', label: 'Legal Links', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
+    getHtml: (opts = {}) => {
+      const socialCount = parseInt(opts.socialCount) || 3;
+      const socialIcons = [
+        { name: 'Facebook', url: 'https://www.facebook.com/Advantech.Corp', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-fb.png' },
+        { name: 'YouTube', url: 'https://www.youtube.com/@AdvantechCorp', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-youtube.png' },
+        { name: 'LinkedIn', url: 'https://www.linkedin.com/company/advantech/', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-linkdin.png' },
+        { name: 'X', url: 'https://x.com/Aboredtech', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-x.png' },
+        { name: 'Instagram', url: 'https://www.instagram.com/advantech_corp/', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-ig.png' }
+      ];
+      let socialHtml = '';
+      for (let i = 0; i < socialCount; i++) {
+        const s = socialIcons[i];
+        socialHtml += `<td style="padding: 0 5px;"><a mc:edit="footer_social${i+1}_link" href="${s.url}" style="text-decoration: none;"><img mc:edit="footer_social${i+1}_img" src="${s.img}" width="24" height="24" alt="${s.name}" data-crop="free" style="display: block; width: 24px; height: 24px;" /></a></td>`;
+      }
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
        style="width: 600px;" data-color="footerBg">
   <tr><td align="center" style="padding: 24px 30px 14px 30px;">
     <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" width="160" alt="Advantech IoTMart" style="display: block; margin: 0 auto; width: 160px; max-width: 160px; height: auto;" />
   </td></tr>
   ${opts.showSocial !== false ? `<tr><td align="center" style="padding: 0 30px 14px 30px;">
-    <p mc:edit="footer_follow" style="margin: 0 0 10px 0; font-size: 12px; font-family: Arial, sans-serif;" data-color="footerText">Follow us for the latest IIoT deals &amp; industry insights</p>
     <table border="0" cellpadding="0" cellspacing="0" align="center">
-      <tr>
-        <td style="padding: 0 5px;"><a href="https://www.facebook.com/Advantech.Corp" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-fb.png" width="24" height="24" alt="Facebook" style="display: block; width: 24px; height: 24px;" /></a></td>
-        <td style="padding: 0 5px;"><a href="https://www.youtube.com/@AdvantechCorp" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-youtube.png" width="24" height="24" alt="YouTube" style="display: block; width: 24px; height: 24px;" /></a></td>
-        <td style="padding: 0 5px;"><a href="https://www.linkedin.com/company/advantech/" style="text-decoration: none;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-linkdin.png" width="24" height="24" alt="LinkedIn" style="display: block; width: 24px; height: 24px;" /></a></td>
-      </tr>
+      <tr>${socialHtml}</tr>
     </table>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: 0 30px;">
@@ -1188,10 +1200,10 @@ var COMPONENTS = [
   <tr><td align="center" style="padding: 4px 30px 24px 30px;">
     <p mc:edit="footer_copyright" style="margin: 0; font-size: 10px; font-family: Arial, sans-serif; line-height: 1.8;" data-color="footerCopyright">Copyright &copy; 1983 - 2025 Advantech Co., Ltd.<br/>All Rights Reserved</p>
   </td></tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Background', key: 'footerBg', type: 'bg', default: '#f0f0f0' },
-      { label: 'Body Text', key: 'footerText', type: 'color', default: '#666666', optionGate: 'showSocial' },
       { label: 'Divider', key: 'footerDivider', type: 'bg', default: '#dddddd' },
       { label: 'Link Color', key: 'footerLink', type: 'color', default: '#888888' },
       { label: 'Copyright', key: 'footerCopyright', type: 'color', default: '#aaaaaa' }
@@ -1266,7 +1278,7 @@ var COMPONENTS = [
   // ─── 21 Single Button Bar ───
   {
     id: 'single-button-bar',
-    num: '21',
+    num: '23',
     name: 'Button Bar — Single',
     getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
        style="width: 600px;" data-color="singleBtnBg">
@@ -1290,7 +1302,7 @@ var COMPONENTS = [
   // ─── 22 Dual Button Bar ───
   {
     id: 'dual-button-bar',
-    num: '22',
+    num: '24',
     name: 'Button Bar — Dual',
     optionMap: [{ key: 'buttonCount', label: 'Buttons', type: 'select', default: '2', choices: [{label: '1', value: '1'}, {label: '2', value: '2'}] }],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
@@ -1412,7 +1424,7 @@ var COMPONENTS = [
   // ─── 23 Three Button Bar ───
   {
     id: 'three-button-bar',
-    num: '23',
+    num: '25',
     name: 'Button Bar — Triple',
     optionMap: [{ key: 'buttonCount', label: 'Buttons', type: 'select', default: '3', choices: [{label: '2', value: '2'}, {label: '3', value: '3'}] }],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
@@ -1711,7 +1723,7 @@ var COMPONENTS = [
   // ─── 25 Survey ───
   {
     id: 'survey',
-    num: '25',
+    num: '26',
     name: 'Survey',
     isSurvey: true,
     optionMap: [],
@@ -1837,13 +1849,13 @@ ${questionBlocks}
   // ─── 26 2x2 Image Text Grid ───
   {
     id: 'grid-2x2-image-text',
-    num: '26',
+    num: '15',
     name: '2×2 Image + Text Grid',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;" data-color="grid2x2Bg">
-  <tr><td align="center" style="padding: 16px 20px;">
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+  <tr><td align="center" style="padding: 16px 20px;" data-color="grid2x2Bg">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-2x2" style="width: 560px;">
       <!-- Row 1 -->
       <tr>
@@ -1912,6 +1924,70 @@ ${questionBlocks}
       { label: 'Background', key: 'grid2x2Bg', type: 'bg', default: '#ffffff' },
       { label: 'Item Title', key: 'grid2x2ItemTitle', type: 'color', default: '#1a1a2e' },
       { label: 'Description', key: 'grid2x2ItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
+    ]
+  },
+
+  // ─── 27 3-Col Image Text Grid ───
+  {
+    id: 'grid-3col-image-text',
+    num: '16',
+    name: '3-Col Image + Text',
+    optionMap: [
+      { key: 'showDesc', label: 'Description', default: true }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+  <tr><td align="center" style="padding: 20px;" data-color="grid3colBg">
+    <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-3col" style="width: 560px;">
+      <tr valign="top">
+        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 5px 0 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+                <img mc:edit="grid3col_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 1" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="top" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature One</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item1_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 5px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+                <img mc:edit="grid3col_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 2" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="top" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Two</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item2_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 0 0 5px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+                <img mc:edit="grid3col_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 3" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="top" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Three</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item3_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>`,
+    colorMap: [
+      { label: 'Background', key: 'grid3colBg', type: 'bg', default: '#ffffff' },
+      { label: 'Item Title', key: 'grid3colItemTitle', type: 'color', default: '#1a1a2e' },
+      { label: 'Description', key: 'grid3colItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
     ]
   }
 ];
