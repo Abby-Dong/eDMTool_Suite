@@ -218,18 +218,20 @@ var COMPONENTS = [
     name: 'Section Heading',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
-      { key: 'showSubtitle', label: 'Subtitle', default: true }
+      { key: 'showTitle', label: 'Title', default: true },
+      { key: 'showSubtitle', label: 'Subtitle', default: true },
+      { key: 'textAlign', label: 'Text Align', type: 'select', default: 'center', choices: [{label: 'Left', value: 'left'}, {label: 'Center', value: 'center'}, {label: 'Right', value: 'right'}] }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
-    <td width="600" align="center" valign="top"
-        style="width: 600px; padding: 36px 30px 10px 30px;" data-color="sectionBg">
+    <td width="600" align="${opts.textAlign || 'center'}" valign="top"
+        style="width: 600px; padding: 36px 30px 10px 30px; text-align: ${opts.textAlign || 'center'};" data-color="sectionBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="section_eyebrow" style="margin: 0 0 4px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="sectionEyebrow">
         Featured Products
       </p>` : ''}
-      <h2 mc:edit="section_title" style="margin: 0 0 6px 0; font-size: 24px; font-weight: bold; font-family: Arial, sans-serif;" data-color="sectionTitle">
+      ${opts.showTitle !== false ? `<h2 mc:edit="section_title" style="margin: 0 0 6px 0; font-size: 24px; font-weight: bold; font-family: Arial, sans-serif;" data-color="sectionTitle">
         Top Industrial IoT Hardware Picks
-      </h2>
+      </h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="section_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, sans-serif;" data-color="sectionSubtitle">
         Editor's selection — must-have IIoT devices for your smart factory
       </p>` : ''}
@@ -239,7 +241,7 @@ var COMPONENTS = [
     colorMap: [
       { label: 'Background', key: 'sectionBg', type: 'bg', default: '#eef1f6' },
       { label: 'Eyebrow', key: 'sectionEyebrow', type: 'color', default: '#0050e0', optionGate: 'showEyebrow' },
-      { label: 'Title', key: 'sectionTitle', type: 'color', default: '#1a1a2e' },
+      { label: 'Title', key: 'sectionTitle', type: 'color', default: '#1a1a2e', optionGate: 'showTitle' },
       { label: 'Subtitle', key: 'sectionSubtitle', type: 'color', default: '#888888', optionGate: 'showSubtitle' }
     ]
   },
