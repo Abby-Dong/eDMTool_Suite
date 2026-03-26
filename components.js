@@ -1831,7 +1831,7 @@ ${questionBlocks}
       { key: 'showDesc', label: 'Description', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;" data-color="grid2x2Bg">
-  <tr><td align="center" style="padding: 32px 20px 16px 20px;">
+  <tr><td align="center" style="padding: 16px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-2x2" style="width: 560px;">
       <!-- Row 1 -->
       <tr>
@@ -1895,7 +1895,6 @@ ${questionBlocks}
       </tr>
     </table>
   </td></tr>
-  <tr><td height="16" style="height: 16px; font-size: 0; line-height: 0;">&nbsp;</td></tr>
 </table>`,
     colorMap: [
       { label: 'Background', key: 'grid2x2Bg', type: 'bg', default: '#ffffff' },
