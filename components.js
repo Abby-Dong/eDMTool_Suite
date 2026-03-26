@@ -612,6 +612,7 @@ var COMPONENTS = [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
+      { key: 'showBody', label: 'Body Text', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="its-split-table" style="width: 600px;">
@@ -626,7 +627,7 @@ var COMPONENTS = [
       ${opts.showEyebrow !== false ? `<p mc:edit="split_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="splitEyebrow">Feature</p>` : ''}
       ${opts.showTitle !== false ? `<h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="splitSubtitle">Power up your smart factory this season</p>` : ''}
-      <p mc:edit="split_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitBody">Discover our curated range of IIoT utilities, accessories and connectivity solutions.</p>
+      ${opts.showBody !== false ? `<p mc:edit="split_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitBody">Discover our curated range of IIoT utilities, accessories and connectivity solutions.</p>` : ''}
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding: 12px 28px;" data-color="splitCtaBg">
@@ -643,7 +644,7 @@ var COMPONENTS = [
       { label: 'Eyebrow', key: 'splitEyebrow', type: 'color', default: '#0050e0', optionGate: 'showEyebrow' },
       { label: 'Title', key: 'splitTitle', type: 'color', default: '#1a1a2e', optionGate: 'showTitle' },
       { label: 'Subtitle', key: 'splitSubtitle', type: 'color', default: '#444444', optionGate: 'showSubtitle' },
-      { label: 'Body Text', key: 'splitBody', type: 'color', default: '#666666' },
+      { label: 'Body Text', key: 'splitBody', type: 'color', default: '#666666', optionGate: 'showBody' },
       { label: 'CTA BG', key: 'splitCtaBg', type: 'bg', default: '#0050e0', optionGate: 'showCta' },
       { label: 'CTA Text', key: 'splitCtaText', type: 'color', default: '#ffffff', optionGate: 'showCta' }
     ]
@@ -658,6 +659,7 @@ var COMPONENTS = [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
+      { key: 'showBody', label: 'Body Text', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="tis-split-table" style="width: 600px;">
@@ -667,7 +669,7 @@ var COMPONENTS = [
       ${opts.showEyebrow !== false ? `<p mc:edit="split2_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="split2Eyebrow">Why IoTMart</p>` : ''}
       ${opts.showTitle !== false ? `<h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split2_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="split2Subtitle">Your one-stop IIoT procurement platform</p>` : ''}
-      <p mc:edit="split2_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Body">Access thousands of certified industrial products, expert support and fast global shipping \u2014 all in one place.</p>
+      ${opts.showBody !== false ? `<p mc:edit="split2_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Body">Access thousands of certified industrial products, expert support and fast global shipping \u2014 all in one place.</p>` : ''}
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding: 12px 28px;" data-color="split2CtaBg">
@@ -689,7 +691,7 @@ var COMPONENTS = [
       { label: 'Eyebrow', key: 'split2Eyebrow', type: 'color', default: '#0050e0', optionGate: 'showEyebrow' },
       { label: 'Title', key: 'split2Title', type: 'color', default: '#1a1a2e', optionGate: 'showTitle' },
       { label: 'Subtitle', key: 'split2Subtitle', type: 'color', default: '#444444', optionGate: 'showSubtitle' },
-      { label: 'Body Text', key: 'split2Body', type: 'color', default: '#666666' },
+      { label: 'Body Text', key: 'split2Body', type: 'color', default: '#666666', optionGate: 'showBody' },
       { label: 'CTA BG', key: 'split2CtaBg', type: 'bg', default: '#0050e0', optionGate: 'showCta' },
       { label: 'CTA Text', key: 'split2CtaText', type: 'color', default: '#ffffff', optionGate: 'showCta' }
     ]
