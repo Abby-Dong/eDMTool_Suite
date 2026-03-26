@@ -148,7 +148,7 @@ var COMPONENTS = [
       </table>` : ''}
     </td>
     <td width="300" align="left" valign="top" class="bv2-col-img"
-        style="width: 300px; padding: 0; font-size: 0; line-height: 0;">
+        style="width: 300px; padding: 0; font-size: 0; line-height: 0;" data-color="banner2ImgBg">
       <img mc:edit="hero_image"
            src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png"
            width="300" alt="Industrial IoT Hardware" class="bv2-img" data-crop="free"
@@ -158,6 +158,7 @@ var COMPONENTS = [
 </table>`,
     colorMap: [
       { label: 'Text Area BG', key: 'banner2Bg', type: 'bg', default: '#0059ff' },
+      { label: 'Image BG', key: 'banner2ImgBg', type: 'bg', default: '#ffffff' },
       { label: 'Eyebrow', key: 'banner2Eyebrow', type: 'color', default: '#99d6ff', optionGate: 'showEyebrow' },
       { label: 'Title', key: 'banner2Title', type: 'color', default: '#ffffff' },
       { label: 'Subtitle', key: 'banner2Sub', type: 'color', default: '#e0f0ff', optionGate: 'showBanner2Sub' },
@@ -609,12 +610,13 @@ var COMPONENTS = [
     name: 'Image | Text Split',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
+      { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="its-split-table" style="width: 600px;">
   <tr valign="middle">
-    <td width="300" align="left" valign="top" class="its-col-img" style="padding: 0; width: 300px;">
+    <td width="300" align="center" valign="middle" class="its-col-img" style="padding: 0; width: 300px;" data-color="splitImgBg">
       <img mc:edit="split_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png"
            width="300" alt="Industrial Utilities" class="its-img" data-crop="free"
            style="display: block; width: 300px; max-width: 100%; height: auto;" />
@@ -622,7 +624,7 @@ var COMPONENTS = [
     <td width="300" align="left" valign="middle" class="its-col-text"
         style="padding: 16px 32px; width: 300px;" data-color="splitBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="split_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="splitEyebrow">Feature</p>` : ''}
-      <h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>
+      ${opts.showTitle !== false ? `<h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="splitSubtitle">Power up your smart factory this season</p>` : ''}
       <p mc:edit="split_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="splitBody">Discover our curated range of IIoT utilities, accessories and connectivity solutions.</p>
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
@@ -637,8 +639,9 @@ var COMPONENTS = [
 </table>`,
     colorMap: [
       { label: 'Text Area BG', key: 'splitBg', type: 'bg', default: '#ffffff' },
+      { label: 'Image BG', key: 'splitImgBg', type: 'bg', default: '#f0f0f0' },
       { label: 'Eyebrow', key: 'splitEyebrow', type: 'color', default: '#0050e0', optionGate: 'showEyebrow' },
-      { label: 'Title', key: 'splitTitle', type: 'color', default: '#1a1a2e' },
+      { label: 'Title', key: 'splitTitle', type: 'color', default: '#1a1a2e', optionGate: 'showTitle' },
       { label: 'Subtitle', key: 'splitSubtitle', type: 'color', default: '#444444', optionGate: 'showSubtitle' },
       { label: 'Body Text', key: 'splitBody', type: 'color', default: '#666666' },
       { label: 'CTA BG', key: 'splitCtaBg', type: 'bg', default: '#0050e0', optionGate: 'showCta' },
@@ -653,6 +656,7 @@ var COMPONENTS = [
     name: 'Text | Image Split',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
+      { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
@@ -661,7 +665,7 @@ var COMPONENTS = [
     <td width="300" align="left" valign="middle" class="tis-col-text"
         style="padding: 16px 32px; width: 300px;" data-color="split2ContainerBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="split2_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="split2Eyebrow">Why IoTMart</p>` : ''}
-      <h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>
+      ${opts.showTitle !== false ? `<h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split2_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="split2Subtitle">Your one-stop IIoT procurement platform</p>` : ''}
       <p mc:edit="split2_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="split2Body">Access thousands of certified industrial products, expert support and fast global shipping \u2014 all in one place.</p>
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
@@ -672,7 +676,7 @@ var COMPONENTS = [
         </tr>
       </table>` : ''}
     </td>
-    <td width="300" align="left" valign="top" class="tis-col-img" style="padding: 0; width: 300px;">
+    <td width="300" align="center" valign="middle" class="tis-col-img" style="padding: 0; width: 300px;" data-color="split2ImgBg">
       <img mc:edit="split2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.21.23.png"
            width="300" alt="IoTMart Platform" class="tis-img" data-crop="free"
            style="display: block; width: 300px; max-width: 100%; height: auto;" />
@@ -681,8 +685,9 @@ var COMPONENTS = [
 </table>`,
     colorMap: [
       { label: 'Text Area BG', key: 'split2ContainerBg', type: 'bg', default: '#eef1f6' },
+      { label: 'Image BG', key: 'split2ImgBg', type: 'bg', default: '#f0f0f0' },
       { label: 'Eyebrow', key: 'split2Eyebrow', type: 'color', default: '#0050e0', optionGate: 'showEyebrow' },
-      { label: 'Title', key: 'split2Title', type: 'color', default: '#1a1a2e' },
+      { label: 'Title', key: 'split2Title', type: 'color', default: '#1a1a2e', optionGate: 'showTitle' },
       { label: 'Subtitle', key: 'split2Subtitle', type: 'color', default: '#444444', optionGate: 'showSubtitle' },
       { label: 'Body Text', key: 'split2Body', type: 'color', default: '#666666' },
       { label: 'CTA BG', key: 'split2CtaBg', type: 'bg', default: '#0050e0', optionGate: 'showCta' },
