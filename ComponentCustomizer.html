@@ -290,6 +290,12 @@
     .format-bar button.active { background: rgba(0,89,255,.5); }
     .format-bar .sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); margin: 0 2px; }
     .format-bar .mi { font-size: 16px; margin-right: 0; vertical-align: 0; }
+    .fmt-color-btn { width: auto !important; padding: 0 8px !important; gap: 3px; }
+    .fmt-color-dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: #F39800; border: 2px solid rgba(255,255,255,.4); flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset; }
+    .format-bar.is-link-el .fmt-insert-link-group { display: none !important; }
+    .fmt-edit-link-group { display: none; }
+    .format-bar.is-link-el .fmt-edit-link-group { display: contents; }
+    .fmt-edit-link-btn { width: auto !important; padding: 0 8px !important; gap: 4px; font-size: 11px !important; font-weight: 600 !important; color: #7eb8ff !important; letter-spacing: .2px; }
 
     /* Image / Link Edit Popover */
     .edit-popover {
@@ -1706,13 +1712,23 @@
 
 <!-- Format Toolbar -->
 <div class="format-bar" id="formatBar">
+  <button class="fmt-color-btn" title="Text Color" onmousedown="event.preventDefault(); openInlineColorPicker(this)">
+    <span class="fmt-color-dot" id="fmtColorDot"></span>
+  </button>
+  <span class="sep"></span>
   <button data-i18n-title="format.bold" title="Bold" onmousedown="event.preventDefault(); execFormat('bold')"><b>B</b></button>
   <button data-i18n-title="format.italic" title="Italic" onmousedown="event.preventDefault(); execFormat('italic')"><i>I</i></button>
   <button data-i18n-title="format.strikethrough" title="Strikethrough" onmousedown="event.preventDefault(); execFormat('strikeThrough')"><s>S</s></button>
   <span class="sep"></span>
   <button data-i18n-title="format.bulletPoints" title="Bullet Points" onmousedown="event.preventDefault(); execBullet()"><span class="mi">format_list_bulleted</span></button>
-  <span class="sep"></span>
-  <button data-i18n-title="format.insertLink" title="Insert Link" onmousedown="event.preventDefault(); execLink()"><span class="mi">link</span></button>
+  <span class="fmt-insert-link-group" style="display:contents">
+    <span class="sep"></span>
+    <button data-i18n-title="format.insertLink" title="Insert Link" onmousedown="event.preventDefault(); execLink()"><span class="mi">link</span></button>
+  </span>
+  <span class="fmt-edit-link-group">
+    <span class="sep"></span>
+    <button class="fmt-edit-link-btn" data-i18n-title="format.editLink" title="Edit Link" onmousedown="event.preventDefault(); execEditLink()"><span class="mi" style="font-size:14px;">edit</span><span data-i18n="format.editLink">Edit Link</span></button>
+  </span>
   <span class="sep"></span>
   <button data-i18n-title="format.clearFormatting" title="Clear Formatting" onmousedown="event.preventDefault(); execFormat('removeFormat')"><span class="mi">format_clear</span></button>
 </div>
@@ -2054,6 +2070,20 @@ function buildRgbPanelHtml(hexColor) {
   return html;
 }
 
+// ── Clamp a popover inside the visible editing area (below sticky bars, above viewport bottom) ──
+function _clampPopoverPos(top, left, popW, popH) {
+  const topBarEl = document.querySelector('.top-bar');
+  const breadcrumbEl = document.getElementById('breadcrumbBar');
+  let minTop = topBarEl ? topBarEl.getBoundingClientRect().bottom : 56;
+  if (breadcrumbEl && breadcrumbEl.classList.contains('visible')) {
+    minTop = Math.max(minTop, breadcrumbEl.getBoundingClientRect().bottom);
+  }
+  minTop += 8;
+  top  = Math.max(minTop, Math.min(top, window.innerHeight - popH - 8));
+  left = Math.max(8,      Math.min(left, window.innerWidth  - popW - 8));
+  return { top, left };
+}
+
 function openColorPopup(key, compId, triggerEl) {
   _popupActiveKey = key;
   _popupActiveCompId = compId;
@@ -2071,13 +2101,11 @@ function openColorPopup(key, compId, triggerEl) {
   const rect = triggerEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left;
-  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
-  if (left < 10) left = 10;
-  if (top + 400 > window.innerHeight) top = rect.top - 410;
-  if (top < 10) top = 10;
+  if (top + 400 > window.innerHeight - 8) top = rect.top - 406;
+  const cpColor = _clampPopoverPos(top, left, 320, 400);
 
-  popup.style.top = top + 'px';
-  popup.style.left = left + 'px';
+  popup.style.top = cpColor.top + 'px';
+  popup.style.left = cpColor.left + 'px';
 
   overlay.classList.add('open');
   popup.classList.add('open');
@@ -2089,6 +2117,73 @@ function closeColorPopup() {
   _popupActiveKey = null;
   _popupActiveCompId = null;
   _popupActiveTrigger = null;
+}
+
+// ── Inline Text Color State ──
+let _inlineColorMode = false;
+let _inlineColorSavedRange = null;
+let _inlineColorEditableEl = null;
+
+function openInlineColorPicker(triggerEl) {
+  if (!_activeEditableEl) return;
+  // Save the current selection before the button's mousedown steals focus
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  _inlineColorSavedRange = sel.getRangeAt(0).cloneRange();
+  _inlineColorEditableEl = _activeEditableEl;
+  _inlineColorMode = true;
+
+  // Detect actual color from selection
+  let detectedColor = null;
+  if (!sel.isCollapsed) {
+    // Check if selection is inside a colored span
+    let node = sel.anchorNode;
+    while (node && node !== _activeEditableEl) {
+      if (node.nodeType === 1 && node.style && node.style.color) {
+        detectedColor = node.style.color;
+        break;
+      }
+      node = node.parentNode;
+    }
+  }
+  // Convert rgb() to hex if needed
+  if (detectedColor && detectedColor.startsWith('rgb')) {
+    const m = detectedColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (m) detectedColor = '#' + [m[1],m[2],m[3]].map(x => parseInt(x).toString(16).padStart(2,'0')).join('');
+  }
+  // Fallback: use computed style of the editable element
+  if (!detectedColor) {
+    const computed = window.getComputedStyle(_activeEditableEl).color;
+    if (computed && computed.startsWith('rgb')) {
+      const m = computed.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (m) detectedColor = '#' + [m[1],m[2],m[3]].map(x => parseInt(x).toString(16).padStart(2,'0')).join('');
+    }
+  }
+  const currentColor = detectedColor || '#F39800';
+  // Update dot to reflect detected color
+  const dot = document.getElementById('fmtColorDot');
+  if (dot) dot.style.background = currentColor;
+
+  _popupCurrentColor = currentColor;
+  _popupActiveKey = '__inline_text_color__';
+  _popupActiveCompId = null;
+  _popupActiveTrigger = triggerEl;
+
+  const popup = document.getElementById('colorPopup');
+  const overlay = document.getElementById('colorPopupOverlay');
+  popup.innerHTML =
+    `<div class="popup-panel active" id="brandPanel">${buildBrandPanelHtml(currentColor)}</div>` +
+    `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(currentColor)}</div>`;
+
+  const rect = triggerEl.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left;
+  if (top + 400 > window.innerHeight - 8) top = rect.top - 406;
+  const cp = _clampPopoverPos(top, left, 320, 400);
+  popup.style.top = cp.top + 'px';
+  popup.style.left = cp.left + 'px';
+  overlay.classList.add('open');
+  popup.classList.add('open');
 }
 
 function showRgbPicker() {
@@ -2110,6 +2205,74 @@ function pickBrandColor(hex) {
 function applyPickedColor(hex) {
   hex = hex.trim();
   if (!/^#[0-9a-fA-F]{6}$/.test(hex)) { alert(t('colorPicker.invalidHex')); return; }
+
+  // ── Inline text color mode ──
+  if (_inlineColorMode) {
+    _inlineColorMode = false;
+    closeColorPopup();
+    // Update the dot
+    const dot = document.getElementById('fmtColorDot');
+    if (dot) dot.style.background = hex;
+    // Restore the saved selection and apply <span style="color">
+    if (_inlineColorSavedRange) {
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(_inlineColorSavedRange);
+      if (!_inlineColorSavedRange.collapsed) {
+        // 1. Extract selected content and flatten existing color spans to avoid nesting
+        const frag = _inlineColorSavedRange.extractContents();
+        const tempDiv = document.createElement('div');
+        tempDiv.appendChild(frag);
+        tempDiv.querySelectorAll('span').forEach(sp => {
+          if (sp.style.color && sp.style.length === 1) {
+            // Span only has color → unwrap completely
+            sp.replaceWith(...sp.childNodes);
+          } else if (sp.style.color) {
+            // Span has other styles too → just remove color
+            sp.style.removeProperty('color');
+          }
+        });
+        // 2. Wrap cleaned content in new color span
+        const span = document.createElement('span');
+        span.style.color = hex;
+        span.innerHTML = tempDiv.innerHTML;
+        _inlineColorSavedRange.insertNode(span);
+        // 3. Normalize to merge adjacent text nodes
+        if (_inlineColorEditableEl) _inlineColorEditableEl.normalize();
+        // Save edit state
+        if (_inlineColorEditableEl) {
+          const bsiEl = _inlineColorEditableEl.closest('.builder-stack-item');
+          if (bsiEl) {
+            const uid = bsiEl.dataset.uid;
+            const item = builderStack.find(i => i.uid === uid);
+            if (item) {
+              const comp = COMPONENTS.find(c => c.id === item.compId);
+              if (comp) {
+                const mc = _inlineColorEditableEl.getAttribute('mc:edit');
+                const kb = comp.id.replace(/-/g,'_') + '__' + mc + '__html';
+                item.edits[kb] = _inlineColorEditableEl.innerHTML;
+                pushBuilderHistory();
+                updateBuilderCode();
+              }
+            }
+          } else {
+            const mc = _inlineColorEditableEl.getAttribute('mc:edit');
+            if (mc) {
+              const comp = COMPONENTS.find(c => _inlineColorEditableEl.closest('[data-comp-id="' + c.id + '"]'));
+              if (comp) {
+                const kb = comp.id.replace(/-/g,'_') + '__' + mc + '__html';
+                editState[kb] = _inlineColorEditableEl.innerHTML;
+                refreshPreview(comp.id);
+              }
+            }
+          }
+        }
+      }
+      _inlineColorSavedRange = null;
+      _inlineColorEditableEl = null;
+    }
+    return;
+  }
 
   if (_popupActiveCompId) {
     colorState[_popupActiveKey] = hex;
@@ -2309,6 +2472,8 @@ function applyEdits(wrapper, comp, overrideEdits) {
 let _activeEditableEl = null;
 let _codeDebounce = null;
 let _builderActiveItem = null;
+let _activeLinkKeyBase = null;
+let _activeLinkComp = null;
 
 function setupInlineEditing(previewEl, comp, builderItem) {
   previewEl.querySelectorAll('[mc\\:edit]').forEach(el => {
@@ -2343,6 +2508,8 @@ function setupInlineEditing(previewEl, comp, builderItem) {
       el.addEventListener('focus', () => {
         _activeEditableEl = el;
         if (builderItem) _builderActiveItem = builderItem;
+        if (tag === 'a') { _activeLinkKeyBase = kb; _activeLinkComp = comp; }
+        else { _activeLinkKeyBase = null; _activeLinkComp = null; }
         showFormatBar(el);
       });
       el.addEventListener('input', () => {
@@ -2389,12 +2556,23 @@ function setupInlineEditing(previewEl, comp, builderItem) {
 function showFormatBar(el) {
   const bar = document.getElementById('formatBar');
   const rect = el.getBoundingClientRect();
+  // Compute minimum safe top (below sticky bars)
+  const topBarEl = document.querySelector('.top-bar');
+  const breadcrumbEl = document.getElementById('breadcrumbBar');
+  let minTop = topBarEl ? topBarEl.getBoundingClientRect().bottom : 56;
+  if (breadcrumbEl && breadcrumbEl.classList.contains('visible')) {
+    minTop = Math.max(minTop, breadcrumbEl.getBoundingClientRect().bottom);
+  }
+  minTop += 4;
   let top = rect.top - 40;
   let left = rect.left;
-  if (top < 8) top = rect.bottom + 6;
-  if (left + 180 > window.innerWidth) left = window.innerWidth - 190;
+  if (top < minTop) top = rect.bottom + 6;
+  if (left + 220 > window.innerWidth) left = window.innerWidth - 230;
+  if (left < 8) left = 8;
   bar.style.top = top + 'px';
   bar.style.left = left + 'px';
+  // Hide "Insert Link" when the element itself is an <a> (has its own Edit Link popover)
+  bar.classList.toggle('is-link-el', el.tagName.toLowerCase() === 'a');
   bar.classList.add('visible');
 }
 
@@ -2456,6 +2634,11 @@ function execFormat(cmd) {
       }, 300);
     }
   }
+}
+
+function execEditLink() {
+  if (!_activeEditableEl || !_activeLinkKeyBase || !_activeLinkComp) return;
+  showLinkPopover(_activeEditableEl, _activeLinkKeyBase, _activeLinkComp);
 }
 
 function execLink() {
@@ -2701,11 +2884,10 @@ function showImagePopover(imgEl, keyBase, comp) {
   const rect = imgEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left + rect.width / 2 - 160;
-  if (left < 10) left = 10;
-  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
-  if (top + 340 > window.innerHeight) top = rect.top - 350;
-  pop.style.top = top + 'px';
-  pop.style.left = left + 'px';
+  if (top + 340 > window.innerHeight - 8) top = rect.top - 346;
+  const cpImg = _clampPopoverPos(top, left, 320, 340);
+  pop.style.top = cpImg.top + 'px';
+  pop.style.left = cpImg.left + 'px';
   pop.classList.add('visible');
 }
 
@@ -2759,6 +2941,7 @@ async function uploadToCloudinary(input) {
 
   const cropSpec = input.dataset.crop;
   if (cropSpec) {
+    _cropSourceIsPng = file.type === 'image/png';
     if (cropSpec === 'free') {
       showCropModal(file, null, null, blob => _doCloudinaryUpload(blob, 'cropped.jpg', applyUpload));
     } else {
@@ -2785,8 +2968,11 @@ async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
     });
     if (!res.ok) throw new Error('Upload failed: ' + res.status);
     const data = await res.json();
-    // Insert f_auto,q_auto transformations to minimise bandwidth (auto WebP/AVIF)
-    const url = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+    // For PNG (which may have transparency), keep as PNG. For JPEG use f_auto (WebP/AVIF) to save bandwidth.
+    const uploadedIsPng = (fileOrBlob instanceof Blob && fileOrBlob.type === 'image/png')
+                       || (typeof filename === 'string' && filename.toLowerCase().endsWith('.png'));
+    const transform = uploadedIsPng ? 'f_png,q_auto' : 'f_auto,q_auto';
+    const url = data.secure_url.replace('/upload/', '/upload/' + transform + '/');
 
     if (onDone) {
       onDone(url);
@@ -2805,6 +2991,7 @@ async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
 
 // -- Crop Modal --
 let _cropCallback = null;
+let _cropSourceIsPng = false;  // track whether source file was PNG (to preserve transparency)
 let _cropAspectRatio = null; // null = free, number = locked W/H
 let _cropDragging = false, _cropDragOffsetX = 0, _cropDragOffsetY = 0;
 let _cropResizing = false, _cropResizeHandle = null, _cropResizeStart = null;
@@ -2869,11 +3056,13 @@ function confirmCrop() {
   canvas.getContext('2d').drawImage(img,
     (parseFloat(box.style.left) - img.offsetLeft) * scaleX, (parseFloat(box.style.top) - img.offsetTop) * scaleY,
     sw, sh, 0, 0, cW, cH);
+  const cropMime = _cropSourceIsPng ? 'image/png' : 'image/jpeg';
+  const cropQuality = _cropSourceIsPng ? undefined : 0.92;
   canvas.toBlob(blob => {
     document.getElementById('cropModal').classList.remove('visible');
     if (_cropCallback) _cropCallback(blob);
     _cropCallback = null;
-  }, 'image/jpeg', 0.92);
+  }, cropMime, cropQuality);
 }
 
 document.addEventListener('mousedown', e => {
@@ -2993,10 +3182,10 @@ function showLinkPopover(aEl, keyBase, comp) {
   const rect = aEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left;
-  if (left + 300 > window.innerWidth) left = window.innerWidth - 310;
-  if (top + 260 > window.innerHeight) top = rect.top - 270;
-  pop.style.top = top + 'px';
-  pop.style.left = left + 'px';
+  if (top + 260 > window.innerHeight - 8) top = rect.top - 266;
+  const cpLink = _clampPopoverPos(top, left, 300, 260);
+  pop.style.top = cpLink.top + 'px';
+  pop.style.left = cpLink.left + 'px';
   pop.classList.add('visible');
 }
 

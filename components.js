@@ -112,7 +112,8 @@ var COMPONENTS = [
     name: 'Split Banner',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
-      { key: 'showSubtitle', label: 'Subtitle', default: true },
+      { key: 'showBanner2Sub', label: 'Subtitle', default: true },
+      { key: 'showSubtitle', label: 'Content', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="bv2-split-table" style="width: 600px;">
@@ -127,6 +128,10 @@ var COMPONENTS = [
           style="margin: 0 0 14px 0; font-size: 34px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.15;" data-color="banner2Title">
         Industrial IoT<br/>Sale Is On
       </h1>
+      ${opts.showBanner2Sub !== false ? `<p mc:edit="hero_subtitle2" class="bv2-subtitle2"
+         style="margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: Arial, sans-serif; line-height: 1.25;" data-color="banner2Sub">
+        Your Subtitle Here
+      </p>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="hero_subtitle"
          style="margin: 0 0 24px 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.3;" data-color="banner2Subtitle">
         Top-rated IIoT hardware <strong data-color="banner2Strong">up to 50% OFF</strong> \u2014 72 hours only
@@ -155,7 +160,8 @@ var COMPONENTS = [
       { label: 'Text Area BG', key: 'banner2Bg', type: 'bg', default: '#0059ff' },
       { label: 'Eyebrow', key: 'banner2Eyebrow', type: 'color', default: '#99d6ff', optionGate: 'showEyebrow' },
       { label: 'Title', key: 'banner2Title', type: 'color', default: '#ffffff' },
-      { label: 'Subtitle', key: 'banner2Subtitle', type: 'color', default: '#99d6ff', optionGate: 'showSubtitle' },
+      { label: 'Subtitle', key: 'banner2Sub', type: 'color', default: '#e0f0ff', optionGate: 'showBanner2Sub' },
+      { label: 'Content', key: 'banner2Subtitle', type: 'color', default: '#99d6ff', optionGate: 'showSubtitle' },
       { label: 'Strong Text', key: 'banner2Strong', type: 'color', default: '#ffffff', optionGate: 'showSubtitle' },
       { label: 'CTA BG', key: 'banner2CtaBg', type: 'bg', default: '#ffffff', optionGate: 'showCta' },
       { label: 'CTA Text', key: 'banner2CtaText', type: 'color', default: '#0059ff', optionGate: 'showCta' }
@@ -167,15 +173,34 @@ var COMPONENTS = [
     id: 'countdown',
     num: '04',
     name: 'Countdown Bar',
-    getHtml: () => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+    optionMap: [
+      { key: 'showIcon', label: 'Left Icon', default: true }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
-    <td width="600" align="center" valign="top"
-        style="width: 600px; padding: 14px 20px;" data-color="countdownBg">
-      <p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, sans-serif;" data-color="countdownText">
+    <td width="600" align="center" valign="middle" class="countdown-td"
+        style="width: 600px; padding: 14px 40px;" data-color="countdownBg">
+      ${opts.showIcon !== false ? `<table border="0" cellpadding="0" cellspacing="0" width="100%" class="countdown-icon-tbl" style="width: 100%;">
+        <tr valign="middle">
+          <td width="48" align="center" valign="middle" style="width: 48px; padding-right: 12px; line-height: 0; font-size: 0;">
+            <img mc:edit="countdown_icon"
+                 src="https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773742518/eDM/assets/wbjhvlemyofuxqo4onlv.png"
+                 width="48" height="48" alt="Icon" data-crop="48:48"
+                 style="display: block; width: 48px; height: 48px; border: 0;" />
+          </td>
+          <td align="center" valign="middle">
+            <p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, sans-serif;" data-color="countdownText">
+              ⏰ &nbsp;Offer Ends:
+              <strong style="font-size: 15px;" data-color="countdownAccent">2026 / 03 / 07 &nbsp;23:59</strong>
+              &nbsp;— Don't Miss Out!
+            </p>
+          </td>
+        </tr>
+      </table>` : `<p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, sans-serif;" data-color="countdownText">
         ⏰ &nbsp;Offer Ends:
         <strong style="font-size: 15px;" data-color="countdownAccent">2026 / 03 / 07 &nbsp;23:59</strong>
         &nbsp;— Don't Miss Out!
-      </p>
+      </p>`}
     </td>
   </tr>
 </table>`,
@@ -1157,7 +1182,10 @@ var COMPONENTS = [
     id: 'three-col-image-text',
     num: '13',
     name: '3-Col Image + Text',
-    optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
+    optionMap: [
+      { key: 'showBadges', label: 'Badges', default: true },
+      { key: 'showDesc', label: 'Description', default: true }
+    ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
        style="width: 600px;" data-color="col3Bg">
   <tr><td align="center" style="padding: 32px 20px;">
@@ -1165,19 +1193,40 @@ var COMPONENTS = [
       <tr>
         <td class="col-3" width="173" valign="top" align="center" style="width: 173px; vertical-align: top;">
           <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="160" alt="Free Shipping" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col1_title" style="margin: 12px 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">Free Shipping</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
+            <tr>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
+                <span mc:edit="col1_badge" style="font-size: 10px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">NEW</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">Free Shipping</p>
           ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="174" valign="top" align="center" style="width: 174px; vertical-align: top;">
           <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="160" alt="Sale" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col2_title" style="margin: 12px 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">Sale</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
+            <tr>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
+                <span mc:edit="col2_badge" style="font-size: 10px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">SALE</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">Sale</p>
           ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="173" valign="top" align="center" style="width: 173px; vertical-align: top;">
           <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="160" alt="ePoints" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col3_title" style="margin: 12px 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">ePoints</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
+            <tr>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
+                <span mc:edit="col3_badge" style="font-size: 10px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">HOT</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col3Title">ePoints</p>
           ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
       </tr>
@@ -1186,6 +1235,8 @@ var COMPONENTS = [
 </table>`,
     colorMap: [
       { label: 'Background', key: 'col3Bg', type: 'bg', default: '#ffffff' },
+      { label: 'Badge BG', key: 'col3BadgeBg', type: 'bg', default: '#F39800', optionGate: 'showBadges' },
+      { label: 'Badge Text', key: 'col3BadgeText', type: 'color', default: '#ffffff', optionGate: 'showBadges' },
       { label: 'Title', key: 'col3Title', type: 'color', default: '#07071a' },
       { label: 'Description', key: 'col3Desc', type: 'color', default: '#666666', optionGate: 'showDesc' }
     ]
@@ -1264,7 +1315,10 @@ var COMPONENTS = [
     id: 'four-col-image-text',
     num: '14',
     name: '4-Col Image + Text',
-    optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
+    optionMap: [
+      { key: 'showBadges', label: 'Badges', default: true },
+      { key: 'showDesc', label: 'Description', default: true }
+    ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
        style="width: 600px;" data-color="col4Bg">
   <tr><td align="center" style="padding: 32px 20px;">
@@ -1272,25 +1326,53 @@ var COMPONENTS = [
       <tr>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="120" alt="Free Shipping" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col1_title" style="margin: 10px 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Free Shipping</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
+            <tr>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
+                <span mc:edit="col1_badge" style="font-size: 9px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">NEW</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Free Shipping</p>
           ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="120" alt="Sale" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col2_title" style="margin: 10px 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Sale</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
+            <tr>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
+                <span mc:edit="col2_badge" style="font-size: 9px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">SALE</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Sale</p>
           ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="120" alt="ePoints" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col3_title" style="margin: 10px 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">ePoints</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
+            <tr>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
+                <span mc:edit="col3_badge" style="font-size: 9px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">HOT</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">ePoints</p>
           ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col4_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-009.png" width="120" alt="Add to Cart" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
-          <p mc:edit="col4_title" style="margin: 10px 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Add to Cart</p>
+          ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
+            <tr>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
+                <span mc:edit="col4_badge" style="font-size: 9px; line-height: 1; font-family: Arial, sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">TOP</span>
+              </td>
+            </tr>
+          </table>` : ''}
+          <p mc:edit="col4_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif;" data-color="col4Title">Add to Cart</p>
           ${opts.showDesc !== false ? `<p mc:edit="col4_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
       </tr>
@@ -1299,6 +1381,8 @@ var COMPONENTS = [
 </table>`,
     colorMap: [
       { label: 'Background', key: 'col4Bg', type: 'bg', default: '#ffffff' },
+      { label: 'Badge BG', key: 'col4BadgeBg', type: 'bg', default: '#F39800', optionGate: 'showBadges' },
+      { label: 'Badge Text', key: 'col4BadgeText', type: 'color', default: '#ffffff', optionGate: 'showBadges' },
       { label: 'Title', key: 'col4Title', type: 'color', default: '#07071a' },
       { label: 'Description', key: 'col4Desc', type: 'color', default: '#666666', optionGate: 'showDesc' }
     ]
@@ -1816,10 +1900,13 @@ var RESPONSIVE_CSS = {
       td.bv2-col-img { display: block !important; width: 100% !important; box-sizing: border-box; padding: 0 !important; }
       img.bv2-img { width: 100% !important; max-width: 100% !important; height: auto !important; }
       td.bv2-hero-td { display: block !important; width: 100% !important; box-sizing: border-box; padding: 28px 20px !important; }
-      h1.bv2-hero-title { font-size: 28px !important; line-height: 1.2 !important; }`,
+      h1.bv2-hero-title { font-size: 26px !important; line-height: 1.2 !important; }
+      p.bv2-subtitle2 { font-size: 15px !important; }`,
   'countdown': `
       table.email-container { width: 100% !important; }
-      td.outer-pad { padding: 0 !important; }`,
+      td.outer-pad { padding: 0 !important; }
+      td.countdown-td { width: 100% !important; box-sizing: border-box !important; padding: 12px 16px !important; }
+      table.countdown-icon-tbl { width: 100% !important; }`,
   'section-heading': `
       table.email-container { width: 100% !important; }
       td.outer-pad { padding: 0 !important; }`,

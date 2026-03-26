@@ -1484,6 +1484,20 @@ function buildRgbPanelHtml(hexColor) {
   return html;
 }
 
+// ── Clamp a popover inside the visible editing area (below sticky bars, above viewport bottom) ──
+function _clampPopoverPos(top, left, popW, popH) {
+  const topBarEl = document.querySelector('.top-bar');
+  const breadcrumbEl = document.getElementById('breadcrumbBar');
+  let minTop = topBarEl ? topBarEl.getBoundingClientRect().bottom : 56;
+  if (breadcrumbEl && breadcrumbEl.classList.contains('visible')) {
+    minTop = Math.max(minTop, breadcrumbEl.getBoundingClientRect().bottom);
+  }
+  minTop += 8;
+  top  = Math.max(minTop, Math.min(top, window.innerHeight - popH - 8));
+  left = Math.max(8,      Math.min(left, window.innerWidth  - popW - 8));
+  return { top, left };
+}
+
 function openColorPopup(key, compId, triggerEl) {
   _popupActiveKey = key;
   _popupActiveCompId = compId;
@@ -1501,13 +1515,11 @@ function openColorPopup(key, compId, triggerEl) {
   const rect = triggerEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left;
-  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
-  if (left < 10) left = 10;
-  if (top + 400 > window.innerHeight) top = rect.top - 410;
-  if (top < 10) top = 10;
+  if (top + 400 > window.innerHeight - 8) top = rect.top - 406;
+  const cpColor = _clampPopoverPos(top, left, 320, 400);
 
-  popup.style.top = top + 'px';
-  popup.style.left = left + 'px';
+  popup.style.top = cpColor.top + 'px';
+  popup.style.left = cpColor.left + 'px';
 
   overlay.classList.add('open');
   popup.classList.add('open');
@@ -2739,11 +2751,10 @@ function showImagePopover(imgEl, keyBase, comp) {
   const rect = imgEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left + rect.width / 2 - 160;
-  if (left < 10) left = 10;
-  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
-  if (top + 340 > window.innerHeight) top = rect.top - 350;
-  pop.style.top = top + 'px';
-  pop.style.left = left + 'px';
+  if (top + 340 > window.innerHeight - 8) top = rect.top - 346;
+  const cpImg = _clampPopoverPos(top, left, 320, 340);
+  pop.style.top = cpImg.top + 'px';
+  pop.style.left = cpImg.left + 'px';
   pop.classList.add('visible');
 }
 
@@ -2797,6 +2808,7 @@ async function uploadToCloudinary(input) {
 
   const cropSpec = input.dataset.crop;
   if (cropSpec) {
+    _cropSourceIsPng = file.type === 'image/png';
     if (cropSpec === 'free') {
       showCropModal(file, null, null, blob => _doCloudinaryUpload(blob, 'cropped.jpg', applyUpload));
     } else {
@@ -2824,8 +2836,11 @@ async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
     });
     if (!res.ok) throw new Error('Upload failed: ' + res.status);
     const data = await res.json();
-    // Insert f_auto,q_auto transformations to minimise bandwidth (auto WebP/AVIF)
-    const url = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+    // For PNG (which may have transparency), keep as PNG. For JPEG use f_auto (WebP/AVIF) to save bandwidth.
+    const uploadedIsPng = (fileOrBlob instanceof Blob && fileOrBlob.type === 'image/png')
+                       || (typeof filename === 'string' && filename.toLowerCase().endsWith('.png'));
+    const transform = uploadedIsPng ? 'f_png,q_auto' : 'f_auto,q_auto';
+    const url = data.secure_url.replace('/upload/', '/upload/' + transform + '/');
 
     if (onDone) {
       onDone(url);
@@ -2844,6 +2859,7 @@ async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
 
 // -- Crop Modal --
 let _cropCallback = null;
+let _cropSourceIsPng = false;  // track whether source file was PNG (to preserve transparency)
 let _cropAspectRatio = null; // null = free, number = locked W/H
 let _cropDragging = false, _cropDragOffsetX = 0, _cropDragOffsetY = 0;
 let _cropResizing = false, _cropResizeHandle = null, _cropResizeStart = null;
@@ -2908,11 +2924,13 @@ function confirmCrop() {
   canvas.getContext('2d').drawImage(img,
     (parseFloat(box.style.left) - img.offsetLeft) * scaleX, (parseFloat(box.style.top) - img.offsetTop) * scaleY,
     sw, sh, 0, 0, cW, cH);
+  const cropMime = _cropSourceIsPng ? 'image/png' : 'image/jpeg';
+  const cropQuality = _cropSourceIsPng ? undefined : 0.92;
   canvas.toBlob(blob => {
     document.getElementById('cropModal').classList.remove('visible');
     if (_cropCallback) _cropCallback(blob);
     _cropCallback = null;
-  }, 'image/jpeg', 0.92);
+  }, cropMime, cropQuality);
 }
 
 document.addEventListener('mousedown', e => {
@@ -3003,10 +3021,10 @@ function showLinkPopover(aEl, keyBase, comp) {
   const rect = aEl.getBoundingClientRect();
   let top = rect.bottom + 6;
   let left = rect.left;
-  if (left + 300 > window.innerWidth) left = window.innerWidth - 310;
-  if (top + 160 > window.innerHeight) top = rect.top - 170;
-  pop.style.top = top + 'px';
-  pop.style.left = left + 'px';
+  if (top + 160 > window.innerHeight - 8) top = rect.top - 166;
+  const cpLink = _clampPopoverPos(top, left, 300, 160);
+  pop.style.top = cpLink.top + 'px';
+  pop.style.left = cpLink.left + 'px';
   pop.classList.add('visible');
 }
 
