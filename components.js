@@ -1820,6 +1820,88 @@ ${questionBlocks}
       { label: 'Card BG', key: 'surveyCardBg', type: 'bg', default: '#ffffff' },
       { label: 'Question', key: 'surveyQuestion', type: 'color', default: '#07071a' }
     ]
+  },
+
+  // ─── 26 2x2 Image Text Grid ───
+  {
+    id: 'grid-2x2-image-text',
+    num: '26',
+    name: '2×2 Image + Text Grid',
+    optionMap: [
+      { key: 'showDesc', label: 'Description', default: true }
+    ],
+    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;" data-color="grid2x2Bg">
+  <tr><td align="center" style="padding: 32px 20px 16px 20px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-2x2" style="width: 560px;">
+      <!-- Row 1 -->
+      <tr>
+        <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="60" align="center" valign="middle" style="width: 60px;">
+                <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 1" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="middle" style="padding-left: 12px;">
+                <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature One</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item1_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="60" align="center" valign="middle" style="width: 60px;">
+                <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 2" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="middle" style="padding-left: 12px;">
+                <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Two</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item2_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <!-- Row 2 -->
+      <tr>
+        <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="60" align="center" valign="middle" style="width: 60px;">
+                <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 3" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="middle" style="padding-left: 12px;">
+                <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Three</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item3_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td width="60" align="center" valign="middle" style="width: 60px;">
+                <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 4" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              </td>
+              <td align="left" valign="middle" style="padding-left: 12px;">
+                <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Four</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item4_desc" style="margin: 0; font-size: 12px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+  <tr><td height="16" style="height: 16px; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+</table>`,
+    colorMap: [
+      { label: 'Background', key: 'grid2x2Bg', type: 'bg', default: '#ffffff' },
+      { label: 'Item Title', key: 'grid2x2ItemTitle', type: 'color', default: '#1a1a2e' },
+      { label: 'Description', key: 'grid2x2ItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
+    ]
   }
 ];
 
@@ -2060,5 +2142,10 @@ var RESPONSIVE_CSS = {
   'survey': `
       table.survey-outer { width: 100% !important; }
       table.survey-card { width: 100% !important; }
-      td.outer-pad { padding: 0 !important; }`
+      td.outer-pad { padding: 0 !important; }`,
+  'grid-2x2-image-text': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.grid-2x2 { width: 100% !important; }
+      td.grid-cell { display: block !important; width: 100% !important; padding: 10px 0 !important; box-sizing: border-box; }`
 };
