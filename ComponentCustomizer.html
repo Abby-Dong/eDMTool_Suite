@@ -300,11 +300,22 @@
     /* Image / Link Edit Popover */
     .edit-popover {
       position: fixed; z-index: 10002; background: #fff; border-radius: 10px;
-      padding: 14px 16px; box-shadow: 0 8px 30px rgba(0,0,0,.18);
+      box-shadow: 0 8px 30px rgba(0,0,0,.18);
       display: none; min-width: 280px; max-width: 360px;
       border: 1px solid #e5e7eb;
     }
-    .edit-popover.visible { display: block; }
+    .edit-popover.visible { display: flex; flex-direction: column; }
+    .edit-popover-header {
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px 16px 0 16px; cursor: move; user-select: none;
+    }
+    .edit-popover-drag-handle {
+      width: 36px; height: 4px; background: #d0d0d0; border-radius: 2px;
+    }
+    .edit-popover-header:hover .edit-popover-drag-handle { background: #aaa; }
+    .edit-popover-body {
+      padding: 10px 16px 14px 16px;
+    }
     .edit-popover-title {
       font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase;
       letter-spacing: .5px; margin-bottom: 10px;
@@ -591,12 +602,23 @@
     .color-popup-overlay.open { display: block; }
     .color-popup {
       position: fixed; z-index: 10001;
-      background: #fff; border-radius: 12px; padding: 18px;
+      background: #fff; border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
-      width: 320px; max-height: 480px; overflow-y: auto;
+      width: 320px; max-height: 480px;
       display: none;
     }
-    .color-popup.open { display: block; }
+    .color-popup.open { display: flex; flex-direction: column; }
+    .color-popup-header {
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px 18px 0 18px; cursor: move; user-select: none;
+    }
+    .color-popup-drag-handle {
+      width: 36px; height: 4px; background: #d0d0d0; border-radius: 2px;
+    }
+    .color-popup-header:hover .color-popup-drag-handle { background: #aaa; }
+    .color-popup-body {
+      padding: 12px 18px 18px 18px; overflow-y: auto; flex: 1;
+    }
 
     .brand-group { margin-bottom: 10px; }
     .brand-group-label {
@@ -630,7 +652,8 @@
 
     .popup-divider { border: none; border-top: 1px solid #eee; margin: 12px 0; }
     .other-color-btn {
-      display: block; width: 100%; padding: 8px; margin-top: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      width: 100%; padding: 8px; margin-top: 4px;
       background: #f5f6f8; border: 1px solid #ddd; border-radius: 6px;
       font-size: 12px; font-weight: 600; color: #555; cursor: pointer;
       text-align: center; transition: background .12s;
@@ -692,6 +715,95 @@
       transition: background .12s;
     }
     .rgb-apply-btn:hover { background: #003fcc; }
+
+    /* Gradient Picker Panel */
+    .gradient-panel-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+    }
+    .gradient-back-btn {
+      display: flex; align-items: center; gap: 4px; background: none; border: none;
+      font-size: 12px; font-weight: 600; color: #0059ff; cursor: pointer;
+      padding: 0; transition: color .12s;
+    }
+    .gradient-back-btn:hover { color: #003fcc; }
+    .gradient-back-btn .mi { font-size: 18px; }
+    .gradient-preview-strip {
+      width: 100%; height: 48px; border-radius: 10px; border: 1px solid #e0e0e0;
+      margin-bottom: 20px; transition: background .15s;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.08);
+    }
+    .gradient-direction-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+    }
+    .gradient-direction-row label {
+      font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase;
+      letter-spacing: .5px; min-width: 44px;
+    }
+    .gradient-dir-btns {
+      display: flex; gap: 4px; flex: 1;
+    }
+    .gradient-dir-btn {
+      flex: 1; padding: 10px 4px; border: 1px solid #e0e0e0; border-radius: 8px;
+      background: #fff; font-size: 14px; font-weight: 500; color: #666;
+      cursor: pointer; transition: all .15s; text-align: center;
+    }
+    .gradient-dir-btn:hover { border-color: #bbb; background: #f8f9fa; }
+    .gradient-dir-btn.active {
+      border-color: #0059ff; background: #eef3ff; color: #0059ff;
+    }
+    .gradient-color-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+      padding: 12px; background: #f8f9fa; border-radius: 10px;
+    }
+    .gradient-color-row label {
+      font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase;
+      letter-spacing: .5px; min-width: 44px;
+    }
+    .gradient-color-picker {
+      width: 56px; height: 44px; border-radius: 8px; border: 2px solid #e0e0e0;
+      cursor: pointer; transition: all .15s; padding: 0; overflow: hidden;
+      background: transparent; flex-shrink: 0;
+    }
+    .gradient-color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+    .gradient-color-picker::-webkit-color-swatch { border: none; border-radius: 6px; }
+    .gradient-color-picker::-moz-color-swatch { border: none; border-radius: 6px; }
+    .gradient-color-picker:hover { border-color: #0059ff; transform: scale(1.05); }
+    .gradient-color-picker:focus { outline: none; border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.15); }
+    .gradient-color-input {
+      flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 13px;
+      text-transform: uppercase; font-weight: 600; color: #333; background: #fff;
+      box-sizing: border-box;
+    }
+    .gradient-color-input:focus {
+      outline: none; border-color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.15);
+    }
+    .gradient-fallback-section {
+      margin-bottom: 12px;
+    }
+    .gradient-fallback-title {
+      font-size: 12px; font-weight: 600; color: #333; margin-bottom: 4px;
+    }
+    .gradient-fallback-desc {
+      font-size: 11px; color: #888; line-height: 1.5;
+    }
+    .gradient-fallback-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+      padding: 12px; background: #f8f9fa; border-radius: 10px;
+    }
+    .gradient-fallback-row label {
+      font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase;
+      letter-spacing: .5px; min-width: 44px;
+    }
+    .gradient-apply-row {
+      margin-top: 16px;
+    }
+    .gradient-apply-btn {
+      width: 100%; padding: 12px; background: #0059ff; color: #fff; border: none;
+      border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background .15s;
+    }
+    .gradient-apply-btn:hover { background: #003fcc; }
 
     /* ══════════════════════════════════
        BUILDER VIEW — Drag & Drop eDM Builder
@@ -2038,7 +2150,13 @@ function buildBrandPanelHtml(currentColor) {
     html += `</div></div>`;
   });
   html += `<hr class="popup-divider" />`;
-  html += `<button class="other-color-btn" onclick="showRgbPicker()"><span class="mi">palette</span>${t('colorPicker.pickOther')}</button>`;
+  html += `<div style="display:flex;gap:8px;">`;
+  html += `<button class="other-color-btn" style="flex:1;" onclick="showRgbPicker()"><span class="mi">palette</span>${t('colorPicker.pickOther')}</button>`;
+  // Only show gradient button for section background
+  if (_popupActiveKey === 'sectionBg') {
+    html += `<button class="other-color-btn" style="width:40px;flex:none;padding:8px;" onclick="showGradientPanel()" title="${t('colorPicker.gradient')}"><span class="mi">gradient</span></button>`;
+  }
+  html += `</div>`;
   return html;
 }
 
@@ -2072,6 +2190,175 @@ function buildRgbPanelHtml(hexColor) {
   return html;
 }
 
+// Gradient state
+let _gradientColor1 = '#0059ff';
+let _gradientColor2 = '#00c4b4';
+let _gradientDirection = '180deg'; // 180deg = top to bottom
+let _gradientFallback = '#0059ff'; // fallback solid color for Outlook
+
+function buildGradientPanelHtml(currentValue) {
+  // Parse current value if it's a gradient object
+  if (currentValue && typeof currentValue === 'object' && currentValue.gradient) {
+    const match = currentValue.gradient.match(/linear-gradient\((\d+)deg,\s*(#[0-9a-fA-F]{6}),\s*(#[0-9a-fA-F]{6})\)/);
+    if (match) {
+      _gradientDirection = match[1] + 'deg';
+      _gradientColor1 = match[2];
+      _gradientColor2 = match[3];
+    }
+    if (currentValue.fallback) {
+      _gradientFallback = currentValue.fallback;
+    }
+  } else {
+    // Reset fallback to start color
+    _gradientFallback = _gradientColor1;
+  }
+  
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  let html = '';
+  html += `<div class="gradient-panel-header">`;
+  html += `<button class="gradient-back-btn" onclick="showBrandPanel()"><span class="mi">arrow_back</span>${t('colorPicker.brandColors')}</button>`;
+  html += `</div>`;
+  html += `<div class="gradient-preview-strip" id="gradientPreview" style="background:${gradientCss}"></div>`;
+  
+  // Direction selector
+  html += `<div class="gradient-direction-row">`;
+  html += `<label>${t('colorPicker.direction')}</label>`;
+  html += `<div class="gradient-dir-btns">`;
+  html += `<button class="gradient-dir-btn${_gradientDirection==='180deg'?' active':''}" onclick="setGradientDirection('180deg')">↓</button>`;
+  html += `<button class="gradient-dir-btn${_gradientDirection==='0deg'?' active':''}" onclick="setGradientDirection('0deg')">↑</button>`;
+  html += `<button class="gradient-dir-btn${_gradientDirection==='90deg'?' active':''}" onclick="setGradientDirection('90deg')">→</button>`;
+  html += `<button class="gradient-dir-btn${_gradientDirection==='270deg'?' active':''}" onclick="setGradientDirection('270deg')">←</button>`;
+  html += `</div>`;
+  html += `</div>`;
+  
+  // Color 1 (start)
+  html += `<div class="gradient-color-row">`;
+  html += `<input type="color" class="gradient-color-picker" id="gradPicker1" value="${_gradientColor1}" oninput="onGradientPickerChange(1)" />`;
+  html += `<input type="text" class="gradient-color-input" id="gradInput1" value="${_gradientColor1}" oninput="onGradientColorInput(1)" onkeydown="if(event.key==='Enter')applyGradientColor()" />`;
+  html += `</div>`;
+  
+  // Color 2 (end)
+  html += `<div class="gradient-color-row">`;
+  html += `<input type="color" class="gradient-color-picker" id="gradPicker2" value="${_gradientColor2}" oninput="onGradientPickerChange(2)" />`;
+  html += `<input type="text" class="gradient-color-input" id="gradInput2" value="${_gradientColor2}" oninput="onGradientColorInput(2)" onkeydown="if(event.key==='Enter')showFallbackPanel()" />`;
+  html += `</div>`;
+  
+  // Next button (to fallback step)
+  html += `<div class="gradient-apply-row">`;
+  html += `<button class="gradient-apply-btn" onclick="showFallbackPanel()">${t('colorPicker.nextStep')}</button>`;
+  html += `</div>`;
+  
+  return html;
+}
+
+function buildFallbackPanelHtml() {
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  let html = '';
+  html += `<div class="gradient-panel-header">`;
+  html += `<button class="gradient-back-btn" onclick="showGradientPanel()"><span class="mi">arrow_back</span>${t('colorPicker.gradient')}</button>`;
+  html += `</div>`;
+  html += `<div class="gradient-preview-strip" id="fallbackPreview" style="background:${gradientCss}"></div>`;
+  
+  // Fallback title and description
+  html += `<div class="gradient-fallback-section">`;
+  html += `<div class="gradient-fallback-title">${t('colorPicker.fallbackTitle')}</div>`;
+  html += `<div class="gradient-fallback-desc">${t('colorPicker.fallbackDesc')}</div>`;
+  html += `</div>`;
+  html += `<div class="gradient-fallback-row">`;
+  html += `<label>${t('colorPicker.fallbackColor')}</label>`;
+  html += `<input type="color" class="gradient-color-picker" id="gradPickerFallback" value="${_gradientFallback}" oninput="onGradientFallbackChange()" />`;
+  html += `<input type="text" class="gradient-color-input" id="gradInputFallback" value="${_gradientFallback}" oninput="onGradientFallbackInput()" onkeydown="if(event.key==='Enter')applyGradientColor()" />`;
+  html += `</div>`;
+  
+  // Apply button
+  html += `<div class="gradient-apply-row">`;
+  html += `<button class="gradient-apply-btn" onclick="applyGradientColor()">${t('colorPicker.apply')}</button>`;
+  html += `</div>`;
+  
+  return html;
+}
+
+function showGradientPanel() {
+  document.getElementById('brandPanel').classList.remove('active');
+  document.getElementById('rgbPanel').classList.remove('active');
+  document.getElementById('fallbackPanel').classList.remove('active');
+  document.getElementById('gradientPanel').classList.add('active');
+}
+
+function showFallbackPanel() {
+  // Update fallback to start color by default
+  _gradientFallback = _gradientColor1;
+  document.getElementById('fallbackPanel').innerHTML = buildFallbackPanelHtml();
+  document.getElementById('brandPanel').classList.remove('active');
+  document.getElementById('rgbPanel').classList.remove('active');
+  document.getElementById('gradientPanel').classList.remove('active');
+  document.getElementById('fallbackPanel').classList.add('active');
+}
+
+function setGradientDirection(deg) {
+  _gradientDirection = deg;
+  updateGradientPreview();
+  // Update button active states
+  document.querySelectorAll('.gradient-dir-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function onGradientPickerChange(num) {
+  const val = document.getElementById('gradPicker' + num).value;
+  if (num === 1) {
+    _gradientColor1 = val;
+    document.getElementById('gradInput1').value = val;
+  } else {
+    _gradientColor2 = val;
+    document.getElementById('gradInput2').value = val;
+  }
+  updateGradientPreview();
+}
+
+function onGradientColorInput(num) {
+  let val = document.getElementById('gradInput' + num).value.trim();
+  if (!val.startsWith('#')) val = '#' + val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    if (num === 1) {
+      _gradientColor1 = val;
+      document.getElementById('gradPicker1').value = val;
+    } else {
+      _gradientColor2 = val;
+      document.getElementById('gradPicker2').value = val;
+    }
+    updateGradientPreview();
+  }
+}
+
+function updateGradientPreview() {
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  const preview = document.getElementById('gradientPreview');
+  if (preview) preview.style.background = gradientCss;
+}
+
+function onGradientFallbackChange() {
+  const val = document.getElementById('gradPickerFallback').value;
+  _gradientFallback = val;
+  document.getElementById('gradInputFallback').value = val;
+}
+
+function onGradientFallbackInput() {
+  let val = document.getElementById('gradInputFallback').value.trim();
+  if (!val.startsWith('#')) val = '#' + val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    _gradientFallback = val;
+    document.getElementById('gradPickerFallback').value = val;
+  }
+}
+
+function applyGradientColor() {
+  const gradientValue = {
+    gradient: `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`,
+    fallback: _gradientFallback
+  };
+  applyPickedColorValue(gradientValue);
+}
+
 // ── Clamp a popover inside the visible editing area (below sticky bars, above viewport bottom) ──
 function _clampPopoverPos(top, left, popW, popH) {
   const topBarEl = document.querySelector('.top-bar');
@@ -2086,18 +2373,73 @@ function _clampPopoverPos(top, left, popW, popH) {
   return { top, left };
 }
 
-function openColorPopup(key, compId, triggerEl) {
+// ── Drag functionality for popovers ──
+let _dragPopup = null;
+let _dragOffsetX = 0;
+let _dragOffsetY = 0;
+
+function startDragPopup(e, popupId) {
+  e.preventDefault();
+  _dragPopup = document.getElementById(popupId);
+  const rect = _dragPopup.getBoundingClientRect();
+  _dragOffsetX = e.clientX - rect.left;
+  _dragOffsetY = e.clientY - rect.top;
+  document.addEventListener('mousemove', onDragPopup);
+  document.addEventListener('mouseup', stopDragPopup);
+}
+
+function onDragPopup(e) {
+  if (!_dragPopup) return;
+  let newLeft = e.clientX - _dragOffsetX;
+  let newTop = e.clientY - _dragOffsetY;
+  const popW = _dragPopup.offsetWidth;
+  const popH = _dragPopup.offsetHeight;
+  const clamped = _clampPopoverPos(newTop, newLeft, popW, popH);
+  _dragPopup.style.left = clamped.left + 'px';
+  _dragPopup.style.top = clamped.top + 'px';
+}
+
+function stopDragPopup() {
+  _dragPopup = null;
+  document.removeEventListener('mousemove', onDragPopup);
+  document.removeEventListener('mouseup', stopDragPopup);
+}
+
+function openColorPopup(key, compId, triggerEl, itemUid) {
+  // Save any pending text editing before opening color popup
+  if (_activeEditableEl) {
+    _activeEditableEl.blur();
+  }
+  
   _popupActiveKey = key;
   _popupActiveCompId = compId;
   _popupActiveTrigger = triggerEl;
+  _popupActiveItemUid = itemUid || null;
 
-  const currentColor = compId ? colorState[key] : triggerEl.getAttribute('data-value');
-  _popupCurrentColor = currentColor || '#000000';
+  // Get color from item if in builder mode with item, else from global colorState
+  let currentColor;
+  if (itemUid) {
+    const item = builderStack.find(i => i.uid === itemUid);
+    currentColor = (item && item.colors && item.colors[key]) ? item.colors[key] : colorState[key];
+  } else {
+    currentColor = compId ? colorState[key] : triggerEl.getAttribute('data-value');
+  }
+  
+  // Handle gradient objects - extract fallback for RGB panel
+  const isGradient = currentColor && typeof currentColor === 'object' && currentColor.gradient;
+  const solidColor = isGradient ? currentColor.fallback : (currentColor || '#000000');
+  _popupCurrentColor = solidColor;
+  
   const popup = document.getElementById('colorPopup');
   const overlay = document.getElementById('colorPopupOverlay');
 
-  popup.innerHTML = `<div class="popup-panel active" id="brandPanel">${buildBrandPanelHtml(currentColor)}</div>`
-                  + `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(_popupCurrentColor)}</div>`;
+  popup.innerHTML = `<div class="color-popup-header" onmousedown="startDragPopup(event, 'colorPopup')"><div class="color-popup-drag-handle"></div></div>`
+                  + `<div class="color-popup-body">`
+                  + `<div class="popup-panel active" id="brandPanel">${buildBrandPanelHtml(isGradient ? null : currentColor)}</div>`
+                  + `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(solidColor)}</div>`
+                  + `<div class="popup-panel" id="gradientPanel">${buildGradientPanelHtml(currentColor)}</div>`
+                  + `<div class="popup-panel" id="fallbackPanel"></div>`
+                  + `</div>`;
 
   // Position popup near trigger
   const rect = triggerEl.getBoundingClientRect();
@@ -2113,12 +2455,15 @@ function openColorPopup(key, compId, triggerEl) {
   popup.classList.add('open');
 }
 
+let _popupActiveItemUid = null;
+
 function closeColorPopup() {
   document.getElementById('colorPopup').classList.remove('open');
   document.getElementById('colorPopupOverlay').classList.remove('open');
   _popupActiveKey = null;
   _popupActiveCompId = null;
   _popupActiveTrigger = null;
+  _popupActiveItemUid = null;
 }
 
 // ── Inline Text Color State ──
@@ -2174,8 +2519,11 @@ function openInlineColorPicker(triggerEl) {
   const popup = document.getElementById('colorPopup');
   const overlay = document.getElementById('colorPopupOverlay');
   popup.innerHTML =
+    `<div class="color-popup-header" onmousedown="startDragPopup(event, 'colorPopup')"><div class="color-popup-drag-handle"></div></div>` +
+    `<div class="color-popup-body">` +
     `<div class="popup-panel active" id="brandPanel">${buildBrandPanelHtml(currentColor)}</div>` +
-    `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(currentColor)}</div>`;
+    `<div class="popup-panel" id="rgbPanel">${buildRgbPanelHtml(currentColor)}</div>` +
+    `</div>`;
 
   const rect = triggerEl.getBoundingClientRect();
   let top = rect.bottom + 6;
@@ -2192,11 +2540,15 @@ function showRgbPicker() {
   // Refresh RGB panel with current color before switching
   document.getElementById('rgbPanel').innerHTML = buildRgbPanelHtml(_popupCurrentColor);
   document.getElementById('brandPanel').classList.remove('active');
+  document.getElementById('gradientPanel').classList.remove('active');
+  document.getElementById('fallbackPanel').classList.remove('active');
   document.getElementById('rgbPanel').classList.add('active');
 }
 
 function showBrandPanel() {
   document.getElementById('rgbPanel').classList.remove('active');
+  document.getElementById('gradientPanel').classList.remove('active');
+  document.getElementById('fallbackPanel').classList.remove('active');
   document.getElementById('brandPanel').classList.add('active');
 }
 
@@ -2277,11 +2629,32 @@ function applyPickedColor(hex) {
   }
 
   if (_popupActiveCompId) {
-    colorState[_popupActiveKey] = hex;
-    // Sync linked keys
     const comp = COMPONENTS.find(c => c.id === _popupActiveCompId);
-    if (comp) {
-      const entry = comp.colorMap.find(c => c.key === _popupActiveKey);
+    const entry = comp ? comp.colorMap.find(c => c.key === _popupActiveKey) : null;
+    
+    // Check if we're editing a specific builder item
+    const item = _popupActiveItemUid ? builderStack.find(i => i.uid === _popupActiveItemUid) : null;
+    
+    if (item) {
+      // Update item-specific colors
+      if (!item.colors) item.colors = {};
+      item.colors[_popupActiveKey] = hex;
+      // Sync linked keys within item colors
+      if (entry && entry.linked) {
+        entry.linked.forEach(lk => { item.colors[lk] = hex; });
+      }
+      if (entry && entry.linkedAlpha) {
+        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+        Object.entries(entry.linkedAlpha).forEach(([lk, alpha]) => {
+          const br = Math.round(r + (255 - r) * (1 - alpha));
+          const bg = Math.round(g + (255 - g) * (1 - alpha));
+          const bb = Math.round(b + (255 - b) * (1 - alpha));
+          item.colors[lk] = '#' + [br,bg,bb].map(v => v.toString(16).padStart(2,'0')).join('');
+        });
+      }
+    } else {
+      // Update global colorState (for non-builder mode)
+      colorState[_popupActiveKey] = hex;
       if (entry && entry.linked) {
         entry.linked.forEach(lk => { colorState[lk] = hex; });
       }
@@ -2295,10 +2668,11 @@ function applyPickedColor(hex) {
         });
       }
     }
+    
     const swatch = document.getElementById('swatch-' + _popupActiveKey);
-    if (swatch) swatch.style.backgroundColor = hex;
+    if (swatch) swatch.style.background = hex;
     const bswatch = document.getElementById('bswatch-' + _popupActiveKey);
-    if (bswatch) bswatch.style.backgroundColor = hex;
+    if (bswatch) bswatch.style.background = hex;
     const bv = document.getElementById('builderView');
     if (bv && bv.classList.contains('visible')) {
       renderBuilderPreview();
@@ -2312,6 +2686,37 @@ function applyPickedColor(hex) {
       el.style.backgroundColor = hex;
       el.setAttribute('data-value', hex);
     }
+  }
+  closeColorPopup();
+}
+
+// Apply a gradient color value (object with gradient and fallback)
+function applyPickedColorValue(value) {
+  if (_popupActiveCompId) {
+    const comp = COMPONENTS.find(c => c.id === _popupActiveCompId);
+    const item = _popupActiveItemUid ? builderStack.find(i => i.uid === _popupActiveItemUid) : null;
+    
+    if (item) {
+      if (!item.colors) item.colors = {};
+      item.colors[_popupActiveKey] = value;
+    } else {
+      colorState[_popupActiveKey] = value;
+    }
+    
+    // Update swatch display
+    const swatch = document.getElementById('swatch-' + _popupActiveKey);
+    const bswatch = document.getElementById('bswatch-' + _popupActiveKey);
+    const bgStyle = (typeof value === 'object' && value.gradient) ? value.gradient : value;
+    if (swatch) swatch.style.background = bgStyle;
+    if (bswatch) bswatch.style.background = bgStyle;
+    
+    const bv = document.getElementById('builderView');
+    if (bv && bv.classList.contains('visible')) {
+      renderBuilderPreview();
+    } else {
+      refreshPreview(_popupActiveCompId);
+    }
+    if (window.Collab) Collab.markUnsaved();
   }
   closeColorPopup();
 }
@@ -2885,6 +3290,8 @@ function showImagePopover(imgEl, keyBase, comp) {
   const curSrc = _edits[srcKey] || imgEl.getAttribute('src') || '';
   const curAlt = _edits[altKey] || imgEl.getAttribute('alt') || '';
   pop.innerHTML = `
+    <div class="edit-popover-header" onmousedown="startDragPopup(event, 'editPopover')"><div class="edit-popover-drag-handle"></div></div>
+    <div class="edit-popover-body">
     <div class="edit-popover-title">${t('popover.editImage')}</div>
     <div class="edit-popover-preview" id="pop-img-preview">
       ${curSrc ? `<img src="${escAttr(curSrc)}" alt="Preview" onload="showPreviewDimensions(this)" onerror="this.parentNode.innerHTML='<span class=\'preview-placeholder\'>${t('popover.imageNotFound')}</span>';document.getElementById('pop-img-dims').textContent=''">` : `<span class="preview-placeholder">${t('popover.noImageUrl')}</span>`}
@@ -2910,6 +3317,7 @@ function showImagePopover(imgEl, keyBase, comp) {
     <div class="edit-popover-actions">
       <button class="pop-cancel" onclick="hideEditPopover()">${t('popover.cancel')}</button>
       <button class="pop-save" onclick="saveImagePopover('${srcKey}','${altKey}','${comp.id}')">${t('popover.save')}</button>
+    </div>
     </div>
   `;
   const rect = imgEl.getBoundingClientRect();
@@ -3184,6 +3592,8 @@ function showLinkPopover(aEl, keyBase, comp) {
   const curUnderline = _edits[underlineKey] !== undefined ? _edits[underlineKey] : (aEl.style.textDecoration === 'underline' ? '1' : '0');
   const curConv      = _edits[convKey]      !== undefined ? _edits[convKey]      : (aEl.getAttribute('conversiontracking')||'');
   pop.innerHTML = `
+    <div class="edit-popover-header" onmousedown="startDragPopup(event, 'editPopover')"><div class="edit-popover-drag-handle"></div></div>
+    <div class="edit-popover-body">
     <div class="edit-popover-title">${t('popover.editLink')}</div>
     <div class="edit-popover-row">
       <label>${t('popover.linkUrl')}</label>
@@ -3208,6 +3618,7 @@ function showLinkPopover(aEl, keyBase, comp) {
     <div class="edit-popover-actions">
       <button class="pop-cancel" onclick="hideEditPopover()">${t('popover.cancel')}</button>
       <button class="pop-save" onclick="saveLinkPopover('${hrefKey}','${aliasKey}','${titleKey}','${underlineKey}','${convKey}','${comp.id}')">${t('popover.save')}</button>
+    </div>
     </div>
   `;
   const rect = aEl.getBoundingClientRect();
@@ -3481,7 +3892,12 @@ function addToBuilder(compId, insertIndex) {
   if (comp && comp.optionMap) {
     comp.optionMap.forEach(o => { options[o.key] = o.default; });
   }
-  const newItem = { uid, compId, edits, options };
+  // Per-item colors: copy from current theme/colorState
+  const colors = {};
+  if (comp) {
+    comp.colorMap.forEach(c => { colors[c.key] = colorState[c.key]; });
+  }
+  const newItem = { uid, compId, edits, options, colors };
   if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= builderStack.length) {
     builderStack.splice(insertIndex, 0, newItem);
   } else {
@@ -3517,7 +3933,13 @@ function duplicateBuilderItem(uid) {
   const idx = builderStack.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const src = builderStack[idx];
-  const clone = { compId: src.compId, uid: 'bi_' + Date.now(), edits: JSON.parse(JSON.stringify(src.edits)), options: src.options ? JSON.parse(JSON.stringify(src.options)) : {} };
+  const clone = {
+    compId: src.compId,
+    uid: 'bi_' + Date.now(),
+    edits: JSON.parse(JSON.stringify(src.edits)),
+    options: src.options ? JSON.parse(JSON.stringify(src.options)) : {},
+    colors: src.colors ? JSON.parse(JSON.stringify(src.colors)) : {}
+  };
   builderStack.splice(idx + 1, 0, clone);
   pushBuilderHistory();
   renderBuilderPreview();
@@ -3635,7 +4057,7 @@ function renderBuilderPreview() {
     const comp = COMPONENTS.find(c => c.id === item.compId);
     if (!comp) return;
     const sel = item.uid === builderSelectedUid ? ' selected' : '';
-    const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits);
+    const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits, item.colors);
     html += `
       <div class="builder-stack-item${sel}" data-uid="${item.uid}" onclick="selectBuilderItem('${item.uid}')">
         <div class="bsi-toolbar">
@@ -3754,11 +4176,14 @@ function renderBuilderRight() {
   comp.colorMap.forEach(c => {
     if (c.hidden) return;
     if (c.optionGate && !opts[c.optionGate]) return;
+    const itemColor = (item.colors && item.colors[c.key]) ? item.colors[c.key] : colorState[c.key];
+    // Handle gradient objects for swatch display
+    const swatchBg = (itemColor && typeof itemColor === 'object' && itemColor.gradient) ? itemColor.gradient : itemColor;
     html += `
       <div class="sidebar-color-ctrl">
         <span class="ctrl-label">${tColorLabel(c.label)}</span>
-        <div class="ctrl-swatch" id="bswatch-${c.key}" style="background:${colorState[c.key]}"
-             onclick="openColorPopup('${c.key}', '${comp.id}', this)"></div>
+        <div class="ctrl-swatch" id="bswatch-${c.key}" style="background:${swatchBg}"
+             onclick="openColorPopup('${c.key}', '${comp.id}', this, '${item.uid}')"></div>
       </div>`;
   });
   html += `</div></div>`;
@@ -3784,13 +4209,27 @@ function buildFullEdmDoc() {
     w.innerHTML = comp.getHtml(item.options || {});
     applyEdits(w, comp, item.edits);
     comp.colorMap.forEach(c => {
-      const val = colorState[c.key];
+      // Use item-specific color if available, else fall back to global colorState
+      const val = (item.colors && item.colors[c.key]) ? item.colors[c.key] : colorState[c.key];
+      // Handle gradient objects
+      const isGradient = val && typeof val === 'object' && val.gradient;
+      const solidColor = isGradient ? val.fallback : val;
+      const bgStyle = isGradient ? val.gradient : val;
+      
       w.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
-        if (c.type === 'bg') { el.style.backgroundColor = val; if (/^#[0-9a-f]{3,8}$/i.test(val)) el.setAttribute('bgcolor', val); }
-        else el.style.color = val;
+        if (c.type === 'bg') {
+          // Set fallback bgcolor attribute for email clients that don't support gradients
+          if (/^#[0-9a-f]{3,8}$/i.test(solidColor)) el.setAttribute('bgcolor', solidColor);
+          el.style.backgroundColor = solidColor; // fallback
+          if (isGradient) {
+            el.style.background = bgStyle; // gradient overrides backgroundColor in supporting clients
+          }
+        } else {
+          el.style.color = solidColor;
+        }
       });
       w.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
-        el.style.border = `2px solid ${val}`;
+        el.style.border = `2px solid ${solidColor}`;
       });
     });
     w.querySelectorAll('[data-color]').forEach(el => el.removeAttribute('data-color'));
@@ -4845,23 +5284,31 @@ function showCustomizer(compId) {
 // ══════════════════════════════════════
 // Apply colors to HTML string via DOM
 // ══════════════════════════════════════
-function applyColors(htmlStr, comp, overrideEdits) {
+function applyColors(htmlStr, comp, overrideEdits, itemColors) {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = htmlStr;
 
   applyEdits(wrapper, comp, overrideEdits);
 
   comp.colorMap.forEach(c => {
-    const val = colorState[c.key];
+    // Use item-specific color if provided, else fall back to global colorState
+    const val = (itemColors && itemColors[c.key]) ? itemColors[c.key] : colorState[c.key];
+    // Extract solid color and gradient from value
+    const isGradient = val && typeof val === 'object' && val.gradient;
+    const solidColor = isGradient ? val.fallback : val;
+    const bgStyle = isGradient ? val.gradient : val;
+    
     wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
       if (c.type === 'bg') {
-        el.style.backgroundColor = val;
+        // For background, use gradient if available, solid as fallback
+        el.style.background = bgStyle;
+        if (solidColor) el.style.backgroundColor = solidColor; // fallback
       } else {
-        el.style.color = val;
+        el.style.color = solidColor;
       }
     });
     wrapper.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
-      el.style.border = `2px solid ${val}`;
+      el.style.border = `2px solid ${solidColor}`;
     });
   });
   return wrapper.innerHTML;
@@ -4880,16 +5327,24 @@ function getCleanHtml(comp) {
 
   comp.colorMap.forEach(c => {
     const val = colorState[c.key];
+    // Handle gradient objects
+    const isGradient = val && typeof val === 'object' && val.gradient;
+    const solidColor = isGradient ? val.fallback : val;
+    const bgStyle = isGradient ? val.gradient : val;
+    
     wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
       if (c.type === 'bg') {
-        el.style.backgroundColor = val;
-        if (/^#[0-9a-f]{3,8}$/i.test(val)) el.setAttribute('bgcolor', val);
+        if (/^#[0-9a-f]{3,8}$/i.test(solidColor)) el.setAttribute('bgcolor', solidColor);
+        el.style.backgroundColor = solidColor; // fallback
+        if (isGradient) {
+          el.style.background = bgStyle;
+        }
       } else {
-        el.style.color = val;
+        el.style.color = solidColor;
       }
     });
     wrapper.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
-      el.style.border = `2px solid ${val}`;
+      el.style.border = `2px solid ${solidColor}`;
     });
   });
 

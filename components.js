@@ -254,10 +254,14 @@ var COMPONENTS = [
     name: 'Products — 2×2 Grid',
     optionMap: [
       { key: 'rowCount', label: 'Rows', type: 'select', default: '2', choices: [{label: '1', value: '1'}, {label: '2', value: '2'}] },
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
       { key: 'showBadges', label: 'Show Badges', type: 'boolean', default: true },
       { key: 'showOrigPrice', label: 'Show Original Price', type: 'boolean', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const imgH = opts.imgRatio === '9:16' ? 147 : 180;
+      const cropRatio = opts.imgRatio === '9:16' ? '9:16' : '1:1';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <!-- Row 1: Products 1 & 2 -->
   <tr>
     <td width="600" align="center" valign="top"
@@ -268,10 +272,10 @@ var COMPONENTS = [
             <table border="0" cellpadding="0" cellspacing="0" width="263" class="product-card"
                    style="width: 263px; border: 0; overflow: hidden;">
               <tr>
-                <td width="261" align="center" height="180" class="card-img" style="width: 261px; height: 180px; background-color: #ffffff; padding: 0;">
+                <td width="261" align="center" height="${imgH}" class="card-img" style="width: 261px; height: ${imgH}px; padding: 0;" data-color="prodImgBg">
                   <img mc:edit="product1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-030-B90A1.png"
-                       width="261" height="180" alt="Product 1" class="mobile-img" data-crop="1:1"
-                       style="display: block; width: 261px; max-width: 261px; height: 180px; object-fit: contain;" />
+                       width="261" height="${imgH}" alt="Product 1" class="mobile-img" data-crop="${cropRatio}"
+                       style="display: block; width: 261px; max-width: 261px; height: ${imgH}px; object-fit: contain;" />
                 </td>
               </tr>
               <tr>
@@ -292,7 +296,7 @@ var COMPONENTS = [
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product1_price" style="font-size: 18px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prodPrice">$299</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 12px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prodOrigPrice">$599</span></td>` : ''}
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 12px; font-family: Arial, sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -312,10 +316,10 @@ var COMPONENTS = [
             <table border="0" cellpadding="0" cellspacing="0" width="263" class="product-card"
                    style="width: 263px; border: 0; overflow: hidden;">
               <tr>
-                <td width="261" align="center" height="180" class="card-img" style="width: 261px; height: 180px; background-color: #ffffff; padding: 0;">
+                <td width="261" align="center" height="${imgH}" class="card-img" style="width: 261px; height: ${imgH}px; padding: 0;" data-color="prodImgBg">
                   <img mc:edit="product2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-030-S30A1.png"
-                       width="261" height="180" alt="Product 2" class="mobile-img" data-crop="1:1"
-                       style="display: block; width: 261px; max-width: 261px; height: 180px; object-fit: contain;" />
+                       width="261" height="${imgH}" alt="Product 2" class="mobile-img" data-crop="${cropRatio}"
+                       style="display: block; width: 261px; max-width: 261px; height: ${imgH}px; object-fit: contain;" />
                 </td>
               </tr>
               <tr>
@@ -336,7 +340,7 @@ var COMPONENTS = [
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product2_price" style="font-size: 18px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prodPrice">$420</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 12px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prodOrigPrice">$599</span></td>` : ''}
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 12px; font-family: Arial, sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -365,10 +369,10 @@ var COMPONENTS = [
             <table border="0" cellpadding="0" cellspacing="0" width="263" class="product-card"
                    style="width: 263px; border: 0; overflow: hidden;">
               <tr>
-                <td width="261" align="center" height="180" class="card-img" style="width: 261px; height: 180px; background-color: #ffffff; padding: 0;">
+                <td width="261" align="center" height="${imgH}" class="card-img" style="width: 261px; height: ${imgH}px; padding: 0;" data-color="prodImgBg">
                   <img mc:edit="product3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-020X-S9A1.png"
-                       width="261" height="180" alt="Product 3" class="mobile-img" data-crop="1:1"
-                       style="display: block; width: 261px; max-width: 261px; height: 180px; object-fit: contain;" />
+                       width="261" height="${imgH}" alt="Product 3" class="mobile-img" data-crop="${cropRatio}"
+                       style="display: block; width: 261px; max-width: 261px; height: ${imgH}px; object-fit: contain;" />
                 </td>
               </tr>
               <tr>
@@ -389,7 +393,7 @@ var COMPONENTS = [
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product3_price" style="font-size: 18px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prodPrice">$359</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 12px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prodOrigPrice">$599</span></td>` : ''}
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 12px; font-family: Arial, sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -409,10 +413,10 @@ var COMPONENTS = [
             <table border="0" cellpadding="0" cellspacing="0" width="263" class="product-card"
                    style="width: 263px; border: 0; overflow: hidden;">
               <tr>
-                <td width="261" align="center" height="180" class="card-img" style="width: 261px; height: 180px; background-color: #ffffff; padding: 0;">
+                <td width="261" align="center" height="${imgH}" class="card-img" style="width: 261px; height: ${imgH}px; padding: 0;" data-color="prodImgBg">
                   <img mc:edit="product4_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_ARK-1124C-S1A3.png"
-                       width="261" height="180" alt="Product 4" class="mobile-img" data-crop="1:1"
-                       style="display: block; width: 261px; max-width: 261px; height: 180px; object-fit: contain;" />
+                       width="261" height="${imgH}" alt="Product 4" class="mobile-img" data-crop="${cropRatio}"
+                       style="display: block; width: 261px; max-width: 261px; height: ${imgH}px; object-fit: contain;" />
                 </td>
               </tr>
               <tr>
@@ -433,7 +437,7 @@ var COMPONENTS = [
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product4_price" style="font-size: 18px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prodPrice">$390</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product4_original_price" style="font-size: 12px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prodOrigPrice">$599</span></td>` : ''}
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product4_original_price" style="font-size: 12px; font-family: Arial, sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -452,9 +456,11 @@ var COMPONENTS = [
       </table>
     </td>
   </tr>` : ''}
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Section BG', key: 'prodBg', type: 'bg', default: '#eef1f6' },
+      { label: 'Image BG', key: 'prodImgBg', type: 'bg', default: '#ffffff' },
       { label: 'Badge Accent', key: 'prodBadgeBg', type: 'bg', default: '#f39c12', linked: ['prodBadge2Text','prodBadgeBorder'], linkedAlpha: { 'prodBadge2Bg': 0.15 } },
       { key: 'prodBadgeText', type: 'color', default: '#ffffff', hidden: true },
       { key: 'prodBadge2Bg', type: 'bg', default: '#feeed9', hidden: true },
@@ -475,10 +481,14 @@ var COMPONENTS = [
     num: '07',
     name: 'Products — 3-Col',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
       { key: 'showBadges', label: 'Badges', default: true },
       { key: 'showOrigPrice', label: 'Original Price', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const imgH = opts.imgRatio === '9:16' ? 98 : 160;
+      const cropRatio = opts.imgRatio === '9:16' ? '9:16' : '1:1';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
     <td width="600" align="center" valign="top"
         style="width: 600px; padding: 20px 20px 20px 20px;" data-color="prod2Bg">
@@ -487,8 +497,8 @@ var COMPONENTS = [
           <td width="180" align="center" valign="top" class="col-3" style="padding: 0 4px 0 0; width: 180px;">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="product-card"
                    style="width: 176px; border: 0; overflow: hidden;">
-              <tr><td width="174" align="center" height="160" class="card-img" style="width: 174px; height: 160px; background-color: #ffffff; padding: 0;">
-                <img mc:edit="product1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-020X-S9A1.png" width="174" height="160" alt="Product 1" class="mobile-img" data-crop="1:1" style="display: block; width: 174px; max-width: 174px; height: 160px; object-fit: contain;" />
+              <tr><td width="174" align="center" height="${imgH}" class="card-img" style="width: 174px; height: ${imgH}px; padding: 0;" data-color="prod2ImgBg">
+                <img mc:edit="product1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-020X-S9A1.png" width="174" height="${imgH}" alt="Product 1" class="mobile-img" data-crop="${cropRatio}" style="display: block; width: 174px; max-width: 174px; height: ${imgH}px; object-fit: contain;" />
               </td></tr>
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
@@ -507,7 +517,7 @@ var COMPONENTS = [
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product1_price" style="font-size: 16px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prod2Price">$359</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 11px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prod2OrigPrice">$599</span></td>` : ''}
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 11px; font-family: Arial, sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
@@ -520,8 +530,8 @@ var COMPONENTS = [
           <td width="180" align="center" valign="top" class="col-3" style="padding: 0 2px; width: 180px;">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="product-card"
                    style="width: 176px; border: 0; overflow: hidden;">
-              <tr><td width="174" align="center" height="160" class="card-img" style="width: 174px; height: 160px; background-color: #ffffff; padding: 0;">
-                <img mc:edit="product2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_ARK-1124C-S1A3.png" width="174" height="160" alt="Product 2" class="mobile-img" data-crop="1:1" style="display: block; width: 174px; max-width: 174px; height: 160px; object-fit: contain;" />
+              <tr><td width="174" align="center" height="${imgH}" class="card-img" style="width: 174px; height: ${imgH}px; padding: 0;" data-color="prod2ImgBg">
+                <img mc:edit="product2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_ARK-1124C-S1A3.png" width="174" height="${imgH}" alt="Product 2" class="mobile-img" data-crop="${cropRatio}" style="display: block; width: 174px; max-width: 174px; height: ${imgH}px; object-fit: contain;" />
               </td></tr>
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
@@ -540,7 +550,7 @@ var COMPONENTS = [
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product2_price" style="font-size: 16px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prod2Price">$390</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 11px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prod2OrigPrice">$599</span></td>` : ''}
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 11px; font-family: Arial, sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
@@ -553,8 +563,8 @@ var COMPONENTS = [
           <td width="180" align="center" valign="top" class="col-3" style="padding: 0 0 0 4px; width: 180px;">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="product-card"
                    style="width: 176px; border: 0; overflow: hidden;">
-              <tr><td width="174" align="center" height="160" class="card-img" style="width: 174px; height: 160px; background-color: #ffffff; padding: 0;">
-                <img mc:edit="product3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-030-B90A1.png" width="174" height="160" alt="Product 3" class="mobile-img" data-crop="1:1" style="display: block; width: 174px; max-width: 174px; height: 160px; object-fit: contain;" />
+              <tr><td width="174" align="center" height="${imgH}" class="card-img" style="width: 174px; height: ${imgH}px; padding: 0;" data-color="prod2ImgBg">
+                <img mc:edit="product3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_AIR-030-B90A1.png" width="174" height="${imgH}" alt="Product 3" class="mobile-img" data-crop="${cropRatio}" style="display: block; width: 174px; max-width: 174px; height: ${imgH}px; object-fit: contain;" />
               </td></tr>
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
@@ -573,7 +583,7 @@ var COMPONENTS = [
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product3_price" style="font-size: 16px; font-weight: bold; font-family: Arial, sans-serif;" data-color="prod2Price">$299</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 11px; font-family: Arial, sans-serif; text-decoration: line-through;" data-color="prod2OrigPrice">$599</span></td>` : ''}
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 11px; font-family: Arial, sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
@@ -586,9 +596,11 @@ var COMPONENTS = [
       </table>
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Section BG', key: 'prod2Bg', type: 'bg', default: '#eef1f6' },
+      { label: 'Image BG', key: 'prod2ImgBg', type: 'bg', default: '#ffffff' },
       { label: 'Badge Accent', key: 'prod2BadgeBg', type: 'bg', default: '#f39c12', linked: ['prod2Badge2Text','prod2BadgeBorder'], linkedAlpha: { 'prod2Badge2Bg': 0.15 } },
       { key: 'prod2BadgeText', type: 'color', default: '#ffffff', hidden: true },
       { key: 'prod2Badge2Bg', type: 'bg', default: '#feeed9', hidden: true },
