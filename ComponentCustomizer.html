@@ -697,17 +697,18 @@
        BUILDER VIEW — Drag & Drop eDM Builder
        ══════════════════════════════════ */
     .builder-view { display: none; }
-    .builder-view.visible { display: block; }
+    .builder-view.visible { display: block; overflow: hidden; }
+    body:has(.builder-view.visible) { overflow: hidden; }
 
     .builder-layout {
-      display: flex; height: calc(100vh - 96px);
+      display: flex; height: calc(100vh - 96px); overflow: hidden;
     }
 
     /* Builder Left Sidebar — Component List */
     .builder-left {
       width: 300px; min-width: 300px; background: #fff;
       border-right: 1px solid #e5e7eb;
-      position: sticky; top: 96px; height: calc(100vh - 96px);
+      height: 100%; flex-shrink: 0;
       overflow-y: auto; display: flex; flex-direction: column;
     }
     .builder-left-header {
@@ -782,6 +783,7 @@
     .builder-center {
       flex: 1; display: flex; flex-direction: column;
       background: #eef0f3; min-width: 0; position: relative;
+      overflow-y: auto; height: 100%;
     }
     .builder-canvas-wrap {
       flex: 1; position: relative;
@@ -811,7 +813,7 @@
     .builder-center-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 24px; background: #fff; border-bottom: 1px solid #e5e7eb;
-      position: sticky; top: 96px; z-index: 50; flex-shrink: 0;
+      position: sticky; top: 0; z-index: 50; flex-shrink: 0;
     }
     .builder-center-header h3 {
       font-size: 14px; font-weight: 600; color: #555;
@@ -879,7 +881,7 @@
     .builder-right {
       width: 300px; min-width: 300px; background: #fff;
       border-left: 1px solid #e5e7eb;
-      position: sticky; top: 96px; height: calc(100vh - 96px);
+      height: 100%; flex-shrink: 0;
       overflow-y: auto; display: flex; flex-direction: column;
     }
     .builder-right-empty {
