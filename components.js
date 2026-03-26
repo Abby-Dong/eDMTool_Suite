@@ -1838,8 +1838,8 @@ ${questionBlocks}
         <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="60" align="center" valign="middle" style="width: 60px;">
-                <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 1" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              <td width="64" align="center" valign="middle" style="width: 64px;">
+                <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 1" data-crop="free" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature One</p>
@@ -1852,8 +1852,8 @@ ${questionBlocks}
         <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="60" align="center" valign="middle" style="width: 60px;">
-                <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 2" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              <td width="64" align="center" valign="middle" style="width: 64px;">
+                <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 2" data-crop="free" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Two</p>
@@ -1868,8 +1868,8 @@ ${questionBlocks}
         <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="60" align="center" valign="middle" style="width: 60px;">
-                <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 3" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              <td width="64" align="center" valign="middle" style="width: 64px;">
+                <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 3" data-crop="free" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Three</p>
@@ -1882,8 +1882,8 @@ ${questionBlocks}
         <td class="grid-cell" width="270" valign="middle" style="width: 270px; padding: 12px 0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="60" align="center" valign="middle" style="width: 60px;">
-                <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" alt="Icon 4" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
+              <td width="64" align="center" valign="middle" style="width: 64px;">
+                <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 4" data-crop="free" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Four</p>
