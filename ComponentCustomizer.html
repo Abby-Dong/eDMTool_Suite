@@ -2573,6 +2573,35 @@ function showFormatBar(el) {
   bar.style.left = left + 'px';
   // Hide "Insert Link" when the element itself is an <a> (has its own Edit Link popover)
   bar.classList.toggle('is-link-el', el.tagName.toLowerCase() === 'a');
+
+  // ── Update color dot to reflect element's current text color ──
+  const dot = document.getElementById('fmtColorDot');
+  if (dot) {
+    let detectedColor = null;
+    // First: check element's own inline style
+    if (el.style && el.style.color) {
+      detectedColor = el.style.color;
+    }
+    // Second: check if element has a colored span child as main content
+    if (!detectedColor) {
+      const firstColorSpan = el.querySelector('span[style*="color"]');
+      if (firstColorSpan && firstColorSpan.style.color) {
+        detectedColor = firstColorSpan.style.color;
+      }
+    }
+    // Fallback: computed style
+    if (!detectedColor) {
+      const computed = window.getComputedStyle(el).color;
+      if (computed) detectedColor = computed;
+    }
+    // Convert rgb() to hex
+    if (detectedColor && detectedColor.startsWith('rgb')) {
+      const m = detectedColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (m) detectedColor = '#' + [m[1], m[2], m[3]].map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
+    }
+    dot.style.background = detectedColor || '#F39800';
+  }
+
   bar.classList.add('visible');
 }
 
