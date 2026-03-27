@@ -1492,9 +1492,14 @@ var COMPONENTS = [
     name: 'Article — Spotlight',
     optionMap: [
       { key: 'showImage', label: 'Image', default: false },
-      { key: 'showCta', label: 'CTA Button', default: false }
+      { key: 'showCta', label: 'CTA Button', default: false },
+      { key: 'bodyFontSize', label: 'Body Text Size', type: 'select', default: '14', choices: [
+        { label: 'Small', value: '12' }, { label: 'Medium', value: '14' }, { label: 'Large', value: '16' }
+      ]}
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const bodyFontSize = opts.bodyFontSize || '14';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table" style="width: 600px;">
   <tr valign="top">
     <td width="150" align="left" valign="top" class="spot-label-td"
         style="width: 150px; padding: 28px 20px 28px 24px;" data-color="spotBg">
@@ -1510,7 +1515,7 @@ var COMPONENTS = [
     <td width="450" align="left" valign="top" class="spot-body-td"
         style="width: 450px; padding: 28px 24px${(opts.showCta || opts.showImage) ? ' 20px' : ' 28px'} 24px; border-left: 1px solid #eeeeee;" data-color="spotBodyBg">
       <p mc:edit="spot_body"
-         style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 16px 0' : ''}; font-size: 14px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="spotBody">
+         style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 16px 0' : ''}; font-size: ${bodyFontSize}px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="spotBody">
         Discover our top pick this season &#8212; the <strong style="font-weight: 700;">ADAM-6700 Series Intelligent I/O Gateway</strong>. Designed for smart factory and edge computing applications, it features built-in Node-RED for rapid logic deployment, OPC UA &amp; MQTT support, and a rugged industrial-grade enclosure.<br><br>
         Ideal for production line monitoring, energy management, and predictive maintenance. With IoTMart&#8217;s global fast delivery, you can get started in days, not weeks.
       </p>
@@ -1528,7 +1533,8 @@ var COMPONENTS = [
       </table>` : ''}
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Label Area BG', key: 'spotBg', type: 'bg', default: '#0c0c0c' },
       { label: 'Eyebrow', key: 'spotEyebrow', type: 'color', default: '#0059ff' },
@@ -1675,12 +1681,16 @@ var COMPONENTS = [
     optionMap: [
       { key: 'specCount', label: 'Spec Count', type: 'select', default: '3', choices: [
         { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
+      ]},
+      { key: 'bodyFontSize', label: 'Body Text Size', type: 'select', default: '13', choices: [
+        { label: 'Small', value: '12' }, { label: 'Medium', value: '14' }, { label: 'Large', value: '16' }
       ]}
     ],
     getHtml: (opts = {}) => {
       var count = parseInt(opts.specCount) || 3;
       if (count < 3) count = 3;
       if (count > 5) count = 5;
+      const bodyFontSize = opts.bodyFontSize || '13';
       var defaultSpecs = [
         { num: '50+', label: 'Products Available' },
         { num: '24hr', label: 'Fast Shipping' },
@@ -1716,7 +1726,7 @@ var COMPONENTS = [
               Industrial IoT Solutions:<br/>Edge-to-Cloud Ready Hardware
             </h2>
             <p mc:edit="showcase_body"
-               style="margin: 0; font-size: 13px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="showcaseBody">
+               style="margin: 0; font-size: ${bodyFontSize}px; font-family: Arial, sans-serif; line-height: 1.5;" data-color="showcaseBody">
               Explore our curated catalog of industrial-grade IoT hardware. From intelligent gateways and edge AI platforms to wireless connectivity modules, every product is selected for reliability, interoperability, and rapid deployment.<br><br>
               <strong style="font-weight: 700;">Why choose IoTMart?</strong><br>
               &bull;&nbsp;<strong style="font-weight: 700;">Direct Shipping:</strong> Factory-to-door delivery across 40+ countries with real-time tracking.<br>

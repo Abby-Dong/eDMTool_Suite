@@ -213,6 +213,10 @@ const TRANSLATIONS = {
     'option.left': 'Left',
     'option.center': 'Center',
     'option.right': 'Right',
+    'option.bodyTextSize': 'Body Text Size',
+    'option.small': 'Small',
+    'option.medium': 'Medium',
+    'option.large': 'Large',
     // Color labels
     'color.background': 'Background',
     'color.linkColor': 'Link Color',
@@ -557,6 +561,10 @@ const TRANSLATIONS = {
     'option.left': '靠左',
     'option.center': '置中',
     'option.right': '靠右',
+    'option.bodyTextSize': '內文字型大小',
+    'option.small': '小',
+    'option.medium': '中',
+    'option.large': '大',
     // Color labels
     'color.background': '背景色',
     'color.linkColor': '連結色',
@@ -901,6 +909,10 @@ const TRANSLATIONS = {
     'option.left': '왼쪽',
     'option.center': '가운데',
     'option.right': '오른쪽',
+    'option.bodyTextSize': '본문 글자 크기',
+    'option.small': '작게',
+    'option.medium': '중간',
+    'option.large': '크게',
     // Color labels
     'color.background': '배경',
     'color.linkColor': '링크 색상',
@@ -1166,6 +1178,7 @@ const OPTION_LABEL_MAP = {
   'Badges': 'option.badges',
   'Original Price': 'option.originalPrice',
   'Body Text': 'option.bodyText',
+  'Body Text Size': 'option.bodyTextSize',
   'Terms': 'option.terms',
   'Image': 'option.image',
   'Images': 'option.images',
@@ -1181,7 +1194,10 @@ const OPTION_LABEL_MAP = {
   'Social Count': 'option.socialCount',
   'Left': 'option.left',
   'Center': 'option.center',
-  'Right': 'option.right'
+  'Right': 'option.right',
+  'Small': 'option.small',
+  'Medium': 'option.medium',
+  'Large': 'option.large'
 };
 function tOptionLabel(label) {
   const key = OPTION_LABEL_MAP[label];
