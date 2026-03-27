@@ -2540,15 +2540,19 @@ function showRgbPicker() {
   // Refresh RGB panel with current color before switching
   document.getElementById('rgbPanel').innerHTML = buildRgbPanelHtml(_popupCurrentColor);
   document.getElementById('brandPanel').classList.remove('active');
-  document.getElementById('gradientPanel').classList.remove('active');
-  document.getElementById('fallbackPanel').classList.remove('active');
+  const gradientPanel = document.getElementById('gradientPanel');
+  const fallbackPanel = document.getElementById('fallbackPanel');
+  if (gradientPanel) gradientPanel.classList.remove('active');
+  if (fallbackPanel) fallbackPanel.classList.remove('active');
   document.getElementById('rgbPanel').classList.add('active');
 }
 
 function showBrandPanel() {
   document.getElementById('rgbPanel').classList.remove('active');
-  document.getElementById('gradientPanel').classList.remove('active');
-  document.getElementById('fallbackPanel').classList.remove('active');
+  const gradientPanel = document.getElementById('gradientPanel');
+  const fallbackPanel = document.getElementById('fallbackPanel');
+  if (gradientPanel) gradientPanel.classList.remove('active');
+  if (fallbackPanel) fallbackPanel.classList.remove('active');
   document.getElementById('brandPanel').classList.add('active');
 }
 
@@ -2856,8 +2860,12 @@ function initEditState() {
 initEditState();
 
 function applyEdits(wrapper, comp, overrideEdits) {
+  const edits = overrideEdits || editState;
+  const prefix = comp.id.replace(/-/g,'_') + '__';
+  
+  // First, apply edits from the cached edit map (static defaults)
   buildComponentEditMap(comp).forEach(e => {
-    const val = (overrideEdits || editState)[e.key];
+    const val = edits[e.key];
     if (val === undefined) return;
     wrapper.querySelectorAll('[mc\\:edit="'+e.mc+'"]').forEach(el => {
       if (e.type === 'html') el.innerHTML = val
@@ -2873,6 +2881,35 @@ function applyEdits(wrapper, comp, overrideEdits) {
       else if (e.type === 'img') el.setAttribute('src', val);
     });
   });
+  
+  // Also apply any dynamic edits that may not be in the cached map
+  // (e.g., Footer social icons when socialCount > 3 default)
+  if (edits) {
+    Object.keys(edits).forEach(key => {
+      if (!key.startsWith(prefix)) return;
+      const val = edits[key];
+      if (val === undefined) return;
+      // Parse the key: compId__mc:edit__type
+      const rest = key.slice(prefix.length);
+      const lastUnderscore = rest.lastIndexOf('__');
+      if (lastUnderscore === -1) return;
+      const mc = rest.slice(0, lastUnderscore);
+      const type = rest.slice(lastUnderscore + 2);
+      wrapper.querySelectorAll('[mc\\:edit="'+mc+'"]').forEach(el => {
+        if (type === 'html') el.innerHTML = val
+          .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
+          .replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '')
+          .replace(/^<br>/, '');
+        else if (type === 'href') el.setAttribute('href', val);
+        else if (type === 'alias') { if (val) el.setAttribute('alias', val); else el.removeAttribute('alias'); }
+        else if (type === 'title') { if (val) el.setAttribute('title', val); else el.removeAttribute('title'); }
+        else if (type === 'underline') { el.style.textDecoration = val === '1' ? 'underline' : 'none'; }
+        else if (type === 'convtrack') { if (val) el.setAttribute('conversiontracking', val); else el.removeAttribute('conversiontracking'); }
+        else if (type === 'alt') el.setAttribute('alt', val);
+        else if (type === 'src') el.setAttribute('src', val);
+      });
+    });
+  }
 }
 
 // ── Inline Editing Setup ──
@@ -3270,8 +3307,11 @@ document.addEventListener('mousedown', (ev) => {
   const bar       = document.getElementById('formatBar');
   const pop       = document.getElementById('editPopover');
   const cropModal = document.getElementById('cropModal');
-  // Never close the popover while the crop modal is active
+  const colorPopup = document.getElementById('colorPopup');
+  const colorOverlay = document.getElementById('colorPopupOverlay');
+  // Never close the popover while the crop modal or color popup is active
   if (bar.contains(ev.target) || pop.contains(ev.target) || (cropModal && cropModal.contains(ev.target))) return;
+  if ((colorPopup && colorPopup.contains(ev.target)) || (colorOverlay && colorOverlay.contains(ev.target))) return;
   const ce = ev.target.closest('[contenteditable="true"]');
   const img = ev.target.closest('[data-editable]');
   if (!ce && !img) {
@@ -3300,7 +3340,7 @@ function showImagePopover(imgEl, keyBase, comp) {
     <div class="pop-upload-row">
       <label class="pop-upload-btn" id="pop-upload-btn" title="${t('popover.uploadToCloud')}">
         <span class="mi">upload</span>${t('popover.uploadImage')}
-        <input type="file" id="pop-upload-input" accept="image/jpg,image/jpeg,image/png" style="display:none" onchange="uploadToCloudinary(this)" ${imgEl.dataset.crop ? 'data-crop="' + imgEl.dataset.crop + '"' : ''} data-src-key="${srcKey}" data-alt-key="${altKey}" />
+        <input type="file" id="pop-upload-input" accept="image/jpg,image/jpeg,image/png" style="display:none" onchange="uploadToCloudinary(this)" ${imgEl.dataset.crop ? 'data-crop="' + imgEl.dataset.crop + '"' : ''} data-src-key="${srcKey}" data-alt-key="${altKey}" ${_builderActiveItem ? 'data-builder-uid="' + _builderActiveItem.uid + '"' : ''} />
       </label>
       <span class="pop-upload-divider">${t('popover.pasteUrl')}</span>
     </div>
@@ -3363,7 +3403,11 @@ async function uploadToCloudinary(input) {
   input.value = '';
 
   // Capture state NOW (before any async gap or modal interaction clears it)
-  const capturedItem = _builderActiveItem;
+  // Also check for stored builder-uid to recover the item if _builderActiveItem was cleared
+  let capturedItem = _builderActiveItem;
+  if (!capturedItem && input.dataset.builderUid) {
+    capturedItem = builderStack.find(i => i.uid === input.dataset.builderUid);
+  }
   const srcKey = input.dataset.srcKey || null;
   const altKey = input.dataset.altKey || null;
 
@@ -3442,7 +3486,17 @@ function showCropModal(file, cropW, cropH, callback) {
   const modal = document.getElementById('cropModal');
   const img   = document.getElementById('cropSourceImg');
   const title = document.getElementById('cropModalTitle');
-  if (title) title.textContent = cropW && cropH ? t('crop.cropTitle') + ' — ' + cropW + '×' + cropH + ' px' : t('crop.cropTitle');
+  // Determine if this is ratio mode (small values) or fixed pixel mode
+  const isRatioMode = cropW && cropH && (cropW < 100 || cropH < 100);
+  if (title) {
+    if (cropW && cropH) {
+      title.textContent = isRatioMode 
+        ? t('crop.cropTitle') + ' — ' + cropW + ':' + cropH
+        : t('crop.cropTitle') + ' — ' + cropW + '×' + cropH + ' px';
+    } else {
+      title.textContent = t('crop.cropTitle');
+    }
+  }
   const reader = new FileReader();
   reader.onload = e => { img.onload = () => initCropBox(cropW, cropH); img.src = e.target.result; modal.classList.add('visible'); };
   reader.readAsDataURL(file);
@@ -3488,8 +3542,19 @@ function confirmCrop() {
   const scaleY = img.naturalHeight / img.offsetHeight;
   const sw = parseFloat(box.style.width) * scaleX;
   const sh = parseFloat(box.style.height) * scaleY;
-  const cW = rW || Math.round(sw);
-  const cH = rH || Math.round(sh);
+  // Determine output size:
+  // - If rW/rH are small values (< 100), treat as aspect ratio only → use actual crop area size
+  // - If rW/rH are larger values, treat as fixed pixel dimensions
+  let cW, cH;
+  if (rW && rH && (rW < 100 || rH < 100)) {
+    // Ratio mode: output at actual selection size, preserving aspect ratio
+    cW = Math.round(sw);
+    cH = Math.round(sh);
+  } else {
+    // Fixed pixel mode or free crop
+    cW = rW || Math.round(sw);
+    cH = rH || Math.round(sh);
+  }
   const canvas = document.createElement('canvas');
   canvas.width = cW; canvas.height = cH;
   canvas.getContext('2d').drawImage(img,

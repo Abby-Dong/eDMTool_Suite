@@ -54,7 +54,7 @@ var COMPONENTS = [
   {
     id: 'banner-v1',
     num: '02',
-    name: 'Full-Width Banner',
+    name: 'Hero — Full Width',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
@@ -109,7 +109,7 @@ var COMPONENTS = [
   {
     id: 'banner-v2',
     num: '03',
-    name: 'Split Banner',
+    name: 'Hero — Split',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showBanner2Sub', label: 'Subtitle', default: true },
@@ -173,7 +173,7 @@ var COMPONENTS = [
   {
     id: 'countdown',
     num: '04',
-    name: 'Countdown Bar',
+    name: 'Heading — Countdown',
     optionMap: [
       { key: 'showIcon', label: 'Left Icon', default: true }
     ],
@@ -216,7 +216,7 @@ var COMPONENTS = [
   {
     id: 'section-heading',
     num: '05',
-    name: 'Section Heading',
+    name: 'Heading — Section',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showTitle', label: 'Title', default: true },
@@ -251,7 +251,7 @@ var COMPONENTS = [
   {
     id: 'products-v1',
     num: '06',
-    name: 'Products — 2×2 Grid',
+    name: 'Product Grid — 2×2',
     optionMap: [
       { key: 'rowCount', label: 'Rows', type: 'select', default: '2', choices: [{label: '1', value: '1'}, {label: '2', value: '2'}] },
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
@@ -479,7 +479,7 @@ var COMPONENTS = [
   {
     id: 'products-v2',
     num: '07',
-    name: 'Products — 3-Col',
+    name: 'Product Grid — 3-Col',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
       { key: 'showBadges', label: 'Badges', default: true },
@@ -619,7 +619,7 @@ var COMPONENTS = [
   {
     id: 'image-text-split',
     num: '12',
-    name: 'Text + Image — Left',
+    name: 'Split — Image Left',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '9:16', value: '9:16'}, {label: '1:1', value: '1:1'}, {label: 'Free', value: 'free'}] },
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
@@ -670,7 +670,7 @@ var COMPONENTS = [
   {
     id: 'text-image-split',
     num: '13',
-    name: 'Text + Image — Right',
+    name: 'Split — Image Right',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '9:16', value: '9:16'}, {label: '1:1', value: '1:1'}, {label: 'Free', value: 'free'}] },
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
@@ -1019,7 +1019,7 @@ var COMPONENTS = [
   {
     id: 'service-benefits',
     num: '18',
-    name: 'Icon + Text — 4-Col',
+    name: 'Icon Grid — 4-Col',
     optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
        style="width: 600px;" data-color="svcBg">
@@ -1061,7 +1061,7 @@ var COMPONENTS = [
   {
     id: 'other-activities',
     num: '10',
-    name: 'Content Block — 3-Col',
+    name: 'Card Grid — 3-Col',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow + Headline', default: true },
       { key: 'showCta', label: 'CTA Buttons', default: true },
@@ -1225,7 +1225,7 @@ var COMPONENTS = [
   {
     id: 'three-col-image-text',
     num: '14',
-    name: 'Feature Cards — 3-Col',
+    name: 'Feature Grid — 3-Col',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}, {label: 'Free', value: 'free'}] },
       { key: 'showBadges', label: 'Badges', default: true },
@@ -1362,7 +1362,7 @@ var COMPONENTS = [
   {
     id: 'four-col-image-text',
     num: '15',
-    name: 'Feature Cards — 4-Col',
+    name: 'Feature Grid — 4-Col',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}, {label: 'Free', value: 'free'}] },
       { key: 'showBadges', label: 'Badges', default: true },
@@ -1489,7 +1489,7 @@ var COMPONENTS = [
   {
     id: 'product-spotlight',
     num: '08',
-    name: 'Content Block — Spotlight',
+    name: 'Article — Spotlight',
     optionMap: [
       { key: 'showImage', label: 'Image', default: false },
       { key: 'showCta', label: 'CTA Button', default: false }
@@ -1544,7 +1544,7 @@ var COMPONENTS = [
   {
     id: 'product-cards',
     num: '09',
-    name: 'Content Block — 2-Col',
+    name: 'Card Grid — 2-Col',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '16:9', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}] },
       { key: 'showImages', label: 'Images', default: false },
@@ -1671,7 +1671,7 @@ var COMPONENTS = [
   {
     id: 'product-showcase',
     num: '11',
-    name: 'Content Block — Stats',
+    name: 'Article — Stats',
     optionMap: [
       { key: 'specCount', label: 'Spec Count', type: 'select', default: '3', choices: [
         { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
@@ -1873,7 +1873,7 @@ ${questionBlocks}
   {
     id: 'grid-2x2-image-text',
     num: '16',
-    name: 'Icon + Text — 2×2 Grid',
+    name: 'Icon Grid — 2×2',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
@@ -1954,7 +1954,7 @@ ${questionBlocks}
   {
     id: 'grid-3col-image-text',
     num: '17',
-    name: 'Icon + Text — 3-Col',
+    name: 'Icon Grid — 3-Col',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
