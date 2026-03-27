@@ -258,7 +258,8 @@ var COMPONENTS = [
       { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '14', choices: [{label: 'S', value: '12'}, {label: 'M', value: '14'}, {label: 'L', value: '16'}] },
       { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '12', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}] },
       { key: 'showBadges', label: 'Show Badges', type: 'boolean', default: true },
-      { key: 'showOrigPrice', label: 'Show Original Price', type: 'boolean', default: true }
+      { key: 'showPrice', label: 'Price', type: 'boolean', default: true },
+      { key: 'showOrigPrice', label: 'Show Original Price', type: 'boolean', default: true, optionGate: 'showPrice' }
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 147 : 180;
@@ -297,12 +298,12 @@ var COMPONENTS = [
                   </table>` : ''}
                   <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-030-B90A1</p>
                   <p mc:edit="product1_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
-                  <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
+                  ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product1_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$299</span></td>
                       ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
-                  </table>
+                  </table>` : ''}
                 </td>
               </tr>
               <tr>
@@ -341,12 +342,12 @@ var COMPONENTS = [
                   </table>` : ''}
                   <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-030-S30A1</p>
                   <p mc:edit="product2_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
-                  <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
+                  ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product2_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$420</span></td>
                       ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
-                  </table>
+                  </table>` : ''}
                 </td>
               </tr>
               <tr>
@@ -394,12 +395,12 @@ var COMPONENTS = [
                   </table>` : ''}
                   <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-020X-S9A1</p>
                   <p mc:edit="product3_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
-                  <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
+                  ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product3_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$359</span></td>
                       ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
-                  </table>
+                  </table>` : ''}
                 </td>
               </tr>
               <tr>
@@ -438,12 +439,12 @@ var COMPONENTS = [
                   </table>` : ''}
                   <p mc:edit="product4_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">ARK-1124C-S1A3</p>
                   <p mc:edit="product4_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">Intel® Celeron™ Fanless Edge Computer System</p>
-                  <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
+                  ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
                       <td style="padding-right: 8px;"><span mc:edit="product4_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$390</span></td>
                       ${opts.showOrigPrice !== false ? `<td><span mc:edit="product4_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
-                  </table>
+                  </table>` : ''}
                 </td>
               </tr>
               <tr>
@@ -472,8 +473,8 @@ var COMPONENTS = [
       { key: 'prodBadgeBorder', type: 'border', default: '#f39c12', hidden: true },
       { label: 'Product Name', key: 'prodName', type: 'color', default: '#1a1a2e' },
       { label: 'Product Desc', key: 'prodDesc', type: 'color', default: '#888888' },
-      { label: 'Sale Price', key: 'prodPrice', type: 'color', default: '#e02020' },
-      { label: 'Original Price', key: 'prodOrigPrice', type: 'color', default: '#bbbbbb' },
+      { label: 'Sale Price', key: 'prodPrice', type: 'color', default: '#e02020', optionGate: 'showPrice' },
+      { label: 'Original Price', key: 'prodOrigPrice', type: 'color', default: '#bbbbbb', optionGate: 'showPrice' },
       { label: 'CTA BG', key: 'prodCtaBg', type: 'bg', default: '#07071a' },
       { label: 'CTA Text', key: 'prodCtaText', type: 'color', default: '#ffffff' }
     ]
@@ -489,7 +490,8 @@ var COMPONENTS = [
       { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '13', choices: [{label: 'S', value: '12'}, {label: 'M', value: '13'}, {label: 'L', value: '16'}] },
       { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '10', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}] },
       { key: 'showBadges', label: 'Badges', default: true },
-      { key: 'showOrigPrice', label: 'Original Price', default: true }
+      { key: 'showPrice', label: 'Price', type: 'boolean', default: true },
+      { key: 'showOrigPrice', label: 'Original Price', default: true, optionGate: 'showPrice' }
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 98 : 160;
@@ -522,12 +524,12 @@ var COMPONENTS = [
                 </table>` : ''}
                 <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">AIR-020X-S9A1</p>
                 <p mc:edit="product1_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
-                <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
+                ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product1_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$359</span></td>
                     ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
-                </table>
+                </table>` : ''}
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
                 <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product1_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
@@ -555,12 +557,12 @@ var COMPONENTS = [
                 </table>` : ''}
                 <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">ARK-1124C-S1A3</p>
                 <p mc:edit="product2_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">Intel® Celeron™ Fanless Edge Computer System</p>
-                <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
+                ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product2_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$390</span></td>
                     ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
-                </table>
+                </table>` : ''}
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
                 <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product2_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
@@ -588,12 +590,12 @@ var COMPONENTS = [
                 </table>` : ''}
                 <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">AIR-030-B90A1</p>
                 <p mc:edit="product3_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
-                <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
+                ${opts.showPrice !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
                     <td style="padding-right: 6px;"><span mc:edit="product3_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$299</span></td>
                     ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
-                </table>
+                </table>` : ''}
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
                 <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product3_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
@@ -616,8 +618,8 @@ var COMPONENTS = [
       { key: 'prod2BadgeBorder', type: 'border', default: '#f39c12', hidden: true },
       { label: 'Product Name', key: 'prod2Name', type: 'color', default: '#1a1a2e' },
       { label: 'Product Desc', key: 'prod2Desc', type: 'color', default: '#888888' },
-      { label: 'Sale Price', key: 'prod2Price', type: 'color', default: '#e02020' },
-      { label: 'Original Price', key: 'prod2OrigPrice', type: 'color', default: '#bbbbbb' },
+      { label: 'Sale Price', key: 'prod2Price', type: 'color', default: '#e02020', optionGate: 'showPrice' },
+      { label: 'Original Price', key: 'prod2OrigPrice', type: 'color', default: '#bbbbbb', optionGate: 'showPrice' },
       { label: 'CTA BG', key: 'prod2CtaBg', type: 'bg', default: '#07071a' },
       { label: 'CTA Text', key: 'prod2CtaText', type: 'color', default: '#ffffff' }
     ]
@@ -2045,6 +2047,27 @@ ${questionBlocks}
       { label: 'Item Title', key: 'grid3colItemTitle', type: 'color', default: '#1a1a2e' },
       { label: 'Description', key: 'grid3colItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
     ]
+  },
+
+  // ─── 28 Full Width Image ───
+  {
+    id: 'full-width-image',
+    num: '18',
+    name: 'Full Width Image',
+    optionMap: [
+      { key: 'showLink', label: 'Link', default: true }
+    ],
+    getHtml: (opts = {}) => {
+      const imgContent = `<img mc:edit="fwimg_image" src="https://res.cloudinary.com/dhj1ztoeu/image/upload/f_png,q_auto/v1774610370/eDM/assets/s5oe6ooqspfgxfrvmbnd.png" width="600" alt="Full Width Image" class="fwimg" style="display: block; width: 600px; max-width: 100%; height: auto;" />`;
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+  <tr>
+    <td width="600" align="center" style="width: 600px; padding: 0; font-size: 0; line-height: 0;">
+      ${opts.showLink !== false ? `<a href="https://www.iotmart.com/s/?language=en_US" mc:edit="fwimg_link" style="display: block;">${imgContent}</a>` : imgContent}
+    </td>
+  </tr>
+</table>`;
+    },
+    colorMap: []
   }
 ];
 
