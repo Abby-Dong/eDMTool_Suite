@@ -1702,8 +1702,8 @@ var COMPONENTS = [
       for (var i = 0; i < count; i++) {
         var s = defaultSpecs[i];
         var isLast = (i === count - 1);
-        specsHtml += '<p mc:edit="showcase_num' + (i+1) + '"\n               style="margin: 0 0 6px 0; font-size: 24px; font-weight: 300; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; line-height: 1;" data-color="showcaseNumber">\n              ' + s.num + '\n            </p>\n';
-        specsHtml += '<p mc:edit="showcase_label' + (i+1) + '"\n               style="margin: 0' + (isLast ? '' : ' 0 20px 0') + '; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 0.5px;" data-color="showcaseSpecLabel">\n              ' + s.label + '\n            </p>\n';
+        specsHtml += '<p mc:edit="showcase_num' + (i+1) + '"\n               style="margin: 0 0 6px 0; font-size: 24px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="showcaseNumber">\n              ' + s.num + '\n            </p>\n';
+        specsHtml += '<p mc:edit="showcase_label' + (i+1) + '"\n               style="margin: 0' + (isLast ? '' : ' 0 20px 0') + '; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="showcaseSpecLabel">\n              ' + s.label + '\n            </p>\n';
       }
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table" style="width: 600px;">
   <tr>
