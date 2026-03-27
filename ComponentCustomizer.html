@@ -2134,6 +2134,7 @@ const BRAND_COLORS = [
 let _popupActiveKey = null;
 let _popupActiveCompId = null;
 let _popupActiveTrigger = null;
+let _popupActiveType = null;  // 'bg', 'color', or 'border'
 
 function buildBrandPanelHtml(currentColor) {
   let html = '';
@@ -2152,8 +2153,8 @@ function buildBrandPanelHtml(currentColor) {
   html += `<hr class="popup-divider" />`;
   html += `<div style="display:flex;gap:8px;">`;
   html += `<button class="other-color-btn" style="flex:1;" onclick="showRgbPicker()"><span class="mi">palette</span>${t('colorPicker.pickOther')}</button>`;
-  // Only show gradient button for section background
-  if (_popupActiveKey === 'sectionBg') {
+  // Show gradient button for all background colors (type: 'bg')
+  if (_popupActiveType === 'bg') {
     html += `<button class="other-color-btn" style="width:40px;flex:none;padding:8px;" onclick="showGradientPanel()" title="${t('colorPicker.gradient')}"><span class="mi">gradient</span></button>`;
   }
   html += `</div>`;
@@ -2415,6 +2416,16 @@ function openColorPopup(key, compId, triggerEl, itemUid) {
   _popupActiveCompId = compId;
   _popupActiveTrigger = triggerEl;
   _popupActiveItemUid = itemUid || null;
+  
+  // Determine color type from component's colorMap
+  _popupActiveType = null;
+  if (compId) {
+    const comp = COMPONENTS.find(c => c.id === compId);
+    if (comp && comp.colorMap) {
+      const entry = comp.colorMap.find(c => c.key === key);
+      if (entry) _popupActiveType = entry.type;
+    }
+  }
 
   // Get color from item if in builder mode with item, else from global colorState
   let currentColor;
@@ -2464,6 +2475,7 @@ function closeColorPopup() {
   _popupActiveCompId = null;
   _popupActiveTrigger = null;
   _popupActiveItemUid = null;
+  _popupActiveType = null;
 }
 
 // ── Inline Text Color State ──
