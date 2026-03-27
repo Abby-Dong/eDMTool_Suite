@@ -1989,7 +1989,7 @@ ${questionBlocks}
             </tr>
           </table>
         </td>
-        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="col-gap" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="173" valign="${vAlign}" style="width: 173px; padding: 0 5px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
@@ -2003,7 +2003,7 @@ ${questionBlocks}
             </tr>
           </table>
         </td>
-        <td width="20" style="width: 20px;">&nbsp;</td>
+        <td class="col-gap" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="173" valign="${vAlign}" style="width: 173px; padding: 0 0 0 5px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
@@ -2220,6 +2220,13 @@ var RESPONSIVE_CSS = {
       td.col-gap-3 { display: none !important; width: 0 !important; max-height: 0 !important; overflow: hidden !important; }
       table.three-col { width: 100% !important; }
       img.col-img { width: 160px !important; max-width: 160px !important; height: auto !important; }`,
+  'grid-3col-image-text': `
+      table.email-container { width: 100% !important; }
+      td.outer-pad { padding: 0 !important; }
+      table.grid-3col { width: 100% !important; }
+      td.col-3 { display: block !important; width: 100% !important; padding: 0 0 16px 0 !important; box-sizing: border-box; }
+      td.col-3:last-child { padding-bottom: 0 !important; }
+      td.col-gap { display: none !important; width: 0 !important; max-height: 0 !important; overflow: hidden !important; }`,
   'single-button-bar': `
       table.email-container { width: 100% !important; }
       td.outer-pad { padding: 0 !important; }`,
