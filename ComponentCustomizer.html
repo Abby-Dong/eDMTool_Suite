@@ -804,6 +804,44 @@
       transition: background .15s;
     }
     .gradient-apply-btn:hover { background: #003fcc; }
+    /* Gradient Position Slider */
+    .gradient-position-row {
+      display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;
+      padding: 12px; background: #f8f9fa; border-radius: 10px;
+    }
+    .gradient-position-row .pos-header {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .gradient-position-row label {
+      font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .gradient-position-row .pos-val {
+      font-size: 12px; font-weight: 600; color: #0059ff;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+    }
+    .gradient-position-slider {
+      width: 100%; height: 8px; border-radius: 4px;
+      -webkit-appearance: none; appearance: none;
+      background: linear-gradient(90deg, var(--grad-c1, #0059ff), var(--grad-c2, #00c4b4));
+      cursor: pointer;
+    }
+    .gradient-position-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; border: 2px solid #0059ff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+      cursor: pointer; transition: transform .15s;
+    }
+    .gradient-position-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    .gradient-position-slider::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; border: 2px solid #0059ff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+      cursor: pointer;
+    }
 
     /* ══════════════════════════════════
        BUILDER VIEW — Drag & Drop eDM Builder
@@ -2195,16 +2233,26 @@ function buildRgbPanelHtml(hexColor) {
 let _gradientColor1 = '#0059ff';
 let _gradientColor2 = '#00c4b4';
 let _gradientDirection = '180deg'; // 180deg = top to bottom
+let _gradientPosition = 50; // 0-100, controls gradient midpoint
 let _gradientFallback = '#0059ff'; // fallback solid color for Outlook
 
 function buildGradientPanelHtml(currentValue) {
   // Parse current value if it's a gradient object
   if (currentValue && typeof currentValue === 'object' && currentValue.gradient) {
-    const match = currentValue.gradient.match(/linear-gradient\((\d+)deg,\s*(#[0-9a-fA-F]{6}),\s*(#[0-9a-fA-F]{6})\)/);
-    if (match) {
-      _gradientDirection = match[1] + 'deg';
-      _gradientColor1 = match[2];
-      _gradientColor2 = match[3];
+    // Try to match gradient with position: linear-gradient(180deg, #color1 pos%, #color2)
+    const matchPos = currentValue.gradient.match(/linear-gradient\((\d+)deg,\s*(#[0-9a-fA-F]{6})\s+(\d+)%,\s*(#[0-9a-fA-F]{6})\)/);
+    // Or without position: linear-gradient(180deg, #color1, #color2)
+    const matchSimple = currentValue.gradient.match(/linear-gradient\((\d+)deg,\s*(#[0-9a-fA-F]{6}),\s*(#[0-9a-fA-F]{6})\)/);
+    if (matchPos) {
+      _gradientDirection = matchPos[1] + 'deg';
+      _gradientColor1 = matchPos[2];
+      _gradientPosition = parseInt(matchPos[3]);
+      _gradientColor2 = matchPos[4];
+    } else if (matchSimple) {
+      _gradientDirection = matchSimple[1] + 'deg';
+      _gradientColor1 = matchSimple[2];
+      _gradientColor2 = matchSimple[3];
+      _gradientPosition = 50; // Default
     }
     if (currentValue.fallback) {
       _gradientFallback = currentValue.fallback;
@@ -2212,9 +2260,10 @@ function buildGradientPanelHtml(currentValue) {
   } else {
     // Reset fallback to start color
     _gradientFallback = _gradientColor1;
+    _gradientPosition = 50;
   }
   
-  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1} ${_gradientPosition}%, ${_gradientColor2})`;
   let html = '';
   html += `<div class="gradient-panel-header">`;
   html += `<button class="gradient-back-btn" onclick="showBrandPanel()"><span class="mi">arrow_back</span>${t('colorPicker.brandColors')}</button>`;
@@ -2244,6 +2293,12 @@ function buildGradientPanelHtml(currentValue) {
   html += `<input type="text" class="gradient-color-input" id="gradInput2" value="${_gradientColor2}" oninput="onGradientColorInput(2)" onkeydown="if(event.key==='Enter')showFallbackPanel()" />`;
   html += `</div>`;
   
+  // Position slider (balance)
+  html += `<div class="gradient-position-row">`;
+  html += `<div class="pos-header"><label>${t('colorPicker.balance')}</label><span class="pos-val" id="gradPosVal">${_gradientPosition}%</span></div>`;
+  html += `<input type="range" min="10" max="90" value="${_gradientPosition}" class="gradient-position-slider" id="gradPosSlider" style="--grad-c1:${_gradientColor1};--grad-c2:${_gradientColor2}" oninput="onGradientPositionChange()" />`;
+  html += `</div>`;
+  
   // Next button (to fallback step)
   html += `<div class="gradient-apply-row">`;
   html += `<button class="gradient-apply-btn" onclick="showFallbackPanel()">${t('colorPicker.nextStep')}</button>`;
@@ -2253,7 +2308,7 @@ function buildGradientPanelHtml(currentValue) {
 }
 
 function buildFallbackPanelHtml() {
-  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1} ${_gradientPosition}%, ${_gradientColor2})`;
   let html = '';
   html += `<div class="gradient-panel-header">`;
   html += `<button class="gradient-back-btn" onclick="showGradientPanel()"><span class="mi">arrow_back</span>${t('colorPicker.gradient')}</button>`;
@@ -2332,9 +2387,22 @@ function onGradientColorInput(num) {
 }
 
 function updateGradientPreview() {
-  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`;
+  const gradientCss = `linear-gradient(${_gradientDirection}, ${_gradientColor1} ${_gradientPosition}%, ${_gradientColor2})`;
   const preview = document.getElementById('gradientPreview');
   if (preview) preview.style.background = gradientCss;
+  // Also update slider track colors
+  const slider = document.getElementById('gradPosSlider');
+  if (slider) {
+    slider.style.setProperty('--grad-c1', _gradientColor1);
+    slider.style.setProperty('--grad-c2', _gradientColor2);
+  }
+}
+
+function onGradientPositionChange() {
+  const val = parseInt(document.getElementById('gradPosSlider').value);
+  _gradientPosition = val;
+  document.getElementById('gradPosVal').textContent = val + '%';
+  updateGradientPreview();
 }
 
 function onGradientFallbackChange() {
@@ -2354,7 +2422,7 @@ function onGradientFallbackInput() {
 
 function applyGradientColor() {
   const gradientValue = {
-    gradient: `linear-gradient(${_gradientDirection}, ${_gradientColor1}, ${_gradientColor2})`,
+    gradient: `linear-gradient(${_gradientDirection}, ${_gradientColor1} ${_gradientPosition}%, ${_gradientColor2})`,
     fallback: _gradientFallback
   };
   applyPickedColorValue(gradientValue);
@@ -2691,6 +2759,7 @@ function applyPickedColor(hex) {
     if (bswatch) bswatch.style.background = hex;
     const bv = document.getElementById('builderView');
     if (bv && bv.classList.contains('visible')) {
+      pushBuilderHistory();
       renderBuilderPreview();
     } else {
       refreshPreview(_popupActiveCompId);
@@ -2728,6 +2797,7 @@ function applyPickedColorValue(value) {
     
     const bv = document.getElementById('builderView');
     if (bv && bv.classList.contains('visible')) {
+      pushBuilderHistory();
       renderBuilderPreview();
     } else {
       refreshPreview(_popupActiveCompId);
