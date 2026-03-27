@@ -31,10 +31,10 @@ var COMPONENTS = [
             <table border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td class="hide-sm" style="padding: 0 8px;">
-                  <a href="https://www.iotmart.com/s/campaigns?language=en_US" mc:edit="header_link1" style="font-size: 12px; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="headerLinkColor">DEALS &amp; OFFERS</a>
+                  <a href="https://www.iotmart.com/s/campaigns?language=en_US" mc:edit="header_link1" style="font-size: 12px; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="headerLinkColor">DEALS &amp; OFFERS</a>
                 </td>
                 <td style="padding: 0 8px;">
-                  <a href="mailto:Service.iotmart@advantech.com" mc:edit="header_link2" style="font-size: 12px; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="headerLinkColor">CONTACT US</a>
+                  <a href="mailto:Service.iotmart@advantech.com" mc:edit="header_link2" style="font-size: 12px; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="headerLinkColor">CONTACT US</a>
                 </td>
               </tr>
             </table>
@@ -65,15 +65,15 @@ var COMPONENTS = [
     <td width="600" colspan="3" align="center" valign="middle" class="hero-v1-td"
         style="width: 600px; padding: 48px 40px 32px 40px;" data-color="bannerBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="hero_eyebrow"
-         style="margin: 0 0 8px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 4px; text-transform: uppercase;" data-color="bannerEyebrow">
+         style="margin: 0 0 8px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 4px; text-transform: uppercase;" data-color="bannerEyebrow">
         Exclusive Offer 2026
       </p>` : ''}
       <h1 mc:edit="hero_title" class="hero-v1-title"
-          style="margin: 0 0 14px 0; font-size: 46px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="bannerTitle">
+          style="margin: 0 0 14px 0; font-size: 46px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="bannerTitle">
         Industrial IoT<br/>Sale Is On
       </h1>
       ${opts.showSubtitle !== false ? `<p mc:edit="hero_subtitle"
-         style="margin: 0; font-size: 16px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="bannerSubtitle">
+         style="margin: 0; font-size: 16px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="bannerSubtitle">
         Top-rated IIoT hardware <strong data-color="bannerStrong">up to 50% OFF</strong> \u2014 72 hours only
       </p>` : ''}
     </td>
@@ -83,7 +83,7 @@ var COMPONENTS = [
     <td width="240" align="center" valign="middle" class="banner-cta-cell"
         style="width: 240px; padding: 18px 24px;" data-color="bannerCtaBg">
       <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="hero_cta"
-         style="font-size: 16px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="bannerCtaText">
+         style="font-size: 16px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="bannerCtaText">
         Shop Now &rarr;
       </a>
     </td>
@@ -121,26 +121,26 @@ var COMPONENTS = [
     <td width="300" align="left" valign="middle" class="bv2-hero-td"
         style="width: 300px; padding: 40px 28px;" data-color="banner2Bg">
       ${opts.showEyebrow !== false ? `<p mc:edit="hero_eyebrow"
-         style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 4px; text-transform: uppercase;" data-color="banner2Eyebrow">
+         style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 4px; text-transform: uppercase;" data-color="banner2Eyebrow">
         Exclusive Offer 2026
       </p>` : ''}
       <h1 mc:edit="hero_title" class="bv2-hero-title"
-          style="margin: 0 0 14px 0; font-size: 34px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="banner2Title">
+          style="margin: 0 0 14px 0; font-size: 34px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="banner2Title">
         Industrial IoT<br/>Sale Is On
       </h1>
       ${opts.showBanner2Sub !== false ? `<p mc:edit="hero_subtitle2" class="bv2-subtitle2"
-         style="margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.25;" data-color="banner2Sub">
+         style="margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="banner2Sub">
         Your Subtitle Here
       </p>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="hero_subtitle"
-         style="margin: 0 0 24px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="banner2Subtitle">
+         style="margin: 0 0 24px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2Subtitle">
         Top-rated IIoT hardware <strong data-color="banner2Strong">up to 50% OFF</strong> \u2014 72 hours only
       </p>` : ''}
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding: 12px 24px;" data-color="banner2CtaBg">
             <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="hero_cta"
-               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="banner2CtaText">
+               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2CtaText">
               Shop Now &rarr;
             </a>
           </td>
@@ -190,14 +190,14 @@ var COMPONENTS = [
                  style="display: block; width: 48px; height: 48px; border: 0;" />
           </td>
           <td align="center" valign="middle">
-            <p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="countdownText">
+            <p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="countdownText">
               ⏰ &nbsp;Offer Ends:
               <strong style="font-size: 15px;" data-color="countdownAccent">2026 / 03 / 07 &nbsp;23:59</strong>
               &nbsp;— Don't Miss Out!
             </p>
           </td>
         </tr>
-      </table>` : `<p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="countdownText">
+      </table>` : `<p mc:edit="countdown_text" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="countdownText">
         ⏰ &nbsp;Offer Ends:
         <strong style="font-size: 15px;" data-color="countdownAccent">2026 / 03 / 07 &nbsp;23:59</strong>
         &nbsp;— Don't Miss Out!
@@ -227,13 +227,13 @@ var COMPONENTS = [
   <tr>
     <td width="600" align="${opts.textAlign || 'center'}" valign="top"
         style="width: 600px; padding: 36px 30px 10px 30px; text-align: ${opts.textAlign || 'center'};" data-color="sectionBg">
-      ${opts.showEyebrow !== false ? `<p mc:edit="section_eyebrow" style="margin: 0 0 4px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="sectionEyebrow">
+      ${opts.showEyebrow !== false ? `<p mc:edit="section_eyebrow" style="margin: 0 0 4px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="sectionEyebrow">
         Featured Products
       </p>` : ''}
-      ${opts.showTitle !== false ? `<h2 mc:edit="section_title" style="margin: 0 0 6px 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="sectionTitle">
+      ${opts.showTitle !== false ? `<h2 mc:edit="section_title" style="margin: 0 0 6px 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="sectionTitle">
         Top Industrial IoT Hardware Picks
       </h2>` : ''}
-      ${opts.showSubtitle !== false ? `<p mc:edit="section_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="sectionSubtitle">
+      ${opts.showSubtitle !== false ? `<p mc:edit="section_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="sectionSubtitle">
         Editor's selection — must-have IIoT devices for your smart factory
       </p>` : ''}
     </td>
@@ -255,12 +255,16 @@ var COMPONENTS = [
     optionMap: [
       { key: 'rowCount', label: 'Rows', type: 'select', default: '2', choices: [{label: '1', value: '1'}, {label: '2', value: '2'}] },
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
+      { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '14', choices: [{label: 'S', value: '12'}, {label: 'M', value: '14'}, {label: 'L', value: '16'}] },
+      { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '12', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}] },
       { key: 'showBadges', label: 'Show Badges', type: 'boolean', default: true },
       { key: 'showOrigPrice', label: 'Show Original Price', type: 'boolean', default: true }
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 147 : 180;
       const cropRatio = opts.imgRatio === '9:16' ? '16:9' : '1:1';
+      const titleSize = opts.titleFontSize || '14';
+      const bodySize = opts.bodyFontSize || '12';
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <!-- Row 1: Products 1 & 2 -->
   <tr>
@@ -282,21 +286,21 @@ var COMPONENTS = [
                 <td width="261" align="center" class="card-body" style="width: 261px; padding: 16px 12px 12px 12px;">
                   ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                     <tr>
-                      <td data-color="prodBadgeBg" style="padding: 3px 8px; line-height: 1;">
-                        <span mc:edit="product1_badge1" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
+                      <td data-color="prodBadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                        <span mc:edit="product1_badge1" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
                       </td>
                       <td width="6" style="width: 6px;"></td>
-                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; line-height: 1;" data-border-color="prodBadgeBorder">
-                        <span mc:edit="product1_badge2" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
+                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prodBadgeBorder">
+                        <span mc:edit="product1_badge2" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
                       </td>
                     </tr>
                   </table>` : ''}
-                  <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodName">AIR-030-B90A1</p>
-                  <p mc:edit="product1_desc" style="margin: 0 0 10px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
+                  <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-030-B90A1</p>
+                  <p mc:edit="product1_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
-                      <td style="padding-right: 8px;"><span mc:edit="product1_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodPrice">$299</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
+                      <td style="padding-right: 8px;"><span mc:edit="product1_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$299</span></td>
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -304,7 +308,7 @@ var COMPONENTS = [
               <tr>
                 <td width="261" align="center" class="card-cta" style="width: 261px; padding: 14px 0;" data-color="prodCtaBg">
                   <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product1_cta"
-                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodCtaText">
+                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodCtaText">
                     <span data-color="prodCtaText">Shop Now &rarr;</span>
                   </a>
                 </td>
@@ -326,21 +330,21 @@ var COMPONENTS = [
                 <td width="261" align="center" class="card-body" style="width: 261px; padding: 16px 12px 12px 12px;">
                   ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                     <tr>
-                      <td data-color="prodBadgeBg" style="padding: 3px 8px; line-height: 1;">
-                        <span mc:edit="product2_badge1" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
+                      <td data-color="prodBadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                        <span mc:edit="product2_badge1" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
                       </td>
                       <td width="6" style="width: 6px;"></td>
-                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; line-height: 1;" data-border-color="prodBadgeBorder">
-                        <span mc:edit="product2_badge2" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
+                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prodBadgeBorder">
+                        <span mc:edit="product2_badge2" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
                       </td>
                     </tr>
                   </table>` : ''}
-                  <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodName">AIR-030-S30A1</p>
-                  <p mc:edit="product2_desc" style="margin: 0 0 10px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
+                  <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-030-S30A1</p>
+                  <p mc:edit="product2_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
-                      <td style="padding-right: 8px;"><span mc:edit="product2_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodPrice">$420</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
+                      <td style="padding-right: 8px;"><span mc:edit="product2_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$420</span></td>
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -348,7 +352,7 @@ var COMPONENTS = [
               <tr>
                 <td width="261" align="center" class="card-cta" style="width: 261px; padding: 14px 0;" data-color="prodCtaBg">
                   <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product2_cta"
-                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodCtaText">
+                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodCtaText">
                     <span data-color="prodCtaText">Shop Now &rarr;</span>
                   </a>
                 </td>
@@ -379,21 +383,21 @@ var COMPONENTS = [
                 <td width="261" align="center" class="card-body" style="width: 261px; padding: 16px 12px 12px 12px;">
                   ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                     <tr>
-                      <td data-color="prodBadgeBg" style="padding: 3px 8px; line-height: 1;">
-                        <span mc:edit="product3_badge1" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
+                      <td data-color="prodBadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                        <span mc:edit="product3_badge1" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
                       </td>
                       <td width="6" style="width: 6px;"></td>
-                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; line-height: 1;" data-border-color="prodBadgeBorder">
-                        <span mc:edit="product3_badge2" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
+                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prodBadgeBorder">
+                        <span mc:edit="product3_badge2" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
                       </td>
                     </tr>
                   </table>` : ''}
-                  <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodName">AIR-020X-S9A1</p>
-                  <p mc:edit="product3_desc" style="margin: 0 0 10px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodDesc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
+                  <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">AIR-020X-S9A1</p>
+                  <p mc:edit="product3_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
-                      <td style="padding-right: 8px;"><span mc:edit="product3_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodPrice">$359</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
+                      <td style="padding-right: 8px;"><span mc:edit="product3_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$359</span></td>
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -401,7 +405,7 @@ var COMPONENTS = [
               <tr>
                 <td width="261" align="center" class="card-cta" style="width: 261px; padding: 14px 0;" data-color="prodCtaBg">
                   <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product3_cta"
-                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodCtaText">
+                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodCtaText">
                     <span data-color="prodCtaText">Shop Now &rarr;</span>
                   </a>
                 </td>
@@ -423,21 +427,21 @@ var COMPONENTS = [
                 <td width="261" align="center" class="card-body" style="width: 261px; padding: 16px 12px 12px 12px;">
                   ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                     <tr>
-                      <td data-color="prodBadgeBg" style="padding: 3px 8px; line-height: 1;">
-                        <span mc:edit="product4_badge1" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
+                      <td data-color="prodBadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                        <span mc:edit="product4_badge1" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prodBadgeText">SALE</span>
                       </td>
                       <td width="6" style="width: 6px;"></td>
-                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; line-height: 1;" data-border-color="prodBadgeBorder">
-                        <span mc:edit="product4_badge2" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
+                      <td data-color="prodBadge2Bg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prodBadgeBorder">
+                        <span mc:edit="product4_badge2" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prodBadge2Text">10% OFF</span>
                       </td>
                     </tr>
                   </table>` : ''}
-                  <p mc:edit="product4_name" style="margin: 0 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodName">ARK-1124C-S1A3</p>
-                  <p mc:edit="product4_desc" style="margin: 0 0 10px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodDesc">Intel® Celeron™ Fanless Edge Computer System</p>
+                  <p mc:edit="product4_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodName">ARK-1124C-S1A3</p>
+                  <p mc:edit="product4_desc" style="margin: 0 0 10px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodDesc">Intel® Celeron™ Fanless Edge Computer System</p>
                   <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 12px;">
                     <tr>
-                      <td style="padding-right: 8px;"><span mc:edit="product4_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodPrice">$390</span></td>
-                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product4_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
+                      <td style="padding-right: 8px;"><span mc:edit="product4_price" style="font-size: 18px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="prodPrice">$390</span></td>
+                      ${opts.showOrigPrice !== false ? `<td><span mc:edit="product4_original_price" style="font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodOrigPrice"><s>$599</s></span></td>` : ''}
                     </tr>
                   </table>
                 </td>
@@ -445,7 +449,7 @@ var COMPONENTS = [
               <tr>
                 <td width="261" align="center" class="card-cta" style="width: 261px; padding: 14px 0;" data-color="prodCtaBg">
                   <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product4_cta"
-                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prodCtaText">
+                     style="display: block; font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prodCtaText">
                     <span data-color="prodCtaText">Shop Now &rarr;</span>
                   </a>
                 </td>
@@ -482,12 +486,16 @@ var COMPONENTS = [
     name: 'Product Grid — 3-Col',
     optionMap: [
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '1:1', choices: [{label: '1:1', value: '1:1'}, {label: '9:16', value: '9:16'}] },
+      { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '13', choices: [{label: 'S', value: '12'}, {label: 'M', value: '13'}, {label: 'L', value: '16'}] },
+      { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '10', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}] },
       { key: 'showBadges', label: 'Badges', default: true },
       { key: 'showOrigPrice', label: 'Original Price', default: true }
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 98 : 160;
       const cropRatio = opts.imgRatio === '9:16' ? '16:9' : '1:1';
+      const titleSize = opts.titleFontSize || '13';
+      const bodySize = opts.bodyFontSize || '10';
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
     <td width="600" align="center" valign="top"
@@ -503,26 +511,26 @@ var COMPONENTS = [
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                   <tr>
-                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                      <span mc:edit="product1_badge1" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
+                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                      <span mc:edit="product1_badge1" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
                     </td>
                     <td width="4" style="width: 4px;"></td>
-                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; line-height: 1;" data-border-color="prod2BadgeBorder">
-                      <span mc:edit="product1_badge2" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
+                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prod2BadgeBorder">
+                      <span mc:edit="product1_badge2" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
                     </td>
                   </tr>
                 </table>` : ''}
-                <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Name">AIR-020X-S9A1</p>
-                <p mc:edit="product1_desc" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Desc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
+                <p mc:edit="product1_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">AIR-020X-S9A1</p>
+                <p mc:edit="product1_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">NVIDIA® Jetson™ Xavier NX AI Inference System</p>
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
-                    <td style="padding-right: 6px;"><span mc:edit="product1_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Price">$359</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
+                    <td style="padding-right: 6px;"><span mc:edit="product1_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$359</span></td>
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product1_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
-                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product1_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
+                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product1_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
               </td></tr>
             </table>
           </td>
@@ -536,26 +544,26 @@ var COMPONENTS = [
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                   <tr>
-                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                      <span mc:edit="product2_badge1" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
+                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                      <span mc:edit="product2_badge1" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
                     </td>
                     <td width="4" style="width: 4px;"></td>
-                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; line-height: 1;" data-border-color="prod2BadgeBorder">
-                      <span mc:edit="product2_badge2" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
+                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prod2BadgeBorder">
+                      <span mc:edit="product2_badge2" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
                     </td>
                   </tr>
                 </table>` : ''}
-                <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Name">ARK-1124C-S1A3</p>
-                <p mc:edit="product2_desc" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Desc">Intel® Celeron™ Fanless Edge Computer System</p>
+                <p mc:edit="product2_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">ARK-1124C-S1A3</p>
+                <p mc:edit="product2_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">Intel® Celeron™ Fanless Edge Computer System</p>
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
-                    <td style="padding-right: 6px;"><span mc:edit="product2_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Price">$390</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
+                    <td style="padding-right: 6px;"><span mc:edit="product2_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$390</span></td>
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product2_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
-                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product2_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
+                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product2_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
               </td></tr>
             </table>
           </td>
@@ -569,26 +577,26 @@ var COMPONENTS = [
               <tr><td width="174" align="center" class="card-body" style="width: 174px; padding: 12px 8px 8px 8px;">
                 ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 8px;">
                   <tr>
-                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                      <span mc:edit="product3_badge1" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
+                    <td data-color="prod2BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                      <span mc:edit="product3_badge1" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="prod2BadgeText">SALE</span>
                     </td>
                     <td width="4" style="width: 4px;"></td>
-                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; line-height: 1;" data-border-color="prod2BadgeBorder">
-                      <span mc:edit="product3_badge2" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
+                    <td data-color="prod2Badge2Bg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;" data-border-color="prod2BadgeBorder">
+                      <span mc:edit="product3_badge2" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold;" data-color="prod2Badge2Text">10% OFF</span>
                     </td>
                   </tr>
                 </table>` : ''}
-                <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Name">AIR-030-B90A1</p>
-                <p mc:edit="product3_desc" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Desc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
+                <p mc:edit="product3_name" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Name">AIR-030-B90A1</p>
+                <p mc:edit="product3_desc" style="margin: 0 0 8px 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Desc">NVIDIA® Jetson AGX Orin™ AI Inference System</p>
                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 10px;">
                   <tr>
-                    <td style="padding-right: 6px;"><span mc:edit="product3_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2Price">$299</span></td>
-                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
+                    <td style="padding-right: 6px;"><span mc:edit="product3_price" style="font-size: 16px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2Price">$299</span></td>
+                    ${opts.showOrigPrice !== false ? `<td><span mc:edit="product3_original_price" style="font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2OrigPrice"><s>$599</s></span></td>` : ''}
                   </tr>
                 </table>
               </td></tr>
               <tr><td width="174" align="center" class="card-cta" style="width: 174px; padding: 12px 0;" data-color="prod2CtaBg">
-                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product3_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
+                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="product3_cta" style="display: block; font-size: 12px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="prod2CtaText"><span data-color="prod2CtaText">Shop Now &rarr;</span></a>
               </td></tr>
             </table>
           </td>
@@ -639,14 +647,14 @@ var COMPONENTS = [
     </td>
     <td width="300" align="left" valign="middle" class="its-col-text"
         style="padding: 16px 32px; width: 300px;" data-color="splitBg">
-      ${opts.showEyebrow !== false ? `<p mc:edit="split_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="splitEyebrow">Feature</p>` : ''}
-      ${opts.showTitle !== false ? `<h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>` : ''}
-      ${opts.showSubtitle !== false ? `<p mc:edit="split_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="splitSubtitle">Power up your smart factory this season</p>` : ''}
-      ${opts.showBody !== false ? `<p mc:edit="split_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="splitBody">Discover our curated range of IIoT utilities, accessories and connectivity solutions.</p>` : ''}
+      ${opts.showEyebrow !== false ? `<p mc:edit="split_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="splitEyebrow">Feature</p>` : ''}
+      ${opts.showTitle !== false ? `<h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>` : ''}
+      ${opts.showSubtitle !== false ? `<p mc:edit="split_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="splitSubtitle">Power up your smart factory this season</p>` : ''}
+      ${opts.showBody !== false ? `<p mc:edit="split_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="splitBody">Discover our curated range of IIoT utilities, accessories and connectivity solutions.</p>` : ''}
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding: 12px 28px;" data-color="splitCtaBg">
-            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="split_cta" style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="splitCtaText">Learn More &rarr;</a>
+            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="split_cta" style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="splitCtaText">Learn More &rarr;</a>
           </td>
         </tr>
       </table>` : ''}
@@ -685,14 +693,14 @@ var COMPONENTS = [
   <tr valign="middle">
     <td width="300" align="left" valign="middle" class="tis-col-text"
         style="padding: 16px 32px; width: 300px;" data-color="split2ContainerBg">
-      ${opts.showEyebrow !== false ? `<p mc:edit="split2_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="split2Eyebrow">Why IoTMart</p>` : ''}
-      ${opts.showTitle !== false ? `<h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>` : ''}
-      ${opts.showSubtitle !== false ? `<p mc:edit="split2_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="split2Subtitle">Your one-stop IIoT procurement platform</p>` : ''}
-      ${opts.showBody !== false ? `<p mc:edit="split2_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="split2Body">Access thousands of certified industrial products, expert support and fast global shipping \u2014 all in one place.</p>` : ''}
+      ${opts.showEyebrow !== false ? `<p mc:edit="split2_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="split2Eyebrow">Why IoTMart</p>` : ''}
+      ${opts.showTitle !== false ? `<h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>` : ''}
+      ${opts.showSubtitle !== false ? `<p mc:edit="split2_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="split2Subtitle">Your one-stop IIoT procurement platform</p>` : ''}
+      ${opts.showBody !== false ? `<p mc:edit="split2_body" style="margin: 0 0 22px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="split2Body">Access thousands of certified industrial products, expert support and fast global shipping \u2014 all in one place.</p>` : ''}
       ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <td style="padding: 12px 28px;" data-color="split2CtaBg">
-            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="split2_cta" style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="split2CtaText">Learn More &rarr;</a>
+            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="split2_cta" style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="split2CtaText">Learn More &rarr;</a>
           </td>
         </tr>
       </table>` : ''}
@@ -730,8 +738,8 @@ var COMPONENTS = [
        style="width: 600px;" data-color="couponBg">
   <tr>
     <td width="600" align="center" valign="middle" style="width: 600px; padding: 32px 30px;">
-      ${opts.showEyebrow !== false ? `<p mc:edit="coupon_eyebrow" style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="couponEyebrow">Exclusive Promo Code</p>` : ''}
-      <p mc:edit="coupon_headline" style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="couponHeadline">Save <span data-color="couponAccent">$50</span> on Your Order</p>
+      ${opts.showEyebrow !== false ? `<p mc:edit="coupon_eyebrow" style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="couponEyebrow">Exclusive Promo Code</p>` : ''}
+      <p mc:edit="coupon_headline" style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="couponHeadline">Save <span data-color="couponAccent">$50</span> on Your Order</p>
       <table border="0" cellpadding="0" cellspacing="0" align="center">
         <tr>
           <td align="center" style="padding: 10px 30px;" data-border-color="couponCodeBorder">
@@ -739,7 +747,7 @@ var COMPONENTS = [
           </td>
         </tr>
       </table>
-      ${opts.showTerms !== false ? `<p mc:edit="coupon_terms" style="margin: 12px 0 0 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="couponTerms">* Valid on orders over $300. Single use per account. Cannot be combined with other offers.</p>` : ''}
+      ${opts.showTerms !== false ? `<p mc:edit="coupon_terms" style="margin: 12px 0 0 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="couponTerms">* Valid on orders over $300. Single use per account. Cannot be combined with other offers.</p>` : ''}
     </td>
   </tr>
 </table>`,
@@ -773,35 +781,35 @@ var COMPONENTS = [
     ],
     getHtml: (opts = {}) => { const _cpat = { '1': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778546/pattern-1_size2_f3ypx1.png', '2': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778546/pattern-2_size2_bv6jn9.png', '3': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778546/pattern-3_size2_z4zkdp.png' }; const _cimg = _cpat[opts.pattern] || _cpat['1']; return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="cs-outer" style="width: 600px;" data-color="cpn1OuterBg">
   ${opts.showEyebrow !== false ? `<tr><td align="center" style="padding: 28px 20px 4px 20px;">
-    <p mc:edit="cpn1_eyebrow" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="cpn1Eyebrow">Limited Time Offer</p>
+    <p mc:edit="cpn1_eyebrow" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="cpn1Eyebrow">Limited Time Offer</p>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: ${opts.showEyebrow !== false ? '0' : '28px'} 20px 6px 20px;">
-    <h2 mc:edit="cpn1_title" style="margin: 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="cpn1Title">Exclusive Savings Await</h2>
+    <h2 mc:edit="cpn1_title" style="margin: 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="cpn1Title">Exclusive Savings Await</h2>
   </td></tr>
   <tr><td align="center" style="padding: 0 20px 20px 20px;">
-    <p mc:edit="cpn1_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="cpn1Subtitle">Save big on your next purchase with this special coupon</p>
+    <p mc:edit="cpn1_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="cpn1Subtitle">Save big on your next purchase with this special coupon</p>
   </td></tr>
   <tr><td align="center" style="padding: 0 20px 28px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="cs-card" style="width: 560px; border-collapse: collapse;">
       <tr>
         ${opts.showImage !== false ? `<td class="cs-img" width="200" valign="middle" align="center" style="width: 200px; height: 200px; background-image: url('${_cimg}'); background-size: cover; background-position: center; text-align: center;" data-color="cpn1ImgBg">
-          ${opts.showImgText !== false ? `<p mc:edit="cpn1_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4; color: #ffffff; text-align: center;">LIMITED TIME OFFER</p>
-          <p mc:edit="cpn1_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff; text-align: center;">$50 OFF</p>` : ''}
+          ${opts.showImgText !== false ? `<p mc:edit="cpn1_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; color: #ffffff; text-align: center;">LIMITED TIME OFFER</p>
+          <p mc:edit="cpn1_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff; text-align: center;">$50 OFF</p>` : ''}
         </td>` : ''}
         <td class="cs-text" width="${opts.showImage !== false ? '360' : '560'}" valign="top" style="width: ${opts.showImage !== false ? 360 : 560}px; background-color: #ffffff;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; border-collapse: collapse;">
             <tr><td align="left" class="cs-text-cell" style="padding: 20px 20px 16px 20px; background-color: #ffffff;">
-              <p mc:edit="cpn1_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4;" data-color="cpn1Headline">GET $50.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
+              <p mc:edit="cpn1_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="cpn1Headline">GET $50.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
             </td></tr>
             <tr><td style="padding: 0 20px; background-color: #ffffff;"><div style="border-bottom: 2px dashed #d0d0d0;"></div></td></tr>
             <tr><td align="left" class="cs-text-cell" style="padding: 16px 20px ${opts.showCta !== false ? '6px' : '20px'} 20px; background-color: #ffffff;">
-              <p mc:edit="cpn1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="cpn1Amount">$50.00</p>
-              ${opts.showValidity !== false ? `<p mc:edit="cpn1_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="cpn1Validity">Valid through 2026/7/31</p>` : ''}
+              <p mc:edit="cpn1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="cpn1Amount">$50.00</p>
+              ${opts.showValidity !== false ? `<p mc:edit="cpn1_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="cpn1Validity">Valid through 2026/7/31</p>` : ''}
             </td></tr>
             ${opts.showCta !== false ? `<tr><td align="right" class="cs-cta-cell" style="padding: 8px 20px 20px 20px; background-color: #ffffff;">
               <table border="0" cellpadding="0" cellspacing="0" align="right" class="cs-cta-table">
                 <tr><td align="center" style="padding: 10px 20px;" data-color="cpn1CtaBg">
-                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="cpn1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="cpn1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
                 </td></tr>
               </table>
             </td></tr>` : ''}
@@ -843,13 +851,13 @@ var COMPONENTS = [
     ],
     getHtml: (opts = {}) => { const _cpat = { '1': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778546/pattern-1_size1_br97mt.png', '2': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778546/pattern-2_size1_phrcnp.png', '3': 'https://res.cloudinary.com/dhj1ztoeu/image/upload/v1773778547/pattern-3_size1_nkmwch.png' }; const _cimg = _cpat[opts.pattern] || _cpat['1']; return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="cd-outer" style="width: 600px;" data-color="coupon2OuterBg">
   ${opts.showEyebrow !== false ? `<tr><td align="center" style="padding: 28px 20px 4px 20px;">
-    <p mc:edit="coupon_eyebrow" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase;" data-color="coupon2Eyebrow">Limited Time Offer</p>
+    <p mc:edit="coupon_eyebrow" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="coupon2Eyebrow">Limited Time Offer</p>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: ${opts.showEyebrow !== false ? '0' : '28px'} 20px 6px 20px;">
-    <h2 mc:edit="coupon_title" style="margin: 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="coupon2Title">Exclusive Savings Await</h2>
+    <h2 mc:edit="coupon_title" style="margin: 0; font-size: 24px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="coupon2Title">Exclusive Savings Await</h2>
   </td></tr>
   <tr><td align="center" style="padding: 0 20px 20px 20px;">
-    <p mc:edit="coupon_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="coupon2Subtitle">Save big on your next purchase with these special coupons</p>
+    <p mc:edit="coupon_subtitle" style="margin: 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Subtitle">Save big on your next purchase with these special coupons</p>
   </td></tr>
   <tr><td align="center" style="padding: 0 20px 28px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="cd-grid" style="width: 560px;">
@@ -858,11 +866,11 @@ var COMPONENTS = [
         <td class="cd-col" width="269" valign="top" align="center" style="width: 269px; vertical-align: top;">
           <table border="0" cellpadding="0" cellspacing="0" width="269" class="cd-card" style="width: 269px; border-collapse: collapse;">
             <tr><td align="center" valign="middle" class="cd-card-img" height="202" style="height: 202px;${opts.showImage !== false ? ` background-image: url('${_cimg}'); background-size: cover; background-position: center;` : ''}" data-color="coupon2Card1ImgBg">
-              ${opts.showImgText !== false ? `<p mc:edit="coupon1_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4; color: #ffffff;">LIMITED TIME OFFER</p>
-              <p mc:edit="coupon1_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff;">$50 OFF</p>` : ''}
+              ${opts.showImgText !== false ? `<p mc:edit="coupon1_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; color: #ffffff;">LIMITED TIME OFFER</p>
+              <p mc:edit="coupon1_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff;">$50 OFF</p>` : ''}
             </td></tr>
             <tr><td align="center" style="padding: 20px 20px 16px 20px; background-color: #ffffff;">
-              <p mc:edit="coupon1_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Headline">GET $50.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
+              <p mc:edit="coupon1_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="coupon2Headline">GET $50.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
             </td></tr>
             <tr><td style="padding: 0; height: 24px; font-size: 0; line-height: 0; background-color: #ffffff;">
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; border-collapse: collapse;">
@@ -874,13 +882,13 @@ var COMPONENTS = [
               </table>
             </td></tr>
             <tr><td style="padding: 16px 20px ${opts.showCta !== false ? '6px' : '20px'} 20px; background-color: #ffffff;">
-              <p mc:edit="coupon1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="coupon2Amount">$50.00</p>
-              ${opts.showValidity !== false ? `<p mc:edit="coupon1_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
+              <p mc:edit="coupon1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$50.00</p>
+              ${opts.showValidity !== false ? `<p mc:edit="coupon1_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
             </td></tr>
             ${opts.showCta !== false ? `<tr><td align="right" style="padding: 8px 20px 20px 20px; background-color: #ffffff;">
               <table border="0" cellpadding="0" cellspacing="0" align="right">
                 <tr><td align="center" style="padding: 10px 20px;" data-color="coupon2CtaBg">
-                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="coupon1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="coupon1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
                 </td></tr>
               </table>
             </td></tr>` : ''}
@@ -891,11 +899,11 @@ var COMPONENTS = [
         <td class="cd-col" width="269" valign="top" align="center" style="width: 269px; vertical-align: top;">
           <table border="0" cellpadding="0" cellspacing="0" width="269" class="cd-card" style="width: 269px; border-collapse: collapse;">
             <tr><td align="center" valign="middle" class="cd-card-img" height="202" style="height: 202px;${opts.showImage !== false ? ` background-image: url('${_cimg}'); background-size: cover; background-position: center;` : ''}" data-color="coupon2Card2ImgBg">
-              ${opts.showImgText !== false ? `<p mc:edit="coupon2_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4; color: #ffffff;">SPECIAL DEAL</p>
-              <p mc:edit="coupon2_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff;">$30 OFF</p>` : ''}
+              ${opts.showImgText !== false ? `<p mc:edit="coupon2_imgLabel" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; color: #ffffff;">SPECIAL DEAL</p>
+              <p mc:edit="coupon2_imgTitle" style="margin: 0; font-size: 48px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1; color: #ffffff;">$30 OFF</p>` : ''}
             </td></tr>
             <tr><td align="center" style="padding: 20px 20px 16px 20px; background-color: #ffffff;">
-              <p mc:edit="coupon2_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Headline">GET $30.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
+              <p mc:edit="coupon2_headline" style="margin: 0; font-size: 11px; font-weight: 400; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="coupon2Headline">GET $30.00 OFF YOUR NEXT FULL PRICE PURCHASE!</p>
             </td></tr>
             <tr><td style="padding: 0; height: 24px; font-size: 0; line-height: 0; background-color: #ffffff;">
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width: 100%; border-collapse: collapse;">
@@ -907,13 +915,13 @@ var COMPONENTS = [
               </table>
             </td></tr>
             <tr><td style="padding: 16px 20px ${opts.showCta !== false ? '6px' : '20px'} 20px; background-color: #ffffff;">
-              <p mc:edit="coupon2_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="coupon2Amount">$30.00</p>
-              ${opts.showValidity !== false ? `<p mc:edit="coupon2_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
+              <p mc:edit="coupon2_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$30.00</p>
+              ${opts.showValidity !== false ? `<p mc:edit="coupon2_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
             </td></tr>
             ${opts.showCta !== false ? `<tr><td align="right" style="padding: 8px 20px 20px 20px; background-color: #ffffff;">
               <table border="0" cellpadding="0" cellspacing="0" align="right">
                 <tr><td align="center" style="padding: 10px 20px;" data-color="coupon2CtaBg">
-                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="coupon2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="coupon2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none; white-space: nowrap; color: #ffffff;">Save Pass</a>
                 </td></tr>
               </table>
             </td></tr>` : ''}
@@ -947,7 +955,7 @@ var COMPONENTS = [
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="product-grid" style="width: 600px;" data-color="promo2OuterBg">
   ${opts.showEyebrow !== false ? `<tr><td align="center" style="padding: 28px 20px 16px 20px;">
-    <p mc:edit="promo_eyebrow" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="promo2Eyebrow">Exclusive Promo Codes</p>
+    <p mc:edit="promo_eyebrow" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="promo2Eyebrow">Exclusive Promo Codes</p>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: 0 20px 28px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="product-grid" style="width: 560px;">
@@ -955,10 +963,10 @@ var COMPONENTS = [
         <td class="col-2" width="269" valign="top" align="left" style="width: 269px; vertical-align: top;" data-border-color="promo2Color1Border">
           <table border="0" cellpadding="0" cellspacing="0" width="267" class="product-grid promo-card" style="width: 267px; border-collapse: collapse;">
             <tr><td align="center" style="padding: 10px 16px;" data-color="promo2Color1Bg">
-              <p mc:edit="promo1_tag" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; color: #ffffff;">New Customer Offer</p>
+              <p mc:edit="promo1_tag" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; color: #ffffff;">New Customer Offer</p>
             </td></tr>
             <tr><td align="center" style="padding: 16px;" data-color="promo2Color1BodyBg">
-              <p mc:edit="promo1_headline" style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: #ffffff;">Save <span data-color="promo2Color1Text">$50</span> on First Order</p>
+              <p mc:edit="promo1_headline" style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #ffffff;">Save <span data-color="promo2Color1Text">$50</span> on First Order</p>
               <table border="0" cellpadding="0" cellspacing="0" align="center">
                 <tr><td align="center" style="padding: 6px 14px;" data-border-color="promo2Color1Border">
                   <span mc:edit="promo1_code" style="font-size: 18px; font-weight: bold; font-family: 'Courier New', Courier, monospace; letter-spacing: 4px;" data-color="promo2Color1Text">NEW50</span>
@@ -968,7 +976,7 @@ var COMPONENTS = [
             <tr><td align="center" style="padding: 12px 16px;">
               <table border="0" cellpadding="0" cellspacing="0" align="center">
                 <tr><td align="center" style="padding: 8px 20px;" data-color="promo2Color1Bg">
-                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="promo1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: bold; text-decoration: none; color: #ffffff;">Shop Now</a>
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="promo1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 12px; font-weight: bold; text-decoration: none; color: #ffffff;">Shop Now</a>
                 </td></tr>
               </table>
             </td></tr>
@@ -978,10 +986,10 @@ var COMPONENTS = [
         <td class="col-2" width="269" valign="top" align="left" style="width: 269px; vertical-align: top;" data-border-color="promo2Color2Border">
           <table border="0" cellpadding="0" cellspacing="0" width="267" class="product-grid promo-card" style="width: 267px; border-collapse: collapse;">
             <tr><td align="center" style="padding: 10px 16px;" data-color="promo2Color2Bg">
-              <p mc:edit="promo2_tag" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; color: #ffffff;">Returning Member Deal</p>
+              <p mc:edit="promo2_tag" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; color: #ffffff;">Returning Member Deal</p>
             </td></tr>
             <tr><td align="center" style="padding: 16px;" data-color="promo2Color2BodyBg">
-              <p mc:edit="promo2_headline" style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: #ffffff;">Save <span data-color="promo2Color2Text">$30</span> on Next Order</p>
+              <p mc:edit="promo2_headline" style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #ffffff;">Save <span data-color="promo2Color2Text">$30</span> on Next Order</p>
               <table border="0" cellpadding="0" cellspacing="0" align="center">
                 <tr><td align="center" style="padding: 6px 14px;" data-border-color="promo2Color2Border">
                   <span mc:edit="promo2_code" style="font-size: 18px; font-weight: bold; font-family: 'Courier New', Courier, monospace; letter-spacing: 4px;" data-color="promo2Color2Text">BACK30</span>
@@ -991,7 +999,7 @@ var COMPONENTS = [
             <tr><td align="center" style="padding: 12px 16px;">
               <table border="0" cellpadding="0" cellspacing="0" align="center">
                 <tr><td align="center" style="padding: 8px 20px;" data-color="promo2Color2Bg">
-                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="promo2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: bold; text-decoration: none; color: #ffffff;">Shop Now</a>
+                  <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="promo2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 12px; font-weight: bold; text-decoration: none; color: #ffffff;">Shop Now</a>
                 </td></tr>
               </table>
             </td></tr>
@@ -1028,23 +1036,23 @@ var COMPONENTS = [
       <tr>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc1_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Multiple Payment" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
-          <p mc:edit="svc1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; text-align: center;" data-color="svcTitle">Multiple Payment</p>
-          ${opts.showDesc !== false ? `<p mc:edit="svc1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5; text-align: center;" data-color="svcDesc">Flexible options<br/>for every buyer</p>` : ''}
+          <p mc:edit="svc1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Multiple Payment</p>
+          ${opts.showDesc !== false ? `<p mc:edit="svc1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Flexible options<br/>for every buyer</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc2_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Dispatch in 24 Hrs" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
-          <p mc:edit="svc2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; text-align: center;" data-color="svcTitle">Dispatch in 24 Hrs</p>
-          ${opts.showDesc !== false ? `<p mc:edit="svc2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5; text-align: center;" data-color="svcDesc">Fast fulfilment<br/>on all orders</p>` : ''}
+          <p mc:edit="svc2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Dispatch in 24 Hrs</p>
+          ${opts.showDesc !== false ? `<p mc:edit="svc2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Fast fulfilment<br/>on all orders</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc3_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Cross-Border" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
-          <p mc:edit="svc3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; text-align: center;" data-color="svcTitle">Cross-Border</p>
-          ${opts.showDesc !== false ? `<p mc:edit="svc3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5; text-align: center;" data-color="svcDesc">Shipping to<br/>global destinations</p>` : ''}
+          <p mc:edit="svc3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Cross-Border</p>
+          ${opts.showDesc !== false ? `<p mc:edit="svc3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Shipping to<br/>global destinations</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc4_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="24/7 Support" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
-          <p mc:edit="svc4_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; text-align: center;" data-color="svcTitle">24/7 Online Support</p>
-          ${opts.showDesc !== false ? `<p mc:edit="svc4_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5; text-align: center;" data-color="svcDesc">Always here<br/>when you need us</p>` : ''}
+          <p mc:edit="svc4_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">24/7 Online Support</p>
+          ${opts.showDesc !== false ? `<p mc:edit="svc4_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Always here<br/>when you need us</p>` : ''}
         </td>
       </tr>
     </table>
@@ -1074,8 +1082,8 @@ var COMPONENTS = [
     <td width="600" align="center" valign="top" style="width: 600px; padding: 36px 20px;" data-color="actBg">
       ${opts.showEyebrow !== false ? `<table border="0" cellpadding="0" cellspacing="0" width="560" class="split-table" style="width: 560px;">
         <tr><td align="center" style="width: 560px; padding: 0 0 24px 0;" width="560">
-          <p mc:edit="other_eyebrow" style="margin: 0 0 4px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;" data-color="actEyebrow">More Promotions</p>
-          <p mc:edit="other_headline" style="margin: 0; font-size: 22px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actHeadline">Other Activities</p>
+          <p mc:edit="other_eyebrow" style="margin: 0 0 4px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;" data-color="actEyebrow">More Promotions</p>
+          <p mc:edit="other_headline" style="margin: 0; font-size: 22px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="actHeadline">Other Activities</p>
         </td></tr>
       </table>` : ''}
       <table border="0" cellpadding="0" cellspacing="0" width="560" class="activity-grid" style="width: 560px;">
@@ -1086,12 +1094,12 @@ var COMPONENTS = [
                 <img mc:edit="activity1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.52.32+1.png" width="174" alt="Campaign" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity1_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Campaign</p>
-                <p mc:edit="activity1_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actTitle">Edge AI System</p>
-                <p mc:edit="activity1_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.6;" data-color="actDesc">Get <strong>10% off</strong> on selected Edge AI Systems. Accelerate your AI at the edge deployment today.</p>
+                <p mc:edit="activity1_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Campaign</p>
+                <p mc:edit="activity1_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">Edge AI System</p>
+                <p mc:edit="activity1_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">Get <strong>10% off</strong> on selected Edge AI Systems. Accelerate your AI at the edge deployment today.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
                   <tr><td style="padding: 8px 16px;" data-color="actCtaBg">
-                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity1_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actCtaText">Shop Now &rarr;</a>
+                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity1_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actCtaText">Shop Now &rarr;</a>
                   </td></tr>
                 </table>` : ''}
               </td></tr>
@@ -1104,12 +1112,12 @@ var COMPONENTS = [
                 <img mc:edit="activity2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.53.07+1.png" width="174" alt="Cyber Sale" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity2_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Limited Time</p>
-                <p mc:edit="activity2_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actTitle">Cyber Sale</p>
-                <p mc:edit="activity2_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.6;" data-color="actDesc">Exclusive online deals on IoT gateways, sensors &amp; networking gear. Limited stock &mdash; don't miss out.</p>
+                <p mc:edit="activity2_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Limited Time</p>
+                <p mc:edit="activity2_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">Cyber Sale</p>
+                <p mc:edit="activity2_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">Exclusive online deals on IoT gateways, sensors &amp; networking gear. Limited stock &mdash; don't miss out.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
                   <tr><td style="padding: 8px 16px;" data-color="actCtaBg">
-                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity2_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actCtaText">Shop Now &rarr;</a>
+                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity2_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actCtaText">Shop Now &rarr;</a>
                   </td></tr>
                 </table>` : ''}
               </td></tr>
@@ -1122,12 +1130,12 @@ var COMPONENTS = [
                 <img mc:edit="activity3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.57.47+1.png" width="174" alt="AMAX Series" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity3_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">New Series</p>
-                <p mc:edit="activity3_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actTitle">AMAX Series</p>
-                <p mc:edit="activity3_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.6;" data-color="actDesc">High-performance IIoT computing platforms built for demanding industrial environments.</p>
+                <p mc:edit="activity3_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">New Series</p>
+                <p mc:edit="activity3_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">AMAX Series</p>
+                <p mc:edit="activity3_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">High-performance IIoT computing platforms built for demanding industrial environments.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
                   <tr><td style="padding: 8px 16px;" data-color="actCtaBg">
-                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity3_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="actCtaText">Learn More &rarr;</a>
+                    <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="activity3_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actCtaText">Learn More &rarr;</a>
                   </td></tr>
                 </table>` : ''}
               </td></tr>
@@ -1195,12 +1203,12 @@ var COMPONENTS = [
     </table>
   </td></tr>
   <tr><td align="center" style="padding: 0 30px 6px 30px;">
-    <p mc:edit="footer_email" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.6;">
+    <p mc:edit="footer_email" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;">
       <a href="mailto:Service.iotmart@advantech.com" style="text-decoration: none;" data-color="footerLink">Service.iotmart@advantech.com</a>
     </p>
   </td></tr>
   ${opts.showLegalLinks !== false ? `<tr><td align="center" style="padding: 4px 30px 8px 30px;">
-    <p mc:edit="footer_legal_links" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;">
+    <p mc:edit="footer_legal_links" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;">
       <a href="https://www.advantech.com/en/legal/privacy" style="text-decoration: none;" data-color="footerLink">Privacy Policy</a>
       &nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://www.iotmart.com/en-en/s/terms-conditions?language=en_US" style="text-decoration: none;" data-color="footerLink">Terms &amp; Conditions</a>
@@ -1209,7 +1217,7 @@ var COMPONENTS = [
     </p>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: 4px 30px 24px 30px;">
-    <p mc:edit="footer_copyright" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.8;" data-color="footerCopyright">Copyright &copy; 1983 - 2025 Advantech Co., Ltd.<br/>All Rights Reserved</p>
+    <p mc:edit="footer_copyright" style="margin: 0; font-size: 10px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="footerCopyright">Copyright &copy; 1983 - 2025 Advantech Co., Ltd.<br/>All Rights Reserved</p>
   </td></tr>
 </table>`;
     },
@@ -1242,39 +1250,39 @@ var COMPONENTS = [
           <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="160" alt="Free Shipping" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
-              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
-                <span mc:edit="col1_badge" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">NEW</span>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col1_badge" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">NEW</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col3Title">Free Shipping</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
+          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Title">Free Shipping</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="174" valign="top" align="center" style="width: 174px; vertical-align: top;">
           <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="160" alt="Sale" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
-              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
-                <span mc:edit="col2_badge" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">SALE</span>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col2_badge" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">SALE</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col3Title">Sale</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
+          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Title">Sale</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="173" valign="top" align="center" style="width: 173px; vertical-align: top;">
           <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="160" alt="ePoints" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
-              <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
-                <span mc:edit="col3_badge" style="font-size: 10px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">HOT</span>
+              <td data-color="col3BadgeBg" style="padding: 3px 8px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col3_badge" style="font-size: 10px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 1px;" data-color="col3BadgeText">HOT</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col3Title">ePoints</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col3Desc">Short description text goes here.</p>` : ''}
+          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '6px' : '12px'} 0 4px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Title">ePoints</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col3Desc">Short description text goes here.</p>` : ''}
         </td>
       </tr>
     </table>
@@ -1301,7 +1309,7 @@ var COMPONENTS = [
     <table border="0" cellpadding="0" cellspacing="0" align="center">
       <tr>
         <td align="center" style="padding: 12px 36px;" data-color="singleBtnCtaBg">
-          <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="single_btn_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="singleBtnCtaText">Button Text &rarr;</a>
+          <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="single_btn_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="singleBtnCtaText">Button Text &rarr;</a>
         </td>
       </tr>
     </table>
@@ -1329,7 +1337,7 @@ var COMPONENTS = [
           <table border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td align="center" style="padding: 12px 32px;" data-color="dualBtn1Bg">
-                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="dual_btn1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="dualBtn1Text"><span data-color="dualBtn1Text">Primary &rarr;</span></a>
+                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="dual_btn1_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="dualBtn1Text"><span data-color="dualBtn1Text">Primary &rarr;</span></a>
               </td>
             </tr>
           </table>
@@ -1339,7 +1347,7 @@ var COMPONENTS = [
           <table border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td align="center" style="padding: 10px 30px;" data-border-color="dualBtn2Border" data-color="dualBtn2Bg">
-                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="dual_btn2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="dualBtn2Text"><span data-color="dualBtn2Text">Secondary &rarr;</span></a>
+                <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="dual_btn2_cta" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 14px; font-weight: bold; text-decoration: none;" data-color="dualBtn2Text"><span data-color="dualBtn2Text">Secondary &rarr;</span></a>
               </td>
             </tr>
           </table>
@@ -1379,52 +1387,52 @@ var COMPONENTS = [
           <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="120" alt="Free Shipping" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
-              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                <span mc:edit="col1_badge" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">NEW</span>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col1_badge" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">NEW</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col4Title">Free Shipping</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
+          <p mc:edit="col1_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Title">Free Shipping</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="120" alt="Sale" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
-              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                <span mc:edit="col2_badge" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">SALE</span>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col2_badge" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">SALE</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col4Title">Sale</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
+          <p mc:edit="col2_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Title">Sale</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="120" alt="ePoints" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
-              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                <span mc:edit="col3_badge" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">HOT</span>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col3_badge" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">HOT</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col4Title">ePoints</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
+          <p mc:edit="col3_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Title">ePoints</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
           <img mc:edit="col4_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-009.png" width="120" alt="Add to Cart" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
-              <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
-                <span mc:edit="col4_badge" style="font-size: 9px; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">TOP</span>
+              <td data-color="col4BadgeBg" style="padding: 3px 6px; mso-line-height-rule: exactly; line-height: 1.3;">
+                <span mc:edit="col4_badge" style="font-size: 9px; mso-line-height-rule: exactly; line-height: 1; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-weight: bold; letter-spacing: 0.5px;" data-color="col4BadgeText">TOP</span>
               </td>
             </tr>
           </table>` : ''}
-          <p mc:edit="col4_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="col4Title">Add to Cart</p>
-          ${opts.showDesc !== false ? `<p mc:edit="col4_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="col4Desc">Description text here.</p>` : ''}
+          <p mc:edit="col4_title" style="margin: ${opts.showBadges !== false ? '5px' : '10px'} 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Title">Add to Cart</p>
+          ${opts.showDesc !== false ? `<p mc:edit="col4_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="col4Desc">Description text here.</p>` : ''}
         </td>
       </tr>
     </table>
@@ -1454,7 +1462,7 @@ var COMPONENTS = [
         <td class="btn3-col" align="center" valign="middle">
           <table border="0" cellpadding="0" cellspacing="0">
             <tr><td align="center" style="padding: 10px 28px;" data-color="btn3CtaBg">
-              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta1" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button One</span></a>
+              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta1" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button One</span></a>
             </td></tr>
           </table>
         </td>
@@ -1462,7 +1470,7 @@ var COMPONENTS = [
         <td class="btn3-col" align="center" valign="middle">
           <table border="0" cellpadding="0" cellspacing="0">
             <tr><td align="center" style="padding: 10px 28px;" data-color="btn3CtaBg">
-              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta2" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button Two</span></a>
+              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta2" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button Two</span></a>
             </td></tr>
           </table>
         </td>
@@ -1470,7 +1478,7 @@ var COMPONENTS = [
         <td class="btn3-col" align="center" valign="middle">
           <table border="0" cellpadding="0" cellspacing="0">
             <tr><td align="center" style="padding: 10px 28px;" data-color="btn3CtaBg">
-              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta3" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button Three</span></a>
+              <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="btn3_cta3" style="font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; font-size: 13px; font-weight: bold; text-decoration: none;" data-color="btn3CtaText"><span data-color="btn3CtaText">Button Three</span></a>
             </td></tr>
           </table>
         </td>` : ''}
@@ -1494,7 +1502,7 @@ var COMPONENTS = [
       { key: 'showImage', label: 'Image', default: false },
       { key: 'showCta', label: 'CTA Button', default: false },
       { key: 'bodyFontSize', label: 'Body Text Size', type: 'select', default: '14', choices: [
-        { label: 'Small', value: '12' }, { label: 'Medium', value: '14' }, { label: 'Large', value: '16' }
+        { label: 'S', value: '12' }, { label: 'M', value: '14' }, { label: 'L', value: '16' }
       ]}
     ],
     getHtml: (opts = {}) => {
@@ -1504,18 +1512,18 @@ var COMPONENTS = [
     <td width="150" align="left" valign="top" class="spot-label-td"
         style="width: 150px; padding: 28px 20px 28px 24px;" data-color="spotBg">
       <p mc:edit="spot_eyebrow"
-         style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="spotEyebrow">
+         style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="spotEyebrow">
         Spotlight
       </p>
       <h2 mc:edit="spot_title"
-          style="margin: 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.25;" data-color="spotTitle">
+          style="margin: 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="spotTitle">
         Featured Product Pick
       </h2>
     </td>
     <td width="450" align="left" valign="top" class="spot-body-td"
         style="width: 450px; padding: 28px 24px${(opts.showCta || opts.showImage) ? ' 20px' : ' 28px'} 24px; border-left: 1px solid #eeeeee;" data-color="spotBodyBg">
       <p mc:edit="spot_body"
-         style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 16px 0' : ''}; font-size: ${bodyFontSize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="spotBody">
+         style="margin: 0${(opts.showImage || opts.showCta) ? ' 0 16px 0' : ''}; font-size: ${bodyFontSize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="spotBody">
         Discover our top pick this season &#8212; the <strong style="font-weight: 700;">ADAM-6700 Series Intelligent I/O Gateway</strong>. Designed for smart factory and edge computing applications, it features built-in Node-RED for rapid logic deployment, OPC UA &amp; MQTT support, and a rugged industrial-grade enclosure.<br><br>
         Ideal for production line monitoring, energy management, and predictive maintenance. With IoTMart&#8217;s global fast delivery, you can get started in days, not weeks.
       </p>
@@ -1525,7 +1533,7 @@ var COMPONENTS = [
         <tr>
           <td style="padding: 10px 24px;" data-color="spotCtaBg">
             <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="spot_cta"
-               style="font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="spotCtaText">
+               style="font-size: 13px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="spotCtaText">
               View Product &rarr;
             </a>
           </td>
@@ -1563,7 +1571,7 @@ var COMPONENTS = [
     <td align="center" valign="top" class="pcards-outer-td" bgcolor="#e8ecef"
         style="padding: 28px;" data-color="pcardsBg">
       <p mc:edit="pcards_eyebrow" align="center"
-         style="margin: 0 0 20px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; text-align: center;" data-color="pcardsEyebrow">
+         style="margin: 0 0 20px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; text-align: center;" data-color="pcardsEyebrow">
         PRODUCT PICKS
       </p>
       <table border="0" cellpadding="0" cellspacing="0" width="544" class="pcards-grid" style="width: 544px;">
@@ -1579,7 +1587,7 @@ var COMPONENTS = [
                           style="width: 6px; font-size: 0; line-height: 0;"></td>
                       <td style="padding: 2px 0 2px 10px;">
                         <h3 mc:edit="pcard1_title"
-                            style="margin: 0; font-size: 18px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.25;" data-color="pcardsTitle">
+                            style="margin: 0; font-size: 18px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="pcardsTitle">
                           ADAM-6700 Series
                         </h3>
                       </td>
@@ -1593,7 +1601,7 @@ var COMPONENTS = [
                    style="display: block; width: 226px; height: 136px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 18px 14px 18px;">
                 <p mc:edit="pcard1_body"
-                   style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsBody">
+                   style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsBody">
                   Intelligent I/O gateway with built-in Node-RED for rapid edge logic deployment and OPC UA / MQTT connectivity.
                 </p>
               </td></tr>
@@ -1602,7 +1610,7 @@ var COMPONENTS = [
                   <tr>
                     <td style="padding: 7px 18px;" data-color="pcardsCtaBg">
                       <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="pcard1_cta"
-                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="pcardsCtaText">
+                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsCtaText">
                         Shop Now &rarr;
                       </a>
                     </td>
@@ -1623,7 +1631,7 @@ var COMPONENTS = [
                           style="width: 6px; font-size: 0; line-height: 0;"></td>
                       <td style="padding: 2px 0 2px 10px;">
                         <h3 mc:edit="pcard2_title"
-                            style="margin: 0; font-size: 18px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.25;" data-color="pcardsTitle">
+                            style="margin: 0; font-size: 18px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="pcardsTitle">
                           EKI-6333AC Series
                         </h3>
                       </td>
@@ -1637,7 +1645,7 @@ var COMPONENTS = [
                    style="display: block; width: 226px; height: 136px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 18px 14px 18px;">
                 <p mc:edit="pcard2_body"
-                   style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsBody">
+                   style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsBody">
                   Industrial-grade Wi-Fi access point with seamless roaming, ideal for AGV and mobile robot applications in smart warehouses.
                 </p>
               </td></tr>
@@ -1646,7 +1654,7 @@ var COMPONENTS = [
                   <tr>
                     <td style="padding: 7px 18px;" data-color="pcardsCtaBg">
                       <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="pcard2_cta"
-                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="pcardsCtaText">
+                         style="font-size: 12px; font-weight: 700; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="pcardsCtaText">
                         Shop Now &rarr;
                       </a>
                     </td>
@@ -1683,7 +1691,7 @@ var COMPONENTS = [
         { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
       ]},
       { key: 'bodyFontSize', label: 'Body Text Size', type: 'select', default: '13', choices: [
-        { label: 'Small', value: '12' }, { label: 'Medium', value: '14' }, { label: 'Large', value: '16' }
+        { label: 'S', value: '12' }, { label: 'M', value: '14' }, { label: 'L', value: '16' }
       ]}
     ],
     getHtml: (opts = {}) => {
@@ -1702,8 +1710,8 @@ var COMPONENTS = [
       for (var i = 0; i < count; i++) {
         var s = defaultSpecs[i];
         var isLast = (i === count - 1);
-        specsHtml += '<p mc:edit="showcase_num' + (i+1) + '"\n               style="margin: 0 0 6px 0; font-size: 24px; font-weight: 300; font-family: Arial, sans-serif; line-height: 1;" data-color="showcaseNumber">\n              ' + s.num + '\n            </p>\n';
-        specsHtml += '<p mc:edit="showcase_label' + (i+1) + '"\n               style="margin: 0' + (isLast ? '' : ' 0 20px 0') + '; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 0.5px;" data-color="showcaseSpecLabel">\n              ' + s.label + '\n            </p>\n';
+        specsHtml += '<p mc:edit="showcase_num' + (i+1) + '"\n               style="margin: 0 0 6px 0; font-size: 24px; font-weight: 300; font-family: Arial, \'Malgun Gothic\', \'Apple SD Gothic Neo\', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="showcaseNumber">\n              ' + s.num + '\n            </p>\n';
+        specsHtml += '<p mc:edit="showcase_label' + (i+1) + '"\n               style="margin: 0' + (isLast ? '' : ' 0 20px 0') + '; font-size: 11px; font-family: Arial, \'Malgun Gothic\', \'Apple SD Gothic Neo\', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="showcaseSpecLabel">\n              ' + s.label + '\n            </p>\n';
       }
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table" style="width: 600px;">
   <tr>
@@ -1718,15 +1726,15 @@ var COMPONENTS = [
           <td width="382" align="left" valign="top" class="showcase-body-td" bgcolor="#ffffff"
               style="width: 382px; padding: 22px 20px;" data-color="showcaseBodyBg">
             <p mc:edit="showcase_eyebrow"
-               style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="showcaseEyebrow">
+               style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="showcaseEyebrow">
               PRODUCT CATALOG
             </p>
             <h2 mc:edit="showcase_title"
-                style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.25;" data-color="showcaseTitle">
+                style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="showcaseTitle">
               Industrial IoT Solutions:<br/>Edge-to-Cloud Ready Hardware
             </h2>
             <p mc:edit="showcase_body"
-               style="margin: 0; font-size: ${bodyFontSize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.5;" data-color="showcaseBody">
+               style="margin: 0; font-size: ${bodyFontSize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="showcaseBody">
               Explore our curated catalog of industrial-grade IoT hardware. From intelligent gateways and edge AI platforms to wireless connectivity modules, every product is selected for reliability, interoperability, and rapid deployment.<br><br>
               <strong style="font-weight: 700;">Why choose IoTMart?</strong><br>
               &bull;&nbsp;<strong style="font-weight: 700;">Direct Shipping:</strong> Factory-to-door delivery across 40+ countries with real-time tracking.<br>
@@ -1778,24 +1786,24 @@ var COMPONENTS = [
 
         if (qType === 'radio' && optArr.length) {
           optArr.forEach((opt, idx) => {
-            fieldHtml += `<tr><td style="padding: 6px 0;"><label style="font-size: 13px; color: #07071a; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; cursor: pointer; display: block;"><input type="radio" name="q${i}" value="${opt.replace(/"/g, '&quot;')}" style="margin-right: 10px; accent-color: #0059ff; vertical-align: middle;" />${opt}</label></td></tr>`;
+            fieldHtml += `<tr><td style="padding: 6px 0;"><label style="font-size: 13px; color: #07071a; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; cursor: pointer; display: block;"><input type="radio" name="q${i}" value="${opt.replace(/"/g, '&quot;')}" style="margin-right: 10px; accent-color: #0059ff; vertical-align: middle;" />${opt}</label></td></tr>`;
           });
         } else if (qType === 'checkbox' && optArr.length) {
           optArr.forEach((opt, idx) => {
-            fieldHtml += `<tr><td style="padding: 6px 0;"><label style="font-size: 13px; color: #07071a; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; cursor: pointer; display: block;"><input type="checkbox" name="q${i}_${idx + 1}" value="${opt.replace(/"/g, '&quot;')}" style="margin-right: 10px; accent-color: #0059ff; vertical-align: middle;" />${opt}</label></td></tr>`;
+            fieldHtml += `<tr><td style="padding: 6px 0;"><label style="font-size: 13px; color: #07071a; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; cursor: pointer; display: block;"><input type="checkbox" name="q${i}_${idx + 1}" value="${opt.replace(/"/g, '&quot;')}" style="margin-right: 10px; accent-color: #0059ff; vertical-align: middle;" />${opt}</label></td></tr>`;
           });
         } else if (qType === 'dropdown' && optArr.length) {
           let selectOptions = '';
           optArr.forEach(opt => {
             selectOptions += `<option value="${opt.replace(/"/g, '&quot;')}">${opt}</option>`;
           });
-          fieldHtml += `<tr><td style="padding: 4px 0;"><select name="q${i}" style="width: 100%; padding: 10px 12px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box;"><option value="">Select...</option>${selectOptions}</select></td></tr>`;
+          fieldHtml += `<tr><td style="padding: 4px 0;"><select name="q${i}" style="width: 100%; padding: 10px 12px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box;"><option value="">Select...</option>${selectOptions}</select></td></tr>`;
         } else if (qType === 'text') {
           const phText = opts['q' + i + 'Placeholder'] || 'Type your answer...';
-          fieldHtml += `<tr><td style="padding: 4px 0;"><input type="text" name="q${i}" placeholder="${phText.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px 14px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box;" /></td></tr>`;
+          fieldHtml += `<tr><td style="padding: 4px 0;"><input type="text" name="q${i}" placeholder="${phText.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px 14px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box;" /></td></tr>`;
         } else if (qType === 'textarea') {
           const phArea = opts['q' + i + 'Placeholder'] || 'Type your answer...';
-          fieldHtml += `<tr><td style="padding: 4px 0;"><textarea name="q${i}" placeholder="${phArea.replace(/"/g, '&quot;')}" rows="3" style="width: 100%; padding: 12px 14px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box; resize: vertical;"></textarea></td></tr>`;
+          fieldHtml += `<tr><td style="padding: 4px 0;"><textarea name="q${i}" placeholder="${phArea.replace(/"/g, '&quot;')}" rows="3" style="width: 100%; padding: 12px 14px; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; border: 1px solid #d0d5dd; border-radius: 0; background: #fff; color: #07071a; box-sizing: border-box; resize: vertical;"></textarea></td></tr>`;
         } else if (qType === 'star') {
           fieldHtml += `<tr><td style="padding: 8px 0;"><table border="0" cellpadding="0" cellspacing="0"><tr>`;
           for (let s = 1; s <= 5; s++) {
@@ -1809,7 +1817,7 @@ var COMPONENTS = [
         <tr><td align="center" style="padding: ${i === 1 ? '24px' : '0'} 20px 12px 20px;">
           <table border="0" cellpadding="0" cellspacing="0" width="560" class="survey-card" style="width: 560px; max-width: 560px; background-color: #ffffff;" data-color="surveyCardBg">
             <tr><td align="left" style="padding: 20px 24px;">
-              <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: #07071a;" data-color="surveyQuestion">Q${i}. ${qLabel}</p>
+              <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #07071a;" data-color="surveyQuestion">Q${i}. ${qLabel}</p>
               <table border="0" cellpadding="0" cellspacing="0" width="100%">${fieldHtml}</table>
             </td></tr>
           </table>
@@ -1830,8 +1838,8 @@ var COMPONENTS = [
 <!--[if mso]>
 <table border="0" cellpadding="0" cellspacing="0" width="600" align="center" style="width:600px; background-color:#f5f7fa;" data-color="surveyOuterBg">
   <tr><td align="center" style="padding: 28px 20px 16px 20px;">
-    <p style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase; color:#0059ff;" data-color="surveyEyebrow">${eyebrowText}</p>
-    <p style="margin: 0; font-size: 22px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3; color:#07071a;" data-color="surveyTitle">${edmTitle}</p>
+    <p style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; color:#0059ff;" data-color="surveyEyebrow">${eyebrowText}</p>
+    <p style="margin: 0; font-size: 22px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2; color:#07071a;" data-color="surveyTitle">${edmTitle}</p>
   </td></tr>
   <tr><td align="center" style="padding: 16px 20px 28px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" align="center" style="width:560px; background-color:#ffffff;" data-color="surveyCardBg">
@@ -1852,20 +1860,20 @@ var COMPONENTS = [
 
 <table border="0" cellpadding="0" cellspacing="0" width="600" class="survey-outer" style="width: 600px; max-width: 600px;" data-color="surveyOuterBg">
   <tr><td align="center" style="padding: 28px 20px 16px 20px;" class="survey-pad">
-    <p style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="surveyEyebrow">${eyebrowText}</p>
-    <p style="margin: 0; font-size: 22px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.3;" data-color="surveyTitle">${edmTitle}</p>
+    <p style="margin: 0 0 6px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase;" data-color="surveyEyebrow">${eyebrowText}</p>
+    <p style="margin: 0; font-size: 22px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="surveyTitle">${edmTitle}</p>
   </td></tr>
 </table>
 ${questionBlocks}
 <table border="0" cellpadding="0" cellspacing="0" width="600" class="survey-outer" style="width: 600px; max-width: 600px;" data-color="surveyOuterBg">
   <tr><td align="center" style="padding: 16px 20px 28px 20px;">
-    <button type="submit" style="padding: 12px 40px; background-color: #0059ff; color: #ffffff; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; border: none; cursor: pointer;">${submitText} →</button>
+    <button type="submit" style="padding: 12px 40px; background-color: #0059ff; color: #ffffff; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; border: none; cursor: pointer;">${submitText} →</button>
   </td></tr>
 </table>
 </form>
 <table border="0" cellpadding="0" cellspacing="0" width="600" class="survey-outer" style="width: 600px; max-width: 600px; border-top: 1px solid #e0e6f0;" data-color="surveyOuterBg">
   <tr><td align="center" style="padding: 12px 20px;">
-    <p style="margin: 0; font-size: 12px; color: #999999; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;">Can't submit? <a href="${cloudPageUrl}" style="color: #0059ff; text-decoration: underline;">Click here</a></p>
+    <p style="margin: 0; font-size: 12px; color: #999999; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;">Can't submit? <a href="${cloudPageUrl}" style="color: #0059ff; text-decoration: underline;">Click here</a></p>
   </td></tr>
 </table>
 <!--<![endif]-->`;
@@ -1885,9 +1893,14 @@ ${questionBlocks}
     num: '16',
     name: 'Icon Grid — 2×2',
     optionMap: [
-      { key: 'showDesc', label: 'Description', default: true }
+      { key: 'showDesc', label: 'Description', default: true },
+      { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '14', choices: [{label: 'S', value: '12'}, {label: 'M', value: '14'}, {label: 'L', value: '16'}] },
+      { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '12', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}], optionGate: 'showDesc' }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const titleSize = opts.titleFontSize || '14';
+      const bodySize = opts.bodyFontSize || '12';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr><td align="center" style="padding: 16px 20px;" data-color="grid2x2Bg">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-2x2" style="width: 560px;">
       <!-- Row 1 -->
@@ -1899,8 +1912,8 @@ ${questionBlocks}
                 <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 1" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
-                <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid2x2ItemTitle">Feature One</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item1_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature One</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item1_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -1913,8 +1926,8 @@ ${questionBlocks}
                 <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 2" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
-                <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid2x2ItemTitle">Feature Two</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item2_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Two</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item2_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -1929,8 +1942,8 @@ ${questionBlocks}
                 <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 3" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
-                <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid2x2ItemTitle">Feature Three</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item3_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Three</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item3_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -1943,8 +1956,8 @@ ${questionBlocks}
                 <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 4" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
-                <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid2x2ItemTitle">Feature Four</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item4_desc" style="margin: 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Four</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item4_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -1952,7 +1965,8 @@ ${questionBlocks}
       </tr>
     </table>
   </td></tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Background', key: 'grid2x2Bg', type: 'bg', default: '#ffffff' },
       { label: 'Item Title', key: 'grid2x2ItemTitle', type: 'color', default: '#1a1a2e' },
@@ -1966,12 +1980,16 @@ ${questionBlocks}
     num: '17',
     name: 'Icon Grid — 3-Col',
     optionMap: [
-      { key: 'showDesc', label: 'Description', default: true }
+      { key: 'showDesc', label: 'Description', default: true },
+      { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '13', choices: [{label: 'S', value: '12'}, {label: 'M', value: '13'}, {label: 'L', value: '16'}] },
+      { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '10', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}], optionGate: 'showDesc' }
     ],
     getHtml: (opts = {}) => {
       const vAlign = opts.showDesc !== false ? 'top' : 'middle';
       const iconPadding = opts.showDesc !== false ? 'padding-top: 2px;' : '';
       const titleMargin = opts.showDesc !== false ? 'margin: 0 0 4px 0;' : 'margin: 0;';
+      const titleSize = opts.titleFontSize || '13';
+      const bodySize = opts.bodyFontSize || '10';
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr><td align="center" style="padding: 20px;" data-color="grid3colBg">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-3col" style="width: 560px;">
@@ -1983,8 +2001,8 @@ ${questionBlocks}
                 <img mc:edit="grid3col_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 1" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item1_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid3colItemTitle">Feature One</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                <p mc:edit="grid3col_item1_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature One</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item1_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -1997,8 +2015,8 @@ ${questionBlocks}
                 <img mc:edit="grid3col_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 2" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item2_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid3colItemTitle">Feature Two</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                <p mc:edit="grid3col_item2_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature Two</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item2_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
           </table>
@@ -2011,8 +2029,8 @@ ${questionBlocks}
                 <img mc:edit="grid3col_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 3" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item3_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;" data-color="grid3colItemTitle">Feature Three</p>
-                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                <p mc:edit="grid3col_item3_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature Three</p>
+                ${opts.showDesc !== false ? `<p mc:edit="grid3col_item3_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
           </table>
