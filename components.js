@@ -1958,46 +1958,50 @@ ${questionBlocks}
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const vAlign = opts.showDesc !== false ? 'top' : 'middle';
+      const iconPadding = opts.showDesc !== false ? 'padding-top: 2px;' : '';
+      const titleMargin = opts.showDesc !== false ? 'margin: 0 0 4px 0;' : 'margin: 0;';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr><td align="center" style="padding: 20px;" data-color="grid3colBg">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="grid-3col" style="width: 560px;">
-      <tr valign="top">
-        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 5px 0 0;">
+      <tr valign="${vAlign}">
+        <td class="col-3" width="173" valign="${vAlign}" style="width: 173px; padding: 0 5px 0 0;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+              <td width="48" align="center" valign="${vAlign}" style="width: 48px; ${iconPadding}">
                 <img mc:edit="grid3col_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 1" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
-              <td align="left" valign="top" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature One</p>
+              <td align="left" valign="${vAlign}" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item1_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature One</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item1_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
           </table>
         </td>
         <td width="20" style="width: 20px;">&nbsp;</td>
-        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 5px;">
+        <td class="col-3" width="173" valign="${vAlign}" style="width: 173px; padding: 0 5px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+              <td width="48" align="center" valign="${vAlign}" style="width: 48px; ${iconPadding}">
                 <img mc:edit="grid3col_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 2" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
-              <td align="left" valign="top" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Two</p>
+              <td align="left" valign="${vAlign}" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item2_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Two</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item2_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
           </table>
         </td>
         <td width="20" style="width: 20px;">&nbsp;</td>
-        <td class="col-3" width="173" valign="top" style="width: 173px; padding: 0 0 0 5px;">
+        <td class="col-3" width="173" valign="${vAlign}" style="width: 173px; padding: 0 0 0 5px;">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
-              <td width="48" align="center" valign="top" style="width: 48px; padding-top: 2px;">
+              <td width="48" align="center" valign="${vAlign}" style="width: 48px; ${iconPadding}">
                 <img mc:edit="grid3col_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="48" height="48" alt="Icon 3" data-crop="1:1" style="display: block; width: 48px; height: 48px;" />
               </td>
-              <td align="left" valign="top" style="padding-left: 10px;">
-                <p mc:edit="grid3col_item3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Three</p>
+              <td align="left" valign="${vAlign}" style="padding-left: 10px;">
+                <p mc:edit="grid3col_item3_title" style="${titleMargin} font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid3colItemTitle">Feature Three</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item3_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
               </td>
             </tr>
@@ -2006,7 +2010,8 @@ ${questionBlocks}
       </tr>
     </table>
   </td></tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Background', key: 'grid3colBg', type: 'bg', default: '#ffffff' },
       { label: 'Item Title', key: 'grid3colItemTitle', type: 'color', default: '#1a1a2e' },
