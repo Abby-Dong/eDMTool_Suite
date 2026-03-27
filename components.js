@@ -260,7 +260,7 @@ var COMPONENTS = [
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 147 : 180;
-      const cropRatio = opts.imgRatio === '9:16' ? '9:16' : '1:1';
+      const cropRatio = opts.imgRatio === '9:16' ? '16:9' : '1:1';
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <!-- Row 1: Products 1 & 2 -->
   <tr>
@@ -487,7 +487,7 @@ var COMPONENTS = [
     ],
     getHtml: (opts = {}) => {
       const imgH = opts.imgRatio === '9:16' ? 98 : 160;
-      const cropRatio = opts.imgRatio === '9:16' ? '9:16' : '1:1';
+      const cropRatio = opts.imgRatio === '9:16' ? '16:9' : '1:1';
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
     <td width="600" align="center" valign="top"
@@ -618,20 +618,23 @@ var COMPONENTS = [
   // ─── 11 Image Text Split ───
   {
     id: 'image-text-split',
-    num: '11',
-    name: 'Image | Text Split',
+    num: '12',
+    name: 'Text + Image — Left',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '9:16', value: '9:16'}, {label: '1:1', value: '1:1'}, {label: 'Free', value: 'free'}] },
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
       { key: 'showBody', label: 'Body Text', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="its-split-table" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const cropRatio = opts.imgRatio || 'free';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="its-split-table" style="width: 600px;">
   <tr valign="middle">
     <td width="300" align="center" valign="middle" class="its-col-img" style="padding: 0; width: 300px;" data-color="splitImgBg">
       <img mc:edit="split_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png"
-           width="300" alt="Industrial Utilities" class="its-img" data-crop="free"
+           width="300" alt="Industrial Utilities" class="its-img" data-crop="${cropRatio}"
            style="display: block; width: 300px; max-width: 100%; height: auto;" />
     </td>
     <td width="300" align="left" valign="middle" class="its-col-text"
@@ -649,7 +652,8 @@ var COMPONENTS = [
       </table>` : ''}
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Text Area BG', key: 'splitBg', type: 'bg', default: '#ffffff' },
       { label: 'Image BG', key: 'splitImgBg', type: 'bg', default: '#f0f0f0' },
@@ -665,16 +669,19 @@ var COMPONENTS = [
   // ─── 12 Text Image Split ───
   {
     id: 'text-image-split',
-    num: '12',
-    name: 'Text | Image Split',
+    num: '13',
+    name: 'Text + Image — Right',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '9:16', value: '9:16'}, {label: '1:1', value: '1:1'}, {label: 'Free', value: 'free'}] },
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
       { key: 'showTitle', label: 'Title', default: true },
       { key: 'showSubtitle', label: 'Subtitle', default: true },
       { key: 'showBody', label: 'Body Text', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="tis-split-table" style="width: 600px;">
+    getHtml: (opts = {}) => {
+      const cropRatio = opts.imgRatio || 'free';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="tis-split-table" style="width: 600px;">
   <tr valign="middle">
     <td width="300" align="left" valign="middle" class="tis-col-text"
         style="padding: 16px 32px; width: 300px;" data-color="split2ContainerBg">
@@ -692,11 +699,12 @@ var COMPONENTS = [
     </td>
     <td width="300" align="center" valign="middle" class="tis-col-img" style="padding: 0; width: 300px;" data-color="split2ImgBg">
       <img mc:edit="split2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.21.23.png"
-           width="300" alt="IoTMart Platform" class="tis-img" data-crop="free"
+           width="300" alt="IoTMart Platform" class="tis-img" data-crop="${cropRatio}"
            style="display: block; width: 300px; max-width: 100%; height: auto;" />
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Text Area BG', key: 'split2ContainerBg', type: 'bg', default: '#eef1f6' },
       { label: 'Image BG', key: 'split2ImgBg', type: 'bg', default: '#f0f0f0' },
@@ -712,7 +720,7 @@ var COMPONENTS = [
   // ─── 17 Promo Code Single ───
   {
     id: 'coupon-v1',
-    num: '19',
+    num: '21',
     name: 'Promo Code — Single',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
@@ -749,7 +757,7 @@ var COMPONENTS = [
   // ─── 15 Coupon Single ───
   {
     id: 'coupon-single',
-    num: '17',
+    num: '19',
     name: 'Coupon — Single',
     optionMap: [
       { key: 'showImage', label: 'Image', default: true },
@@ -819,7 +827,7 @@ var COMPONENTS = [
   // ─── 16 Coupon v2 ───
   {
     id: 'coupon-v2',
-    num: '18',
+    num: '20',
     name: 'Coupon — Dual',
     optionMap: [
       { key: 'showImage', label: 'Image', default: true },
@@ -932,7 +940,7 @@ var COMPONENTS = [
   // ─── 18 Promo Code Dual ───
   {
     id: 'promo-code-dual',
-    num: '20',
+    num: '22',
     name: 'Promo Code — Dual',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow', default: true }
@@ -1010,8 +1018,8 @@ var COMPONENTS = [
   // ─── 19 Service Benefits ───
   {
     id: 'service-benefits',
-    num: '21',
-    name: 'Service Benefits — 4-Col',
+    num: '18',
+    name: 'Icon + Text — 4-Col',
     optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
        style="width: 600px;" data-color="svcBg">
@@ -1019,22 +1027,22 @@ var COMPONENTS = [
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="service-grid" style="width: 560px;">
       <tr>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
-          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Multiple Payment" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
+          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc1_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Multiple Payment" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif; text-align: center;" data-color="svcTitle">Multiple Payment</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc1_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5; text-align: center;" data-color="svcDesc">Flexible options<br/>for every buyer</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
-          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Dispatch in 24 Hrs" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
+          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc2_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Dispatch in 24 Hrs" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif; text-align: center;" data-color="svcTitle">Dispatch in 24 Hrs</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc2_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5; text-align: center;" data-color="svcDesc">Fast fulfilment<br/>on all orders</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
-          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Cross-Border" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
+          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc3_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Cross-Border" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif; text-align: center;" data-color="svcTitle">Cross-Border</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc3_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5; text-align: center;" data-color="svcDesc">Shipping to<br/>global destinations</p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
-          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="24/7 Support" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
+          <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc4_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="24/7 Support" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc4_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif; text-align: center;" data-color="svcTitle">24/7 Online Support</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc4_desc" style="margin: 0; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.5; text-align: center;" data-color="svcDesc">Always here<br/>when you need us</p>` : ''}
         </td>
@@ -1052,11 +1060,14 @@ var COMPONENTS = [
   // ─── 20 Other Activities ───
   {
     id: 'other-activities',
-    num: '22',
-    name: 'Other Activities — 3-Col Cards',
+    num: '10',
+    name: 'Content Block — 3-Col',
     optionMap: [
       { key: 'showEyebrow', label: 'Eyebrow + Headline', default: true },
-      { key: 'showCta', label: 'CTA Buttons', default: true }
+      { key: 'showCta', label: 'CTA Buttons', default: true },
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [
+        { label: '16:9', value: '16:9' }, { label: '1:1', value: '1:1' }, { label: 'Free', value: 'free' }
+      ]}
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
@@ -1072,7 +1083,7 @@ var COMPONENTS = [
           <td align="left" valign="top" class="col-3" style="width: 180px; padding: 0 4px 0 0;" width="180">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="activity-card" style="width: 176px; border: 1px solid #e0e6f0;" data-color="actCardBg">
               <tr><td align="center" class="card-img" style="width: 176px; padding: 0; font-size: 0; line-height: 0;" width="176">
-                <img mc:edit="activity1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.52.32+1.png" width="174" alt="Campaign" class="mobile-img" data-crop="free" style="display: block; width: 174px; height: auto;" />
+                <img mc:edit="activity1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.52.32+1.png" width="174" alt="Campaign" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
                 <p mc:edit="activity1_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Campaign</p>
@@ -1090,7 +1101,7 @@ var COMPONENTS = [
           <td align="left" valign="top" class="col-3" style="width: 180px; padding: 0 2px;" width="180">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="activity-card" style="width: 176px; border: 1px solid #e0e6f0;" data-color="actCardBg">
               <tr><td align="center" class="card-img" style="width: 176px; padding: 0; font-size: 0; line-height: 0;" width="176">
-                <img mc:edit="activity2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.53.07+1.png" width="174" alt="Cyber Sale" class="mobile-img" data-crop="free" style="display: block; width: 174px; height: auto;" />
+                <img mc:edit="activity2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.53.07+1.png" width="174" alt="Cyber Sale" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
                 <p mc:edit="activity2_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Limited Time</p>
@@ -1108,7 +1119,7 @@ var COMPONENTS = [
           <td align="left" valign="top" class="col-3" style="width: 180px; padding: 0 0 0 4px;" width="180">
             <table border="0" cellpadding="0" cellspacing="0" width="176" class="activity-card" style="width: 176px; border: 1px solid #e0e6f0;" data-color="actCardBg">
               <tr><td align="center" class="card-img" style="width: 176px; padding: 0; font-size: 0; line-height: 0;" width="176">
-                <img mc:edit="activity3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.57.47+1.png" width="174" alt="AMAX Series" class="mobile-img" data-crop="free" style="display: block; width: 174px; height: auto;" />
+                <img mc:edit="activity3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.57.47+1.png" width="174" alt="AMAX Series" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
                 <p mc:edit="activity3_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">New Series</p>
@@ -1213,19 +1224,22 @@ var COMPONENTS = [
   // ─── 13 Three Col Image Text ───
   {
     id: 'three-col-image-text',
-    num: '13',
-    name: '3-Col Image + Text',
+    num: '14',
+    name: 'Feature Cards — 3-Col',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}, {label: 'Free', value: 'free'}] },
       { key: 'showBadges', label: 'Badges', default: true },
       { key: 'showDesc', label: 'Description', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
+    getHtml: (opts = {}) => {
+      const cropRatio = opts.imgRatio || 'free';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
        style="width: 600px;" data-color="col3Bg">
   <tr><td align="center" style="padding: 32px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="three-col" style="width: 560px;">
       <tr>
         <td class="col-3" width="173" valign="top" align="center" style="width: 173px; vertical-align: top;">
-          <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="160" alt="Free Shipping" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="160" alt="Free Shipping" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
               <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
@@ -1238,7 +1252,7 @@ var COMPONENTS = [
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="174" valign="top" align="center" style="width: 174px; vertical-align: top;">
-          <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="160" alt="Sale" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="160" alt="Sale" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
               <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
@@ -1251,7 +1265,7 @@ var COMPONENTS = [
         </td>
         <td class="col-gap-3" width="20" style="width: 20px;">&nbsp;</td>
         <td class="col-3" width="173" valign="top" align="center" style="width: 173px; vertical-align: top;">
-          <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="160" alt="ePoints" class="col-img" data-crop="free" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="160" alt="ePoints" class="col-img" data-crop="${cropRatio}" style="display: block; width: 160px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 10px;">
             <tr>
               <td data-color="col3BadgeBg" style="padding: 3px 8px; line-height: 1;">
@@ -1265,7 +1279,8 @@ var COMPONENTS = [
       </tr>
     </table>
   </td></tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Background', key: 'col3Bg', type: 'bg', default: '#ffffff' },
       { label: 'Badge BG', key: 'col3BadgeBg', type: 'bg', default: '#F39800', optionGate: 'showBadges' },
@@ -1346,19 +1361,22 @@ var COMPONENTS = [
   // ─── 14 Four Col Image Text ───
   {
     id: 'four-col-image-text',
-    num: '14',
-    name: '4-Col Image + Text',
+    num: '15',
+    name: 'Feature Cards — 4-Col',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}, {label: 'Free', value: 'free'}] },
       { key: 'showBadges', label: 'Badges', default: true },
       { key: 'showDesc', label: 'Description', default: true }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
+    getHtml: (opts = {}) => {
+      const cropRatio = opts.imgRatio || 'free';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container"
        style="width: 600px;" data-color="col4Bg">
   <tr><td align="center" style="padding: 32px 20px;">
     <table border="0" cellpadding="0" cellspacing="0" width="560" class="four-col" style="width: 560px;">
       <tr>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
-          <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="120" alt="Free Shipping" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-004.png" width="120" alt="Free Shipping" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
               <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
@@ -1371,7 +1389,7 @@ var COMPONENTS = [
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
-          <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="120" alt="Sale" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-011.png" width="120" alt="Sale" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
               <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
@@ -1384,7 +1402,7 @@ var COMPONENTS = [
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
-          <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="120" alt="ePoints" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-010.png" width="120" alt="ePoints" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
               <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
@@ -1397,7 +1415,7 @@ var COMPONENTS = [
         </td>
         <td class="col-gap-4" width="12" style="width: 12px;">&nbsp;</td>
         <td class="col-4" width="128" valign="top" align="center" style="width: 128px; vertical-align: top;">
-          <img mc:edit="col4_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-009.png" width="120" alt="Add to Cart" class="col4-img" data-crop="free" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
+          <img mc:edit="col4_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/membership-009.png" width="120" alt="Add to Cart" class="col4-img" data-crop="${cropRatio}" style="display: block; width: 120px; height: auto; margin: 0 auto;" />
           ${opts.showBadges !== false ? `<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 8px;">
             <tr>
               <td data-color="col4BadgeBg" style="padding: 3px 6px; line-height: 1;">
@@ -1411,7 +1429,8 @@ var COMPONENTS = [
       </tr>
     </table>
   </td></tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Background', key: 'col4Bg', type: 'bg', default: '#ffffff' },
       { label: 'Badge BG', key: 'col4BadgeBg', type: 'bg', default: '#F39800', optionGate: 'showBadges' },
@@ -1470,7 +1489,7 @@ var COMPONENTS = [
   {
     id: 'product-spotlight',
     num: '08',
-    name: 'Product Spotlight',
+    name: 'Content Block — Spotlight',
     optionMap: [
       { key: 'showImage', label: 'Image', default: false },
       { key: 'showCta', label: 'CTA Button', default: false }
@@ -1525,12 +1544,15 @@ var COMPONENTS = [
   {
     id: 'product-cards',
     num: '09',
-    name: 'Product Cards',
+    name: 'Content Block — 2-Col',
     optionMap: [
+      { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: '16:9', choices: [{label: '1:1', value: '1:1'}, {label: '16:9', value: '16:9'}] },
       { key: 'showImages', label: 'Images', default: false },
       { key: 'showCta', label: 'CTA Button', default: false }
     ],
-    getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="cards-table" style="width: 600px; border-collapse: collapse; border-spacing: 0;">
+    getHtml: (opts = {}) => {
+      const cropRatio = opts.imgRatio || '16:9';
+      return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="cards-table" style="width: 600px; border-collapse: collapse; border-spacing: 0;">
   <tr>
     <td align="center" valign="top" class="pcards-outer-td" bgcolor="#e8ecef"
         style="padding: 28px;" data-color="pcardsBg">
@@ -1561,7 +1583,7 @@ var COMPONENTS = [
               </tr>
               ${opts.showImages ? `<tr><td align="center" style="padding: 0 18px 14px 18px; font-size: 0; line-height: 0; overflow: hidden;"><img mc:edit="pcard1_image"
                    src="https://res.cloudinary.com/dhj1ztoeu/image/upload/f_auto,q_auto/v1773385887/eDM/assets/hv6vwlzex66kdhlolq0o.jpg"
-                   width="226" height="136" alt="Product 1" class="pcard-img" data-crop="226:136"
+                   width="226" height="136" alt="Product 1" class="pcard-img" data-crop="${cropRatio}"
                    style="display: block; width: 226px; height: 136px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 18px 14px 18px;">
                 <p mc:edit="pcard1_body"
@@ -1605,7 +1627,7 @@ var COMPONENTS = [
               </tr>
               ${opts.showImages ? `<tr><td align="center" style="padding: 0 18px 14px 18px; font-size: 0; line-height: 0; overflow: hidden;"><img mc:edit="pcard2_image"
                    src="https://res.cloudinary.com/dhj1ztoeu/image/upload/f_auto,q_auto/v1773385887/eDM/assets/hv6vwlzex66kdhlolq0o.jpg"
-                   width="226" height="136" alt="Product 2" class="pcard-img" data-crop="226:136"
+                   width="226" height="136" alt="Product 2" class="pcard-img" data-crop="${cropRatio}"
                    style="display: block; width: 226px; height: 136px; max-width: 100%; object-fit: cover;" /></td></tr>` : ''}
               <tr><td style="padding: 0 18px 14px 18px;">
                 <p mc:edit="pcard2_body"
@@ -1631,7 +1653,8 @@ var COMPONENTS = [
       </table>
     </td>
   </tr>
-</table>`,
+</table>`;
+    },
     colorMap: [
       { label: 'Section BG',  key: 'pcardsBg',       type: 'bg',    default: '#e8ecef' },
       { label: 'Eyebrow',     key: 'pcardsEyebrow',  type: 'color', default: '#0059ff' },
@@ -1647,8 +1670,8 @@ var COMPONENTS = [
   // ─── 10 Product Showcase ───
   {
     id: 'product-showcase',
-    num: '10',
-    name: 'Product Showcase',
+    num: '11',
+    name: 'Content Block — Stats',
     optionMap: [
       { key: 'specCount', label: 'Spec Count', type: 'select', default: '3', choices: [
         { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
@@ -1849,8 +1872,8 @@ ${questionBlocks}
   // ─── 26 2x2 Image Text Grid ───
   {
     id: 'grid-2x2-image-text',
-    num: '15',
-    name: '2×2 Image + Text Grid',
+    num: '16',
+    name: 'Icon + Text — 2×2 Grid',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
@@ -1863,7 +1886,7 @@ ${questionBlocks}
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td width="64" align="center" valign="middle" style="width: 64px;">
-                <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 1" data-crop="free" style="display: block; width: 64px; height: 64px;" />
+                <img mc:edit="grid2x2_img1" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 1" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature One</p>
@@ -1877,7 +1900,7 @@ ${questionBlocks}
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td width="64" align="center" valign="middle" style="width: 64px;">
-                <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 2" data-crop="free" style="display: block; width: 64px; height: 64px;" />
+                <img mc:edit="grid2x2_img2" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 2" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Two</p>
@@ -1893,7 +1916,7 @@ ${questionBlocks}
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td width="64" align="center" valign="middle" style="width: 64px;">
-                <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 3" data-crop="free" style="display: block; width: 64px; height: 64px;" />
+                <img mc:edit="grid2x2_img3" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 3" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Three</p>
@@ -1907,7 +1930,7 @@ ${questionBlocks}
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td width="64" align="center" valign="middle" style="width: 64px;">
-                <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 4" data-crop="free" style="display: block; width: 64px; height: 64px;" />
+                <img mc:edit="grid2x2_img4" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="64" alt="Icon 4" data-crop="1:1" style="display: block; width: 64px; height: 64px;" />
               </td>
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700; font-family: Arial, sans-serif;" data-color="grid2x2ItemTitle">Feature Four</p>
@@ -1930,8 +1953,8 @@ ${questionBlocks}
   // ─── 27 3-Col Image Text Grid ───
   {
     id: 'grid-3col-image-text',
-    num: '16',
-    name: '3-Col Image + Text',
+    num: '17',
+    name: 'Icon + Text — 3-Col',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true }
     ],
