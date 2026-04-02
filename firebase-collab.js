@@ -724,7 +724,10 @@
   async function renameProject(id, newName) {
     if (!ready()) return;
     try {
-      await db().collection(COLLECTION).doc(id).update({ name: newName });
+      await db().collection(COLLECTION).doc(id).update({ 
+        name: newName,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
     } catch (e) { console.error('[Collab] rename error', e); }
   }
 

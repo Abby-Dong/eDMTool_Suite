@@ -1205,8 +1205,8 @@ var COMPONENTS = [
     </table>
   </td></tr>
   <tr><td align="center" style="padding: 0 30px 6px 30px;">
-    <p mc:edit="footer_email" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;">
-      <a href="mailto:Service.iotmart@advantech.com" style="text-decoration: none;" data-color="footerLink">Service.iotmart@advantech.com</a>
+    <p mc:edit="footer_unsubscribe" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #888888;">
+      To unsubscribe, click <a alias="external_link_unsubscribe_unsubscribe" conversion="false" data-linkto="other" href="%%unsub_center_url%%" style="text-decoration: underline;" data-color="footerLink" title="">here</a>
     </p>
   </td></tr>
   ${opts.showLegalLinks !== false ? `<tr><td align="center" style="padding: 4px 30px 8px 30px;">
