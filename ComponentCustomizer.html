@@ -2920,7 +2920,12 @@ function buildComponentEditMap(comp) {
       map.push({ key: kb+'__src', mc, type: 'img', default: el.getAttribute('src')||'' });
       map.push({ key: kb+'__alt', mc, type: 'alt', default: el.getAttribute('alt')||'' });
     } else if (tag === 'a') {
-      map.push({ key: kb+'__html', mc, type: 'html', default: el.innerHTML.trim() });
+      // Only add __html entry if the <a> does NOT contain nested mc:edit elements
+      // (e.g., an <img> inside the link with its own mc:edit should be handled separately)
+      const hasNestedMcEdit = el.querySelector('[mc\\:edit]');
+      if (!hasNestedMcEdit) {
+        map.push({ key: kb+'__html', mc, type: 'html', default: el.innerHTML.trim() });
+      }
       map.push({ key: kb+'__href', mc, type: 'link', default: el.getAttribute('href')||'' });
       map.push({ key: kb+'__alias', mc, type: 'alias', default: el.getAttribute('alias')||'' });
       map.push({ key: kb+'__title', mc, type: 'title', default: el.getAttribute('title')||'' });
@@ -2950,6 +2955,8 @@ function applyEdits(wrapper, comp, overrideEdits) {
     const val = edits[e.key];
     if (val === undefined) return;
     wrapper.querySelectorAll('[mc\\:edit="'+e.mc+'"]').forEach(el => {
+      // Skip __html for <a> elements that contain nested mc:edit (handled separately)
+      if (e.type === 'html' && el.tagName.toLowerCase() === 'a' && el.querySelector('[mc\\:edit]')) return;
       if (e.type === 'html') el.innerHTML = val
         .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
         .replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '')
@@ -2978,6 +2985,8 @@ function applyEdits(wrapper, comp, overrideEdits) {
       const mc = rest.slice(0, lastUnderscore);
       const type = rest.slice(lastUnderscore + 2);
       wrapper.querySelectorAll('[mc\\:edit="'+mc+'"]').forEach(el => {
+        // Skip __html for <a> elements that contain nested mc:edit (handled separately)
+        if (type === 'html' && el.tagName.toLowerCase() === 'a' && el.querySelector('[mc\\:edit]')) return;
         if (type === 'html') el.innerHTML = val
           .replace(/<div><br\s*\/?><\/div>/gi, '<br>')
           .replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '')
