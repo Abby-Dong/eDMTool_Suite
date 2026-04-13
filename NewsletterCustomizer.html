@@ -1911,6 +1911,7 @@ var COMPONENTS = [
     num: '06',
     name: 'Feature(Orange)',
     optionMap: [
+      { key: 'showEyebrow', label: 'Eyebrow', default: false },
       { key: 'showCta',  label: 'CTA Button',  default: false },
       { key: 'imgLeft',  label: 'Image Left',  default: false, exclusiveGroup: 'imgPos' },
       { key: 'imgRight', label: 'Image Right', default: false, exclusiveGroup: 'imgPos' }
@@ -1924,6 +1925,10 @@ var COMPONENTS = [
            style="display: block; width: 300px; max-width: 100%; height: auto;" /></td>` : ''}
     <td width="${hasImg ? '450' : '750'}" valign="middle" class="feature-body-td" bgcolor="#ffffff"
         style="width: ${hasImg ? '450' : '750'}px; padding: 32px; direction: ltr;" data-color="featureBodyBg">
+      ${opts.showEyebrow ? `<p mc:edit="feature_eyebrow"
+         style="margin: 0 0 12px 0; font-size: 11px; font-family: Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;" data-color="featureEyebrow">
+        Lorem Ipsum
+      </p>` : ''}
       <h2 mc:edit="feature_title"
           style="margin: 0 0 12px 0; font-size: 26px; font-weight: 900; font-family: Arial, sans-serif; line-height: 1.25;" data-color="featureTitle">
         Lorem Ipsum Dolor:<br/>Sit Amet Consectetur Adipiscing
@@ -1957,6 +1962,7 @@ var COMPONENTS = [
 </table>`; },
     colorMap: [
       { label: 'Body Area BG', key: 'featureBodyBg',   type: 'bg',    default: '#ffffff' },
+      { label: 'Eyebrow',      key: 'featureEyebrow', type: 'color', default: '#F39800', optionGate: 'showEyebrow' },
       { label: 'Title',        key: 'featureTitle',    type: 'color', default: '#0c0c0c' },
       { label: 'Accent Line',  key: 'featureAccent',   type: 'bg',    default: '#F39800' },
       { label: 'Body Text',    key: 'featureBody',     type: 'color', default: '#434447' },
