@@ -117,41 +117,9 @@ var COMPONENTS = [
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="bv2-split-table" style="width: 600px; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-  <tr valign="middle">
-    <td width="300" align="left" valign="middle" class="bv2-hero-td"
-        style="width: 300px; padding: 40px 28px; mso-line-height-rule: exactly;" data-color="banner2Bg">
-      ${opts.showEyebrow !== false ? `<p mc:edit="hero_eyebrow"
-         style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 4px; text-transform: uppercase;" data-color="banner2Eyebrow">
-        Exclusive Offer 2026
-      </p>` : ''}
-      <h1 mc:edit="hero_title" class="bv2-hero-title"
-          style="margin: 0 0 14px 0; font-size: 34px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="banner2Title">
-        Industrial IoT<br/>Sale Is On
-      </h1>
-      ${opts.showBanner2Sub !== false ? `<p mc:edit="hero_subtitle2" class="bv2-subtitle2"
-         style="margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="banner2Sub">
-        Your Subtitle Here
-      </p>` : ''}
-      ${opts.showSubtitle !== false ? `<p mc:edit="hero_subtitle"
-         style="margin: 0 0 24px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2Subtitle">
-        Top-rated IIoT hardware <strong data-color="banner2Strong">up to 50% OFF</strong> \u2014 72 hours only
-      </p>` : ''}
-      ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-        <tr>
-          <td style="padding: 12px 24px; mso-line-height-rule: exactly;" data-color="banner2CtaBg">
-            <a href="https://www.iotmart.com/s/?language=en_US" mc:edit="hero_cta"
-               style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2CtaText">
-              Shop Now &rarr;
-            </a>
-          </td>
-        </tr>
-      </table>` : ''}
-    </td>
-    <td width="300" align="center" valign="top" class="bv2-col-img"
-        style="width: 300px; padding: 0; margin: 0; font-size: 0; line-height: 0; mso-line-height-rule: exactly; background-color: #ffffff;" data-color="banner2ImgBg"><img mc:edit="hero_image"
-           src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png"
-           width="300" alt="Industrial IoT Hardware" class="bv2-img" data-crop="free"
-           style="display: block; width: 300px; max-width: 100%; height: auto; border: 0; outline: none; text-decoration: none; vertical-align: top; margin: 0; padding: 0;" /></td>
+  <tr>
+    <td width="300" align="left" valign="middle" class="bv2-hero-td" style="width: 300px; padding: 0 28px; mso-line-height-rule: exactly;" data-color="banner2Bg">${opts.showEyebrow !== false ? `<p mc:edit="hero_eyebrow" style="margin: 0 0 10px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 4px; text-transform: uppercase;" data-color="banner2Eyebrow">Exclusive Offer 2026</p>` : ''}<h1 mc:edit="hero_title" class="bv2-hero-title" style="margin: 0 0 14px 0; font-size: 34px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.1;" data-color="banner2Title">Industrial IoT<br/>Sale Is On</h1>${opts.showBanner2Sub !== false ? `<p mc:edit="hero_subtitle2" class="bv2-subtitle2" style="margin: 0 0 12px 0; font-size: 18px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="banner2Sub">Your Subtitle Here</p>` : ''}${opts.showSubtitle !== false ? `<p mc:edit="hero_subtitle" style="margin: 0 0 24px 0; font-size: 13px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2Subtitle">Top-rated IIoT hardware <strong data-color="banner2Strong">up to 50% OFF</strong> \u2014 72 hours only</p>` : ''}${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><tr><td style="padding: 12px 24px; mso-line-height-rule: exactly;" data-color="banner2CtaBg"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="hero_cta" style="font-size: 14px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="banner2CtaText">Shop Now &rarr;</a></td></tr></table>` : ''}</td>
+    <td width="300" align="center" valign="top" class="bv2-col-img" style="width: 300px; padding: 0; font-size: 0; line-height: 0; mso-line-height-rule: exactly; background-color: #ffffff;" data-color="banner2ImgBg"><img mc:edit="hero_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png" width="300" height="300" alt="Industrial IoT Hardware" class="bv2-img" data-crop="free" style="display: block; width: 300px; height: auto; border: 0; vertical-align: top;" /></td>
   </tr>
 </table>`,
     colorMap: [

@@ -2967,7 +2967,22 @@ function applyEdits(wrapper, comp, overrideEdits) {
       else if (e.type === 'underline') { el.style.textDecoration = val === '1' ? 'underline' : 'none'; }
       else if (e.type === 'convtrack') { if (val) el.setAttribute('conversiontracking', val); else el.removeAttribute('conversiontracking'); }
       else if (e.type === 'alt') el.setAttribute('alt', val);
-      else if (e.type === 'img') el.setAttribute('src', val);
+      else if (e.type === 'img') {
+        el.setAttribute('src', val);
+        // 設置圖片的寬高（從保存的自然尺寸計算）
+        const nwKey = e.key.replace('__img', '__naturalWidth');
+        const nhKey = e.key.replace('__img', '__naturalHeight');
+        const nw = edits[nwKey];
+        const nh = edits[nhKey];
+        if (nw && nh) {
+          const targetWidth = parseInt(el.getAttribute('width')) || 300;
+          const calcHeight = Math.round((nh / nw) * targetWidth);
+          el.setAttribute('width', targetWidth);
+          el.setAttribute('height', calcHeight);
+          el.style.width = targetWidth + 'px';
+          el.style.height = calcHeight + 'px';
+        }
+      }
     });
   });
   
@@ -2997,7 +3012,22 @@ function applyEdits(wrapper, comp, overrideEdits) {
         else if (type === 'underline') { el.style.textDecoration = val === '1' ? 'underline' : 'none'; }
         else if (type === 'convtrack') { if (val) el.setAttribute('conversiontracking', val); else el.removeAttribute('conversiontracking'); }
         else if (type === 'alt') el.setAttribute('alt', val);
-        else if (type === 'src') el.setAttribute('src', val);
+        else if (type === 'src') {
+          el.setAttribute('src', val);
+          // 設置圖片的寬高（從保存的自然尺寸計算）
+          const nwKey = key.replace('__src', '__naturalWidth');
+          const nhKey = key.replace('__src', '__naturalHeight');
+          const nw = edits[nwKey];
+          const nh = edits[nhKey];
+          if (nw && nh) {
+            const targetWidth = parseInt(el.getAttribute('width')) || 300;
+            const calcHeight = Math.round((nh / nw) * targetWidth);
+            el.setAttribute('width', targetWidth);
+            el.setAttribute('height', calcHeight);
+            el.style.width = targetWidth + 'px';
+            el.style.height = calcHeight + 'px';
+          }
+        }
       });
     });
   }
@@ -3503,14 +3533,24 @@ async function uploadToCloudinary(input) {
   const altKey = input.dataset.altKey || null;
 
   // Called once the URL is ready — writes directly to item.edits and re-renders
-  const applyUpload = (url) => {
-    const srcInput = document.getElementById('pop-img-src');
-    if (srcInput) { srcInput.value = url; updateImagePreview(url); }
+  // width/height 來自 Cloudinary API 返回值
+  const applyUpload = (url, width, height) => {
     const _edits = capturedItem ? capturedItem.edits : editState;
     if (srcKey) _edits[srcKey] = url;
+    
+    // 直接使用 Cloudinary 返回的尺寸（比載入圖片更快更準確）
+    if (width && height) {
+      _edits[srcKey.replace('__src', '__naturalWidth')] = width;
+      _edits[srcKey.replace('__src', '__naturalHeight')] = height;
+    }
+    
     hideEditPopover();
     pushBuilderHistory();
     renderBuilderPreview();
+    
+    // 更新 popover 中的輸入框和預覽（如果還在顯示）
+    const srcInput = document.getElementById('pop-img-src');
+    if (srcInput) { srcInput.value = url; updateImagePreview(url); }
   };
 
   const cropSpec = input.dataset.crop;
@@ -3549,7 +3589,8 @@ async function _doCloudinaryUpload(fileOrBlob, filename, onDone) {
     const url = data.secure_url.replace('/upload/', '/upload/' + transform + '/');
 
     if (onDone) {
-      onDone(url);
+      // 傳遞 Cloudinary 返回的原始尺寸
+      onDone(url, data.width, data.height);
     } else {
       const srcInput = document.getElementById('pop-img-src');
       if (srcInput) { srcInput.value = url; updateImagePreview(url); }
@@ -3723,6 +3764,14 @@ function saveImagePopover(srcKey, altKey, compId) {
   const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
   _edits[srcKey] = document.getElementById('pop-img-src').value;
   _edits[altKey] = document.getElementById('pop-img-alt').value;
+  
+  // 計算並保存圖片的自然尺寸（從預覽圖片讀取）
+  const previewImg = document.querySelector('#pop-img-preview img');
+  if (previewImg && previewImg.naturalWidth && previewImg.naturalHeight) {
+    _edits[srcKey.replace('__src', '__naturalWidth')] = previewImg.naturalWidth;
+    _edits[srcKey.replace('__src', '__naturalHeight')] = previewImg.naturalHeight;
+  }
+  
   hideEditPopover();
   const bv = document.getElementById('builderView');
   if (bv && bv.classList.contains('visible')) {
@@ -4259,6 +4308,71 @@ function renderBuilderPreview() {
   });
   // Update builder code panel if open
   updateBuilderCode();
+  
+  // 自動修復舊專案：檢測圖片是否有尺寸，沒有的話載入取得
+  autoFixImageDimensions();
+}
+
+// 自動修復沒有保存尺寸的圖片（打開專案時自動運行）
+function autoFixImageDimensions() {
+  let needsUpdate = false;
+  const promises = [];
+  
+  builderStack.forEach(item => {
+    if (!item.edits) return;
+    Object.keys(item.edits).forEach(key => {
+      if (!key.endsWith('__src')) return;
+      const src = item.edits[key];
+      if (!src) return;
+      const nwKey = key.replace('__src', '__naturalWidth');
+      const nhKey = key.replace('__src', '__naturalHeight');
+      // 如果已經有尺寸，跳過
+      if (item.edits[nwKey] && item.edits[nhKey]) return;
+      
+      // 載入圖片取得尺寸
+      const p = new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          if (img.naturalWidth && img.naturalHeight) {
+            item.edits[nwKey] = img.naturalWidth;
+            item.edits[nhKey] = img.naturalHeight;
+            needsUpdate = true;
+          }
+          resolve();
+        };
+        img.onerror = resolve;
+        img.src = src;
+      });
+      promises.push(p);
+    });
+  });
+  
+  // 等所有圖片載入完成後重新渲染
+  if (promises.length > 0) {
+    Promise.all(promises).then(() => {
+      if (needsUpdate) {
+        // 重新渲染以套用新尺寸
+        const canvas = document.getElementById('builderCanvas');
+        builderStack.forEach(item => {
+          const comp = COMPONENTS.find(c => c.id === item.compId);
+          if (!comp) return;
+          const stackEl = canvas.querySelector(`[data-uid="${item.uid}"]`);
+          if (!stackEl) return;
+          const contentEl = stackEl.querySelector('.bsi-content');
+          if (!contentEl) return;
+          const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits, item.colors);
+          contentEl.innerHTML = coloredHtml;
+          setupInlineEditing(contentEl, comp, item);
+        });
+        updateBuilderCode();
+        // 觸發自動保存
+        if (window.Collab) {
+          Collab.markUnsaved();
+          Collab.triggerAutoSave();
+        }
+      }
+    });
+  }
 }
 
 function renderBuilderRight() {
