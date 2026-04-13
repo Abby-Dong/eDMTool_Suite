@@ -147,13 +147,11 @@ var COMPONENTS = [
         </tr>
       </table>` : ''}
     </td>
-    <td width="300" align="left" valign="top" class="bv2-col-img"
-        style="width: 300px; padding: 0; font-size: 0; line-height: 0; mso-line-height-rule: exactly; background-color: #ffffff;" data-color="banner2ImgBg">
-      <img mc:edit="hero_image"
+    <td width="300" align="center" valign="top" class="bv2-col-img"
+        style="width: 300px; padding: 0; margin: 0; font-size: 0; line-height: 0; mso-line-height-rule: exactly; background-color: #ffffff;" data-color="banner2ImgBg"><img mc:edit="hero_image"
            src="https://irp.cdn-website.com/56869327/dms3rep/multi/test-b73f2a4f.png"
            width="300" alt="Industrial IoT Hardware" class="bv2-img" data-crop="free"
-           style="display: block; width: 300px; max-width: 100%; height: auto; border: 0; outline: none; text-decoration: none;" />
-    </td>
+           style="display: block; width: 300px; max-width: 100%; height: auto; border: 0; outline: none; text-decoration: none; vertical-align: top; margin: 0; padding: 0;" /></td>
   </tr>
 </table>`,
     colorMap: [
