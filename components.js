@@ -614,7 +614,7 @@ var COMPONENTS = [
            style="display: block; width: 300px; max-width: 100%; height: auto;" />
     </td>
     <td width="300" align="left" valign="middle" class="its-col-text"
-        style="padding: 16px 32px; width: 300px;" data-color="splitBg">
+        style="padding: 0 32px; width: 300px;" data-color="splitBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="split_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="splitEyebrow">Feature</p>` : ''}
       ${opts.showTitle !== false ? `<h2 mc:edit="split_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="splitTitle">Explore Industrial IoT Solutions</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="splitSubtitle">Power up your smart factory this season</p>` : ''}
@@ -660,7 +660,7 @@ var COMPONENTS = [
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="tis-split-table" style="width: 600px;">
   <tr valign="middle">
     <td width="300" align="left" valign="middle" class="tis-col-text"
-        style="padding: 16px 32px; width: 300px;" data-color="split2ContainerBg">
+        style="padding: 0 32px; width: 300px;" data-color="split2ContainerBg">
       ${opts.showEyebrow !== false ? `<p mc:edit="split2_eyebrow" style="margin: 0 0 8px 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 3px; text-transform: uppercase;" data-color="split2Eyebrow">Why IoTMart</p>` : ''}
       ${opts.showTitle !== false ? `<h2 mc:edit="split2_title" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 900; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="split2Title">Trusted by Industry Leaders Worldwide</h2>` : ''}
       ${opts.showSubtitle !== false ? `<p mc:edit="split2_subtitle" style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="split2Subtitle">Your one-stop IIoT procurement platform</p>` : ''}
