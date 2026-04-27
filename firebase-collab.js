@@ -12,8 +12,24 @@
 (function () {
   'use strict';
 
-  // i18n helper — uses global t() from i18n-component.js if available
-  function _t(key) { return (typeof window.t === 'function') ? window.t(key) : key; }
+  // i18n helper — uses global t() from i18n-component.js if available.
+  // Falls back to readable English labels (not the raw key) when i18n is not loaded.
+  const _I18N_FALLBACK = {
+    'collab.save': 'Save',
+    'collab.saved': 'Saved',
+    'collab.saving': 'Saving…',
+    'collab.saveFailed': 'Save failed — ',
+    'collab.saveTooltip': 'Save project (Ctrl+S)',
+    'collab.saveAndBack': 'Save & back to gallery'
+  };
+  function _t(key) {
+    if (typeof window.t === 'function') {
+      const v = window.t(key);
+      // Some i18n impls return the key on miss — fall through to our fallback in that case
+      if (v && v !== key) return v;
+    }
+    return _I18N_FALLBACK[key] !== undefined ? _I18N_FALLBACK[key] : key;
+  }
 
   const COLLECTION = window._collabCollection || 'edm_projects';
   const PRESENCE_COL = 'presence';   // sub-collection under each project
