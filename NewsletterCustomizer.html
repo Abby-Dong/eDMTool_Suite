@@ -1434,6 +1434,7 @@ const BRAND_COLORS = [
 let _popupActiveKey = null;
 let _popupActiveCompId = null;
 let _popupActiveTrigger = null;
+let _popupActiveBuilderUid = null;  // when set, write color to that builder item's overrides instead of global colorState
 
 function buildBrandPanelHtml(currentColor) {
   let html = '';
@@ -1498,12 +1499,20 @@ function _clampPopoverPos(top, left, popW, popH) {
   return { top, left };
 }
 
-function openColorPopup(key, compId, triggerEl) {
+function openColorPopup(key, compId, triggerEl, builderUid) {
   _popupActiveKey = key;
   _popupActiveCompId = compId;
   _popupActiveTrigger = triggerEl;
+  _popupActiveBuilderUid = builderUid || null;
 
-  const currentColor = compId ? colorState[key] : triggerEl.getAttribute('data-value');
+  let currentColor;
+  if (_popupActiveBuilderUid) {
+    const item = builderStack.find(i => i.uid === _popupActiveBuilderUid);
+    const ovr = (item && item.colorOverrides) || {};
+    currentColor = (ovr[key] !== undefined) ? ovr[key] : colorState[key];
+  } else {
+    currentColor = compId ? colorState[key] : triggerEl.getAttribute('data-value');
+  }
   _popupCurrentColor = currentColor || '#000000';
   const popup = document.getElementById('colorPopup');
   const overlay = document.getElementById('colorPopupOverlay');
@@ -1531,6 +1540,7 @@ function closeColorPopup() {
   _popupActiveKey = null;
   _popupActiveCompId = null;
   _popupActiveTrigger = null;
+  _popupActiveBuilderUid = null;
 }
 
 function showRgbPicker() {
@@ -1554,29 +1564,47 @@ function applyPickedColor(hex) {
   if (!/^#[0-9a-fA-F]{6}$/.test(hex)) { alert('Please enter a valid 6-digit hex code, e.g. #F39800'); return; }
 
   if (_popupActiveCompId) {
-    colorState[_popupActiveKey] = hex;
-    // Sync linked keys
     const comp = COMPONENTS.find(c => c.id === _popupActiveCompId);
-    if (comp) {
-      const entry = comp.colorMap.find(c => c.key === _popupActiveKey);
-      if (entry && entry.linked) {
-        entry.linked.forEach(lk => { colorState[lk] = hex; });
-      }
-      if (entry && entry.linkedAlpha) {
-        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
-        Object.entries(entry.linkedAlpha).forEach(([lk, alpha]) => {
-          const br = Math.round(r + (255 - r) * (1 - alpha));
-          const bg = Math.round(g + (255 - g) * (1 - alpha));
-          const bb = Math.round(b + (255 - b) * (1 - alpha));
-          colorState[lk] = '#' + [br,bg,bb].map(v => v.toString(16).padStart(2,'0')).join('');
-        });
-      }
+    const entry = comp ? comp.colorMap.find(c => c.key === _popupActiveKey) : null;
+
+    // Helper: compute all key/value pairs to apply (primary + linked + linkedAlpha)
+    const updates = { [_popupActiveKey]: hex };
+    if (entry && entry.linked) {
+      entry.linked.forEach(lk => { updates[lk] = hex; });
     }
+    if (entry && entry.linkedAlpha) {
+      const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+      Object.entries(entry.linkedAlpha).forEach(([lk, alpha]) => {
+        const br = Math.round(r + (255 - r) * (1 - alpha));
+        const bg = Math.round(g + (255 - g) * (1 - alpha));
+        const bb = Math.round(b + (255 - b) * (1 - alpha));
+        updates[lk] = '#' + [br,bg,bb].map(v => v.toString(16).padStart(2,'0')).join('');
+      });
+    }
+
+    if (_popupActiveBuilderUid) {
+      // Per-item override: write only into this builder item, leave global theme untouched
+      const item = builderStack.find(i => i.uid === _popupActiveBuilderUid);
+      if (item) {
+        if (!item.colorOverrides) item.colorOverrides = {};
+        Object.entries(updates).forEach(([k, v]) => { item.colorOverrides[k] = v; });
+      }
+    } else {
+      // Global theme color: applies to all items that have NOT overridden this key.
+      // Per spec: changing the global theme color clears that key from every item's overrides.
+      Object.entries(updates).forEach(([k, v]) => { colorState[k] = v; });
+      builderStack.forEach(it => {
+        if (!it.colorOverrides) return;
+        Object.keys(updates).forEach(k => { delete it.colorOverrides[k]; });
+      });
+    }
+
     const swatch = document.getElementById('swatch-' + _popupActiveKey);
     if (swatch) swatch.style.backgroundColor = hex;
     const bswatch = document.getElementById('bswatch-' + _popupActiveKey);
     if (bswatch) bswatch.style.backgroundColor = hex;
     renderBuilderPreview();
+    renderBuilderRight();
     if (window.Collab) Collab.markUnsaved();
   } else {
     const el = document.getElementById(_popupActiveKey);
@@ -2269,7 +2297,9 @@ function applyTheme(themeName) {
   }
   // 3. Store current theme
   currentBuilderTheme = themeName;
-  // 4. Re-render
+  // 4. Clear all per-item color overrides so the theme applies cleanly to every component
+  builderStack.forEach(it => { it.colorOverrides = {}; });
+  // 5. Re-render
   renderThemeSelect();
   renderBuilderPreview();
   renderBuilderRight();
@@ -3315,7 +3345,8 @@ function addToBuilder(compId, insertIndex) {
   if (comp) buildComponentEditMap(comp).forEach(e => { edits[e.key] = e.default; });
   const options = {};
   if (comp && comp.optionMap) comp.optionMap.forEach(o => { options[o.key] = o.default; });
-  const newItem = { uid, compId, edits, options };
+  // colorOverrides starts empty: new items inherit global theme colors by default
+  const newItem = { uid, compId, edits, options, colorOverrides: {} };
   if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= builderStack.length) {
     builderStack.splice(insertIndex, 0, newItem);
   } else {
@@ -3347,10 +3378,32 @@ function duplicateBuilderItem(uid) {
   const idx = builderStack.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const src = builderStack[idx];
-  const clone = { compId: src.compId, uid: 'bi_' + Date.now(), edits: JSON.parse(JSON.stringify(src.edits)) };
+  const clone = {
+    compId: src.compId,
+    uid: 'bi_' + Date.now(),
+    edits: JSON.parse(JSON.stringify(src.edits || {})),
+    options: JSON.parse(JSON.stringify(src.options || {})),
+    colorOverrides: JSON.parse(JSON.stringify(src.colorOverrides || {}))
+  };
   builderStack.splice(idx + 1, 0, clone);
   pushBuilderHistory();
   renderBuilderPreview();
+}
+
+// Reset a single color key on a builder item back to the global theme color
+function resetBuilderItemColor(uid, key) {
+  const item = builderStack.find(i => i.uid === uid);
+  if (!item || !item.colorOverrides) return;
+  const comp = COMPONENTS.find(c => c.id === item.compId);
+  const entry = comp ? comp.colorMap.find(c => c.key === key) : null;
+  // Also clear linked / linkedAlpha keys so reset matches what the popup applied
+  delete item.colorOverrides[key];
+  if (entry && entry.linked) entry.linked.forEach(lk => { delete item.colorOverrides[lk]; });
+  if (entry && entry.linkedAlpha) Object.keys(entry.linkedAlpha).forEach(lk => { delete item.colorOverrides[lk]; });
+  pushBuilderHistory();
+  renderBuilderPreview();
+  renderBuilderRight();
+  if (window.Collab) Collab.markUnsaved();
 }
 
 function setBuilderOption(uid, key, val) {
@@ -3461,7 +3514,7 @@ function renderBuilderPreview() {
     const comp = COMPONENTS.find(c => c.id === item.compId);
     if (!comp) return;
     const sel = item.uid === builderSelectedUid ? ' selected' : '';
-    const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits);
+    const coloredHtml = applyColors(comp.getHtml(item.options || {}), comp, item.edits, item.colorOverrides);
     html += `
       <div class="builder-stack-item${sel}" data-uid="${item.uid}" onclick="selectBuilderItem('${item.uid}')">
         <div class="bsi-toolbar">
@@ -3593,11 +3646,20 @@ function renderBuilderRight() {
   comp.colorMap.forEach(c => {
     if (c.hidden) return;
     if (c.optionGate && !(item.options || {})[c.optionGate]) return;
+    const ovr = item.colorOverrides || {};
+    const isOverridden = ovr[c.key] !== undefined;
+    const effective = isOverridden ? ovr[c.key] : colorState[c.key];
+    const resetBtn = isOverridden
+      ? `<button class="ctrl-reset" title="Reset to theme color" onclick="event.stopPropagation(); resetBuilderItemColor('${item.uid}','${c.key}')" style="background:none;border:none;cursor:pointer;color:#999;padding:2px 4px;font-size:14px;line-height:1;display:inline-flex;align-items:center;"><span class="mi" style="font-size:14px;margin:0;">restart_alt</span></button>`
+      : '';
     html += `
       <div class="sidebar-color-ctrl">
-        <span class="ctrl-label">${c.label}</span>
-        <div class="ctrl-swatch" id="bswatch-${c.key}" style="background:${colorState[c.key]}"
-             onclick="openColorPopup('${c.key}', '${comp.id}', this)"></div>
+        <span class="ctrl-label">${c.label}${isOverridden ? ' <span style="font-size:10px;color:#0059ff;font-weight:600;">\u2022</span>' : ''}</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          ${resetBtn}
+          <div class="ctrl-swatch" id="bswatch-${c.key}" style="background:${effective}"
+               onclick="openColorPopup('${c.key}', '${comp.id}', this, '${item.uid}')"></div>
+        </div>
       </div>`;
   });
   html += `</div></div>`;
@@ -3622,8 +3684,9 @@ function buildFullEdmDoc() {
     const w = document.createElement('div');
     w.innerHTML = comp.getHtml(item.options || {});
     applyEdits(w, comp, item.edits);
+    const ovr = item.colorOverrides || {};
     comp.colorMap.forEach(c => {
-      const val = colorState[c.key];
+      const val = (ovr[c.key] !== undefined) ? ovr[c.key] : colorState[c.key];
       w.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
         if (c.type === 'bg') el.style.backgroundColor = val;
         else el.style.color = val;
@@ -3845,14 +3908,15 @@ function downloadBuilderZip() {
 // ══════════════════════════════════════
 // Apply colors to HTML string via DOM
 // ══════════════════════════════════════
-function applyColors(htmlStr, comp, overrideEdits) {
+function applyColors(htmlStr, comp, overrideEdits, colorOverrides) {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = htmlStr;
 
   applyEdits(wrapper, comp, overrideEdits);
 
+  const ovr = colorOverrides || {};
   comp.colorMap.forEach(c => {
-    const val = colorState[c.key];
+    const val = (ovr[c.key] !== undefined) ? ovr[c.key] : colorState[c.key];
     wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
       if (c.type === 'bg') {
         el.style.backgroundColor = val;
@@ -3911,6 +3975,8 @@ function resetAll() {
     comp._editMap = null;
     buildComponentEditMap(comp).forEach(e => { editState[e.key] = e.default; });
   });
+  // Clear per-item color overrides on every builder item
+  builderStack.forEach(it => { it.colorOverrides = {}; });
   const bv = document.getElementById('builderView');
   if (bv && bv.classList.contains('visible')) {
     currentBuilderTheme = 'light-blue';
@@ -4099,7 +4165,7 @@ function renderProjectGallery() {
           const item = p.builderStack[i];
           const comp = COMPONENTS.find(c => c.id === item.compId);
           if (!comp) continue;
-          previewHtml += applyColors(comp.getHtml(item.options || {}), comp, item.edits);
+          previewHtml += applyColors(comp.getHtml(item.options || {}), comp, item.edits, item.colorOverrides);
         }
 
         // Restore original colorState
