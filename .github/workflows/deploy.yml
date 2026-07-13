@@ -41,6 +41,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Exclude legacy assets from deploy
+        run: rm -rf "Campaign Page Builder/legacy"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

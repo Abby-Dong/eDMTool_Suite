@@ -1,0 +1,44 @@
+[data-style="clean-pro"] {
+  --cpb-c-primary:        #006EFF;
+  --cpb-c-primary-hover:  #0052cc;
+  --cpb-c-accent:         #4d8cff;
+  --cpb-c-link:           #006EFF;
+
+  --cpb-c-bg:             #ffffff;
+  --cpb-c-bg-alt:         #f6f7f9;
+  --cpb-c-surface:        #ffffff;
+
+  --cpb-c-text:           #0c0c0c;
+  --cpb-c-text-muted:     #5b6068;
+  --cpb-c-text-subtle:    #8b9098;
+  --cpb-c-border:         #e5e7eb;
+
+  --cpb-font-body:        'Heebo', 'Inter', -apple-system, sans-serif;
+  --cpb-font-display:     'Heebo', 'Inter', -apple-system, sans-serif;
+
+  --cpb-radius-card:      8px;
+  --cpb-radius-btn:       2px;
+  --cpb-card-border:      1px solid #e5e7eb;
+  --cpb-card-shadow:      0 1px 3px rgba(0,0,0,.04);
+  --cpb-card-shadow-hover: 0 6px 24px rgba(0,89,255,.10);
+
+  --cpb-headline-weight:  800;
+  --cpb-transition:       .25s ease;
+
+  background: var(--cpb-c-bg);
+  color: var(--cpb-c-text);
+  font-family: var(--cpb-font-body);
+}
+
+[data-style="clean-pro"] .cpb-section[data-mode="dark"] {
+  --cpb-c-bg:             #0c0c0c;
+  --cpb-c-bg-alt:         #1a1a1a;
+  --cpb-c-surface:        #161616;
+  --cpb-c-text:           #ffffff;
+  --cpb-c-text-muted:     #c0c0c0;
+  --cpb-c-text-subtle:    #888;
+  --cpb-c-border:         rgba(255,255,255,.12);
+  --cpb-card-border:      1px solid rgba(255,255,255,.12);
+  --cpb-card-shadow:      0 1px 3px rgba(0,0,0,.4);
+  --cpb-card-shadow-hover: 0 6px 24px rgba(0,89,255,.25);
+}

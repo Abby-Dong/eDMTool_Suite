@@ -485,6 +485,19 @@
     .device-toggle button.active { background: #07071a; color: #fff; }
     .device-toggle button:not(.active):hover { background: #eef3ff; color: #0059ff; }
 
+    /* Output format toggle (MCE / MCAE) */
+    .format-toggle {
+      display: inline-flex; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;
+    }
+    .format-toggle button {
+      background: #fafafa; border: none; cursor: pointer;
+      padding: 6px 12px; font-size: 12px; font-weight: 700; color: #888;
+      letter-spacing: .3px; transition: all .12s; font-family: inherit;
+    }
+    .format-toggle button:first-child { border-right: 1px solid #e0e0e0; }
+    .format-toggle button.active { background: #0059ff; color: #fff; }
+    .format-toggle button:not(.active):hover { background: #eef3ff; color: #0059ff; }
+
     .detail-preview-body {
       padding: 24px; background: #D6D9DD; overflow-x: auto;
       display: flex; justify-content: center;
@@ -1777,6 +1790,10 @@
           </div>
         </div>
         <div class="builder-center-actions">
+          <div class="format-toggle" id="formatToggle" title="Output format (MCE / MCAE)">
+            <button class="active" data-format="mce" onclick="setExportFormat('mce')">MCE</button>
+            <button data-format="mcae" onclick="setExportFormat('mcae')">MCAE</button>
+          </div>
           <button class="builder-copy-btn" id="builderCopyBtn" onclick="copyBuilderHtml()">
             <span class="mi">content_copy</span><span data-i18n="builder.copyFullHtml">Copy Full HTML</span>
           </button>
@@ -3870,6 +3887,50 @@ function toggleSection(sectionId) {
 // ══════════════════════════════════════
 // Build full HTML document for copy/export
 // ══════════════════════════════════════
+// ══════════════════════════════════════
+// Export Format (MCE / MCAE)
+// ══════════════════════════════════════
+let exportFormat = localStorage.getItem('edm_export_format') || 'mce';
+
+function setExportFormat(fmt) {
+  exportFormat = (fmt === 'mcae') ? 'mcae' : 'mce';
+  localStorage.setItem('edm_export_format', exportFormat);
+  document.querySelectorAll('.format-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.format === exportFormat);
+  });
+  // Keep an open source panel in sync with the selected format
+  const codeEl = document.getElementById('builderCode');
+  if (codeEl && codeEl.textContent && typeof builderStack !== 'undefined' && builderStack.length) {
+    codeEl.textContent = buildFullEdmDoc();
+  }
+}
+
+// Convert MCE (Marketing Cloud Engagement) output into MCAE
+// (Account Engagement / Pardot) Handlebars Merge Language (HML).
+function transformForMcae(html) {
+  let out = html;
+  // 1. Unsubscribe link: legacy %% merge tag -> HML action tag + safe rel
+  out = out.replace(/href="%%unsub_center_url%%"/g, 'href="{{Unsubscribe}}" rel="nofollow,noreferrer"');
+  // 2. Strip MCE-only attributes (editable regions + link tracking metadata)
+  out = out.replace(/\s+(?:mc:edit|alias|conversion|data-linkto)="[^"]*"/g, '');
+  // 3. Inject the required physical mailing address right after the unsubscribe line
+  const unsubIdx = out.indexOf('{{Unsubscribe}}');
+  if (unsubIdx !== -1) {
+    const pEnd = out.indexOf('</p>', unsubIdx);
+    if (pEnd !== -1) {
+      const addressP = '\n    <p style="margin: 6px 0 0 0; font-size: 11px; font-family: Arial, \'Malgun Gothic\', \'Apple SD Gothic Neo\', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #888888;">{{{Organization.Address}}}</p>';
+      out = out.slice(0, pEnd + 4) + addressP + out.slice(pEnd + 4);
+    }
+  }
+  // 4. Generic legacy merge tokens %%token%% -> {{token}}
+  out = out.replace(/%%([a-zA-Z0-9_.]+)%%/g, '{{$1}}');
+  return out;
+}
+
+function formatHtmlForExport(html) {
+  return exportFormat === 'mcae' ? transformForMcae(html) : html;
+}
+
 function buildFullDoc(comp, coloredInnerHtml) {
   const title = t('customizer.component') + ' — ' + tCompName(comp);
   const css = RESPONSIVE_CSS[comp.id] || '';
@@ -3924,7 +3985,7 @@ function buildFullDoc(comp, coloredInnerHtml) {
 </table>`;
   }
 
-  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  return formatHtmlForExport(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -3966,7 +4027,7 @@ function buildFullDoc(comp, coloredInnerHtml) {
 ${bodyContent}
 
 </body>
-</html>`;
+</html>`);
 }
 
 // ══════════════════════════════════════
@@ -4506,7 +4567,7 @@ function buildFullEdmDoc() {
     w.querySelectorAll('[data-border-color]').forEach(el => el.removeAttribute('data-border-color'));
     parts += w.innerHTML + '\n';
   });
-  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  return formatHtmlForExport(`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -4558,7 +4619,7 @@ ${parts}
   </tr>
 </table>
 </body>
-</html>`;
+</html>`);
 }
 
 function updateBuilderCode() {
@@ -4725,6 +4786,86 @@ function downloadBuilderHtml() {
 // ══════════════════════════════════════
 function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+function buildProjectPreviewSrcdoc(project) {
+  const stack = Array.isArray(project && project.builderStack) ? project.builderStack : [];
+  if (!stack.length) return '';
+
+  const previewColors = {};
+  COMPONENTS.forEach(comp => {
+    (comp.colorMap || []).forEach(c => { previewColors[c.key] = c.default; });
+  });
+
+  const themeObj = THEMES[project && project.theme];
+  if (themeObj && themeObj.overrides) Object.assign(previewColors, themeObj.overrides);
+  if (project && project.colorState) Object.assign(previewColors, project.colorState);
+
+  let css = '';
+  const seenCss = new Set();
+  stack.forEach(item => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (comp && RESPONSIVE_CSS[comp.id] && !seenCss.has(comp.id)) {
+      css += RESPONSIVE_CSS[comp.id];
+      seenCss.add(comp.id);
+    }
+  });
+
+  let parts = '';
+  stack.forEach(item => {
+    const comp = COMPONENTS.find(c => c.id === item.compId);
+    if (!comp) return;
+
+    const w = document.createElement('div');
+    w.innerHTML = comp.getHtml(item.options || {});
+    applyEdits(w, comp, item.edits);
+
+    (comp.colorMap || []).forEach(c => {
+      const val = (item.colors && item.colors[c.key]) ? item.colors[c.key] : previewColors[c.key];
+      const isGradient = val && typeof val === 'object' && val.gradient;
+      const solidColor = isGradient ? val.fallback : val;
+      const bgStyle = isGradient ? val.gradient : val;
+
+      w.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
+        if (c.type === 'bg') {
+          if (/^#[0-9a-f]{3,8}$/i.test(solidColor)) el.setAttribute('bgcolor', solidColor);
+          el.style.backgroundColor = solidColor;
+          if (isGradient) el.style.background = bgStyle;
+        } else {
+          el.style.color = solidColor;
+        }
+      });
+
+      w.querySelectorAll(`[data-border-color="${c.key}"]`).forEach(el => {
+        el.style.border = `2px solid ${solidColor}`;
+      });
+    });
+
+    w.querySelectorAll('[data-color]').forEach(el => el.removeAttribute('data-color'));
+    w.querySelectorAll('[data-border-color]').forEach(el => el.removeAttribute('data-border-color'));
+    parts += w.innerHTML + '\n';
+  });
+
+  const safeParts = parts.replace(/<script[\s\S]*?<\/script>/gi, '');
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html, body { margin: 0; padding: 0; overflow: hidden; background: #fff; }
+body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; max-width: 100%; display: block; }
+body { margin: 0 !important; padding: 0 !important; width: 100% !important; font-family: Arial, Helvetica, sans-serif; }
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+.ExternalClass { width: 100%; }
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+@media only screen and (max-width: 480px) {${css}}
+</style></head>
+<body style="margin:0;padding:0;background-color:#D6D9DD;font-family:Arial,Helvetica,sans-serif;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#D6D9DD;"><tr><td align="center" valign="top" class="outer-pad" style="padding:0 10px;">${safeParts}</td></tr></table>
+</body></html>`;
+}
+
 function renderGallery() {
   const grid = document.getElementById('projectGalleryGrid');
   if (!grid) return;
@@ -4770,6 +4911,7 @@ function renderGallery() {
   }
 
   Collab.list().then(projects => {
+    projects = (projects || []).filter(p => !(p && p.__masScoped));
     grid.innerHTML = '';
 
     // ── Component Library card ──
@@ -4804,28 +4946,7 @@ function renderGallery() {
       const thumb = document.createElement('div');
       thumb.className = 'proj-gallery-card-thumb';
       if (p.componentCount > 0 && p.builderStack && p.builderStack.length > 0) {
-        const savedColors = Object.assign({}, colorState);
-        const previewColors = {};
-        COMPONENTS.forEach(comp => comp.colorMap.forEach(c => { previewColors[c.key] = c.default; }));
-        const themeObj = THEMES[p.theme];
-        if (themeObj && themeObj.overrides) Object.assign(previewColors, themeObj.overrides);
-        if (p.colorState) Object.assign(previewColors, p.colorState);
-        Object.assign(colorState, previewColors);
-
-        let previewHtml = '';
-        const maxPreview = Math.min(p.builderStack.length, 2);
-        for (let i = 0; i < maxPreview; i++) {
-          const item = p.builderStack[i];
-          const comp = COMPONENTS.find(c => c.id === item.compId);
-          if (!comp) continue;
-          previewHtml += applyColors(comp.getHtml(item.options || {}), comp, item.edits);
-        }
-
-        Object.keys(colorState).forEach(k => delete colorState[k]);
-        Object.assign(colorState, savedColors);
-
-        const cleanHtml = previewHtml.replace(/<script[\s\S]*?<\/script>/gi, '');
-        const iframeSrc = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;padding:0;overflow:hidden;background:#fff;}</style></head><body>' + cleanHtml + '</body></html>';
+        const iframeSrc = buildProjectPreviewSrcdoc(p);
         const iframe = document.createElement('iframe');
         iframe.className = 'thumb-preview-iframe';
         iframe.setAttribute('sandbox', 'allow-same-origin');
@@ -5570,9 +5691,10 @@ function applyColors(htmlStr, comp, overrideEdits, itemColors) {
     
     wrapper.querySelectorAll(`[data-color="${c.key}"]`).forEach(el => {
       if (c.type === 'bg') {
-        // For background, use gradient if available, solid as fallback
-        el.style.background = bgStyle;
-        if (solidColor) el.style.backgroundColor = solidColor; // fallback
+        // Solid: set backgroundColor only (preserves any inline background-image
+        // like the Coupon — Dual pattern). Gradient: use shorthand to override.
+        if (solidColor) el.style.backgroundColor = solidColor;
+        if (isGradient) el.style.background = bgStyle;
       } else {
         el.style.color = solidColor;
       }
@@ -5831,6 +5953,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (input) input.addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmProfile();
   });
+  // Restore saved output format (MCE / MCAE) toggle state
+  document.querySelectorAll('.format-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.format === exportFormat);
+  });
 });
 
 // ══════════════════════════════════════
@@ -5872,8 +5998,112 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ══════════════════════════════════════
+  // Marcom Agent Studio — Embed (eDM) Mode
+  // Boots straight into the eDM Builder (no Component Library, no Firebase).
+  // Communicates with the parent window via postMessage.
+  // ══════════════════════════════════════
+  function _captureEmbedSnapshot() {
+    return {
+      builderStack: JSON.parse(JSON.stringify(builderStack || [])),
+      colorState: JSON.parse(JSON.stringify(colorState || {})),
+      theme: currentBuilderTheme || 'light-blue',
+      _builderUid: _builderUid || 0
+    };
+  }
+
+  function _applyEmbedSnapshot(snap) {
+    // Restore theme (resets colorState to defaults + overrides)
+    if (snap && snap.theme && THEMES[snap.theme]) {
+      currentBuilderTheme = snap.theme;
+      initState();
+      var th = THEMES[snap.theme];
+      if (th && th.overrides) Object.entries(th.overrides).forEach(function (e) { colorState[e[0]] = e[1]; });
+    } else {
+      currentBuilderTheme = 'light-blue';
+      initState();
+    }
+    // Overlay saved colorState
+    if (snap && snap.colorState) Object.entries(snap.colorState).forEach(function (e) { colorState[e[0]] = e[1]; });
+    // Restore stack
+    builderStack = (snap && Array.isArray(snap.builderStack)) ? JSON.parse(JSON.stringify(snap.builderStack)) : [];
+    if (snap && typeof snap._builderUid === 'number') _builderUid = snap._builderUid;
+    builderSelectedUid = null;
+    renderThemeSelect();
+    renderBuilderPreview();
+    renderBuilderRight();
+    // Reset local history to this state
+    builderHistory = [JSON.parse(JSON.stringify(builderStack))];
+    builderHistoryIdx = 0;
+    updateUndoRedoBtns();
+  }
+
+  function _enterEmbedBuilder() {
+    document.getElementById('galleryView').classList.add('hidden');
+    var cl = document.getElementById('compLibraryView'); if (cl) cl.classList.remove('visible');
+    document.getElementById('builderView').classList.add('visible');
+    var bc = document.getElementById('breadcrumbBar'); if (bc) bc.classList.remove('visible');
+    resetCanvasToBlank();
+    if (!_builderInited) { initBuilderDragDrop(); _builderInited = true; }
+    renderThemeSelect();
+    renderBuilderLeft();
+    renderBuilderPreview();
+    renderBuilderRight();
+    window.scrollTo(0, 0);
+  }
+
+  function _onEmbedMessage(ev) {
+    var d = ev.data || {};
+    if (d.type === 'mas-asset-load') {
+      _applyEmbedSnapshot(d.payload);
+    } else if (d.type === 'mas-asset-request-save') {
+      try { window.parent.postMessage({ type: 'mas-asset-save', payload: _captureEmbedSnapshot() }, '*'); } catch (e) {}
+    }
+  }
+
+  function _startEmbedEdm() {
+    document.body.classList.add('mas-embed');
+    // The parent app (Marcom Agent Studio) already provides the header + breadcrumb.
+    // Hide this iframe's entire top bar (incl. language switcher) and let the
+    // builder fill the full iframe height — avoids a duplicated header.
+    var st = document.createElement('style');
+    st.textContent = '.mas-embed .top-bar{display:none !important;} .mas-embed .builder-layout{height:100vh;}';
+    document.head.appendChild(st);
+    _enterEmbedBuilder();
+    window.addEventListener('message', _onEmbedMessage);
+    try { window.parent.postMessage({ type: 'mas-asset-ready' }, '*'); } catch (e) {}
+  }
+
+  // Read-only, chrome-less preview used by Marcom Agent Studio asset cards.
+  function _startThumbEdm() {
+    document.body.classList.add('mas-embed');
+    document.body.classList.add('mas-thumb');
+    var st = document.createElement('style');
+    st.textContent =
+      '.mas-embed .top-bar{display:none !important;}' +
+      '.mas-thumb .builder-left,.mas-thumb .builder-right,.mas-thumb .builder-center-header,.mas-thumb .builder-float-ur,.mas-thumb .builder-float-br,.mas-thumb .code-panel{display:none !important;}' +
+      '.mas-thumb .builder-layout{height:100vh;}' +
+      '.mas-thumb .builder-canvas{padding:0 !important;overflow:hidden !important;pointer-events:none !important;background:#fff !important;align-items:flex-start !important;}';
+    document.head.appendChild(st);
+    _enterEmbedBuilder();
+    window.addEventListener('message', function (ev) {
+      var d = ev.data || {};
+      if (d.type === 'mas-thumb-load') {
+        _applyEmbedSnapshot(d.payload);
+        try { window.parent.postMessage({ type: 'mas-thumb-rendered', width: 600 }, '*'); } catch (e) {}
+      }
+    });
+    try { window.parent.postMessage({ type: 'mas-thumb-ready' }, '*'); } catch (e) {}
+  }
+
   (function() {
     applyStaticTranslations();
+    var _params = new URLSearchParams(window.location.search);
+    var _embed = _params.get('embed');
+    if (_embed === 'edm') {
+      if (_params.get('preview') === '1') { _startThumbEdm(); return; }
+      _startEmbedEdm(); return;
+    }
     if (_loadUserProfile()) {
       _afterProfileReady();
     } else {

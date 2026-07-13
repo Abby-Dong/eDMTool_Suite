@@ -130,6 +130,14 @@
     .tool-card-icon.orange {
       background: linear-gradient(135deg, #F39800 0%, #f5b342 100%);
     }
+    .tool-card-icon.purple {
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+    }
+    .tool-card.purple-card .tool-card-footer { color: #6028c5; }
+    .tool-card-icon.teal {
+      background: linear-gradient(135deg, #0d9488 0%, #22c55e 100%);
+    }
+    .tool-card.teal-card .tool-card-footer { color: #0d8a72; }
 
     /* floating decorative shapes */
     .tool-card-icon::before,
@@ -272,6 +280,36 @@
     </div>
   </a>
 
+  <!-- Campaign Page Builder -->
+  <a class="tool-card purple-card" href="Campaign Page Builder/CampaignPageBuilder.html">
+    <div class="tool-card-icon purple">
+      <span class="mi">campaign</span>
+    </div>
+    <div class="tool-card-body">
+      <h3 data-i18n="home.page.title">Campaign Page Builder</h3>
+      <p data-i18n="home.page.desc">Compose Magnolia campaign landing pages from modular Sections. Pick a Style, drag Sections, and ship a single self-contained HTML.</p>
+      <div class="tool-card-footer">
+        <span data-i18n="home.open">Open Tool</span>
+        <span class="mi">arrow_forward</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- Marketing Material Builder -->
+  <a class="tool-card teal-card" href="MarketingMaterialBuilder.html">
+    <div class="tool-card-icon teal">
+      <span class="mi">design_services</span>
+    </div>
+    <div class="tool-card-body">
+      <h3 data-i18n="home.mmb.title">Marketing Material Builder</h3>
+      <p data-i18n="home.mmb.desc">Design pixel-perfect ad creatives — Google Display, PMAX, social posts, IoTMart banners &amp; signatures. Layer background, text, and product images, then export ready-to-use PNG/JPG.</p>
+      <div class="tool-card-footer">
+        <span data-i18n="home.open">Open Tool</span>
+        <span class="mi">arrow_forward</span>
+      </div>
+    </div>
+  </a>
+
 </div>
 
 <!-- ── Footer ── -->
@@ -294,6 +332,10 @@ const TRANSLATIONS = {
     'home.comp.desc': 'Browse, customise, and compose eDM components with drag-and-drop. Adjust colors, text, images, and export production-ready HTML.',
     'home.news.title': 'Newsletter Customizer',
     'home.news.desc': 'Design and customise newsletter emails with articles, insights, and data center sections. Inline-edit content and export complete HTML.',
+    'home.page.title': 'Campaign Page Builder',
+    'home.page.desc': 'Compose Magnolia campaign landing pages from modular Sections. Pick a Style, drag Sections, and ship a single self-contained HTML.',
+    'home.mmb.title': 'Marketing Material Builder',
+    'home.mmb.desc': 'Design pixel-perfect ad creatives — Google Display, PMAX, social posts, IoTMart banners & signatures. Layer background, text, and product images, then export ready-to-use PNG/JPG.',
     'home.open': 'Open Tool',
   },
   'zh-TW': {
@@ -304,6 +346,10 @@ const TRANSLATIONS = {
     'home.comp.desc': '瀏覽、自訂和組合 eDM 元件，支援拖放操作。可調整顏色、文字、圖片，並匯出正式 HTML。',
     'home.news.title': '電子報自訂工具',
     'home.news.desc': '設計和自訂電子報郵件，包含文章、趨勢觀點和數據中心區塊。支援即時編輯內容並匯出完整 HTML。',
+    'home.page.title': '活動頁面建構器',
+    'home.page.desc': '透過模組化 Section 組合 Magnolia 活動登陸頁。挑選 Style、拖放 Section，輸出單一完整 HTML 檔。',
+    'home.mmb.title': '行銷素材建構器',
+    'home.mmb.desc': '製作精準像素尺寸的廣告素材——Google Display、PMAX、社群貼文、IoTMart 版位與簽名檔。疊加背景、文字與產品圖，直接匯出可用的 PNG/JPG。',
     'home.open': '開啟工具',
   },
   'ko': {
@@ -314,6 +360,10 @@ const TRANSLATIONS = {
     'home.comp.desc': '드래그 앤 드롭으로 eDM 컴포넌트를 탐색, 맞춤 설정 및 조합하세요. 색상, 텍스트, 이미지를 조정하고 프로덕션 HTML을 내보내세요.',
     'home.news.title': '뉴스레터 커스터마이저',
     'home.news.desc': '기사, 인사이트 및 데이터 센터 섹션이 포함된 뉴스레터 이메일을 디자인하고 맞춤 설정하세요. 콘텐츠를 인라인 편집하고 완전한 HTML을 내보내세요.',
+    'home.page.title': '캠페인 페이지 빌더',
+    'home.page.desc': '모듈식 섹션으로 Magnolia 캠페인 랜딩 페이지를 구성하세요. 스타일을 선택하고 섹션을 드래그하여 단일 HTML 파일을 내보낼 수 있습니다.',
+    'home.mmb.title': '마케팅 소재 빌더',
+    'home.mmb.desc': 'Google Display, PMAX, 소셜 게시물, IoTMart 배너 및 서명 파일 등 정확한 픽셀 크기의 광고 소재를 디자인하세요. 배경, 텍스트, 제품 이미지를 레이어로 구성한 후 PNG/JPG로 바로 내보내세요.',
     'home.open': '도구 열기',
   }
 };

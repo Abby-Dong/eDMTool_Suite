@@ -1,0 +1,68 @@
+/* ══════════════════════════════════════════════════════════════════════
+   NEW STYLE TEMPLATE — tokens layer
+   ----------------------------------------------------------------------
+   HOW TO USE (4 steps):
+   1) Copy this file to:  styles-src/cpb-style-<your-id>.tokens.css
+      Copy _template.tail.css to: styles-src/cpb-style-<your-id>.tail.css
+   2) Find/replace  style03  →  <your-id>   (same id in BOTH files)
+   3) In scripts/build-cpb-styles.sh add a 3rd cat block:
+        cat "$SRC_DIR/cpb-style-<your-id>.tokens.css" \
+            "$SRC_DIR/cpb-style-base.css" \
+            "$SRC_DIR/cpb-style-<your-id>.tail.css" > "$DIST_DIR/cpb-style-<your-id>.css"
+   4) In src/cpb-styles.js add a registry entry:
+        { id: '<your-id>', num: '03', name: 'Style03 (...)',
+          desc: '...', cssFile: 'dist/cpb-style-<your-id>.css',
+          defaultMode: 'light' | 'dark', swatch: ['#bg','#accent','#text'],
+          defaultCardVisual: 'image' | 'icon', paletteColors: [] }
+   Then run:  ./scripts/build-cpb-styles.sh
+   ══════════════════════════════════════════════════════════════════════ */
+
+[data-style="style03"] {
+  /* —— Brand / accent —— */
+  --cpb-c-primary:        #8B5CF6;
+  --cpb-c-primary-hover:  #6D28D9;   /* used by all button :hover */
+  --cpb-c-accent:         #06B6D4;
+  --cpb-c-link:           #8B5CF6;
+
+  /* —— Surfaces (light/default mode) —— */
+  --cpb-c-bg:             #f5f7fa;
+  --cpb-c-bg-alt:         #eef2f8;
+  --cpb-c-surface:        #ffffff;
+
+  /* —— Text —— */
+  --cpb-c-text:           #1e293b;
+  --cpb-c-text-muted:     #475569;
+  --cpb-c-text-subtle:    #64748b;
+  --cpb-c-border:         #d8deea;
+
+  /* —— Typography —— */
+  --cpb-font-body:        'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+  --cpb-font-display:     'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* —— Shape / shadow / motion —— */
+  --cpb-radius-card:      10px;
+  --cpb-radius-btn:       999px;
+  --cpb-card-border:      1px solid rgba(139,92,246,.18);
+  --cpb-card-shadow:      0 1px 3px rgba(0,0,0,.04);
+  --cpb-card-shadow-hover: 0 12px 32px rgba(109,40,217,.18);
+  --cpb-headline-weight:  800;
+  --cpb-transition:       .25s ease;
+
+  background: var(--cpb-c-bg);
+  color: var(--cpb-c-text);
+  font-family: var(--cpb-font-body);
+}
+
+/* Dark section override — remap the same tokens for [data-mode="dark"]. */
+[data-style="style03"] .cpb-section[data-mode="dark"] {
+  --cpb-c-bg:             #09070f;
+  --cpb-c-bg-alt:         #151025;
+  --cpb-c-surface:        #161124;
+  --cpb-c-text:           #ffffff;
+  --cpb-c-text-muted:     #d1d5db;
+  --cpb-c-text-subtle:    #9ca3af;
+  --cpb-c-border:         rgba(196,181,253,.22);
+  --cpb-card-border:      1px solid rgba(196,181,253,.24);
+  --cpb-card-shadow:      0 1px 3px rgba(0,0,0,.4);
+  --cpb-card-shadow-hover: 0 14px 32px rgba(109,40,217,.36);
+}

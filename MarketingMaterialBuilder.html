@@ -1,0 +1,3762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!-- Content fonts for canvas (Google Fonts) -->
+<link id="mmbContentFonts" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Heebo:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Michroma&family=Zen+Dots&family=Syncopate:wght@400;700&family=Ubuntu+Condensed&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Exo+2:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<title>Graphic Asset Builder · eDM Tool Suite</title>
+<style>
+  .mi { font-family: 'Material Symbols Outlined'; font-size: 18px; vertical-align: -4px; margin-right: 4px; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; }
+  .top-bar .mi { font-size: 22px; vertical-align: -5px; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5; color: #1a1a2e;
+    min-width: 1280px;
+  }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+  * { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.15) transparent; }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    position: sticky; top: 0; z-index: 1000;
+    background: #ffffff; color: #1a1a2e; padding: 0 32px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 8px rgba(0,0,0,.08); border-bottom: 1px solid #e5e7eb;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 14px; }
+  .top-bar-logo { height: 20px; display: block; }
+  .top-bar-divider { width: 1px; height: 24px; background: #e0e0e0; }
+  .top-bar h1 { font-size: 15px; font-weight: 700; color: #333; letter-spacing: .3px; }
+  .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+  /* ── Breadcrumb ── */
+  .breadcrumb-bar {
+    background: #fff; border-bottom: 1px solid #e5e7eb; padding: 10px 32px;
+    font-size: 13px; color: #888; display: none; align-items: center; gap: 6px;
+    position: fixed; top: 56px; left: 0; right: 0; z-index: 999;
+  }
+  .breadcrumb-bar.visible { display: flex; }
+  .breadcrumb-bar a { color: #0059ff; text-decoration: none; font-weight: 500; cursor: pointer; }
+  .breadcrumb-bar a:hover { text-decoration: underline; }
+  .breadcrumb-bar .sep { color: #ccc; margin: 0 2px; }
+  .breadcrumb-bar .current { color: #333; font-weight: 600; }
+
+  /* ── Gallery ── */
+  .project-gallery { padding: 32px 32px 60px; }
+  .project-gallery.hidden { display: none; }
+  .project-gallery-header { text-align: center; padding: 24px 0 36px; }
+  .project-gallery-header h2 { font-size: 28px; font-weight: 800; color: #07071a; margin-bottom: 6px; }
+  .project-gallery-header p { font-size: 14px; color: #888; max-width: 560px; margin: 0 auto; }
+  .project-gallery-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px; max-width: 1200px; margin: 0 auto;
+  }
+  .proj-gallery-card {
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
+    cursor: pointer; transition: all .2s ease;
+    display: flex; flex-direction: column; position: relative;
+  }
+  .proj-gallery-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.20);
+  }
+  .proj-gallery-card-thumb {
+    height: 160px; background: #eef0f3; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .proj-gallery-card-thumb .thumb-clip { overflow: hidden; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,.12); border-radius: 4px; background: #fff; }
+  .proj-gallery-card-thumb .thumb-empty { font-size: 12px; color: #bbb; font-style: italic; }
+  .size-count-badge {
+    position: absolute; bottom: 8px; right: 8px; background: rgba(7,7,26,.72); color: #fff;
+    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: .3px;
+    backdrop-filter: blur(3px);
+  }
+  .proj-gallery-card-info {
+    padding: 12px 14px; border-top: 1px solid #f0f0f0;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .proj-gallery-card-info .card-meta { min-width: 0; }
+  .proj-gallery-card-info .card-name {
+    font-size: 13px; font-weight: 600; color: #333;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; display: block;
+  }
+  .proj-gallery-card-info .card-date { font-size: 10px; color: #999; }
+  .proj-gallery-card-info .card-arrow { color: #bbb; font-size: 18px; transition: color .15s; flex-shrink: 0; }
+  .proj-gallery-card:hover .card-arrow { color: #0059ff; }
+
+  .card-kebab { position: absolute; top: 8px; right: 8px; z-index: 20; }
+  .card-kebab-btn {
+    background: rgba(255,255,255,.85); border: none; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #888; transition: all .15s; backdrop-filter: blur(4px);
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .card-kebab-btn:hover { background: #fff; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  .card-kebab-btn .mi { font-size: 17px; margin-right: 0; vertical-align: 0; }
+  .card-kebab-menu {
+    display: none; position: absolute; top: 34px; right: 0;
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+    min-width: 160px; padding: 6px 0; z-index: 50; font-family: 'Inter', sans-serif;
+  }
+  .card-kebab-menu.open { display: block; }
+  .card-kebab-menu button {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 8px 14px; border: none; background: none;
+    font-size: 12px; font-weight: 500; color: #333;
+    cursor: pointer; text-align: left; font-family: inherit; transition: background .1s;
+  }
+  .card-kebab-menu button:hover { background: #f5f6f8; }
+  .card-kebab-menu button .mi { font-size: 16px; margin-right: 0; color: #888; }
+  .card-kebab-menu button.menu-delete { color: #e74c3c; }
+  .card-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+  .card-kebab-menu button.menu-delete:hover { background: #fff0f0; }
+
+  .proj-gallery-card-new .proj-gallery-card-thumb {
+    background: linear-gradient(135deg, #0059ff 0%, #06b6d4 100%);
+    align-items: center; justify-content: center;
+  }
+  .proj-gallery-card-new .new-card-content { text-align: center; color: #fff; }
+  .proj-gallery-card-new .new-card-content .mi { font-size: 36px; display: block; margin: 0 auto 8px; color: rgba(255,255,255,.95); margin-right: 0; }
+  .proj-gallery-card-new .new-card-content .new-card-title { font-size: 14px; font-weight: 700; display: block; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 10000;
+    background: rgba(0,0,0,.4); backdrop-filter: blur(2px);
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.visible { display: flex; }
+
+  /* ── New Project / Size Picker modal ── */
+  .size-picker-box {
+    background: #fff; border-radius: 18px;
+    width: 920px; max-width: 96vw; max-height: 90vh;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 24px 64px rgba(7,7,26,.28);
+  }
+  .spb-header { padding: 22px 28px 16px; border-bottom: 1px solid #eef0f3; flex-shrink: 0; }
+  .spb-header h3 { font-size: 20px; font-weight: 800; color: #07071a; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+  .spb-header h3 .mi { font-size: 25px; color: #0059ff; margin-right: 0; }
+  .spb-header p.hint { font-size: 13px; color: #8b919b; margin: 0; line-height: 1.45; }
+  .spb-body { padding: 22px 28px; overflow-y: auto; flex: 1; }
+  .spb-footer {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 15px 28px; border-top: 1px solid #eef0f3; flex-shrink: 0; background: #fbfcfd;
+  }
+  .spb-count { font-size: 12.5px; font-weight: 600; color: #8b919b; }
+  .spb-count b { color: #0059ff; font-weight: 800; }
+
+  /* setup block: project name + starter images */
+  .spb-setup {
+    display: grid; grid-template-columns: 1fr; gap: 18px;
+    margin-bottom: 24px; padding-bottom: 22px; border-bottom: 1px solid #f0f2f5;
+  }
+  .picker-row label { font-size: 12px; font-weight: 700; color: #4a5160; display: block; margin-bottom: 7px; }
+  .picker-row input[type="text"] {
+    width: 100%; border: 1px solid #e0e0e0; border-radius: 9px;
+    padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+    outline: none; color: #333; box-sizing: border-box; transition: all .12s;
+  }
+  .picker-row input[type="text"]:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+
+  /* sizes section header */
+  .spb-sizes-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .spb-sizes-title { font-size: 13.5px; font-weight: 800; color: #07071a; }
+  .bulk-select-row { display: flex; gap: 6px; }
+  .bulk-select-row button {
+    padding: 6px 13px; border-radius: 7px; border: 1px solid #e0e0e0; background: #fff;
+    font-size: 11px; font-weight: 600; color: #646b76; cursor: pointer; font-family: inherit; transition: all .12s;
+  }
+  .bulk-select-row button:hover { background: #f0f4ff; border-color: #c5d4ff; color: #0059ff; }
+
+  .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 12px; }
+  .size-grid-card {
+    border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 14px 12px 11px;
+    cursor: pointer; transition: all .15s; background: #fff; text-align: center; position: relative;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .size-grid-card:hover { border-color: #b7c9ff; background: #fafcff; }
+  .size-grid-card.selected { border-color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.14); background: #f5f8ff; }
+  .size-grid-card .pick-check {
+    position: absolute; top: 6px; right: 6px; width: 18px; height: 18px; border-radius: 50%;
+    background: #0059ff; color: #fff; font-size: 13px; margin-right: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(.5); transition: all .13s;
+  }
+  .size-grid-card.selected .pick-check { opacity: 1; transform: scale(1); }
+  .size-grid-card .size-swatch {
+    height: 56px; width: 100%; border-radius: 8px; margin-bottom: 10px;
+    background: #f0f2f5; display: flex; align-items: center; justify-content: center; transition: background .15s;
+  }
+  .size-grid-card.selected .size-swatch { background: #e6eeff; }
+  .size-grid-card .size-swatch .ratio-box { background: #c1cfe8; border: 1px solid #9db4e6; border-radius: 2px; transition: all .15s; }
+  .size-grid-card.selected .size-swatch .ratio-box { background: #0059ff; border-color: #0047cc; }
+  .size-grid-card .size-name {
+    font-size: 10px; font-weight: 800; color: #7b8493; text-transform: uppercase;
+    letter-spacing: .8px; line-height: 1.3;
+  }
+  .size-grid-card .size-subtitle { font-size: 12.5px; font-weight: 500; color: #1f2633; line-height: 1.25; margin-top: 2px; }
+  .size-grid-card .size-dims { font-size: 10px; color: #9aa1ac; font-family: 'SF Mono', Monaco, monospace; margin-top: 3px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+  .modal-actions button {
+    padding: 9px 20px; border-radius: 8px; border: none;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: all .12s;
+  }
+  .btn-cancel { background: #f0f2f5; color: #555; }
+  .btn-cancel:hover { background: #e5e7eb; }
+  .btn-confirm { background: #0059ff; color: #fff; }
+  .btn-confirm:hover { background: #003fcc; }
+  .btn-confirm:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+  /* ── Export modal ── */
+  .export-modal-box {
+    background: #fff; border-radius: 16px; padding: 28px 28px 24px;
+    width: 400px; max-width: 92vw; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+  }
+  .export-modal-box h3 { font-size: 17px; font-weight: 700; color: #07071a; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+  .export-modal-box h3 .mi { font-size: 21px; color: #0059ff; margin-right: 0; }
+  .export-modal-box .hint { font-size: 12px; color: #8b919b; margin-bottom: 20px; line-height: 1.5; }
+  .export-opt-section { margin-bottom: 18px; }
+  .export-opt-label { font-size: 10px; font-weight: 800; color: #8b919b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .export-scale-note { font-size: 11px; color: #8b919b; margin-top: 8px; font-family: 'SF Mono', Monaco, monospace; }
+
+  .rename-modal-box {
+    background: #fff; border-radius: 16px; padding: 28px 28px 24px;
+    width: 360px; max-width: 90vw; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+  }
+  .rename-modal-box h3 { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .rename-modal-box h3 .mi { font-size: 20px; color: #0059ff; margin-right: 0; }
+  .rename-modal-box p { font-size: 12px; color: #999; margin-bottom: 16px; }
+  .rename-modal-box input {
+    width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+    padding: 10px 14px; font-size: 14px; font-family: 'Inter', sans-serif; outline: none;
+    box-sizing: border-box;
+  }
+  .rename-modal-box input:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+
+  /* ══════════════ BUILDER VIEW ══════════════ */
+  .builder-view { display: none; height: calc(100vh - 56px); overflow: hidden; }
+  .builder-view.visible { display: flex; flex-direction: column; padding-top: 41px; }
+
+  .builder-layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* Left — Content panel */
+  .builder-left {
+    width: 300px; min-width: 300px; background: #fff;
+    border-right: 1px solid #e5e7eb; height: 100%; overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .builder-left-header { padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0; }
+  .builder-left-header h3 { font-size: 14px; font-weight: 700; color: #07071a; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+  .builder-left-header h3 .mi { color: #0059ff; }
+  .builder-left-header p { font-size: 11px; color: #999; margin: 0; }
+  .content-body { flex: 1; overflow-y: auto; }
+
+  /* Center — Canvas */
+  .builder-center { flex: 1; display: flex; flex-direction: column; background: #eef0f3; min-width: 0; position: relative; overflow: hidden; }
+  .builder-center-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px; background: #fff; border-bottom: 1px solid #e5e7eb;
+    position: sticky; top: 0; z-index: 50; flex-shrink: 0; gap: 16px;
+  }
+  .builder-center-header h3 { font-size: 14px; font-weight: 600; color: #555; display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .builder-center-header h3 #centerSizeName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .builder-center-header h3 .mi { color: #0059ff; }
+  .builder-center-header .dims-tag {
+    font-size: 11px; font-weight: 700; color: #0059ff; background: #eef3ff;
+    padding: 3px 10px; border-radius: 20px; font-family: 'SF Mono', Monaco, monospace;
+  }
+
+  .zoom-toggle { display: inline-flex; align-items: center; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+  .zoom-toggle button {
+    background: #fafafa; border: none; cursor: pointer;
+    width: 28px; height: 28px; font-size: 14px; font-weight: 700; color: #666;
+    display: flex; align-items: center; justify-content: center; transition: all .12s; font-family: inherit;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .zoom-toggle button:hover { background: #f0f4ff; color: #0059ff; }
+  .zoom-toggle button + button { border-left: 1px solid #e0e0e0; }
+  .zoom-toggle .zoom-pct { font-size: 11px; font-weight: 700; color: #888; padding: 0 10px; min-width: 46px; text-align: center; }
+
+  .builder-center-actions { display: flex; gap: 8px; }
+  .builder-center-actions button { font-size: 12px; }
+  .builder-center-actions button {
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-weight: 600; border: none; display: flex; align-items: center; gap: 4px;
+    transition: all .15s; white-space: nowrap;
+  }
+  .builder-download-btn { background: #07071a; color: #fff; }
+  .builder-download-btn:hover { background: #222; }
+  .builder-download-btn.downloaded { background: #27ae60; }
+  .builder-style-btn { background: #0059ff; color: #fff; }
+  .builder-style-btn:hover { background: #003fcc; }
+  .builder-download-all-btn { background: #07071a; color: #fff; }
+  .builder-download-all-btn:hover { background: #222; }
+  .builder-download-all-btn:disabled { background: #8b919b; cursor: progress; }
+  .builder-back-btn { background: #f0f0f0; color: #555; }
+  .builder-back-btn:hover { background: #e0e0e0; }
+  .dl-menu-wrap { position: relative; }
+  .dl-menu {
+    display: none; position: absolute; top: 100%; right: 0; margin-top: 6px;
+    background: #fff; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.15);
+    min-width: 150px; padding: 6px; z-index: 200;
+  }
+  .dl-menu.open { display: block; }
+  .dl-menu button {
+    width: 100%; justify-content: flex-start; background: none; color: #333; border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .dl-menu button:hover { background: #f0f4ff; color: #0059ff; }
+
+  /* Size tab strip */
+  .size-tab-strip {
+    display: flex; align-items: center; gap: 8px; padding: 10px 24px;
+    background: #fff; border-bottom: 1px solid #e5e7eb; overflow-x: auto; flex-shrink: 0;
+  }
+  .size-tab {
+    display: flex; align-items: center; gap: 8px; padding: 7px 10px 7px 14px;
+    border-radius: 8px; background: #f2f4f7; color: #555; cursor: pointer;
+    font-size: 12px; font-weight: 600; white-space: nowrap; transition: all .15s; flex-shrink: 0;
+    border: 1px solid transparent;
+  }
+  .size-tab:hover { background: #e7ecf5; }
+  .size-tab.active { background: #07071a; color: #fff; }
+  .size-tab .tab-dims { font-size: 10px; font-weight: 600; opacity: .65; font-family: 'SF Mono', Monaco, monospace; }
+  .size-tab .tab-remove {
+    width: 18px; height: 18px; border-radius: 50%; border: none; background: rgba(0,0,0,.08);
+    color: inherit; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: .5;
+  }
+  .size-tab .tab-remove:hover { opacity: 1; background: rgba(255,0,0,.25); }
+  .size-tab .tab-remove .mi { font-size: 13px; margin-right: 0; vertical-align: 0; }
+  .size-tab.add-tab { background: #eef3ff; color: #0059ff; border: 1px dashed #b7c9ff; }
+  .size-tab.add-tab:hover { background: #dce8ff; }
+
+  .builder-canvas-wrap { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 0; }
+  .builder-canvas { flex: 1; padding: 40px; background: #D6D9DD; overflow: auto; display: flex; align-items: center; justify-content: center; }
+  .mmb-stage { position: relative; flex-shrink: 0; }
+  .mmb-canvas {
+    position: relative; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.18);
+    background: #fff; transform-origin: center center; flex-shrink: 0;
+  }
+  .mmb-bg { position: absolute; inset: 0; z-index: 0; }
+  .mmb-bg .bg-img { position: absolute; inset: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; }
+  .mmb-bg .bg-overlay { position: absolute; inset: 0; }
+
+  .mmb-content-wrap { position: absolute; z-index: 1; display: flex; }
+  .mmb-content-wrap.layout-image-left { flex-direction: row; }
+  .mmb-content-wrap.layout-image-right { flex-direction: row-reverse; }
+  .mmb-content-wrap.layout-image-top { flex-direction: column; }
+  .mmb-content-wrap.layout-image-bottom { flex-direction: column-reverse; }
+  .mmb-content-wrap.layout-text-only { flex-direction: row; }
+  .mmb-content-wrap.layout-text-only .mmb-text-slot { flex: 1 1 100%; }
+  .mmb-media-slot { display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; }
+  .mmb-media-slot img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .mmb-content-wrap.layout-image-left .mmb-media-slot,
+  .mmb-content-wrap.layout-image-right .mmb-media-slot {
+    flex: 0 0 auto;
+    max-width: 36%;
+  }
+  .mmb-content-wrap.layout-image-top .mmb-media-slot,
+  .mmb-content-wrap.layout-image-bottom .mmb-media-slot {
+    flex: 0 0 42%;
+    width: 100%;
+  }
+  /* Google Display Ad Size 01/02 — fixed two-row split layout */
+  .mmb-content-wrap.mmb-gda-split { flex-direction: column; justify-content: center; }
+  .mmb-gda-row-top { display: flex; flex-direction: row; align-items: center; flex: 0 0 auto; min-width: 0; min-height: 0; }
+  .mmb-gda-row-bottom { display: flex; flex-direction: column; justify-content: center; flex: 0 0 auto; min-width: 0; min-height: 0; }
+  .mmb-gda-split .mmb-gda-row-top .mmb-media-slot { flex: 0 0 auto; align-self: center; }
+  .mmb-gda-split .mmb-text-slot { flex: 1 1 auto; }
+  .mmb-text-slot { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-width: 0; min-height: 0; overflow: hidden; gap: 12px; }
+  .mmb-text-el { word-wrap: break-word; }
+  .mmb-text-eyebrow { text-transform: uppercase; letter-spacing: .6px; }
+  .mmb-features-list { display: flex; flex-direction: column; gap: 8px; }
+  .mmb-feature-line { display: flex; align-items: center; gap: 6px; }
+  .mmb-feature-line .feature-check { flex-shrink: 0; margin-right: 0; }
+  .empty-img-ph {
+    width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(0,89,255,.06); border: 1px dashed #a9c0ff; color: #7b93c9; font-size: 11px; text-align: center; gap: 4px;
+    border-radius: 8px; padding: 8px;
+  }
+  .empty-img-ph .mi { font-size: 20px; margin-right: 0; }
+  .mmb-canvas.exporting .empty-img-ph { visibility: hidden; }
+
+  .builder-empty-canvas {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    color: #999; text-align: center;
+  }
+  .builder-empty-canvas .mi { font-size: 42px; color: #c3c8d1; margin-right: 0; }
+  .builder-empty-canvas button {
+    background: #0059ff; color: #fff; border: none; padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+
+  /* Right — Properties panel */
+  .builder-right { width: 320px; min-width: 320px; background: #fff; border-left: 1px solid #e5e7eb; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+  .builder-right-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+  .builder-right-empty .mi { font-size: 34px; color: #ddd; margin-bottom: 8px; margin-right: 0; display: block; }
+  .builder-right-empty p { font-size: 13px; color: #bbb; line-height: 1.5; }
+
+  .detail-sidebar-header { padding: 18px 20px 14px; border-bottom: 1px solid #f0f0f0; background: linear-gradient(180deg, #f0f4ff, #fff); }
+  .detail-sidebar-header h3 { font-size: 15px; font-weight: 700; color: #07071a; margin-bottom: 4px; }
+  .detail-sidebar-sub { font-size: 11px; font-weight: 600; color: #9aa1ac; font-family: 'SF Mono', Monaco, monospace; }
+
+  .sidebar-section { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; color: #646b76; }
+  .sidebar-section-title { font-size: 10px; font-weight: 800; color: #8b919b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+  .sidebar-toggle-ctrl { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
+  .sidebar-toggle-ctrl .ctrl-label { font-size: 12px; color: #646b76; font-weight: 500; }
+  .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ddd; border-radius: 20px; transition: .2s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+  .toggle-switch input:checked + .toggle-slider { background: #0059ff; }
+  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(16px); }
+
+  .pill-group { display: flex; gap: 4px; flex-wrap: wrap; }
+  .pill-group button {
+    padding: 6px 12px; font-size: 11px; font-weight: 600;
+    border: 1px solid #cfd2d5; border-radius: 6px;
+    background: #fff; color: #646b76; cursor: pointer;
+    transition: all .12s; font-family: inherit; display: flex; align-items: center; gap: 4px;
+  }
+  .pill-group button:hover { border-color: #c5d4ff; background: #f0f4ff; }
+  .pill-group button.active { background: #0059ff; color: #fff; border-color: #0059ff; }
+  .pill-group button .mi { font-size: 14px; margin-right: 0; }
+
+  .ctrl-stack { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+  .ctrl-stack + .ctrl-stack { margin-top: 10px; }
+  .ctrl-label { font-size: 11px; color: #646b76; font-weight: 600; }
+
+  /* ── Spacing: compact Figma-style padding box ── */
+  .spacing-title-row { display: flex; align-items: center; justify-content: space-between; }
+  .spacing-presets { display: inline-flex; gap: 3px; }
+  .spacing-presets button {
+    width: 22px; height: 19px; border: 1px solid #d3d8e3; border-radius: 5px; background: #fff;
+    font-size: 10px; font-weight: 800; color: #8b919b; cursor: pointer; padding: 0; letter-spacing: 0;
+    transition: all .12s; font-family: inherit;
+  }
+  .spacing-presets button:hover { border-color: #9ab6ff; color: #0059ff; background: #f2f6ff; }
+  .pad-box {
+    position: relative; height: 96px; margin: 6px 0 10px;
+    border: 1px solid #e5e7eb; border-radius: 10px; background: #f6f8fb;
+  }
+  .pad-box-inner {
+    position: absolute; inset: 27px 50px; border: 1px dashed #c2cad8; border-radius: 6px;
+    background: #fff; display: flex; align-items: center; justify-content: center;
+  }
+  .pad-input {
+    position: absolute; width: 42px; height: 24px; border: 1px solid #dfe3ea; border-radius: 6px;
+    background: #fff; text-align: center; font-size: 11px; font-weight: 600; color: #384150;
+    font-family: 'SF Mono', Monaco, monospace; outline: none; box-sizing: border-box; padding: 0;
+    appearance: textfield; -moz-appearance: textfield; transition: border-color .12s, box-shadow .12s;
+  }
+  .pad-input::-webkit-inner-spin-button, .pad-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .pad-input:hover { border-color: #b7c9ff; }
+  .pad-input:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.12); }
+  .pad-input.pad-top { top: 4px; left: 50%; transform: translateX(-50%); }
+  .pad-input.pad-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
+  .pad-input.pad-left { left: 4px; top: 50%; transform: translateY(-50%); }
+  .pad-input.pad-right { right: 4px; top: 50%; transform: translateY(-50%); }
+  .pad-link-btn {
+    width: 26px; height: 26px; border-radius: 7px; border: 1px solid #dfe3ea; background: #fff;
+    color: #9aa1ac; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    padding: 0; transition: all .12s;
+  }
+  .pad-link-btn .mi { font-size: 15px; margin: 0; }
+  .pad-link-btn:hover { border-color: #9ab6ff; }
+  .pad-link-btn.active { border-color: #0059ff; color: #0059ff; background: #eef4ff; }
+  .spacing-gap-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .spacing-gap-row .ctrl-label { flex-shrink: 0; }
+  .spacing-input-row { display: inline-flex; align-items: center; gap: 5px; }
+  .spacing-step-btn {
+    width: 22px; height: 24px; border: 1px solid #d3d8e3; border-radius: 6px; background: #fff;
+    color: #4b5563; font-size: 14px; line-height: 1; cursor: pointer; padding: 0; flex-shrink: 0;
+    transition: all .12s;
+  }
+  .spacing-step-btn:hover { border-color: #9ab6ff; background: #f2f6ff; color: #0059ff; }
+  .spacing-number-input {
+    width: 50px; text-align: center; padding: 6px 4px; font-size: 11px; font-weight: 600;
+    font-family: 'SF Mono', Monaco, monospace; appearance: textfield; -moz-appearance: textfield;
+  }
+  .spacing-number-input::-webkit-inner-spin-button, .spacing-number-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .text-input, textarea.text-input {
+    width: 100%; border: 1px solid #e5e7eb; border-radius: 6px;
+    padding: 7px 10px; font-size: 12px; font-family: inherit;
+    box-sizing: border-box; background: #fafafa; color: #333; outline: none;
+  }
+  .text-input:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); background: #fff; }
+  textarea.text-input { resize: vertical; min-height: 52px; line-height: 1.5; }
+
+  .color-field { display: flex; align-items: center; gap: 8px; }
+  .color-swatch-wrap {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; cursor: pointer;
+    position: relative; overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.14);
+    transition: transform .12s ease;
+  }
+  /* tiny eyedropper glyph appears on hover to signal it's clickable */
+  .color-swatch-wrap::after {
+    content: 'edit'; font-family: 'Material Icons'; font-size: 13px; line-height: 1;
+    position: absolute; right: 2px; bottom: 2px; color: #fff; opacity: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,.55); transition: opacity .15s ease; pointer-events: none;
+  }
+  .color-swatch-wrap:hover { box-shadow: inset 0 0 0 1px rgba(0,89,255,.55); transform: translateY(-1px); }
+  .color-swatch-wrap:hover::after { opacity: .9; }
+  .color-swatch-wrap:active { transform: translateY(0); }
+  .color-swatch-wrap input[type="color"] {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0; border: none; padding: 0; margin: 0; cursor: pointer; background: transparent;
+  }
+  .color-hex-input {
+    flex: 1; text-transform: uppercase; letter-spacing: .04em;
+    font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace; font-size: 11.5px; font-weight: 600; color: #384150;
+  }
+  .color-hex-input::selection { background: rgba(0,89,255,.18); }
+
+  /* ── Custom color picker (replaces native <input type=color> popup) ── */
+  .cpick {
+    position: fixed; z-index: 10400; width: 232px; padding: 12px;
+    background: #ffffff; border: 1px solid #e7eaf0; border-radius: 14px;
+    box-shadow: 0 18px 48px rgba(15,23,42,.22), 0 2px 8px rgba(15,23,42,.12);
+    opacity: 0; transform: translateY(-4px) scale(.98); pointer-events: none;
+    transition: opacity .14s ease, transform .14s ease;
+    font-family: inherit;
+  }
+  .cpick.open { opacity: 1; transform: none; pointer-events: auto; }
+  .cpick-sv {
+    position: relative; width: 100%; height: 148px; border-radius: 10px;
+    cursor: crosshair; overflow: hidden; touch-action: none;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.10);
+  }
+  .cpick-sv-white { position: absolute; inset: 0; background: linear-gradient(to right, #fff, rgba(255,255,255,0)); }
+  .cpick-sv-black { position: absolute; inset: 0; background: linear-gradient(to top, #000, rgba(0,0,0,0)); }
+  .cpick-handle {
+    position: absolute; width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.4);
+    transform: translate(-50%, -50%); pointer-events: none;
+  }
+  .cpick-hue {
+    position: relative; height: 14px; margin: 12px 0 10px; border-radius: 8px; cursor: pointer; touch-action: none;
+    background: linear-gradient(to right,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.10);
+  }
+  .cpick-hue-handle {
+    position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #fff;
+    border: 1px solid rgba(15,23,42,.25); box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    transform: translate(-50%, -50%); pointer-events: none;
+  }
+  .cpick-fields { display: flex; align-items: center; gap: 8px; }
+  .cpick-preview {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.16), 0 1px 2px rgba(15,23,42,.12);
+  }
+  .cpick-hex {
+    flex: 1; min-width: 0; border: 1px solid #e5e7eb; border-radius: 8px; background: #fafafa;
+    padding: 8px 10px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace; color: #384150; outline: none; box-sizing: border-box;
+  }
+  .cpick-hex:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.12); background: #fff; }
+  .cpick-presets { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-top: 12px; }
+  .cpick-preset {
+    aspect-ratio: 1; border-radius: 6px; cursor: pointer; border: none; padding: 0;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,.14); transition: transform .1s ease, box-shadow .12s ease;
+  }
+  .cpick-preset:hover { transform: scale(1.12); box-shadow: inset 0 0 0 1px rgba(0,89,255,.5), 0 2px 6px rgba(0,89,255,.25); }
+
+  .range-row { display: flex; align-items: center; gap: 10px; }
+  .range-row input[type="range"] {
+    --mmb-range-accent: #0059ff;
+    --mmb-range-track: #d9e0ec;
+    --mmb-range-thumb-ring: rgba(0, 89, 255, .2);
+    flex: 1;
+    height: 18px;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  .range-row input[type="range"]:focus-visible { outline: none; }
+  .range-row input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6da0ff 0%, var(--mmb-range-accent) 45%, #0ea5e9 100%);
+    box-shadow: inset 0 0 0 1px rgba(0, 46, 138, .1);
+  }
+  .range-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--mmb-range-accent);
+    margin-top: -5px;
+    box-shadow: 0 1px 4px rgba(0, 46, 138, .28), 0 0 0 0 var(--mmb-range-thumb-ring);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .range-row input[type="range"]:hover::-webkit-slider-thumb,
+  .range-row input[type="range"]:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.08);
+    box-shadow: 0 2px 7px rgba(0, 46, 138, .3), 0 0 0 5px var(--mmb-range-thumb-ring);
+  }
+  .range-row input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    border: none;
+    background: var(--mmb-range-track);
+  }
+  .range-row input[type="range"]::-moz-range-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6da0ff 0%, var(--mmb-range-accent) 45%, #0ea5e9 100%);
+  }
+  .range-row input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--mmb-range-accent);
+    box-shadow: 0 1px 4px rgba(0, 46, 138, .28), 0 0 0 0 var(--mmb-range-thumb-ring);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .range-row input[type="range"]:hover::-moz-range-thumb,
+  .range-row input[type="range"]:focus-visible::-moz-range-thumb {
+    transform: scale(1.08);
+    box-shadow: 0 2px 7px rgba(0, 46, 138, .3), 0 0 0 5px var(--mmb-range-thumb-ring);
+  }
+  .range-val {
+    font-size: 11px;
+    font-family: 'SF Mono', Monaco, monospace;
+    color: #4b5565;
+    min-width: 44px;
+    text-align: center;
+    background: #eef3ff;
+    border: 1px solid #d7e3ff;
+    border-radius: 999px;
+    padding: 2px 8px;
+    line-height: 1.4;
+  }
+
+  .grad-preview { height: 34px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb; }
+
+  .fit-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; }
+  .fit-toggle button { background: #fafafa; border: none; cursor: pointer; padding: 5px 12px; font-size: 11px; font-weight: 600; color: #888; font-family: inherit; transition: all .12s; }
+  .fit-toggle button:not(:last-child) { border-right: 1px solid #e5e7eb; }
+  .fit-toggle button.active { background: #07071a; color: #fff; }
+
+  .upload-drop {
+    border: 1.5px dashed #c5d4ff; background: #f7f9ff; border-radius: 10px;
+    padding: 16px; text-align: center; cursor: pointer; transition: all .15s;
+  }
+  .upload-drop:hover { background: #eef3ff; border-color: #0059ff; }
+  .upload-drop .mi { font-size: 24px; color: #7b93c9; margin-right: 0; display: block; margin-bottom: 4px; }
+  .upload-drop .upload-txt { font-size: 11px; color: #7b93c9; font-weight: 600; }
+  .upload-preview { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 8px; background: repeating-conic-gradient(#f2f2f2 0% 25%, #fff 0% 50%) 0/16px 16px; }
+  .upload-preview img { width: 100%; height: 90px; object-fit: contain; display: block; }
+  .upload-preview.is-cover img { object-fit: cover; }
+  .upload-preview .remove-img-btn {
+    position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(0,0,0,.55); color: #fff; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .upload-preview .remove-img-btn .mi { font-size: 15px; margin-right: 0; }
+
+  .empty-selection-hint { font-size: 11px; color: #999; padding: 4px 0 8px; line-height: 1.5; }
+  .feature-input-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .feature-input-row .feature-num { width: 16px; font-size: 10px; color: #aaa; font-weight: 700; flex-shrink: 0; }
+  .feature-remove-btn { flex-shrink: 0; width: 24px; height: 24px; border: 1px solid #e5e7eb; background: #fff; border-radius: 6px; cursor: pointer; color: #b0b6bf; display: inline-flex; align-items: center; justify-content: center; transition: all .12s; }
+  .feature-remove-btn:hover { border-color: #f0a9a9; color: #e05353; background: #fff5f5; }
+  .feature-remove-btn .mi { font-size: 15px; margin-right: 0; }
+  .feature-add-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; border: 1px dashed #b7c9ff; background: #f5f8ff; color: #0059ff; border-radius: 7px; font-size: 11px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all .12s; margin-top: 2px; }
+  .feature-add-btn:hover { background: #e8f0ff; border-color: #7ba0ff; }
+  .feature-add-btn .mi { font-size: 15px; margin-right: 0; }
+
+  /* ── Image field (upload + library button pair) ── */
+  .img-field-actions { display: flex; gap: 6px; }
+  .img-field-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+    border: 1px solid #d7deea; background: #f8faff; color: #375a9e;
+    border-radius: 7px; padding: 7px 8px; font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all .15s; font-family: inherit; text-align: center;
+  }
+  .img-field-btn:hover { background: #eaf1ff; border-color: #a9c0ff; }
+  .img-field-btn .mi { font-size: 15px; margin-right: 0; }
+
+  /* ── Image Library modal ── */
+  .imglib-box {
+    background: #fff; border-radius: 16px; padding: 22px;
+    width: 760px; max-width: 95vw; max-height: 88vh; overflow: hidden;
+    display: flex; flex-direction: column; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+  }
+  .imglib-box h3 { font-size: 17px; font-weight: 700; color: #07071a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .imglib-box h3 .mi { font-size: 21px; color: #0059ff; margin-right: 0; }
+  .imglib-search-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .imglib-search-row input {
+    flex: 1; border: 1px solid #e0e0e0; border-radius: 8px; padding: 9px 14px;
+    font-size: 13px; font-family: inherit; outline: none;
+  }
+  .imglib-search-row input:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+  .imglib-upload-btn {
+    display: flex; align-items: center; gap: 5px; padding: 9px 14px; border-radius: 8px;
+    border: 1px dashed #b7c9ff; background: #eef3ff; color: #0059ff; font-size: 12px; font-weight: 700;
+    cursor: pointer; white-space: nowrap; font-family: inherit;
+  }
+  .imglib-upload-btn:hover { background: #dce8ff; }
+  .imglib-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;
+    overflow-y: auto; padding: 2px;
+  }
+  .imglib-cell {
+    border: 2px solid #e5e7eb; border-radius: 10px; overflow: hidden; cursor: pointer;
+    background: #fff; transition: all .15s; text-align: left; display: flex; flex-direction: column;
+    min-height: 100px;
+  }
+  .imglib-cell:hover { border-color: #c5d4ff; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.1); }
+  .imglib-thumb { height: 76px; background: #f2f4f7; position: relative; overflow: hidden; }
+  .imglib-thumb img { width: 100%; height: 100%; display: block; }
+  .imglib-thumb.is-cover img { object-fit: cover; }
+  .imglib-thumb.is-contain img { object-fit: contain; padding: 6px; }
+  .imglib-thumb.broken img { display: none; }
+  .imglib-thumb.broken::after { content: 'image unavailable'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #bbb; text-align: center; padding: 6px; }
+  .imglib-name { font-size: 10px; color: #666; padding: 6px 8px; text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ── New-project pending image pickers (follow CPB pop-upload usage) ── */
+  .pending-images-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .pending-image-card {
+    border: 1px solid #e5e7eb; border-radius: 10px; background: #fcfdff;
+    padding: 10px;
+  }
+  .pending-image-preview {
+    margin-bottom: 8px; border-radius: 8px; overflow: hidden;
+    background: #f5f7fb; border: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 90px; max-height: 120px; position: relative;
+  }
+  .pending-image-preview img { max-width: 100%; max-height: 120px; object-fit: contain; display: block; }
+  .pending-image-preview .preview-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px; color: #a2a8b3; font-size: 11px; padding: 14px; text-align: center;
+  }
+  .pending-image-preview .preview-placeholder .mi { font-size: 22px; margin-right: 0; }
+  .pending-image-actions { display: flex; align-items: stretch; gap: 6px; }
+  /* both <button> and <label> get identical rendering */
+  .pending-image-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 6px 10px; border-radius: 6px; border: 1px dashed #c5d4ff;
+    background: #f0f4ff; color: #5a5f6a; font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all .15s; font-family: 'Inter', sans-serif;
+    white-space: nowrap; box-sizing: border-box; line-height: 1.4;
+    text-align: center; vertical-align: middle;
+  }
+  .pending-image-btn:hover { background: #dce8ff; border-color: #0059ff; color: #0059ff; }
+  .pending-image-btn .mi { font-size: 14px; margin-right: 0; flex-shrink: 0; }
+  /* remove overlay: small dark circle top-right corner of preview */
+  .pending-img-remove {
+    position: absolute; top: 7px; right: 7px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(10,10,20,.55); color: #fff; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s; z-index: 2;
+  }
+  .pending-img-remove:hover { background: rgba(180,30,30,.75); }
+  .pending-img-remove .mi { font-size: 13px; margin-right: 0; }
+  @media (max-width: 860px) {
+    .pending-images-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── Typography popup ── */
+  .typo-summary-row { display: flex; align-items: center; gap: 10px; }
+  .typo-summary-preview {
+    width: 34px; height: 34px; border-radius: 8px; background: #07071a; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+  }
+  .typo-summary-meta { flex: 1; font-size: 11px; color: #8b919b; line-height: 1.4; }
+  .typo-edit-btn {
+    display: flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 6px;
+    border: 1px solid #cfd2d5; background: #fff; color: #0059ff; font-size: 11px; font-weight: 700;
+    cursor: pointer; font-family: inherit; flex-shrink: 0;
+  }
+  .typo-edit-btn:hover { background: #eef3ff; border-color: #0059ff; }
+  .typo-edit-btn .mi { font-size: 15px; margin-right: 0; }
+  .typo-modal-box {
+    background: #fff; border-radius: 16px; padding: 24px;
+    width: 380px; max-width: 92vw; max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,.18);
+  }
+  .text-modal-box { width: 720px; max-width: 92vw; }
+  .typo-modal-box h3 { font-size: 16px; font-weight: 700; color: #07071a; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .typo-modal-box h3 .mi { font-size: 20px; color: #0059ff; margin-right: 0; }
+
+  /* ── Layout visual picker ── */
+  .layout-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .media-size-ctrl { margin-top: 12px; }
+  .layout-opt {
+    border: 1.5px solid #e5e7eb; border-radius: 9px; padding: 7px 6px 6px;
+    cursor: pointer; transition: all .15s; background: #fff; text-align: center;
+  }
+  .layout-opt:hover { border-color: #b7c9ff; background: #fafcff; }
+  .layout-opt.active { border-color: #0059ff; background: #f5f8ff; box-shadow: 0 0 0 2px rgba(0,89,255,.12); }
+  .lo-preview { height: 44px; border-radius: 6px; background: #f0f2f5; margin-bottom: 5px; padding: 5px; box-sizing: border-box; overflow: hidden; }
+  .lo-row { display: flex; gap: 3px; height: 100%; }
+  .lo-col { display: flex; flex-direction: column; gap: 3px; height: 100%; }
+  .lo-img { flex: 0 0 42%; background: #c1cfe8; border-radius: 3px; }
+  .layout-opt.active .lo-img { background: #6b9aff; }
+  .lo-text { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+  .lo-line { background: #cdd2da; border-radius: 2px; height: 3px; }
+  .lo-line:first-child { width: 80%; }
+  .lo-line:nth-child(2) { width: 55%; }
+  .lo-line:nth-child(3) { width: 70%; }
+  .layout-opt.active .lo-line { background: rgba(0,89,255,.5); }
+  .layout-opt-label { font-size: 9.5px; color: #7b8493; font-weight: 600; line-height: 1.3; }
+  .layout-opt.active .layout-opt-label { color: #0059ff; }
+
+  /* ── Canvas inline text editing ── */
+  .mmb-editable { cursor: text; transition: box-shadow .1s; }
+  .mmb-editable:hover { box-shadow: 0 0 0 1.5px rgba(0,89,255,.4); border-radius: 2px; }
+  .mmb-editing { box-shadow: 0 0 0 2px #0059ff !important; border-radius: 2px; }
+  .mmb-editing:focus { outline: none; }
+
+  /* ── Compact typo rows (left panel typography section) ── */
+  .typo-compact-row {
+    display: flex; align-items: center; gap: 9px; padding: 7px 0;
+    border-bottom: 1px solid #f5f5f7;
+  }
+  /* ── Background edit popup ── */
+  .bg-edit-trigger {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px;
+    background: #fafafa; color: #444; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all .15s;
+  }
+  .bg-edit-trigger:hover { background: #f0f4ff; border-color: #b7c9ff; color: #0059ff; }
+  .bg-edit-trigger .mi { font-size: 17px; margin-right: 0; }
+  .bg-popup {
+    display: none; position: fixed; z-index: 10200;
+    background: #fff; border-radius: 14px; width: 300px; max-height: calc(100vh - 16px); overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+  }
+  .bg-popup.open { display: block; }
+  .bg-popup-header {
+    display: flex; align-items: center; gap: 8px; padding: 13px 14px 11px;
+    border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; background: #fff; z-index: 1;
+  }
+  .bg-popup-header h4 { flex: 1; font-size: 13px; font-weight: 700; color: #07071a; margin: 0; display: flex; align-items: center; gap: 6px; }
+  .bg-popup-header h4 .mi { font-size: 16px; margin-right: 0; color: #0059ff; }
+  .bg-popup-close { background: none; border: none; cursor: pointer; color: #aaa; padding: 2px; line-height: 1; }
+  .bg-popup-close .mi { font-size: 18px; margin-right: 0; }
+  .bg-popup-body { padding: 14px; }
+  .bg-popup-section { margin-bottom: 8px; }
+  .bg-popup-section:last-child { margin-bottom: 0; }
+  .bg-popup-label { font-size: 10px; font-weight: 800; color: #8b919b; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
+  .bg-popup-divider { border: none; border-top: 1px solid #f0f2f5; margin: 14px 0; }
+
+  /* iOS-like slider style specifically inside Background popup */
+  .bg-popup .range-row { gap: 8px; }
+  .bg-popup .range-row input[type="range"] {
+    --mmb-range-accent: #0a84ff;
+    --mmb-range-track: #dfe4ec;
+    --mmb-range-thumb-ring: rgba(10,132,255,.18);
+    height: 20px;
+  }
+  .bg-popup .range-row input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--mmb-range-track);
+    box-shadow: none;
+  }
+  .bg-popup .range-row input[type="range"]::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(15,23,42,.10);
+    margin-top: -7px;
+    box-shadow: 0 2px 6px rgba(15,23,42,.24), 0 0 0 0 var(--mmb-range-thumb-ring);
+  }
+  .bg-popup .range-row input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--mmb-range-track);
+    box-shadow: none;
+  }
+  .bg-popup .range-row input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--mmb-range-accent);
+  }
+  .bg-popup .range-row input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(15,23,42,.10);
+    box-shadow: 0 2px 6px rgba(15,23,42,.24), 0 0 0 0 var(--mmb-range-thumb-ring);
+  }
+  .bg-popup .range-val {
+    min-width: 42px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5d6572;
+    text-align: right;
+  }
+
+  .typo-compact-row:last-child { border-bottom: none; }
+
+  /* \u2500\u2500 Style preset picker \u2500\u2500 */
+  .style-preset-grid { display: flex; gap: 7px; }
+  .style-preset-opt {
+    flex: 1; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 7px 5px 6px;
+    cursor: pointer; transition: all .15s; background: #fff; text-align: center;
+  }
+  .style-preset-opt:hover { border-color: #b7c9ff; }
+  .style-preset-opt.active { border-color: #0059ff; background: #f5f8ff; box-shadow: 0 0 0 2px rgba(0,89,255,.12); }
+  .style-preset-swatch { height: 28px; border-radius: 5px; margin-bottom: 5px; border: 1px solid rgba(0,0,0,.07); }
+  .style-preset-label { font-size: 9px; font-weight: 800; color: #7b8493; text-transform: uppercase; letter-spacing: .5px; }
+  .style-preset-opt.active .style-preset-label { color: #0059ff; }
+
+  /* \u2500\u2500 Mode toggle (Light / Dark) \u2500\u2500 */
+  .mode-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; }
+  .mode-toggle button {
+    background: #fafafa; border: none; cursor: pointer;
+    padding: 5px 12px; font-size: 11px; font-weight: 600; color: #888;
+    display: flex; align-items: center; gap: 4px; transition: all .12s; font-family: inherit;
+  }
+  .mode-toggle button:not(:last-child) { border-right: 1px solid #e5e7eb; }
+  .mode-toggle button .mi { font-size: 14px; margin-right: 0; }
+  .mode-toggle button.active { background: #07071a; color: #fff; }
+
+  .style-popup {
+    display: none; position: fixed; z-index: 10210;
+    background: #fff; border-radius: 14px; width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+  }
+  .style-popup.open { display: block; }
+  .style-popup-header {
+    display: flex; align-items: center; gap: 8px; padding: 13px 14px 11px;
+    border-bottom: 1px solid #f0f0f0; background: #fff;
+  }
+  .style-popup-header h4 { flex: 1; font-size: 13px; font-weight: 700; color: #07071a; margin: 0; display: flex; align-items: center; gap: 6px; }
+  .style-popup-header h4 .mi { font-size: 16px; margin-right: 0; color: #0059ff; }
+  .style-popup-close { background: none; border: none; cursor: pointer; color: #aaa; padding: 2px; line-height: 1; }
+  .style-popup-close .mi { font-size: 18px; margin-right: 0; }
+  .style-popup-body { padding: 14px; }
+  .style-popup-hint { font-size: 11px; color: #8b919b; margin-bottom: 10px; }
+
+  /* Graphic / apply-to-all controls */
+  .graphic-type-group { flex-wrap: wrap; }
+  .graphic-style-color {
+    flex: 0 0 auto; width: 32px; height: 32px; padding: 0; border: 1px solid #d7deea;
+    border-radius: 8px; background: #f8faff; color: #7b8493; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .12s;
+  }
+  .graphic-style-color:hover { border-color: #a9c0ff; color: #0059ff; }
+  .graphic-style-color.active { border-color: #0059ff; background: #eef3ff; color: #0059ff; }
+  .graphic-style-color .mi { font-size: 16px; margin-right: 0; }
+  .apply-all-btn {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;
+    border: 1px solid #d7deea; background: #f8faff; color: #375a9e;
+    border-radius: 8px; padding: 8px 10px; font-size: 11.5px; font-weight: 700;
+    cursor: pointer; transition: all .15s; font-family: inherit;
+  }
+  .apply-all-btn:hover { background: #eaf1ff; border-color: #a9c0ff; }
+  .apply-all-btn.done { background: #e7f7ec; border-color: #86e0a6; color: #1f9d55; }
+  .apply-all-btn .mi { font-size: 15px; margin-right: 0; }
+
+  /* \u2500\u2500 Font picker (left panel) \u2500\u2500 */
+  .font-cat-label { font-size: 9.5px; font-weight: 800; color: #8b919b; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; margin-top: 10px; }
+  .font-cat-label:first-child { margin-top: 0; }
+  .font-pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+  .font-pill {
+    padding: 5px 11px; border: 1px solid #e5e7eb; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 12px; color: #444;
+    transition: all .12s; white-space: nowrap; line-height: 1.4;
+  }
+  .font-pill:hover { border-color: #b7c9ff; background: #f0f4ff; }
+  .font-pill.active { border-color: #0059ff; background: #f5f8ff; color: #0059ff; box-shadow: 0 0 0 2px rgba(0,89,255,.1); }
+  .typo-compact-preview {
+    width: 26px; height: 26px; border-radius: 6px; background: #0d1321; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+  }
+  .typo-compact-label { font-size: 11px; font-weight: 600; color: #444; min-width: 68px; }
+  .typo-compact-meta { flex: 1; font-size: 10px; color: #9aa1ac; font-family: 'SF Mono', Monaco, monospace; }
+</style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
+    <span class="top-bar-divider"></span>
+    <h1>Graphic Asset Builder</h1>
+  </div>
+  <div class="top-bar-right"></div>
+</div>
+
+<!-- ── Breadcrumb ── -->
+<div class="breadcrumb-bar" id="breadcrumbBar">
+  <a onclick="backToGallery()"><span class="mi">grid_view</span> Graphic Asset Project Gallery</a>
+  <span class="sep">›</span>
+  <span class="current" id="breadcrumbName">Untitled</span>
+</div>
+
+<!-- ── Project Gallery ── -->
+<div class="project-gallery" id="galleryView">
+  <div class="project-gallery-header">
+    <h2>Graphic Asset Builder</h2>
+    <p>One project, every size. Set your headline, copy and images once — each ad size auto-lays them out, ready to export.</p>
+  </div>
+  <div class="project-gallery-grid" id="projectGrid"></div>
+</div>
+
+<!-- ── Builder View ── -->
+<div class="builder-view" id="builderView">
+  <div class="builder-layout">
+
+    <!-- Left: Content -->
+    <div class="builder-left">
+      <div class="builder-left-header">
+        <h3><span class="mi">edit_note</span>Content</h3>
+        <p>Text is per size · images &amp; font shared</p>
+      </div>
+      <div class="content-body" id="contentBody"></div>
+    </div>
+
+    <!-- Center: Canvas -->
+    <div class="builder-center">
+      <div class="builder-center-header">
+        <h3><span class="mi">photo_size_select_large</span><span id="centerSizeName">Size</span><span class="dims-tag" id="centerDimsTag">0×0</span></h3>
+        <div class="zoom-toggle">
+          <button onclick="zoomStep(-1)" title="Zoom out">−</button>
+          <span class="zoom-pct" id="zoomPct">100%</span>
+          <button onclick="zoomStep(1)" title="Zoom in">+</button>
+          <button onclick="zoomFit()" title="Fit to screen" style="width:auto;padding:0 10px;font-size:11px;">Fit</button>
+          <button onclick="zoom100()" title="Actual size (100%)" style="width:auto;padding:0 12px;font-size:11px;">100%</button>
+        </div>
+        <div class="builder-center-actions">
+          <button class="builder-style-btn" id="styleBtn" onclick="openStylePopup(this)"><span class="mi">palette</span>Style</button>
+          <button class="builder-download-all-btn" id="downloadAllBtn" onclick="openExportModal()"><span class="mi">folder_zip</span>Export All Sizes</button>
+        </div>
+      </div>
+      <div class="size-tab-strip" id="sizeTabStrip"></div>
+      <div class="builder-canvas-wrap">
+        <div class="builder-canvas" id="canvasScroll">
+          <div class="mmb-stage" id="mmbStage">
+            <div class="mmb-canvas" id="mmbCanvas"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Properties -->
+    <div class="builder-right" id="rightPanel">
+      <div class="builder-right-empty">
+        <span class="mi">ads_click</span>
+        <p>Add a size to get started.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Size Picker Modal (create / add) ── -->
+<div class="modal-overlay" id="sizeModal">
+  <div class="size-picker-box">
+    <div class="spb-header">
+      <h3><span class="mi">add_photo_alternate</span><span id="sizeModalTitle">New Graphic Asset Project</span></h3>
+      <p class="hint" id="sizeModalHint">Name your project and choose every output size you need — you can add more later.</p>
+    </div>
+    <div class="spb-body">
+      <div class="spb-setup" id="spbSetup">
+        <div class="picker-row" id="nameRow">
+          <label>Project name</label>
+          <input type="text" id="newProjName" placeholder="e.g. Summer Sale 2026" />
+        </div>
+        <div class="picker-row pending-images-grid" id="pendingImagesRow">
+          <div class="pending-image-card">
+            <label>Background Image (optional)</label>
+            <div class="pending-image-preview" id="pendingBgPreview">
+              <span class="preview-placeholder"><span class="mi">wallpaper</span>No image selected</span>
+            </div>
+            <div class="pending-image-actions">
+              <button type="button" class="pending-image-btn" onclick="pickPendingImage('background')"><span class="mi">photo_library</span>Image Library</button>
+              <button type="button" class="pending-image-btn" onclick="triggerPendingUpload('background')"><span class="mi">upload</span>Upload</button>
+            </div>
+            <input type="file" id="pendingBgFile" accept="image/*" style="display:none" onchange="uploadPendingImage(event,'background')" />
+          </div>
+          <div class="pending-image-card">
+            <label>Product Image (optional)</label>
+            <div class="pending-image-preview" id="pendingProductPreview">
+              <span class="preview-placeholder"><span class="mi">inventory_2</span>No image selected</span>
+            </div>
+            <div class="pending-image-actions">
+              <button type="button" class="pending-image-btn" onclick="pickPendingImage('product')"><span class="mi">photo_library</span>Image Library</button>
+              <button type="button" class="pending-image-btn" onclick="triggerPendingUpload('product')"><span class="mi">upload</span>Upload</button>
+            </div>
+            <input type="file" id="pendingProductFile" accept="image/*" style="display:none" onchange="uploadPendingImage(event,'product')" />
+          </div>
+        </div>
+      </div>
+      <div class="spb-sizes-head">
+        <span class="spb-sizes-title">Output sizes</span>
+        <div class="bulk-select-row">
+          <button onclick="selectAllSizes()">Select all</button>
+          <button onclick="clearAllSizes()">Clear all</button>
+        </div>
+      </div>
+      <div id="sizeGroupsWrap"></div>
+    </div>
+    <div class="spb-footer">
+      <span class="spb-count" id="spbCount">No sizes selected</span>
+      <div class="modal-actions" style="margin-top:0;">
+        <button class="btn-cancel" onclick="closeSizeModal()">Cancel</button>
+        <button class="btn-confirm" id="confirmCreateBtn" disabled onclick="confirmSizeModal()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Background Edit Popup ── -->
+<div id="bgPopup" class="bg-popup">
+  <div class="bg-popup-header">
+    <h4 id="bgPopupTitle"><span class="mi">wallpaper</span>Background</h4>
+    <button class="bg-popup-close" onclick="closeBgPopup()"><span class="mi">close</span></button>
+  </div>
+  <div class="bg-popup-body" id="bgPopupBody"></div>
+</div>
+<div id="bgPopupOverlay" onclick="closeBgPopup()" style="display:none;position:fixed;inset:0;z-index:10199;"></div>
+
+<!-- ── Custom Color Picker ── -->
+<div id="colorPickerOverlay" onclick="closeColorPicker()" style="display:none;position:fixed;inset:0;z-index:10399;"></div>
+<div id="colorPicker" class="cpick" role="dialog" aria-label="Color picker">
+  <div class="cpick-sv" id="cpickSV">
+    <div class="cpick-sv-white"></div>
+    <div class="cpick-sv-black"></div>
+    <div class="cpick-handle" id="cpickSVHandle"></div>
+  </div>
+  <div class="cpick-hue" id="cpickHue"><div class="cpick-hue-handle" id="cpickHueHandle"></div></div>
+  <div class="cpick-fields">
+    <div class="cpick-preview" id="cpickPreview"></div>
+    <input id="cpickHex" class="cpick-hex" type="text" spellcheck="false" maxlength="7" />
+  </div>
+  <div class="cpick-presets" id="cpickPresets"></div>
+</div>
+
+<!-- ── Style Popup ── -->
+<div id="stylePopup" class="style-popup">
+  <div class="style-popup-header">
+    <h4><span class="mi">palette</span>Style</h4>
+    <button class="style-popup-close" onclick="closeStylePopup()"><span class="mi">close</span></button>
+  </div>
+  <div class="style-popup-body" id="stylePopupBody"></div>
+</div>
+<div id="stylePopupOverlay" onclick="closeStylePopup()" style="display:none;position:fixed;inset:0;z-index:10209;"></div>
+
+<!-- ── Export Modal ── -->
+<div class="modal-overlay" id="exportModal">
+  <div class="export-modal-box">
+    <h3><span class="mi">folder_zip</span>Export All Sizes</h3>
+    <p class="hint" id="exportModalHint">Loading…</p>
+    <div class="export-opt-section">
+      <div class="export-opt-label">Format</div>
+      <div class="pill-group">
+        <button id="exportFmtPng" class="active" onclick="setExportFormat('png')"><span class="mi">image</span>PNG</button>
+        <button id="exportFmtJpg" onclick="setExportFormat('jpeg')"><span class="mi">image</span>JPG</button>
+      </div>
+    </div>
+    <div class="export-opt-section">
+      <div class="export-opt-label">Resolution</div>
+      <div class="pill-group">
+        <button id="exportScale1" class="active" onclick="setExportScale(1)">1×</button>
+        <button id="exportScale2" onclick="setExportScale(2)">2×</button>
+        <button id="exportScale4" onclick="setExportScale(4)">4×</button>
+      </div>
+      <div class="export-scale-note" id="exportScaleNote"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeExportModal()">Cancel</button>
+      <button class="btn-confirm" id="exportConfirmBtn" onclick="runExportAll()"><span class="mi">download</span>Export ZIP</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Rename Modal ── -->
+<div class="modal-overlay" id="renameModal">
+  <div class="rename-modal-box">
+    <h3><span class="mi">edit</span>Rename Project</h3>
+    <p>Give this project a new name.</p>
+    <input type="text" id="renameInput" />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeRenameModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmRename()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Image Library Modal (shared: background photos + product cutouts) ── -->
+<div class="modal-overlay" id="imageLibModal">
+  <div class="imglib-box">
+    <h3><span class="mi">photo_library</span><span id="imageLibTitle">Choose Image</span></h3>
+    <div class="imglib-search-row">
+      <input type="text" id="imageLibSearch" placeholder="Search…" oninput="onImageLibSearch(this.value)" />
+      <label class="imglib-upload-btn"><span class="mi">upload</span>Upload instead
+        <input type="file" accept="image/*" style="display:none" onchange="uploadIntoLibraryTarget(event)" />
+      </label>
+    </div>
+    <div class="imglib-grid" id="imageLibGrid"></div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeImageLibrary()">Cancel</button></div>
+  </div>
+</div>
+
+<!-- ── Typography Edit Modal ── -->
+<div class="modal-overlay" id="typoModal">
+  <div class="typo-modal-box">
+    <h3><span class="mi">text_fields</span><span id="typoModalTitle">Typography</span></h3>
+    <div id="typoModalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeTypoModalCancel()">Cancel</button>
+      <button class="btn-confirm" onclick="closeTypoModalSave()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Text Content Edit Modal ── -->
+<div class="modal-overlay" id="textModal">
+  <div class="typo-modal-box text-modal-box">
+    <h3><span class="mi">edit_note</span>Text Content</h3>
+    <div id="textModalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeTextModalCancel()">Cancel</button>
+      <button class="btn-confirm" onclick="closeTextModalSave()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Offscreen stage used for exporting (never visible) -->
+<div id="exportStage" style="position:fixed; left:-99999px; top:0; z-index:-1;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<!-- Shared product database (same source Campaign Page Builder uses) — sets window.CPB_PRODUCT_DATABASE. Optional: falls back to a curated subset if unavailable. -->
+<script src="Campaign%20Page%20Builder/dist/product-database.js"></script>
+<script>
+'use strict';
+
+/* ══════════════════════════════════════════════════════════════════
+   FONT CATALOG
+   ══════════════════════════════════════════════════════════════════ */
+const FONT_CATALOG = [
+  { category: 'Business', fonts: [
+    { id: 'Oswald',            name: 'Oswald',            css: "'Oswald', sans-serif" },
+    { id: 'Roboto',            name: 'Roboto',            css: "'Roboto', sans-serif" },
+    { id: 'Heebo',             name: 'Heebo',             css: "'Heebo', sans-serif" },
+    { id: 'Plus Jakarta Sans', name: 'Plus Jakarta Sans', css: "'Plus Jakarta Sans', sans-serif" },
+  ]},
+  { category: 'Techno', fonts: [
+    { id: 'Michroma',          name: 'Michroma',          css: "'Michroma', sans-serif" },
+    { id: 'Zen Dots',          name: 'Zen Dots',          css: "'Zen Dots', sans-serif" },
+    { id: 'Syncopate',         name: 'Syncopate',         css: "'Syncopate', sans-serif" },
+    { id: 'Ubuntu Condensed',  name: 'Ubuntu Condensed',  css: "'Ubuntu Condensed', sans-serif" },
+  ]},
+  { category: 'Active', fonts: [
+    { id: 'Bebas Neue',        name: 'Bebas Neue',        css: "'Bebas Neue', sans-serif" },
+    { id: 'Barlow Condensed',  name: 'Barlow Condensed',  css: "'Barlow Condensed', sans-serif" },
+    { id: 'Exo 2',             name: 'Exo 2',             css: "'Exo 2', sans-serif" },
+    { id: 'Rajdhani',          name: 'Rajdhani',          css: "'Rajdhani', sans-serif" },
+  ]},
+];
+function findFontEntry(id) {
+  for (const cat of FONT_CATALOG) { const f = cat.fonts.find(f => f.id === id); if (f) return f; }
+  return FONT_CATALOG[2].fonts.find(f => f.id === 'Rajdhani') || FONT_CATALOG[0].fonts[0];
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLE PRESETS (derived from Campaign Page Builder Style 01/02/03)
+   ══════════════════════════════════════════════════════════════════ */
+const STYLE_PRESETS = {
+  'clean-pro': {
+    id: 'clean-pro', shortName: 'S01', name: 'Clean Pro',
+    swatch: { light: '#f0f2f5', dark: '#0b1429', accent: '#006EFF' },
+    light: {
+      bg: { flatType: 'color', color: '#f0f2f5', overlayType: 'gradient', overlayGradFrom: '#001dad', overlayGradTo: '#000000', overlayGradAngle: 180, overlayOpacity: 0.20, overlayGradOpacity: 0.20 },
+      imgTreatment: { imgSaturation: 30, imgOpacity: 0.30 },
+      typo: { eyebrow: '#0066FF', headline: '#000000', subheadline: '#0066FF', features: '#000000' }
+    },
+    dark: {
+      bg: { flatType: 'color', color: '#0a1222', overlayType: 'gradient', overlayGradFrom: '#001dad', overlayGradTo: '#000000', overlayGradAngle: 180, overlayOpacity: 0.80, overlayGradOpacity: 0.80 },
+      imgTreatment: { imgSaturation: 0, imgOpacity: 1 },
+      typo: { eyebrow: '#598cd9', headline: '#ffffff', subheadline: '#598cd9', features: '#ffffff' }
+    }
+  },
+  'cyber-green': {
+    id: 'cyber-green', shortName: 'S02', name: 'Cyber Green',
+    swatch: { light: '#ffffff', dark: '#05070d', accent: '#97c430' },
+    light: {
+      bg: { flatType: 'color', color: '#ffffff', overlayType: 'gradient', overlayGradFrom: '#e8e8e8', overlayGradTo: '#8ab625', overlayGradAngle: 240, overlayOpacity: 0.40, overlayGradOpacity: 0.40 },
+      imgTreatment: { imgSaturation: 0, imgOpacity: 0.20 },
+      typo: { eyebrow: '#8ab625', headline: '#111111', subheadline: '#8ab625', features: '#111111' }
+    },
+    dark: {
+      bg: { flatType: 'color', color: '#05070d', overlayType: 'gradient', overlayGradFrom: '#5C7B14', overlayGradTo: '#000000', overlayGradAngle: 180, overlayOpacity: 0.80, overlayGradOpacity: 0.80 },
+      imgTreatment: { imgSaturation: 10, imgOpacity: 1 },
+      typo: { eyebrow: '#8ab625', headline: '#ffffff', subheadline: '#8ab625', features: '#ffffff' }
+    }
+  },
+  'modern': {
+    id: 'modern', shortName: 'S03', name: 'Modern',
+    swatch: { light: '#f5f7fa', dark: '#09070f', accent: '#8B5CF6' },
+    light: {
+      bg: { flatType: 'gradient', gradFrom: '#f5f7fa', gradTo: '#eef2f8', gradAngle: 135, overlayType: 'gradient', overlayGradFrom: '#4f13bf', overlayGradTo: '#cdc9ff', overlayGradAngle: 240, overlayOpacity: 0.40, overlayGradOpacity: 0.40 },
+      imgTreatment: { imgSaturation: 0, imgOpacity: 0.20 },
+      typo: { eyebrow: '#8B5CF6', headline: '#1e293b', subheadline: '#8B5CF6', features: '#1e293b' }
+    },
+    dark: {
+      bg: { flatType: 'color', color: '#09070f', overlayType: 'gradient', overlayGradFrom: '#4f13bf', overlayGradTo: '#000000', overlayGradAngle: 240, overlayOpacity: 0.80, overlayGradOpacity: 0.80 },
+      imgTreatment: { imgSaturation: 0, imgOpacity: 1 },
+      typo: { eyebrow: '#a78bfa', headline: '#ffffff', subheadline: '#67e8f9', features: '#ffffff' }
+    }
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   SIZE CATALOG
+   ══════════════════════════════════════════════════════════════════ */
+const SIZE_GROUPS = [
+  { id: 'iotmart', name: 'IoTMart Website', sizes: [
+    { id: 'iotmart-a1', name: 'A Zone – A1', w: 1200, h: 675 }
+  ]},
+  { id: 'social', name: 'Social Post', sizes: [
+    { id: 'social-fb-li', name: 'FB & LinkedIn', w: 1080, h: 1080 }
+  ]},
+  { id: 'gda', name: 'Google Display Ad', sizes: [
+    { id: 'gda-01', name: 'Size 01', w: 300, h: 250 },
+    { id: 'gda-02', name: 'Size 02', w: 336, h: 280 },
+    { id: 'gda-03', name: 'Size 03', w: 728, h: 90 },
+    { id: 'gda-04', name: 'Size 04', w: 300, h: 600 },
+    { id: 'gda-05', name: 'Size 05', w: 320, h: 100 }
+  ]},
+  { id: 'pmax', name: 'Google PMAX', sizes: [
+    { id: 'pmax-01', name: 'Size 01', w: 1200, h: 628 },
+    { id: 'pmax-02', name: 'Size 02', w: 960, h: 1200 }
+  ]},
+  { id: 'sig', name: 'Signature File', sizes: [
+    { id: 'sig-banner', name: 'Banner', w: 650, h: 120 }
+  ]}
+];
+
+const GROUP_DEFAULT_SHOW = {
+  iotmart: { eyebrow: true,  headline: true, subheadline: true,  features: true,  background: true, product: true },
+  social:  { eyebrow: true,  headline: true, subheadline: true,  features: true,  background: true, product: true },
+  sig:     { eyebrow: false, headline: true, subheadline: true,  features: false, background: true, product: true },
+  pmax:    { eyebrow: false, headline: true, subheadline: true,  features: false, background: true, product: true },
+  gda:     { eyebrow: false, headline: true, subheadline: true,  features: false, background: true, product: true }
+};
+
+const SIZE_DEFAULT_LAYOUT = {
+  'social-fb-li': 'image-top',
+  'iotmart-a1': 'image-right'
+};
+
+function findSize(sizeId) {
+  for (const g of SIZE_GROUPS) { const s = g.sizes.find(s => s.id === sizeId); if (s) return s; }
+  return null;
+}
+function groupIdOf(sizeId) {
+  for (const g of SIZE_GROUPS) if (g.sizes.some(s => s.id === sizeId)) return g.id;
+  return null;
+}
+function groupNameOf(sizeId) {
+  for (const g of SIZE_GROUPS) if (g.sizes.some(s => s.id === sizeId)) return g.name;
+  return '';
+}
+function orientationOf(size) {
+  const r = size.w / size.h;
+  if (r >= 1.15) return 'wide';
+  if (r <= 0.87) return 'tall';
+  return 'square';
+}
+function isGdaSplit(sizeId) {
+  return sizeId === 'gda-01' || sizeId === 'gda-02';
+}
+function layoutOptionsFor(orient) {
+  if (orient === 'wide') return [{ id: 'image-left', label: 'Image Left · Text Right' }, { id: 'image-right', label: 'Text Left · Image Right' }];
+  if (orient === 'tall') return [{ id: 'image-top', label: 'Image Top · Text Bottom' }, { id: 'image-bottom', label: 'Text Top · Image Bottom' }];
+  return [
+    { id: 'image-left', label: 'Image Left' }, { id: 'image-right', label: 'Image Right' },
+    { id: 'image-top', label: 'Image Top' }, { id: 'image-bottom', label: 'Image Bottom' }
+  ];
+}
+/* ══════════════════════════════════════════════════════════════════
+   STOCK IMAGE LIBRARIES — a curated subset of Campaign Page Builder's
+   own default asset libraries (same CDN), so both tools share visuals.
+   ══════════════════════════════════════════════════════════════════ */
+const BG_IMAGE_LIBRARY = [
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-01_smart-city.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-02_power-source.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-03_smart-factory.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-04_smart-logistic.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-05_smart-retail.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-06_smart-factory.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-07_factory-monitor.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-08_city-energy.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-09_production-line.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-10_metal.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-11_monitor.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-12_robotic-arm.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-13_smart-transportation.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-14_drilling-oil.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-15_agriculture.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-16_drone.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-17_semi.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-18_factory-monitor.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-19_medical.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-20_city-monitor.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-21_AMR.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-22_Payment-machine.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-23_Self-service-machine.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-24_medical-screen.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-25_medical-screen.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-26_Industrial-screen.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-27_Charging-pile.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-28_AI.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-29_Speed.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-30_Chip.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-31_city-node.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-32_videos.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-33_factory.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-34_entertainment.jpg'
+];
+const PRODUCT_IMAGE_LIBRARY = [
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/ADAM-4571.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/P_ULI-224TC_BB-485LDRC9.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_ARK-3534B-00A1.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_IDK-1110WP-50XGB2.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-PD_PPC3.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-PD_TPC02.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-PD_FPM3.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-PPC3125.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-PPC421.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-TPC312.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-TPC315.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-TPC300.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/monitor-ProductCard-FPM.png'
+];
+function makeLibraryEntries(list, stripPrefix) {
+  return list.map(url => {
+    const fileName = String(url.split('/').pop() || '').replace(/\.[^.]+$/, '');
+    let label = fileName.replace(/[-_]+/g, ' ');
+    if (stripPrefix) label = fileName.replace(/^solutionBG-\d+_?/i, '').replace(/[-_]+/g, ' ');
+    return { url, key: fileName.toLowerCase(), label: label || fileName };
+  });
+}
+const BG_IMAGE_ENTRIES = makeLibraryEntries(BG_IMAGE_LIBRARY, true);
+const PRODUCT_IMAGE_CURATED = makeLibraryEntries(PRODUCT_IMAGE_LIBRARY, false);
+/* Product library follows Campaign Page Builder: merge every product image from the
+   shared product database (labelled by Part Number), then append the curated fallbacks.
+   If the database script isn't present, we gracefully fall back to just the curated set. */
+function buildProductImageEntries() {
+  const raw = window.CPB_PRODUCT_DATABASE;
+  const products = Array.isArray(raw) ? raw : (Array.isArray(raw && raw.products) ? raw.products : []);
+  const unique = new Map();
+  products.forEach(row => {
+    const url = String((row && row.image) || '').trim();
+    if (!url || unique.has(url)) return;
+    const partNumber = String((row && row.PartNumber) || '').trim();
+    const altName = String((row && row.Name) || '').trim();
+    const fileName = String(url.split('/').pop() || '').replace(/\.[^.]+$/, '');
+    unique.set(url, {
+      url,
+      key: `${partNumber} ${altName} ${fileName}`.trim().toLowerCase(),
+      label: partNumber || altName || fileName.replace(/[-_]+/g, ' ')
+    });
+  });
+  PRODUCT_IMAGE_CURATED.forEach(e => { if (!unique.has(e.url)) unique.set(e.url, e); });
+  return [...unique.values()];
+}
+const PRODUCT_IMAGE_ENTRIES = buildProductImageEntries();
+
+/* Hand-tuned per-size defaults — a single min(w,h)*ratio formula looks great on
+  some aspect ratios and terrible on others (a 728×90 leaderboard and a 650×120
+   signature banner both bottleneck on height and end up with illegibly small
+   or oddly large type under a pure formula). These overrides make every size's
+   *default* state look intentional; users can still fine-tune via the
+   Typography popup afterwards. */
+const SIZE_TYPO_OVERRIDES = {
+  'iotmart-a1':   { eyebrow: 16, headline: 52, subheadline: 22, features: 19 },
+  'social-fb-li': { eyebrow: 20, headline: 68, subheadline: 30, features: 22 },
+  'gda-01':       { eyebrow: 10, headline: 24, subheadline: 14, features: 10 },
+  'gda-02':       { eyebrow: 10, headline: 24, subheadline: 14, features: 10 },
+  'gda-03':       { eyebrow: 9,  headline: 24, subheadline: 11, features: 10 },
+  'gda-04':       { eyebrow: 13, headline: 40, subheadline: 17, features: 15 },
+  'gda-05':       { eyebrow: 9,  headline: 22, subheadline: 8, features: 10 },
+  'pmax-01':      { eyebrow: 28, headline: 80, subheadline: 36, features: 20 },
+  'pmax-02':      { eyebrow: 28, headline: 96, subheadline: 44, features: 20 },
+  'sig-banner':   { eyebrow: 10, headline: 24, subheadline: 14, features: 12 }
+};
+// Per-size line-height defaults (only where the formula default needs tightening)
+const SIZE_LINEHEIGHT_OVERRIDES = {
+  'gda-01': { eyebrow: 1, headline: 1.1, subheadline: 1.1, features: 1 },
+  'gda-02': { eyebrow: 1, headline: 1.1, subheadline: 1.1, features: 1 }
+};
+function defaultTypo(sizeId, kind) {
+  const size = findSize(sizeId);
+  const base = Math.min(size.w, size.h);
+  const specs = {
+    eyebrow:     { m: 0.040, min: 9,  weight: 700, color: '#4d8cff', align: 'left', lineHeight: 1.2,  letterSpacing: '0.12em', textTransform: 'uppercase' },
+    headline:    { m: 0.115, min: 14, weight: 700, color: '#ffffff', align: 'left', lineHeight: 1.12, letterSpacing: '-0.005em', textTransform: '' },
+    subheadline: { m: 0.048, min: 10, weight: 500, color: '#a0c4ff', align: 'left', lineHeight: 1.36, letterSpacing: '0',        textTransform: '' },
+    features:    { m: 0.042, min: 9,  weight: 500, color: '#d0d8f0', align: 'left', lineHeight: 1.38, letterSpacing: '0',        textTransform: '' }
+  };
+  const s = specs[kind];
+  const override = (SIZE_TYPO_OVERRIDES[sizeId] || {})[kind];
+  const fontSize = override != null ? override : Math.max(s.min, Math.round(base * s.m));
+  const lhOverride = (SIZE_LINEHEIGHT_OVERRIDES[sizeId] || {})[kind];
+  const lineHeight = lhOverride != null ? lhOverride : s.lineHeight;
+  return { fontSize, fontWeight: s.weight, color: s.color, align: s.align, lineHeight, letterSpacing: s.letterSpacing, textTransform: s.textTransform };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   STATE / PERSISTENCE
+   ══════════════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'mmb_projects_v2';
+let DB = { order: [], projects: {} };
+let currentProjectId = null;
+let zoom = 1;
+let historyStack = [];
+let redoStack = [];
+let pendingSnapshot = null;
+let pendingSizeIds = new Set();
+let sizeModalMode = 'create'; // 'create' | 'add'
+let exportMode = false;
+let exportModalFormat = 'png';
+let exportModalScale = 1;
+let pendingBgImage = '';
+let pendingProductImage = '';
+let libModalKind = null;   // 'background' | 'product'
+let libModalOnPick = null; // function(url)
+let typoModalKey = null;
+let typoModalSnapshot = null;
+let _mmbEmbedMode = false;
+
+function loadDB() {
+  try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) DB = JSON.parse(raw); }
+  catch (e) { console.warn('MMB: failed to load storage', e); }
+  if (!DB.order) DB.order = [];
+  if (!DB.projects) DB.projects = {};
+}
+function saveDB() {
+  if (_mmbEmbedMode) return;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); }
+  catch (e) { console.warn('MMB: failed to save storage', e); }
+}
+function uid(prefix) { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+function makeSizeEntry(sizeId, presetId, mode) {
+  const size = findSize(sizeId);
+  const g = groupIdOf(sizeId);
+  const orient = orientationOf(size);
+  const layoutOpts = layoutOptionsFor(orient);
+  const defaultLayout = SIZE_DEFAULT_LAYOUT[sizeId] || layoutOpts[0].id;
+  const autoSpacing = calcAutoSpacing(size);
+  const defaultMediaSize = sizeId === 'gda-01' || sizeId === 'gda-02' ? 30
+    : sizeId === 'gda-03' ? 15
+    : sizeId === 'gda-05' ? 20
+    : sizeId === 'pmax-01' ? 30
+    : sizeId === 'pmax-02' ? 40
+    : sizeId === 'iotmart-a1' ? 35
+    : sizeId === 'sig-banner' ? 15
+    : 42;
+  const defaultContentGap = sizeId === 'gda-05' ? 12 : autoSpacing.contentGap;
+  const entry = {
+    sizeId,
+    show: Object.assign({}, GROUP_DEFAULT_SHOW[g]),
+    layout: defaultLayout,
+    mediaSize: defaultMediaSize,
+    spacing: {
+      padTop: autoSpacing.pad,
+      padRight: autoSpacing.pad,
+      padBottom: autoSpacing.pad,
+      padLeft: autoSpacing.pad,
+      contentGap: defaultContentGap,
+      linked: true
+    },
+    bg: {
+      flatType: 'color', color: '#0b1429',
+      gradFrom: '#0059ff', gradTo: '#06b6d4', gradAngle: 135,
+      overlayType: 'gradient',
+      overlayColor: '#000000', overlayOpacity: 0.82,
+      overlayGradOpacity: 0.82,
+      overlayGradFrom: '#1a5bdc', overlayGradTo: '#04142e', overlayGradAngle: 180,
+      imgOpacity: 0.20, imgSaturation: 8,
+      imgPosX: 50, imgPosY: 50, imgScale: 1,
+      graphic: 'none', graphicColor: '', graphicOpacity: 1, graphicAngle: 115,
+      graphicPosX: 50, graphicPosY: 50, graphicScale: 1,
+      graphicBandThickness: 20, graphicDiamondLong: 70, graphicDiamondShort: 45
+    },
+    typo: {
+      eyebrow: defaultTypo(sizeId, 'eyebrow'),
+      headline: defaultTypo(sizeId, 'headline'),
+      subheadline: defaultTypo(sizeId, 'subheadline'),
+      features: defaultTypo(sizeId, 'features')
+    },
+    mode: mode || 'dark'
+  };
+  // Apply preset defaults immediately so every new size looks styled from day one
+  applyStyleModeToEntry(entry, presetId || 'clean-pro', entry.mode);
+  return entry;
+}
+
+function createProject(name, sizeIds, bgImage, productImage) {
+  const id = uid('proj');
+  const proj = {
+    id, name: name || 'Untitled Project', createdAt: Date.now(), updatedAt: Date.now(),
+    content: {
+      eyebrow: 'Lorem Ipsum Offer',
+      headline: 'Adaptive Lorem Systems for Industrial Futures',
+      subheadline: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      features: [
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore magna.',
+        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+      ],
+      backgroundImage: bgImage || '',
+      productImage: productImage || '',
+      fontFamily: 'Rajdhani',
+      stylePreset: 'clean-pro'
+    },
+    sizes: {}, sizeOrder: [], activeSizeId: null
+  };
+  sizeIds.forEach(sid => {
+    proj.sizes[sid] = makeSizeEntry(sid, proj.content.stylePreset, 'dark');
+    proj.sizeOrder.push(sid);
+  });
+  proj.activeSizeId = sizeIds[0] || null;
+  DB.projects[id] = proj;
+  DB.order.unshift(id);
+  saveDB();
+  return proj;
+}
+function getCurrentProject() { return DB.projects[currentProjectId]; }
+function getActiveEntry() { const p = getCurrentProject(); return p && p.activeSizeId ? p.sizes[p.activeSizeId] : null; }
+
+/* ══════════════════════════════════════════════════════════════════
+   HISTORY (undo / redo) — two-phase so drag-like inputs collapse to one step
+   ══════════════════════════════════════════════════════════════════ */
+function snapshot() { const p = getCurrentProject(); return p ? JSON.parse(JSON.stringify(p)) : null; }
+function markDirtyStart() { if (!pendingSnapshot) pendingSnapshot = snapshot(); }
+function commitChange() {
+  if (pendingSnapshot) {
+    historyStack.push(pendingSnapshot);
+    if (historyStack.length > 60) historyStack.shift();
+    redoStack = [];
+    pendingSnapshot = null;
+  }
+  persist();
+}
+function persist() { const p = getCurrentProject(); if (p) { p.updatedAt = Date.now(); saveDB(); } }
+function undo() {
+  if (!historyStack.length) return;
+  redoStack.push(snapshot());
+  DB.projects[currentProjectId] = historyStack.pop();
+  saveDB(); renderBuilder();
+}
+function redo() {
+  if (!redoStack.length) return;
+  historyStack.push(snapshot());
+  DB.projects[currentProjectId] = redoStack.pop();
+  saveDB(); renderBuilder();
+}
+
+/* ── Background graphic layer (playful geometric shapes, export-safe) ── */
+/* Every shape is positioned by a center point (posX/posY as % of the canvas)
+   and honours color, opacity, scale and shape-specific params. No clip-path
+   is used (unreliable in html2canvas) — only solid fills + transforms. */
+function bgGraphicHtml(bg, accent, size) {
+  const w = size.w, h = size.h;
+  const minSide = Math.min(w, h);
+  const angle = bg.graphicAngle ?? 115;
+  const op = (bg.graphicOpacity != null ? bg.graphicOpacity : 1);
+  const scale = bg.graphicScale ?? 1;
+  const cx = ((bg.graphicPosX ?? 50) / 100) * w;
+  const cy = ((bg.graphicPosY ?? 50) / 100) * h;
+
+  if (bg.graphic === 'diagonal') {
+    // Half-plane whose straight edge passes through (cx,cy) at the given angle.
+    const big = Math.round(Math.max(w, h) * 3);
+    return `<div class="mmb-graphic" style="position:absolute;left:${cx}px;top:${cy}px;width:${big}px;height:${big}px;background:${accent};opacity:${op};transform:translate(-100%,-50%) rotate(${angle}deg);transform-origin:100% 50%;"></div>`;
+  }
+
+  if (bg.graphic === 'band') {
+    const bandH = clamp(Math.round(minSide * ((bg.graphicBandThickness ?? 20) / 100)), 4, Math.round(minSide * 1.4));
+    const len = Math.round(Math.max(w, h) * 2.8);
+    return `<div class="mmb-graphic" style="position:absolute;left:${cx}px;top:${cy}px;width:${len}px;height:${bandH}px;background:${accent};opacity:${op};transform:translate(-50%,-50%) rotate(${angle}deg);"></div>`;
+  }
+
+  if (bg.graphic === 'arc') {
+    const D = Math.round(minSide * 1.4 * scale);
+    return `<div class="mmb-graphic" style="position:absolute;left:${cx}px;top:${cy}px;width:${D}px;height:${D}px;border-radius:50%;background:${accent};opacity:${op};transform:translate(-50%,-50%);"></div>`;
+  }
+
+  if (bg.graphic === 'diamond') {
+    // Rhombus with independent diagonals: outer div scales a rotated square,
+    // giving a clean diamond with adjustable long (vertical) & short (horizontal) axes.
+    const s = 100, diag = s * Math.SQRT2;
+    const Hy = minSide * ((bg.graphicDiamondLong ?? 70) / 100) * scale;   // long axis (vertical)
+    const Hx = minSide * ((bg.graphicDiamondShort ?? 45) / 100) * scale;  // short axis (horizontal)
+    const ax = (Hx / diag).toFixed(4), ay = (Hy / diag).toFixed(4);
+    return `<div class="mmb-graphic" style="position:absolute;left:${cx}px;top:${cy}px;opacity:${op};transform:translate(-50%,-50%) scaleX(${ax}) scaleY(${ay});"><div style="width:${s}px;height:${s}px;background:${accent};transform:rotate(45deg);"></div></div>`;
+  }
+  return '';
+}
+
+function calcAutoSpacing(size) {
+  const shortSide = Math.min(size.w, size.h);
+  const aspect = size.w / size.h;
+  let pad = Math.round(shortSide * 0.075);
+  let gapBase = Math.round(shortSide * 0.04);
+  if (aspect >= 3.8) {
+    pad = Math.max(pad, 10);
+    gapBase = Math.max(gapBase, 8);
+  }
+  if (aspect <= 0.72) {
+    gapBase = Math.max(gapBase, 10);
+  }
+  pad = clamp(pad, 8, 46);
+  gapBase = clamp(gapBase, 6, 28);
+  return { pad, gapBase, contentGap: Math.round(gapBase * 1.4), shortSide };
+}
+
+function getEffectiveSpacing(entry, size) {
+  const auto = calcAutoSpacing(size);
+  const sp = entry.spacing || {};
+  const maxPad = Math.max(24, Math.round(auto.shortSide * 0.32));
+  const maxGap = Math.max(18, Math.round(auto.shortSide * 0.42));
+  return {
+    padTop: clamp(sp.padTop ?? auto.pad, 0, maxPad),
+    padRight: clamp(sp.padRight ?? auto.pad, 0, maxPad),
+    padBottom: clamp(sp.padBottom ?? auto.pad, 0, maxPad),
+    padLeft: clamp(sp.padLeft ?? auto.pad, 0, maxPad),
+    contentGap: clamp(sp.contentGap ?? auto.contentGap, 0, maxGap),
+    maxPad,
+    maxGap
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CANVAS RENDERING — pure builder used both for live preview & export
+   ══════════════════════════════════════════════════════════════════ */
+/* Text content (eyebrow / headline / subheadline / features) is stored PER SIZE
+   in entry.text, so each size can carry copy tuned to its dimensions. Older
+   projects (and freshly added sizes) lazily inherit the project-level template. */
+function ensureEntryText(p, entry) {
+  if (!entry.text || typeof entry.text !== 'object') {
+    entry.text = {
+      eyebrow: (p.content.eyebrow != null ? p.content.eyebrow : ''),
+      headline: (p.content.headline != null ? p.content.headline : ''),
+      subheadline: (p.content.subheadline != null ? p.content.subheadline : ''),
+      features: Array.isArray(p.content.features) ? p.content.features.slice() : []
+    };
+  }
+  if (!Array.isArray(entry.text.features)) entry.text.features = [];
+  return entry.text;
+}
+function effectiveContent(p, entry) {
+  const t = ensureEntryText(p, entry);
+  return Object.assign({}, p.content, {
+    eyebrow: t.eyebrow, headline: t.headline, subheadline: t.subheadline, features: t.features
+  });
+}
+function buildCanvasInnerHtml(content, entry, size, forExport) {
+  const bg = entry.bg;
+  const usePhoto = entry.show.background && content.backgroundImage;
+  let bgStyle = '';
+  if (!usePhoto) {
+    bgStyle = bg.flatType === 'gradient'
+      ? `background:linear-gradient(${bg.gradAngle}deg, ${bg.gradFrom}, ${bg.gradTo});`
+      : `background:${bg.color};`;
+  }
+  let html = `<div class="mmb-bg" style="${bgStyle}">`;
+  if (usePhoto) {
+    const posX = clamp(bg.imgPosX ?? 50, 0, 100), posY = clamp(bg.imgPosY ?? 50, 0, 100);
+    const scale = bg.imgScale ?? 1;
+    const opacity = bg.imgOpacity ?? 1;
+    const sat = bg.imgSaturation ?? 100;
+    const filterParts = [];
+    if (opacity < 0.999) filterParts.push(`opacity(${opacity})`);
+    if (Math.round(sat) !== 100) filterParts.push(`saturate(${sat}%)`);
+    const filterStr = filterParts.length ? `filter:${filterParts.join(' ')};` : '';
+    const scaleStr = Math.abs(scale - 1) > 0.01 ? `transform:scale(${scale});` : '';
+    const originStr = `transform-origin:${posX}% ${posY}%;`;
+    // Use a background-image div (not <img object-fit:cover>) so the preview and the
+    // html2canvas export render identically — html2canvas doesn't support object-fit
+    // and would otherwise stretch the exported photo.
+    html += `<div class="bg-img" style="background-image:url('${content.backgroundImage}');background-size:cover;background-position:${posX}% ${posY}%;background-repeat:no-repeat;${originStr}${filterStr}${scaleStr}"></div>`;
+  }
+  const overlayOpacity = bg.overlayType === 'gradient'
+    ? (bg.overlayGradOpacity ?? bg.overlayOpacity ?? 0)
+    : (bg.overlayOpacity ?? 0);
+  if (usePhoto && overlayOpacity > 0) {
+    const overlayBg = bg.overlayType === 'gradient'
+      ? `linear-gradient(${bg.overlayGradAngle ?? 180}deg, ${bg.overlayGradFrom || '#000'}, ${bg.overlayGradTo || 'transparent'})`
+      : (bg.overlayColor || '#000');
+    html += `<div class="bg-overlay" style="background:${overlayBg};opacity:${overlayOpacity};"></div>`;
+  }
+  // Graphic renders on top of the photo/overlay so the color block reads on
+  // any background — solid, gradient, or photo.
+  if (bg.graphic && bg.graphic !== 'none') {
+    const gPreset = STYLE_PRESETS[content.stylePreset || 'clean-pro'];
+    const gAccent = bg.graphicColor || (gPreset ? gPreset.swatch.accent : '#006EFF');
+    html += bgGraphicHtml(bg, gAccent, size);
+  }
+  html += `</div>`;
+
+  const spacing = getEffectiveSpacing(entry, size);
+  const showProduct = !!entry.show.product;
+  const textSlotGap = (groupIdOf(size.id) === 'gda' || groupIdOf(size.id) === 'sig') ? 2 : 12;
+
+  // Individual text element builders (reused by both default & GDA-split layouts)
+  const eyebrowHtml = (entry.show.eyebrow && content.eyebrow) ? textElHtml(content.eyebrow, entry.typo.eyebrow, 'eyebrow', forExport) : '';
+  const headlineHtml = (entry.show.headline && content.headline) ? textElHtml(content.headline, entry.typo.headline, 'headline', forExport) : '';
+  const subheadHtml = (entry.show.subheadline && content.subheadline) ? textElHtml(content.subheadline, entry.typo.subheadline, 'subheadline', forExport) : '';
+  let featuresHtml = '';
+  if (entry.show.features) {
+    const feats = (content.features || []).filter(f => f && f.trim());
+    if (feats.length) {
+      const ft = entry.typo.features;
+      featuresHtml = `<div class="mmb-features-list">` +
+        feats.map((f, idx) => {
+          const spanAttrs = forExport ? '' : ` class="mmb-editable" onclick="onCanvasTextClick(event,'feature',${idx})" ondblclick="onCanvasTextDblClick(event,'features')" title="Click to edit · Double-click for typography"`;
+          return `<div class="mmb-feature-line" style="color:${ft.color};font-size:${ft.fontSize}px;font-weight:${ft.fontWeight};line-height:${ft.lineHeight};text-align:${ft.align};"><span class="mi feature-check" style="font-size:${ft.fontSize + 2}px;">check_circle</span><span${spanAttrs}>${escapeHtml(f)}</span></div>`;
+        }).join('') +
+        `</div>`;
+    }
+  }
+
+  const padStyle = `top:${spacing.padTop}px;right:${spacing.padRight}px;bottom:${spacing.padBottom}px;left:${spacing.padLeft}px;`;
+
+  // Google Display Ad Size 01/02: structural two-row layout
+  //   top  = image-left + (eyebrow / headline stacked)
+  //   bottom = subheadline / three features stacked (text only)
+  if (isGdaSplit(size.id)) {
+    const mediaPct = clamp(Math.round(entry.mediaSize ?? 30), 15, 70);
+    const topMedia = (showProduct && content.productImage)
+      ? `<div class="mmb-media-slot" style="flex:0 0 ${mediaPct}%;max-width:${mediaPct}%;"><img src="${content.productImage}" /></div>`
+      : '';
+    const topText = eyebrowHtml + headlineHtml;
+    const bottomText = subheadHtml + featuresHtml;
+    html += `<div class="mmb-content-wrap mmb-gda-split" style="${padStyle}gap:${spacing.contentGap}px;">
+      <div class="mmb-gda-row-top" style="gap:${spacing.contentGap}px;">
+        ${topMedia}
+        ${topText ? `<div class="mmb-text-slot" style="gap:${textSlotGap}px;">${topText}</div>` : ''}
+      </div>
+      ${bottomText ? `<div class="mmb-gda-row-bottom"><div class="mmb-text-slot" style="gap:${textSlotGap}px;">${bottomText}</div></div>` : ''}
+    </div>`;
+    return html;
+  }
+
+  let mediaHtml = '';
+  if (showProduct && content.productImage) {
+    const mediaPct = clamp(Math.round(entry.mediaSize ?? 42), 15, 70);
+    const horiz = entry.layout === 'image-left' || entry.layout === 'image-right';
+    const mediaStyle = horiz
+      ? `flex:0 0 ${mediaPct}%;max-width:${mediaPct}%;`
+      : `flex:0 0 ${mediaPct}%;`;
+    mediaHtml = `<div class="mmb-media-slot" style="${mediaStyle}"><img src="${content.productImage}" /></div>`;
+  }
+
+  const innerText = eyebrowHtml + headlineHtml + subheadHtml + featuresHtml;
+  const textHtml = innerText ? `<div class="mmb-text-slot" style="gap:${textSlotGap}px;">${innerText}</div>` : '';
+
+  const layoutClass = showProduct ? entry.layout : 'text-only';
+  html += `<div class="mmb-content-wrap layout-${layoutClass}" style="${padStyle}gap:${spacing.contentGap}px;">${mediaHtml}${textHtml}</div>`;
+  return html;
+}
+function textElHtml(text, typo, kind, forExport) {
+  const editClass = forExport ? '' : ' mmb-editable';
+  const editAttrs = forExport ? '' : ` onclick="onCanvasTextClick(event,'${kind}')" ondblclick="onCanvasTextDblClick(event,'${kind}')" title="Click to edit \u00b7 Double-click for typography"`;
+  const extras = [
+    typo.letterSpacing && typo.letterSpacing !== '0' ? `letter-spacing:${typo.letterSpacing}` : '',
+    typo.textTransform ? `text-transform:${typo.textTransform}` : ''
+  ].filter(Boolean).join(';');
+  const extraStyle = extras ? ';' + extras : '';
+  return `<div class="mmb-text-el mmb-text-${kind}${editClass}" style="font-size:${typo.fontSize}px;font-weight:${typo.fontWeight};color:${typo.color};text-align:${typo.align};line-height:${typo.lineHeight}${extraStyle};"${editAttrs}>${escapeHtml(text).replace(/\n/g, '<br/>')}</div>`;
+}
+
+/* \u2500\u2500 Style preset, mode & font functions \u2500\u2500 */
+function applyStyleModeToEntry(entry, presetId, mode) {
+  const preset = STYLE_PRESETS[presetId];
+  if (!preset) return;
+  const config = preset[mode];
+  if (!config) return;
+  entry.mode = mode;
+  Object.assign(entry.bg, config.bg);
+  // Apply image treatment (desaturation + opacity) — CPB-style: grayscale bg + accent overlay
+  if (config.imgTreatment) Object.assign(entry.bg, config.imgTreatment);
+  Object.keys(config.typo).forEach(k => { if (entry.typo[k]) entry.typo[k].color = config.typo[k]; });
+}
+function applyStyleMode(mode) {
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!entry || !p) return;
+  markDirtyStart();
+  applyStyleModeToEntry(entry, p.content.stylePreset || 'clean-pro', mode);
+  commitChange();
+  renderCanvas(); renderProperties(); renderContentPanel();
+  if (document.getElementById('bgPopup').classList.contains('open')) renderBgPopup();
+}
+function applyProjectPreset(presetId) {
+  const p = getCurrentProject();
+  if (!p || !STYLE_PRESETS[presetId]) return;
+  markDirtyStart();
+  p.content.stylePreset = presetId;
+  p.sizeOrder.forEach(sid => {
+    const entry = p.sizes[sid];
+    if (entry) applyStyleModeToEntry(entry, presetId, entry.mode || 'dark');
+  });
+  commitChange();
+  renderCanvas(); renderProperties(); renderContentPanel();
+  renderStyleButton();
+  if (document.getElementById('stylePopup').classList.contains('open')) closeStylePopup();
+  if (document.getElementById('bgPopup').classList.contains('open')) renderBgPopup();
+}
+function renderStyleButton() {
+  const p = getCurrentProject();
+  const btn = document.getElementById('styleBtn');
+  if (!btn) return;
+  btn.disabled = !p || !p.activeSizeId;
+  if (!p) {
+    btn.innerHTML = '<span class="mi">palette</span>Style';
+    return;
+  }
+  const preset = STYLE_PRESETS[p.content.stylePreset || 'clean-pro'];
+  const shortName = preset ? preset.shortName : 'Style';
+  btn.innerHTML = `<span class="mi">palette</span>${shortName}`;
+}
+function openStylePopup(triggerEl) {
+  renderStylePopup();
+  const popup = document.getElementById('stylePopup');
+  popup.style.visibility = 'hidden';
+  popup.style.left = '-9999px';
+  popup.style.top = '0';
+  popup.classList.add('open');
+  document.getElementById('stylePopupOverlay').style.display = 'block';
+
+  const rect = triggerEl.getBoundingClientRect();
+  const popupH = popup.offsetHeight;
+  const popupW = popup.offsetWidth || 320;
+  const margin = 8;
+  let left = rect.right - popupW;
+  if (left < margin) left = margin;
+  let top = rect.bottom + 6;
+  if (top + popupH > window.innerHeight - margin) top = rect.top - popupH - 6;
+  if (top < margin) top = margin;
+
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+  popup.style.visibility = '';
+}
+function closeStylePopup() {
+  document.getElementById('stylePopup').classList.remove('open');
+  document.getElementById('stylePopupOverlay').style.display = 'none';
+}
+function renderStylePopup() {
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!p || !entry) return;
+  const presetId = p.content.stylePreset || 'clean-pro';
+  const currentMode = entry.mode || 'dark';
+  let html = `<div class="style-popup-hint">Choose project style. Current mode preview: ${currentMode}</div><div class="style-preset-grid">`;
+  Object.values(STYLE_PRESETS).forEach(preset => {
+    const modeConfig = preset[currentMode];
+    const swatchBg = (modeConfig.bg.flatType === 'gradient')
+      ? `linear-gradient(135deg, ${modeConfig.bg.gradFrom}, ${modeConfig.bg.gradTo})`
+      : modeConfig.bg.color;
+    html += `<div class="style-preset-opt${presetId === preset.id ? ' active' : ''}" onclick="applyProjectPreset('${preset.id}')">
+      <div class="style-preset-swatch" style="background:${swatchBg};"></div>
+      <div class="style-preset-label">${preset.shortName}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('stylePopupBody').innerHTML = html;
+}
+function setProjectFont(fontId) {
+  const p = getCurrentProject();
+  if (!p) return;
+  markDirtyStart();
+  p.content.fontFamily = fontId;
+  commitChange();
+  renderCanvas(); renderContentPanel();
+}
+
+/* \u2500\u2500 Canvas inline text editing \u2500\u2500 */
+let _inlineEditField = null;
+let _inlineEditIdx  = null;
+let _inlineEditEl   = null;
+
+function onCanvasTextClick(e, field, idx) {
+  e.stopPropagation();
+  if (_inlineEditEl === e.currentTarget) return;
+  _commitInlineEdit();
+  _inlineEditField = field;
+  _inlineEditIdx   = (idx !== undefined && idx !== null) ? Number(idx) : null;
+  _inlineEditEl    = e.currentTarget;
+  _inlineEditEl.contentEditable = 'true';
+  _inlineEditEl.classList.add('mmb-editing');
+  _inlineEditEl.focus();
+  // move caret to end
+  const r = document.createRange(); r.selectNodeContents(_inlineEditEl); r.collapse(false);
+  const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  markDirtyStart();
+  _inlineEditEl.addEventListener('blur',    _onInlineBlur,    { once: true });
+  _inlineEditEl.addEventListener('keydown', _onInlineKeydown);
+}
+function onCanvasTextDblClick(e, field) {
+  e.stopPropagation();
+  _commitInlineEdit();
+  const labels = { eyebrow:'Eyebrow', headline:'Headline', subheadline:'Subheadline', features:'Features' };
+  openTypoModal(field, (labels[field] || field) + ' Typography');
+}
+function _onInlineBlur()    { _commitInlineEdit(); }
+function _onInlineKeydown(e) {
+  if (e.key === 'Escape') { e.preventDefault(); _cancelInlineEdit(); return; }
+  // Enter commits for single-line fields
+  if (e.key === 'Enter' && _inlineEditField !== 'headline' && _inlineEditField !== 'subheadline') {
+    e.preventDefault(); _commitInlineEdit();
+  }
+}
+function _commitInlineEdit() {
+  if (!_inlineEditEl) return;
+  // Capture and clear state FIRST to prevent re-entrancy
+  // (setting contentEditable=false fires blur which would call _commitInlineEdit again)
+  const el    = _inlineEditEl;
+  const field = _inlineEditField;
+  const idx   = _inlineEditIdx;
+  _inlineEditEl = null; _inlineEditField = null; _inlineEditIdx = null;
+  el.removeEventListener('blur',    _onInlineBlur);
+  el.removeEventListener('keydown', _onInlineKeydown);
+  const text = (el.innerText || '').replace(/\r/g, '').trim();
+  el.contentEditable = 'false';
+  el.classList.remove('mmb-editing');
+  // normalise display HTML
+  const isMultiline = field === 'headline' || field === 'subheadline';
+  el.innerHTML = isMultiline ? escapeHtml(text).replace(/\n/g, '<br/>') : escapeHtml(text);
+  const p = getCurrentProject();
+  if (p) {
+    const entry = getActiveEntry();
+    const t = ensureEntryText(p, entry);
+    if (field === 'feature') { t.features[idx] = text; }
+    else { t[field] = text; }
+    commitChange();
+    renderContentPanel();
+  }
+}
+function _cancelInlineEdit() {
+  if (!_inlineEditEl) return;
+  _inlineEditEl.removeEventListener('keydown', _onInlineKeydown);
+  _inlineEditEl.contentEditable = 'false';
+  _inlineEditEl.classList.remove('mmb-editing');
+  _inlineEditEl = null; _inlineEditField = null; _inlineEditIdx = null;
+  pendingSnapshot = null;
+  renderCanvas();
+}
+
+/* ── Layout visual icon helper ── */
+function layoutIconHtml(id) {
+  const img = '<div class="lo-img"></div>';
+  const txt = '<div class="lo-text"><div class="lo-line"></div><div class="lo-line"></div><div class="lo-line"></div></div>';
+  const inner = {
+    'image-left':   `<div class="lo-row">${img}${txt}</div>`,
+    'image-right':  `<div class="lo-row">${txt}${img}</div>`,
+    'image-top':    `<div class="lo-col">${img}${txt}</div>`,
+    'image-bottom': `<div class="lo-col">${txt}${img}</div>`,
+  }[id] || `<div class="lo-col">${txt}</div>`;
+  return `<div class="lo-preview">${inner}</div>`;
+}
+
+/* ── Compact typo row for left panel ── */
+function typoCompactRow(key, label, typo) {
+  return `<div class="typo-compact-row">
+    <div class="typo-compact-preview" style="color:${typo.color};font-weight:${typo.fontWeight};">Aa</div>
+    <span class="typo-compact-label">${label}</span>
+    <span class="typo-compact-meta">${typo.fontSize}px · ${weightLabel(typo.fontWeight)}</span>
+    <button class="typo-edit-btn" onclick="openTypoModal('${key}','${label} Typography')"><span class="mi">edit</span>Edit</button>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   GALLERY
+   ══════════════════════════════════════════════════════════════════ */
+function renderGallery() {
+  document.getElementById('galleryView').classList.remove('hidden');
+  document.getElementById('builderView').classList.remove('visible');
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+
+  const grid = document.getElementById('projectGrid');
+  let html = `
+    <div class="proj-gallery-card proj-gallery-card-new" onclick="openCreateModal()">
+      <div class="proj-gallery-card-thumb">
+        <div class="new-card-content">
+          <span class="mi">add_circle</span>
+          <span class="new-card-title">New Project</span>
+        </div>
+      </div>
+      <div class="proj-gallery-card-info"><span class="card-meta"><span class="card-name">Start fresh</span></span></div>
+    </div>`;
+
+  DB.order.forEach(id => {
+    const p = DB.projects[id];
+    if (!p || p.__masScoped) return;
+    const firstSizeId = p.sizeOrder[0];
+    const size = firstSizeId ? findSize(firstSizeId) : null;
+    const maxW = 210, maxH = 130;
+    let clipHtml = `<span class="thumb-empty">No sizes yet</span>`;
+    if (size) {
+      const scale = Math.min(maxW / size.w, maxH / size.h, 1);
+      const cw = Math.round(size.w * scale), ch = Math.round(size.h * scale);
+      const entry = p.sizes[firstSizeId];
+      clipHtml = `<div class="thumb-clip" style="width:${cw}px;height:${ch}px;">
+        <div style="width:${size.w}px;height:${size.h}px;transform:scale(${scale});transform-origin:top left;position:relative;">
+          ${buildCanvasInnerHtml(effectiveContent(p, entry), entry, size, true)}
+        </div>
+      </div>`;
+    }
+    const dateStr = new Date(p.updatedAt).toLocaleDateString();
+    html += `
+    <div class="proj-gallery-card" onclick="openProject('${p.id}')">
+      <div class="card-kebab" onclick="event.stopPropagation()">
+        <button class="card-kebab-btn" onclick="toggleKebab(event, '${p.id}')"><span class="mi">more_vert</span></button>
+        <div class="card-kebab-menu" id="kebab-${p.id}">
+          <button onclick="openRenameModal('${p.id}')"><span class="mi">edit</span>Rename</button>
+          <button onclick="duplicateProject('${p.id}')"><span class="mi">content_copy</span>Duplicate</button>
+          <button class="menu-delete" onclick="deleteProject('${p.id}')"><span class="mi">delete</span>Delete</button>
+        </div>
+      </div>
+      <div class="proj-gallery-card-thumb">
+        ${clipHtml}
+        <span class="size-count-badge">${p.sizeOrder.length} size${p.sizeOrder.length === 1 ? '' : 's'}</span>
+      </div>
+      <div class="proj-gallery-card-info">
+        <span class="card-meta">
+          <span class="card-name">${escapeHtml(p.name)}</span>
+          <span class="card-date">${dateStr}</span>
+        </span>
+        <span class="card-arrow mi">arrow_forward</span>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function toggleKebab(e, id) {
+  e.stopPropagation();
+  document.querySelectorAll('.card-kebab-menu.open').forEach(el => { if (el.id !== 'kebab-' + id) el.classList.remove('open'); });
+  document.getElementById('kebab-' + id).classList.toggle('open');
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.card-kebab-menu.open').forEach(el => el.classList.remove('open'));
+});
+
+function duplicateProject(id) {
+  const src = DB.projects[id];
+  if (!src) return;
+  const copy = JSON.parse(JSON.stringify(src));
+  copy.id = uid('proj');
+  copy.name = src.name + ' (Copy)';
+  copy.createdAt = Date.now(); copy.updatedAt = Date.now();
+  DB.projects[copy.id] = copy;
+  DB.order.unshift(copy.id);
+  saveDB(); renderGallery();
+}
+function deleteProject(id) {
+  if (!confirm('Delete this project and all its sizes? This cannot be undone.')) return;
+  delete DB.projects[id];
+  DB.order = DB.order.filter(x => x !== id);
+  saveDB(); renderGallery();
+}
+
+let renameTargetId = null;
+function openRenameModal(id) {
+  renameTargetId = id;
+  document.getElementById('renameInput').value = DB.projects[id].name;
+  document.getElementById('renameModal').classList.add('visible');
+}
+function closeRenameModal() { document.getElementById('renameModal').classList.remove('visible'); }
+function confirmRename() {
+  const val = document.getElementById('renameInput').value.trim();
+  if (val && renameTargetId) {
+    DB.projects[renameTargetId].name = val;
+    DB.projects[renameTargetId].updatedAt = Date.now();
+    saveDB();
+    if (currentProjectId === renameTargetId) document.getElementById('breadcrumbName').textContent = val;
+  }
+  closeRenameModal();
+  renderGallery();
+}
+
+/* ── Size picker modal (multi-select; reused for create + add-more) ── */
+function openCreateModal() {
+  sizeModalMode = 'create';
+  pendingSizeIds = new Set();
+  pendingBgImage = ''; pendingProductImage = '';
+  document.getElementById('sizeModalTitle').textContent = 'New Graphic Asset Project';
+  document.getElementById('sizeModalHint').textContent = 'Name your project and choose every output size you need — you can add more later.';
+  document.getElementById('spbSetup').style.display = '';
+  document.getElementById('nameRow').style.display = '';
+  document.getElementById('pendingImagesRow').style.display = '';
+  document.getElementById('newProjName').value = '';
+  document.getElementById('confirmCreateBtn').textContent = 'Create';
+  renderPendingImagePreviews();
+  renderSizeGrid();
+  updateConfirmBtn();
+  document.getElementById('sizeModal').classList.add('visible');
+}
+function openAddSizesModal() {
+  const p = getCurrentProject();
+  if (!p) return;
+  sizeModalMode = 'add';
+  pendingSizeIds = new Set();
+  document.getElementById('sizeModalTitle').textContent = 'Add Sizes to ' + p.name;
+  document.getElementById('sizeModalHint').textContent = 'Pick any additional output sizes — they will use this project\'s shared content.';
+  document.getElementById('spbSetup').style.display = 'none';
+  document.getElementById('confirmCreateBtn').textContent = 'Add';
+  renderSizeGrid();
+  updateConfirmBtn();
+  document.getElementById('sizeModal').classList.add('visible');
+}
+
+/* ── Pending images (New Project modal only) ── */
+function renderPendingImagePreviews() {
+  const bgEl = document.getElementById('pendingBgPreview');
+  bgEl.innerHTML = pendingBgImage
+    ? `<img src="${pendingBgImage}" /><button type="button" class="pending-img-remove" title="Remove" onclick="clearPendingImage('background')"><span class="mi">close</span></button>`
+    : `<span class="preview-placeholder"><span class="mi">wallpaper</span>No image selected</span>`;
+  const pEl = document.getElementById('pendingProductPreview');
+  pEl.innerHTML = pendingProductImage
+    ? `<img src="${pendingProductImage}" /><button type="button" class="pending-img-remove" title="Remove" onclick="clearPendingImage('product')"><span class="mi">close</span></button>`
+    : `<span class="preview-placeholder"><span class="mi">inventory_2</span>No image selected</span>`;
+}
+function pickPendingImage(kind) {
+  openImageLibrary(kind, url => {
+    if (kind === 'background') pendingBgImage = url; else pendingProductImage = url;
+    renderPendingImagePreviews();
+  });
+}
+function uploadPendingImage(e, kind) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    if (kind === 'background') pendingBgImage = reader.result; else pendingProductImage = reader.result;
+    renderPendingImagePreviews();
+  };
+  reader.readAsDataURL(file);
+}
+function clearPendingImage(kind) {
+  if (kind === 'background') pendingBgImage = ''; else pendingProductImage = '';
+  renderPendingImagePreviews();
+}
+function triggerPendingUpload(kind) {
+  const input = document.getElementById(kind === 'background' ? 'pendingBgFile' : 'pendingProductFile');
+  if (input) { input.value = ''; input.click(); }
+}
+function closeSizeModal() { document.getElementById('sizeModal').classList.remove('visible'); }
+
+function renderSizeGrid() {
+  const p = sizeModalMode === 'add' ? getCurrentProject() : null;
+  const cards = [];
+  SIZE_GROUPS.forEach(g => {
+    const sizes = p ? g.sizes.filter(s => !p.sizes[s.id]) : g.sizes;
+    sizes.forEach(s => {
+      const maxW = 76, maxH = 46;
+      const scale = Math.min(maxW / s.w, maxH / s.h);
+      const bw = Math.max(6, Math.round(s.w * scale)), bh = Math.max(4, Math.round(s.h * scale));
+      const sel = pendingSizeIds.has(s.id) ? ' selected' : '';
+      cards.push(`
+        <div class="size-grid-card${sel}" data-size="${s.id}" onclick="toggleSizePick('${s.id}')">
+          <span class="pick-check mi">check</span>
+          <div class="size-swatch"><div class="ratio-box" style="width:${bw}px;height:${bh}px;"></div></div>
+          <div class="size-subtitle">${g.name}</div>
+          <div class="size-name">${s.name}</div>
+          <div class="size-dims">${s.w}×${s.h}</div>
+        </div>`);
+    });
+  });
+  let html = cards.length ? `<div class="size-grid">${cards.join('')}</div>` : '';
+  if (!html) html = `<p class="empty-selection-hint">Every size is already in this project.</p>`;
+  document.getElementById('sizeGroupsWrap').innerHTML = html;
+}
+function toggleSizePick(id) {
+  if (pendingSizeIds.has(id)) pendingSizeIds.delete(id); else pendingSizeIds.add(id);
+  renderSizeGrid(); updateConfirmBtn();
+}
+function selectAllSizes() {
+  const p = sizeModalMode === 'add' ? getCurrentProject() : null;
+  SIZE_GROUPS.forEach(g => (p ? g.sizes.filter(s => !p.sizes[s.id]) : g.sizes).forEach(s => pendingSizeIds.add(s.id)));
+  renderSizeGrid(); updateConfirmBtn();
+}
+function clearAllSizes() { pendingSizeIds.clear(); renderSizeGrid(); updateConfirmBtn(); }
+function updateConfirmBtn() {
+  const n = pendingSizeIds.size;
+  document.getElementById('confirmCreateBtn').disabled = n === 0;
+  const countEl = document.getElementById('spbCount');
+  if (countEl) countEl.innerHTML = n === 0 ? 'No sizes selected' : `<b>${n}</b> size${n === 1 ? '' : 's'} selected`;
+}
+
+function confirmSizeModal() {
+  if (!pendingSizeIds.size) return;
+  if (sizeModalMode === 'create') {
+    const name = document.getElementById('newProjName').value.trim() || 'Untitled Project';
+    const proj = createProject(name, Array.from(pendingSizeIds), pendingBgImage, pendingProductImage);
+    closeSizeModal();
+    openProject(proj.id);
+  } else {
+    const p = getCurrentProject();
+    markDirtyStart();
+    Array.from(pendingSizeIds).forEach(sid => {
+      if (!p.sizes[sid]) { p.sizes[sid] = makeSizeEntry(sid, p.content.stylePreset || 'clean-pro', 'dark'); p.sizeOrder.push(sid); }
+    });
+    p.activeSizeId = Array.from(pendingSizeIds)[0];
+    commitChange();
+    closeSizeModal();
+    renderBuilder();
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BUILDER — top-level orchestration
+   ══════════════════════════════════════════════════════════════════ */
+function openProject(id) {
+  currentProjectId = id;
+  historyStack = []; redoStack = []; pendingSnapshot = null;
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('builderView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  document.getElementById('breadcrumbName').textContent = DB.projects[id].name;
+  zoom = null; // trigger auto-fit
+  renderBuilder();
+}
+function backToGallery() { currentProjectId = null; renderGallery(); }
+
+function renderBuilder() {
+  const p = getCurrentProject();
+  if (!p) { renderGallery(); return; }
+  renderStyleButton();
+  renderContentPanel();
+  renderSizeTabs();
+  if (!p.activeSizeId) { renderEmptyCanvas(); renderProperties(); return; }
+  if (zoom === null) { zoomFit(); return; }
+  renderCanvas();
+  renderProperties();
+}
+
+function renderEmptyCanvas() {
+  document.getElementById('centerSizeName').textContent = 'No sizes yet';
+  document.getElementById('centerDimsTag').textContent = '';
+  document.getElementById('mmbStage').innerHTML = `
+    <div class="builder-empty-canvas" style="width:480px;height:320px;">
+      <span class="mi">photo_size_select_large</span>
+      <p>This project has no sizes yet.</p>
+      <button onclick="openAddSizesModal()">Add a Size</button>
+    </div>`;
+}
+
+/* ── Content panel (left, shared across all sizes) ── */
+function renderContentPanel() {
+  const p = getCurrentProject();
+  const c = p.content;
+  const bgPreview = c.backgroundImage
+    ? `<div class="upload-preview is-cover"><img src="${c.backgroundImage}" /><button class="remove-img-btn" onclick="removeContentImage('backgroundImage')"><span class="mi">close</span></button></div>`
+    : '';
+  const prodPreview = c.productImage
+    ? `<div class="upload-preview"><img src="${c.productImage}" /><button class="remove-img-btn" onclick="removeContentImage('productImage')"><span class="mi">close</span></button></div>`
+    : '';
+  const html = `
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Text Content</div>
+      <button class="bg-edit-trigger" onclick="openTextModal()"><span class="mi">edit_note</span>Edit Text Content…</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Background Image</div>
+      ${bgPreview}
+      <div class="img-field-actions">
+        <label class="img-field-btn"><span class="mi">upload</span>Upload
+          <input type="file" accept="image/*" style="display:none" onchange="handleContentImageUpload(event,'backgroundImage')" />
+        </label>
+        <button class="img-field-btn" onclick="openImageLibrary('background', url => { markDirtyStart(); getCurrentProject().content.backgroundImage = url; commitChange(); renderContentPanel(); renderCanvas(); renderProperties(); })"><span class="mi">photo_library</span>Library</button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Product Image</div>
+      ${prodPreview}
+      <div class="img-field-actions">
+        <label class="img-field-btn"><span class="mi">upload</span>Upload
+          <input type="file" accept="image/*" style="display:none" onchange="handleContentImageUpload(event,'productImage')" />
+        </label>
+        <button class="img-field-btn" onclick="openImageLibrary('product', url => { markDirtyStart(); getCurrentProject().content.productImage = url; commitChange(); renderContentPanel(); renderCanvas(); renderProperties(); })"><span class="mi">photo_library</span>Library</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('contentBody').innerHTML = html;
+
+  // Font picker (project-level, always shown when in builder)
+  const fontFamily = p.content.fontFamily || 'Oswald';
+  const fontSection = document.createElement('div');
+  fontSection.className = 'sidebar-section';
+  let fontHtml = '<div class="sidebar-section-title">Font</div>';
+  FONT_CATALOG.forEach(cat => {
+    fontHtml += `<div class="font-cat-label">${cat.category}</div><div class="font-pill-row">`;
+    cat.fonts.forEach(f => {
+      fontHtml += `<button class="font-pill${fontFamily === f.id ? ' active' : ''}" style="font-family:${f.css};" onclick="setProjectFont('${f.id}')">${f.name}</button>`;
+    });
+    fontHtml += '</div>';
+  });
+  fontSection.innerHTML = fontHtml;
+  document.getElementById('contentBody').appendChild(fontSection);
+  const entry = getActiveEntry();
+  if (entry) {
+    const hasAnyTypo = entry.show.eyebrow || entry.show.headline || entry.show.subheadline || entry.show.features;
+    if (hasAnyTypo) {
+      const typoSection = document.createElement('div');
+      typoSection.className = 'sidebar-section';
+      let typoHtml = '<div class="sidebar-section-title">Typography</div>';
+      if (entry.show.eyebrow) typoHtml += typoCompactRow('eyebrow', 'Eyebrow', entry.typo.eyebrow);
+      if (entry.show.headline) typoHtml += typoCompactRow('headline', 'Headline', entry.typo.headline);
+      if (entry.show.subheadline) typoHtml += typoCompactRow('subheadline', 'Subheadline', entry.typo.subheadline);
+      if (entry.show.features) typoHtml += typoCompactRow('features', 'Features', entry.typo.features);
+      typoSection.innerHTML = typoHtml;
+      document.getElementById('contentBody').appendChild(typoSection);
+    }
+  }
+}
+function updateContent(patch) {
+  markDirtyStart();
+  Object.assign(getCurrentProject().content, patch);
+  commitChange();
+  renderCanvas();
+}
+function updateFeature(idx, val) {
+  markDirtyStart();
+  getCurrentProject().content.features[idx] = val;
+  commitChange();
+  renderCanvas();
+}
+function handleContentImageUpload(e, key) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    markDirtyStart();
+    getCurrentProject().content[key] = reader.result;
+    commitChange();
+    renderContentPanel(); renderCanvas(); renderProperties();
+  };
+  reader.readAsDataURL(file);
+}
+function removeContentImage(key) {
+  markDirtyStart();
+  getCurrentProject().content[key] = '';
+  commitChange();
+  renderContentPanel(); renderCanvas(); renderProperties();
+}
+
+/* ── Size tab strip ── */
+function renderSizeTabs() {
+  const p = getCurrentProject();
+  let html = '';
+  p.sizeOrder.forEach(sid => {
+    const size = findSize(sid);
+    const fullName = groupNameOf(sid) + ' — ' + size.name;
+    const active = sid === p.activeSizeId ? ' active' : '';
+    html += `<div class="size-tab${active}" onclick="setActiveSize('${sid}')">
+      <span class="tab-name">${fullName}</span>
+      <button class="tab-remove" title="Remove from project" onclick="event.stopPropagation();removeSizeFromProject('${sid}')"><span class="mi">close</span></button>
+    </div>`;
+  });
+  html += `<div class="size-tab add-tab" onclick="openAddSizesModal()"><span class="mi" style="margin-right:2px;">add</span>Add Size</div>`;
+  document.getElementById('sizeTabStrip').innerHTML = html;
+}
+function setActiveSize(sid) {
+  const p = getCurrentProject();
+  p.activeSizeId = sid;
+  persist();
+  zoom = null;
+  renderBuilder();
+}
+function removeSizeFromProject(sid) {
+  const p = getCurrentProject();
+  if (p.sizeOrder.length <= 1) { alert('A project needs at least one size. Add another before removing this one.'); return; }
+  if (!confirm('Remove this size from the project?')) return;
+  markDirtyStart();
+  delete p.sizes[sid];
+  p.sizeOrder = p.sizeOrder.filter(x => x !== sid);
+  if (p.activeSizeId === sid) p.activeSizeId = p.sizeOrder[0] || null;
+  commitChange();
+  zoom = null;
+  renderBuilder();
+}
+
+/* ── Live canvas ── */
+function renderCanvas() {
+  _commitInlineEdit(); // save any in-progress inline edit before rebuilding
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!entry) { renderEmptyCanvas(); return; }
+  const size = findSize(entry.sizeId);
+  document.getElementById('centerSizeName').textContent = groupNameOf(entry.sizeId) + ' — ' + size.name;
+  document.getElementById('centerDimsTag').textContent = size.w + '×' + size.h;
+
+  // The canvas element may have been removed by the empty-state markup
+  // (e.g. when a project starts with no sizes, then a size is added).
+  let canvasEl = document.getElementById('mmbCanvas');
+  if (!canvasEl) {
+    const stage = document.getElementById('mmbStage');
+    stage.innerHTML = '';
+    canvasEl = document.createElement('div');
+    canvasEl.id = 'mmbCanvas';
+    canvasEl.className = 'mmb-canvas';
+    stage.appendChild(canvasEl);
+  }
+  canvasEl.style.width = size.w + 'px';
+  canvasEl.style.height = size.h + 'px';
+  canvasEl.style.transform = `scale(${zoom})`;
+  const fontEntry = findFontEntry(p.content.fontFamily || 'Oswald');
+  canvasEl.style.fontFamily = fontEntry.css;
+  canvasEl.innerHTML = buildCanvasInnerHtml(effectiveContent(p, entry), entry, size, false);
+  // ensure stage exists (may have been replaced by empty-state markup)
+  const stage = document.getElementById('mmbStage');
+  if (!stage.contains(canvasEl)) { stage.innerHTML = ''; stage.appendChild(canvasEl); }
+}
+
+/* ── Zoom ── */
+function zoomFit() {
+  const entry = getActiveEntry();
+  if (!entry) { zoom = 1; return; }
+  const size = findSize(entry.sizeId);
+  const wrap = document.getElementById('canvasScroll');
+  const availW = wrap.clientWidth - 80;
+  const availH = wrap.clientHeight - 80;
+  let z = Math.min(availW / size.w, availH / size.h);
+  z = Math.max(0.1, Math.min(3, z));
+  zoom = Math.round(z * 100) / 100;
+  document.getElementById('zoomPct').textContent = Math.round(zoom * 100) + '%';
+  renderCanvas(); renderProperties();
+}
+function zoomStep(dir) {
+  if (zoom === null || !getActiveEntry()) return;
+  zoom = clamp(Math.round((zoom + dir * 0.1) * 100) / 100, 0.1, 4);
+  document.getElementById('zoomPct').textContent = Math.round(zoom * 100) + '%';
+  renderCanvas();
+}
+function zoom100() {
+  if (!getActiveEntry()) return;
+  zoom = 1;
+  document.getElementById('zoomPct').textContent = '100%';
+  renderCanvas(); renderProperties();
+}
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+window.addEventListener('resize', () => {
+  if (currentProjectId && getActiveEntry()) zoomFit();
+  if (document.getElementById('bgPopup').classList.contains('open')) {
+    fitBgPopupInViewport(bgPopupAnchorRect);
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   PROPERTIES PANEL (right) — per active size
+   ══════════════════════════════════════════════════════════════════ */
+function renderProperties() {
+  const panel = document.getElementById('rightPanel');
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!entry) { panel.innerHTML = `<div class="builder-right-empty"><span class="mi">ads_click</span><p>Add a size to get started.</p></div>`; return; }
+  const size = findSize(entry.sizeId);
+  const orient = orientationOf(size);
+  const layoutOpts = layoutOptionsFor(orient);
+
+  let html = `<div class="detail-sidebar-header"><h3>${groupNameOf(entry.sizeId)} — ${size.name}</h3><div class="detail-sidebar-sub">Size ${size.w}×${size.h}</div></div>`;
+
+  const currentMode = entry.mode || 'dark';
+
+  /* \u2500 Mode toggle \u2500 */
+  html += `<div class="sidebar-section"><div class="sidebar-section-title">Mode</div>
+    <div class="mode-toggle">
+      <button class="${currentMode === 'light' ? 'active' : ''}" onclick="applyStyleMode('light')">
+        <span class="mi">light_mode</span>Light
+      </button>
+      <button class="${currentMode === 'dark' ? 'active' : ''}" onclick="applyStyleMode('dark')">
+        <span class="mi">dark_mode</span>Dark
+      </button>
+    </div>
+  </div>`;
+
+  html += `<div class="sidebar-section"><div class="sidebar-section-title">Elements</div>`;
+  html += toggleRow('eyebrow', 'Eyebrow', entry.show.eyebrow);
+  html += toggleRow('headline', 'Headline', entry.show.headline);
+  html += toggleRow('subheadline', 'Subheadline', entry.show.subheadline);
+  html += toggleRow('features', 'Features', entry.show.features);
+  html += `</div>`;
+
+  if (entry.show.product) {
+    const splitSize = isGdaSplit(entry.sizeId);
+    html += `<div class="sidebar-section"><div class="sidebar-section-title">Layout</div>`;
+    if (!splitSize) {
+      html += `<div class="layout-grid">`;
+      layoutOpts.forEach(opt => {
+        const lbl = opt.id.replace('image-', '').replace(/-/g, ' ');
+        html += `<div class="layout-opt${entry.layout === opt.id ? ' active' : ''}" onclick="setLayout('${opt.id}')" title="${opt.label}">
+          ${layoutIconHtml(opt.id)}
+          <div class="layout-opt-label">${lbl.charAt(0).toUpperCase() + lbl.slice(1)}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    const mediaPct = clamp(Math.round(entry.mediaSize ?? (splitSize ? 30 : 42)), 15, 70);
+    html += `<div class="ctrl-stack media-size-ctrl">
+      <span class="ctrl-label">Image Size</span>
+      <div class="range-row">
+        <input type="range" min="15" max="70" step="1" value="${mediaPct}" oninput="setMediaSize(this.value,false)" onchange="setMediaSize(this.value,true)" />
+        <span class="range-val">${mediaPct}%</span>
+      </div>
+    </div>`;
+    html += `</div>`;
+  }
+
+  const spacing = getEffectiveSpacing(entry, size);
+  const spacingState = ensureSizeSpacing(entry, size);
+  html += `<div class="sidebar-section">
+    <div class="sidebar-section-title spacing-title-row">
+      <span>Spacing</span>
+      <div class="spacing-presets">
+        <button onclick="applySpacingPreset('compact')" title="Compact">S</button>
+        <button onclick="applySpacingPreset('balanced')" title="Balanced">M</button>
+        <button onclick="applySpacingPreset('airy')" title="Airy">L</button>
+      </div>
+    </div>
+    <div class="pad-box">
+      ${padInputHtml('padTop', spacing.padTop, spacing.maxPad, 'pad-top', 'Top padding')}
+      ${padInputHtml('padRight', spacing.padRight, spacing.maxPad, 'pad-right', 'Right padding')}
+      ${padInputHtml('padBottom', spacing.padBottom, spacing.maxPad, 'pad-bottom', 'Bottom padding')}
+      ${padInputHtml('padLeft', spacing.padLeft, spacing.maxPad, 'pad-left', 'Left padding')}
+      <div class="pad-box-inner">
+        <button class="pad-link-btn${spacingState.linked ? ' active' : ''}" onclick="setSpacingLinked(${!spacingState.linked})" title="${spacingState.linked ? 'Paddings linked — click to unlink' : 'Link all paddings'}">
+          <span class="mi">${spacingState.linked ? 'link' : 'link_off'}</span>
+        </button>
+      </div>
+    </div>
+    <div class="spacing-gap-row">
+      <span class="ctrl-label">Middle Gap</span>
+      <div class="spacing-input-row">
+        <button class="spacing-step-btn" onclick="nudgeSpacing('contentGap',-1)" title="Decrease">−</button>
+        <input type="number" class="text-input spacing-number-input" min="0" max="${spacing.maxGap}" value="${Math.round(spacing.contentGap)}"
+          oninput="updateSpacingField('contentGap',this.value,false)"
+          onchange="updateSpacingField('contentGap',this.value,true)" />
+        <button class="spacing-step-btn" onclick="nudgeSpacing('contentGap',1)" title="Increase">+</button>
+      </div>
+    </div>
+  </div>`;
+
+  html += `<div class="sidebar-section">
+    <div class="sidebar-section-title">Background</div>
+    <button class="bg-edit-trigger" onclick="openBgPopup(this,'image')"><span class="mi">image</span>Background Image…</button>
+    <button class="bg-edit-trigger" style="margin-top:6px;" onclick="openBgPopup(this,'overlay')"><span class="mi">gradient</span>Background Color Overlay…</button>
+    <button class="bg-edit-trigger" style="margin-top:6px;" onclick="openBgPopup(this,'graphic')"><span class="mi">shape_line</span>Background Graphic…</button>
+  </div>`;
+
+  panel.innerHTML = html;
+}
+
+function toggleRow(key, label, checked) {
+  return `<div class="sidebar-toggle-ctrl"><span class="ctrl-label">${label}</span>
+    <label class="toggle-switch"><input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleShow('${key}',this.checked)"><span class="toggle-slider"></span></label></div>`;
+}
+function toggleShow(key, val) {
+  const entry = getActiveEntry();
+  markDirtyStart();
+  entry.show[key] = val;
+  commitChange();
+  renderCanvas(); renderProperties();
+  if (document.getElementById('bgPopup').classList.contains('open')) renderBgPopup();
+}
+function setLayout(id) {
+  const entry = getActiveEntry();
+  markDirtyStart();
+  entry.layout = id;
+  commitChange();
+  renderCanvas(); renderProperties();
+}
+
+function setMediaSize(rawVal, commit) {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  let val = Number(rawVal);
+  if (!Number.isFinite(val)) return;
+  val = clamp(Math.round(val), 15, 70);
+  markDirtyStart();
+  entry.mediaSize = val;
+  if (commit) commitChange();
+  renderCanvas();
+  if (commit) renderProperties();
+  const valEl = document.querySelector('.media-size-ctrl .range-val');
+  if (valEl) valEl.textContent = val + '%';
+}
+
+function ensureSizeSpacing(entry, size) {
+  if (!entry.spacing) {
+    const auto = calcAutoSpacing(size || findSize(entry.sizeId));
+    entry.spacing = {
+      padTop: auto.pad,
+      padRight: auto.pad,
+      padBottom: auto.pad,
+      padLeft: auto.pad,
+      contentGap: auto.contentGap,
+      linked: true
+    };
+  }
+  if (entry.spacing.linked == null) entry.spacing.linked = true;
+  return entry.spacing;
+}
+
+function padInputHtml(key, value, max, cls, title) {
+  return `<input type="number" class="pad-input ${cls}" min="0" max="${max}" value="${Math.round(value)}" title="${title}"
+    oninput="updateSpacingField('${key}',this.value,false)"
+    onchange="updateSpacingField('${key}',this.value,true)" />`;
+}
+
+function updateSpacingField(key, rawVal, commit) {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  const size = findSize(entry.sizeId);
+  const limits = getEffectiveSpacing(entry, size);
+  const sp = ensureSizeSpacing(entry, size);
+  let val = Number(rawVal);
+  if (!Number.isFinite(val)) return;
+  val = Math.round(val);
+  if (key === 'contentGap') val = clamp(val, 0, limits.maxGap);
+  else val = clamp(val, 0, limits.maxPad);
+  markDirtyStart();
+  if (sp.linked && /^pad(Top|Right|Bottom|Left)$/.test(key)) {
+    sp.padTop = val;
+    sp.padRight = val;
+    sp.padBottom = val;
+    sp.padLeft = val;
+  } else {
+    sp[key] = val;
+  }
+  if (commit) commitChange();
+  renderCanvas();
+  if (commit) renderProperties();
+}
+
+function nudgeSpacing(key, delta) {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  const current = ensureSizeSpacing(entry, findSize(entry.sizeId))[key] ?? 0;
+  updateSpacingField(key, Number(current) + Number(delta), true);
+}
+
+function setSpacingLinked(checked) {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  const sp = ensureSizeSpacing(entry, findSize(entry.sizeId));
+  markDirtyStart();
+  sp.linked = !!checked;
+  commitChange();
+  renderProperties();
+}
+
+function applySpacingPreset(kind) {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  const size = findSize(entry.sizeId);
+  const auto = calcAutoSpacing(size);
+  const limits = getEffectiveSpacing(entry, size);
+  const sp = ensureSizeSpacing(entry, size);
+  let padMul = 1;
+  let gapMul = 1;
+  if (kind === 'compact') { padMul = 0.75; gapMul = 0.75; }
+  else if (kind === 'airy') { padMul = 1.25; gapMul = 1.25; }
+  const pad = clamp(Math.round(auto.pad * padMul), 0, limits.maxPad);
+  const gap = clamp(Math.round(auto.contentGap * gapMul), 0, limits.maxGap);
+  markDirtyStart();
+  sp.padTop = pad;
+  sp.padRight = pad;
+  sp.padBottom = pad;
+  sp.padLeft = pad;
+  sp.contentGap = gap;
+  commitChange();
+  renderCanvas();
+  renderProperties();
+}
+
+function weightLabel(w) { return w == 400 ? 'Regular' : w == 600 ? 'Medium' : 'Bold'; }
+function typoSummaryRow(key, title, typo) {
+  return `
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">${title}</div>
+    <div class="typo-summary-row">
+      <div class="typo-summary-preview" style="color:${typo.color};font-weight:${typo.fontWeight};">Aa</div>
+      <div class="typo-summary-meta">${typo.fontSize}px · ${weightLabel(typo.fontWeight)} · ${typo.align}</div>
+      <button class="typo-edit-btn" onclick="openTypoModal('${key}','${title}')"><span class="mi">edit</span>Edit</button>
+    </div>
+  </div>`;
+}
+
+/* ── Typography popup (point 3: all typography edits happen in a modal) ── */
+function openTypoModal(key, title) {
+  const entry = getActiveEntry();
+  typoModalKey = key;
+  typoModalSnapshot = JSON.parse(JSON.stringify(entry.typo[key]));
+  markDirtyStart(); // capture whole-project pre-edit state once, for undo + Cancel-revert
+  document.getElementById('typoModalTitle').textContent = title;
+  renderTypoModalBody();
+  document.getElementById('typoModal').classList.add('visible');
+}
+function renderTypoModalBody() {
+  const typo = getActiveEntry().typo[typoModalKey];
+  const key = typoModalKey;
+  document.getElementById('typoModalBody').innerHTML = `
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Font size (px)</span>
+      <input type="number" class="text-input" value="${typo.fontSize}" min="8" max="300" onchange="updateTypoModal({fontSize:+this.value})" />
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Weight</span>
+      <div class="pill-group">
+        <button class="${typo.fontWeight == 400 ? 'active' : ''}" onclick="updateTypoModal({fontWeight:400})">Regular</button>
+        <button class="${typo.fontWeight == 600 ? 'active' : ''}" onclick="updateTypoModal({fontWeight:600})">Medium</button>
+        <button class="${typo.fontWeight == 800 ? 'active' : ''}" onclick="updateTypoModal({fontWeight:800})">Bold</button>
+      </div>
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Align</span>
+      <div class="pill-group">
+        <button class="${typo.align === 'left' ? 'active' : ''}" onclick="updateTypoModal({align:'left'})"><span class="mi">format_align_left</span></button>
+        <button class="${typo.align === 'center' ? 'active' : ''}" onclick="updateTypoModal({align:'center'})"><span class="mi">format_align_center</span></button>
+        <button class="${typo.align === 'right' ? 'active' : ''}" onclick="updateTypoModal({align:'right'})"><span class="mi">format_align_right</span></button>
+      </div>
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Color</span>
+      <div class="color-field">
+        <div class="color-swatch-wrap" style="background:${typo.color}" onclick="openColorPicker(this,'${typo.color}',v=>updateTypoModal({color:v},true),v=>updateTypoModal({color:v}))"></div>
+        <input type="text" class="text-input color-hex-input" value="${typo.color}" onchange="updateTypoModal({color:this.value})" />
+      </div>
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Line height</span>
+      <div class="range-row">
+        <input type="range" min="0.9" max="2" step="0.05" value="${typo.lineHeight}" oninput="updateTypoModal({lineHeight:+this.value},true)" />
+        <span class="range-val">${typo.lineHeight}</span>
+      </div>
+    </div>
+  `;
+}
+function updateTypoModal(patch, skipRerender) {
+  Object.assign(getActiveEntry().typo[typoModalKey], patch);
+  if (!skipRerender) renderTypoModalBody();
+}
+function closeTypoModalCancel() {
+  if (typoModalKey) {
+    Object.assign(getActiveEntry().typo[typoModalKey], typoModalSnapshot);
+    pendingSnapshot = null; // discard — nothing should land in undo history for a cancelled edit
+  }
+  typoModalKey = null; typoModalSnapshot = null;
+  document.getElementById('typoModal').classList.remove('visible');
+  renderCanvas(); renderProperties();
+}
+function closeTypoModalSave() {
+  commitChange();
+  typoModalKey = null; typoModalSnapshot = null;
+  document.getElementById('typoModal').classList.remove('visible');
+  renderCanvas(); renderProperties();
+}
+
+/* ── Text Content popup (per-size copy: eyebrow / headline / subheadline / features) ── */
+let textModalSnapshot = null;
+function openTextModal() {
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!p || !entry) return;
+  ensureEntryText(p, entry);
+  textModalSnapshot = JSON.parse(JSON.stringify(entry.text));
+  markDirtyStart(); // capture whole-project pre-edit state once, for undo + Cancel-revert
+  renderTextModalBody();
+  document.getElementById('textModal').classList.add('visible');
+}
+function renderTextModalBody() {
+  const p = getCurrentProject();
+  const entry = getActiveEntry();
+  if (!p || !entry) return;
+  const t = ensureEntryText(p, entry);
+  const feats = t.features;
+  let featRows = '';
+  feats.forEach((f, i) => {
+    const canRemove = feats.length > 2;
+    featRows += `<div class="feature-input-row">
+      <span class="feature-num">${i + 1}</span>
+      <input class="text-input" value="${escapeHtml(f || '')}" placeholder="Feature ${i + 1}" onchange="updateTextFeature(${i}, this.value)" />
+      ${canRemove ? `<button class="feature-remove-btn" title="Remove feature" onclick="removeTextFeature(${i})"><span class="mi">close</span></button>` : ''}
+    </div>`;
+  });
+  const canAdd = feats.length < 4;
+  document.getElementById('textModalBody').innerHTML = `
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Eyebrow</span>
+      <input class="text-input" value="${escapeHtml(t.eyebrow || '')}" placeholder="e.g. Limited Time Offer" onchange="updateTextField({eyebrow:this.value})" />
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Headline</span>
+      <textarea class="text-input" rows="2" onchange="updateTextField({headline:this.value})">${escapeHtml(t.headline || '')}</textarea>
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Subheadline</span>
+      <textarea class="text-input" rows="2" onchange="updateTextField({subheadline:this.value})">${escapeHtml(t.subheadline || '')}</textarea>
+    </div>
+    <div class="ctrl-stack">
+      <span class="ctrl-label">Features (2–4)</span>
+      ${featRows}
+      ${canAdd ? `<button class="feature-add-btn" onclick="addTextFeature()"><span class="mi">add</span>Add feature</button>` : ''}
+    </div>
+    <button class="apply-all-btn" style="margin-top:14px;" onclick="applyTextToAllSizes()"><span class="mi">done_all</span>Apply text content to all sizes</button>
+  `;
+}
+function updateTextField(patch) {
+  Object.assign(ensureEntryText(getCurrentProject(), getActiveEntry()), patch);
+  renderCanvas();
+}
+function updateTextFeature(idx, val) {
+  ensureEntryText(getCurrentProject(), getActiveEntry()).features[idx] = val;
+  renderCanvas();
+}
+function addTextFeature() {
+  const t = ensureEntryText(getCurrentProject(), getActiveEntry());
+  if (t.features.length >= 4) return;
+  t.features.push('');
+  renderTextModalBody(); renderCanvas();
+}
+function removeTextFeature(idx) {
+  const t = ensureEntryText(getCurrentProject(), getActiveEntry());
+  if (t.features.length <= 2) return;
+  t.features.splice(idx, 1);
+  renderTextModalBody(); renderCanvas();
+}
+function closeTextModalCancel() {
+  const entry = getActiveEntry();
+  if (entry && textModalSnapshot) {
+    entry.text = JSON.parse(JSON.stringify(textModalSnapshot));
+    pendingSnapshot = null; // discard — nothing should land in undo history for a cancelled edit
+  }
+  textModalSnapshot = null;
+  document.getElementById('textModal').classList.remove('visible');
+  renderCanvas(); renderContentPanel();
+}
+function closeTextModalSave() {
+  commitChange();
+  textModalSnapshot = null;
+  document.getElementById('textModal').classList.remove('visible');
+  renderCanvas(); renderContentPanel();
+}
+
+/* ── Background section ── */
+/* \u2500\u2500 Background popup \u2500\u2500 */
+let bgPopupMode = 'image'; // 'image' | 'overlay' | 'graphic'
+let bgPopupAnchorRect = null;
+
+function fitBgPopupInViewport(anchorRect) {
+  const popup = document.getElementById('bgPopup');
+  if (!popup || !popup.classList.contains('open')) return;
+
+  const margin = 8;
+  const popupW = popup.offsetWidth || 300;
+  const popupH = Math.min(popup.offsetHeight, window.innerHeight - margin * 2);
+
+  let left = popup.offsetLeft;
+  if (anchorRect) left = anchorRect.right - popupW;
+  left = clamp(left, margin, Math.max(margin, window.innerWidth - popupW - margin));
+
+  let top = popup.offsetTop;
+  if (anchorRect) {
+    top = anchorRect.bottom + 6;
+    if (top + popupH > window.innerHeight - margin) top = anchorRect.top - popupH - 6;
+  }
+  top = clamp(top, margin, Math.max(margin, window.innerHeight - popupH - margin));
+
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+}
+
+function openBgPopup(triggerEl, mode) {
+  bgPopupMode = mode || 'image';
+  renderBgPopup();
+  const popup = document.getElementById('bgPopup');
+  // Briefly show off-screen to measure real height before final placement
+  popup.style.visibility = 'hidden';
+  popup.style.left = '-9999px';
+  popup.style.top  = '0';
+  popup.classList.add('open');
+  document.getElementById('bgPopupOverlay').style.display = 'block';
+
+  bgPopupAnchorRect = triggerEl.getBoundingClientRect();
+  fitBgPopupInViewport(bgPopupAnchorRect);
+  popup.style.visibility = '';
+}
+function closeBgPopup() {
+  document.getElementById('bgPopup').classList.remove('open');
+  document.getElementById('bgPopupOverlay').style.display = 'none';
+  bgPopupAnchorRect = null;
+}
+function renderBgPopup() {
+  const entry = getActiveEntry();
+  if (!entry) return;
+  const bg = entry.bg;
+  const p = getCurrentProject();
+  const hasImage = entry.show.background && p && p.content.backgroundImage;
+
+  const titleEl = document.getElementById('bgPopupTitle');
+  const titles = {
+    image:   { icon: 'image',      label: 'Background Image' },
+    overlay: { icon: 'gradient',   label: 'Background Color Overlay' },
+    graphic: { icon: 'shape_line', label: 'Background Graphic' }
+  };
+  const t = titles[bgPopupMode] || titles.image;
+  if (titleEl) titleEl.innerHTML = `<span class="mi">${t.icon}</span>${t.label}`;
+
+  let html = '';
+  if (bgPopupMode === 'graphic')      html = renderGraphicSection(bg, true);
+  else if (bgPopupMode === 'overlay') html = buildBgOverlayHtml(bg, hasImage);
+  else                                html = buildBgImageHtml(bg, p, hasImage);
+  document.getElementById('bgPopupBody').innerHTML = html;
+  if (document.getElementById('bgPopup').classList.contains('open')) {
+    fitBgPopupInViewport(bgPopupAnchorRect);
+    requestAnimationFrame(() => fitBgPopupInViewport(bgPopupAnchorRect));
+  }
+}
+
+function buildBgImageHtml(bg, p, hasImage) {
+  if (!hasImage) {
+    return `<div class="bg-popup-section"><div class="empty-selection-hint">No background image. Upload one from the content panel on the left to enable image controls.</div></div>`;
+  }
+  return `<div class="bg-popup-section">
+      <div class="bg-popup-label">Image</div>
+      <div class="upload-preview is-cover" style="margin-bottom:0;border-radius:8px;"><img src="${p.content.backgroundImage}" /></div>
+    </div>
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Opacity</div>
+      <div class="range-row">
+        <input type="range" min="0" max="100" value="${Math.round((bg.imgOpacity ?? 1) * 100)}"
+          oninput="updateBgLive({imgOpacity:+this.value/100});this.nextElementSibling.textContent=this.value+'%';"
+          onchange="updateBgCommit({imgOpacity:+this.value/100});" />
+        <span class="range-val">${Math.round((bg.imgOpacity ?? 1) * 100)}%</span>
+      </div>
+    </div>
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Saturation</div>
+      <div class="range-row">
+        <input type="range" min="0" max="200" value="${bg.imgSaturation ?? 100}"
+          oninput="updateBgLive({imgSaturation:+this.value});this.nextElementSibling.textContent=this.value+'%';"
+          onchange="updateBgCommit({imgSaturation:+this.value});" />
+        <span class="range-val">${bg.imgSaturation ?? 100}%</span>
+      </div>
+    </div>
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Position X</div>
+      <div class="range-row">
+        <input type="range" min="0" max="100" value="${bg.imgPosX ?? 50}"
+          oninput="updateBgLive({imgPosX:+this.value});this.nextElementSibling.textContent=this.value+'%';"
+          onchange="updateBgCommit({imgPosX:+this.value});" />
+        <span class="range-val">${bg.imgPosX ?? 50}%</span>
+      </div>
+    </div>
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Position Y</div>
+      <div class="range-row">
+        <input type="range" min="0" max="100" value="${bg.imgPosY ?? 50}"
+          oninput="updateBgLive({imgPosY:+this.value});this.nextElementSibling.textContent=this.value+'%';"
+          onchange="updateBgCommit({imgPosY:+this.value});" />
+        <span class="range-val">${bg.imgPosY ?? 50}%</span>
+      </div>
+    </div>
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Scale</div>
+      <div class="range-row">
+        <input type="range" min="100" max="300" value="${Math.round((bg.imgScale ?? 1) * 100)}"
+          oninput="updateBgLive({imgScale:+this.value/100});this.nextElementSibling.textContent=(+this.value/100).toFixed(1)+'\u00d7';"
+          onchange="updateBgCommit({imgScale:+this.value/100});" />
+        <span class="range-val">${(bg.imgScale ?? 1).toFixed(1)}\u00d7</span>
+      </div>
+    </div>`;
+}
+
+function buildBgOverlayHtml(bg, hasImage) {
+  if (hasImage) {
+    const isOverlayGradient = bg.overlayType === 'gradient';
+    const overlayOpacityVal = isOverlayGradient
+      ? (bg.overlayGradOpacity ?? bg.overlayOpacity ?? 0)
+      : (bg.overlayOpacity ?? 0);
+    let html = `<div class="bg-popup-section">
+      <div class="bg-popup-label">Color Overlay</div>
+      <div class="pill-group" style="margin-bottom:10px;">
+        <button class="${(bg.overlayType || 'color') !== 'gradient' ? 'active' : ''}" onclick="updateBgCommit({overlayType:'color'});renderBgPopup();"><span class="mi">format_color_fill</span>Color</button>
+        <button class="${bg.overlayType === 'gradient' ? 'active' : ''}" onclick="updateBgCommit({overlayType:'gradient'});renderBgPopup();"><span class="mi">gradient</span>Gradient</button>
+      </div>`;
+    if (bg.overlayType === 'gradient') {
+      const gf = bg.overlayGradFrom || '#000000', gt = bg.overlayGradTo || 'rgba(0,0,0,0)', ga = bg.overlayGradAngle ?? 180;
+      html += `<div class="grad-preview" style="margin-bottom:8px;background:linear-gradient(${ga}deg,${gf},${gt});"></div>
+      <div class="ctrl-stack"><span class="ctrl-label">From</span><div class="color-field">
+        <div class="color-swatch-wrap" style="background:${gf}" onclick="openColorPicker(this,'${gf.startsWith('rgb') ? '#000000' : gf}',v=>updateBgLive({overlayGradFrom:v}),v=>{updateBgCommit({overlayGradFrom:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${gf}" onchange="updateBgCommit({overlayGradFrom:this.value});renderBgPopup();" />
+      </div></div>
+      <div class="ctrl-stack"><span class="ctrl-label">To</span><div class="color-field">
+        <div class="color-swatch-wrap" style="background:${gt.startsWith('rgb') ? '#fff' : gt}" onclick="openColorPicker(this,'${gt.startsWith('rgb') ? '#000000' : gt}',v=>updateBgLive({overlayGradTo:v}),v=>{updateBgCommit({overlayGradTo:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${gt}" onchange="updateBgCommit({overlayGradTo:this.value});renderBgPopup();" />
+      </div></div>
+      <div class="ctrl-stack"><span class="ctrl-label">Angle</span>
+        <div class="range-row">
+          <input type="range" min="0" max="360" value="${ga}"
+            oninput="updateBgLive({overlayGradAngle:+this.value});this.nextElementSibling.textContent=this.value+'\u00b0';"
+            onchange="updateBgCommit({overlayGradAngle:+this.value});renderBgPopup();" />
+          <span class="range-val">${ga}\u00b0</span>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="color-field" style="margin-bottom:8px;">
+        <div class="color-swatch-wrap" style="background:${bg.overlayColor}" onclick="openColorPicker(this,'${bg.overlayColor}',v=>updateBgLive({overlayColor:v}),v=>{updateBgCommit({overlayColor:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${bg.overlayColor}" onchange="updateBgCommit({overlayColor:this.value});renderBgPopup();" />
+      </div>`;
+    }
+    html += `<div class="ctrl-stack"><span class="ctrl-label">Opacity</span>
+      <div class="range-row">
+        <input type="range" min="0" max="100" value="${Math.round(overlayOpacityVal * 100)}"
+          oninput="updateBgLive({${isOverlayGradient ? 'overlayGradOpacity' : 'overlayOpacity'}:+this.value/100});this.nextElementSibling.textContent=this.value+'%';"
+          onchange="updateBgCommit({${isOverlayGradient ? 'overlayGradOpacity' : 'overlayOpacity'}:+this.value/100});" />
+        <span class="range-val">${Math.round(overlayOpacityVal * 100)}%</span>
+      </div>
+    </div>
+    </div>`;
+    return html;
+  }
+  /* \u2500 No image: flat background fill acts as the base color/gradient \u2500 */
+  let html = `<div class="bg-popup-section">
+      <div class="bg-popup-label">Type</div>
+      <div class="pill-group">
+        <button class="${bg.flatType === 'color' ? 'active' : ''}" onclick="setFlatType('color');renderBgPopup();"><span class="mi">format_color_fill</span>Color</button>
+        <button class="${bg.flatType === 'gradient' ? 'active' : ''}" onclick="setFlatType('gradient');renderBgPopup();"><span class="mi">gradient</span>Gradient</button>
+      </div>
+    </div>`;
+  if (bg.flatType === 'color') {
+    html += `<div class="bg-popup-section"><div class="color-field">
+      <div class="color-swatch-wrap" style="background:${bg.color}" onclick="openColorPicker(this,'${bg.color}',v=>updateBgLive({color:v}),v=>{updateBgCommit({color:v});renderBgPopup();})"></div>
+      <input type="text" class="text-input color-hex-input" value="${bg.color}" onchange="updateBgCommit({color:this.value});renderBgPopup();" />
+    </div></div>`;
+  } else {
+    html += `<div class="bg-popup-section">
+      <div class="grad-preview" style="margin-bottom:8px;background:linear-gradient(${bg.gradAngle}deg,${bg.gradFrom},${bg.gradTo});"></div>
+      <div class="ctrl-stack"><span class="ctrl-label">From</span><div class="color-field">
+        <div class="color-swatch-wrap" style="background:${bg.gradFrom}" onclick="openColorPicker(this,'${bg.gradFrom}',v=>updateBgLive({gradFrom:v}),v=>{updateBgCommit({gradFrom:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${bg.gradFrom}" onchange="updateBgCommit({gradFrom:this.value});renderBgPopup();" />
+      </div></div>
+      <div class="ctrl-stack"><span class="ctrl-label">To</span><div class="color-field">
+        <div class="color-swatch-wrap" style="background:${bg.gradTo}" onclick="openColorPicker(this,'${bg.gradTo}',v=>updateBgLive({gradTo:v}),v=>{updateBgCommit({gradTo:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${bg.gradTo}" onchange="updateBgCommit({gradTo:this.value});renderBgPopup();" />
+      </div></div>
+      <div class="ctrl-stack"><span class="ctrl-label">Angle</span>
+        <div class="range-row">
+          <input type="range" min="0" max="360" value="${bg.gradAngle}"
+            oninput="updateBgLive({gradAngle:+this.value});this.nextElementSibling.textContent=this.value+'\u00b0';"
+            onchange="updateBgCommit({gradAngle:+this.value});renderBgPopup();" />
+          <span class="range-val">${bg.gradAngle}\u00b0</span>
+        </div>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+function bgRangeRow(label, key, min, max, val, disp, factor) {
+  // factor: stored value = slider/factor (e.g. 100 for 0..1 opacity/scale). Default 1.
+  factor = factor || 1;
+  const textExpr = disp === 'pct' ? "this.value+'%'"
+    : disp === 'deg' ? "this.value+'\\u00b0'"
+    : disp === 'mult' ? "(+this.value/" + factor + ").toFixed(1)+'\\u00d7'"
+    : "this.value";
+  const shown = disp === 'pct' ? (Math.round(val) + '%')
+    : disp === 'deg' ? (Math.round(val) + '\u00b0')
+    : disp === 'mult' ? ((val / factor).toFixed(1) + '\u00d7')
+    : String(val);
+  const stored = factor === 1 ? '+this.value' : '+this.value/' + factor;
+  return `<div class="ctrl-stack"><span class="ctrl-label">${label}</span>
+    <div class="range-row">
+      <input type="range" min="${min}" max="${max}" value="${val}"
+        oninput="updateBgLive({${key}:${stored}});this.nextElementSibling.textContent=${textExpr};"
+        onchange="updateBgCommit({${key}:${stored}});" />
+      <span class="range-val">${shown}</span>
+    </div></div>`;
+}
+function renderGraphicSection(bg, standalone) {
+  const graphic = bg.graphic || 'none';
+  const usingStyleColor = !bg.graphicColor;
+  const effColor = bg.graphicColor || currentStyleAccent();
+  const op = (bg.graphicOpacity != null ? bg.graphicOpacity : 1);
+  const posX = bg.graphicPosX ?? 50, posY = bg.graphicPosY ?? 50;
+  const scalePct = Math.round((bg.graphicScale ?? 1) * 100);
+  let h = `${standalone ? '' : '<hr class="bg-popup-divider">'}
+    <div class="bg-popup-section">
+      <div class="bg-popup-label">Graphic</div>
+      <div class="pill-group graphic-type-group">
+        <button class="${graphic === 'none' ? 'active' : ''}" onclick="setBgGraphic('none')">None</button>
+        <button class="${graphic === 'diagonal' ? 'active' : ''}" onclick="setBgGraphic('diagonal')"><span class="mi">show_chart</span>Diagonal</button>
+        <button class="${graphic === 'band' ? 'active' : ''}" onclick="setBgGraphic('band')"><span class="mi">horizontal_rule</span>Band</button>
+        <button class="${graphic === 'arc' ? 'active' : ''}" onclick="setBgGraphic('arc')"><span class="mi">contrast</span>Arc</button>
+        <button class="${graphic === 'diamond' ? 'active' : ''}" onclick="setBgGraphic('diamond')"><span class="mi">diamond</span>Diamond</button>
+      </div>`;
+  if (graphic !== 'none') {
+    // Color (defaults to Style accent, fully overridable)
+    h += `<div class="ctrl-stack" style="margin-top:10px;"><span class="ctrl-label">Color</span>
+      <div class="color-field">
+        <div class="color-swatch-wrap" style="background:${effColor}" onclick="openColorPicker(this,'${effColor.startsWith('rgb') ? '#000000' : effColor}',v=>updateBgLive({graphicColor:v}),v=>{updateBgCommit({graphicColor:v});renderBgPopup();})"></div>
+        <input type="text" class="text-input color-hex-input" value="${effColor}" onchange="updateBgCommit({graphicColor:this.value});renderBgPopup();" />
+        <button class="graphic-style-color${usingStyleColor ? ' active' : ''}" title="Use current Style color" onclick="updateBgCommit({graphicColor:''});renderBgPopup();"><span class="mi">palette</span></button>
+      </div></div>`;
+    // Opacity (all graphics)
+    h += bgRangeRow('Opacity', 'graphicOpacity', 0, 100, Math.round(op * 100), 'pct', 100);
+    if (graphic === 'diagonal') {
+      h += bgRangeRow('Angle', 'graphicAngle', 0, 360, bg.graphicAngle ?? 115, 'deg');
+      h += bgRangeRow('Position X', 'graphicPosX', 0, 100, posX, 'pct');
+      h += bgRangeRow('Position Y', 'graphicPosY', 0, 100, posY, 'pct');
+    } else if (graphic === 'band') {
+      h += bgRangeRow('Angle', 'graphicAngle', 0, 360, bg.graphicAngle ?? 352, 'deg');
+      h += bgRangeRow('Thickness', 'graphicBandThickness', 2, 90, bg.graphicBandThickness ?? 20, 'pct');
+      h += bgRangeRow('Position X', 'graphicPosX', 0, 100, posX, 'pct');
+      h += bgRangeRow('Position Y', 'graphicPosY', 0, 100, posY, 'pct');
+    } else if (graphic === 'arc') {
+      h += bgRangeRow('Scale', 'graphicScale', 20, 320, scalePct, 'mult', 100);
+      h += bgRangeRow('Position X', 'graphicPosX', 0, 100, posX, 'pct');
+      h += bgRangeRow('Position Y', 'graphicPosY', 0, 100, posY, 'pct');
+    } else if (graphic === 'diamond') {
+      h += bgRangeRow('Long axis', 'graphicDiamondLong', 10, 150, bg.graphicDiamondLong ?? 70, 'pct');
+      h += bgRangeRow('Short axis', 'graphicDiamondShort', 10, 150, bg.graphicDiamondShort ?? 45, 'pct');
+      h += bgRangeRow('Scale', 'graphicScale', 20, 320, scalePct, 'mult', 100);
+      h += bgRangeRow('Position X', 'graphicPosX', 0, 100, posX, 'pct');
+      h += bgRangeRow('Position Y', 'graphicPosY', 0, 100, posY, 'pct');
+    }
+  }
+  h += `<button class="apply-all-btn" style="margin-top:12px;" onclick="applyGraphicToAllSizes()"><span class="mi">done_all</span>Apply graphic to all sizes</button>
+    </div>`;
+  return h;
+}
+function updateBgLive(patch) { markDirtyStart(); Object.assign(getActiveEntry().bg, patch); renderCanvas(); }
+function updateBgCommit(patch) { markDirtyStart(); Object.assign(getActiveEntry().bg, patch); commitChange(); renderCanvas(); }
+
+/* ══════════════════════════════════════════════════════════════════
+   CUSTOM COLOR PICKER — replaces the ugly native <input type=color>
+   Opens anchored to a swatch; drives a live callback while editing and a
+   commit callback when it closes. Pure DOM, export-safe, no dependencies.
+   ══════════════════════════════════════════════════════════════════ */
+const CPICK_PRESETS = ['#000000','#ffffff','#598cd9','#006EFF','#001dad','#8ab625','#8B5CF6','#06b6d4','#f43f5e'];
+let _cpick = { h: 0, s: 0, v: 0, onLive: null, onDone: null, lastHex: '#000000', open: false };
+
+function _cpClamp01(x) { return Math.max(0, Math.min(1, x)); }
+function _cpHexToRgb(hex) {
+  if (typeof hex !== 'string') return { r: 0, g: 0, b: 0 };
+  let h = hex.trim().replace(/^#/, '');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+  return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
+}
+function _cpRgbToHex(r, g, b) {
+  const to = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return '#' + to(r) + to(g) + to(b);
+}
+function _cpRgbToHsv(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+  let h = 0;
+  if (d) {
+    if (max === r) h = ((g - b) / d) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60; if (h < 0) h += 360;
+  }
+  return { h, s: max ? d / max : 0, v: max };
+}
+function _cpHsvToRgb(h, s, v) {
+  const c = v * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = v - c;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) { r = c; g = x; }
+  else if (h < 120) { r = x; g = c; }
+  else if (h < 180) { g = c; b = x; }
+  else if (h < 240) { g = x; b = c; }
+  else if (h < 300) { r = x; b = c; }
+  else { r = c; b = x; }
+  return { r: (r + m) * 255, g: (g + m) * 255, b: (b + m) * 255 };
+}
+function _cpCurrentHex() {
+  const { r, g, b } = _cpHsvToRgb(_cpick.h, _cpick.s, _cpick.v);
+  return _cpRgbToHex(r, g, b);
+}
+function _cpRender(emit) {
+  const sv = document.getElementById('cpickSV');
+  const svHandle = document.getElementById('cpickSVHandle');
+  const hue = document.getElementById('cpickHue');
+  const hueHandle = document.getElementById('cpickHueHandle');
+  const preview = document.getElementById('cpickPreview');
+  const hexInput = document.getElementById('cpickHex');
+  const hueColor = _cpRgbToHex(...Object.values(_cpHsvToRgb(_cpick.h, 1, 1)));
+  sv.style.background = hueColor;
+  svHandle.style.left = (_cpick.s * 100) + '%';
+  svHandle.style.top = ((1 - _cpick.v) * 100) + '%';
+  hueHandle.style.left = (_cpick.h / 360 * 100) + '%';
+  const hex = _cpCurrentHex();
+  preview.style.background = hex;
+  if (document.activeElement !== hexInput) hexInput.value = hex.toUpperCase();
+  _cpick.lastHex = hex;
+  if (emit && typeof _cpick.onLive === 'function') _cpick.onLive(hex);
+}
+function openColorPicker(anchor, initial, onLive, onDone) {
+  _cpick.onLive = onLive; _cpick.onDone = onDone;
+  const rgb = _cpHexToRgb(initial) || { r: 0, g: 0, b: 0 };
+  const hsv = _cpRgbToHsv(rgb.r, rgb.g, rgb.b);
+  _cpick.h = hsv.h; _cpick.s = hsv.s; _cpick.v = hsv.v; _cpick.lastHex = _cpRgbToHex(rgb.r, rgb.g, rgb.b);
+  // presets
+  const pr = document.getElementById('cpickPresets');
+  pr.innerHTML = CPICK_PRESETS.map(c => `<button type="button" class="cpick-preset" style="background:${c}" title="${c}" onclick="cpickApplyPreset('${c}')"></button>`).join('');
+  _cpRender(false);
+  const picker = document.getElementById('colorPicker');
+  const overlay = document.getElementById('colorPickerOverlay');
+  overlay.style.display = 'block';
+  picker.style.visibility = 'hidden';
+  picker.classList.add('open');
+  // position: below anchor, opening leftward-aligned to anchor; flip if needed
+  const r = anchor.getBoundingClientRect();
+  const pw = picker.offsetWidth || 232, ph = picker.offsetHeight || 300, margin = 8;
+  let left = r.left;
+  if (left + pw > window.innerWidth - margin) left = window.innerWidth - pw - margin;
+  if (left < margin) left = margin;
+  let top = r.bottom + 8;
+  if (top + ph > window.innerHeight - margin) top = r.top - ph - 8;
+  if (top < margin) top = margin;
+  picker.style.left = left + 'px';
+  picker.style.top = top + 'px';
+  picker.style.visibility = '';
+  _cpick.open = true;
+}
+function closeColorPicker() {
+  if (!_cpick.open) return;
+  _cpick.open = false;
+  document.getElementById('colorPicker').classList.remove('open');
+  document.getElementById('colorPickerOverlay').style.display = 'none';
+  const done = _cpick.onDone;
+  _cpick.onLive = null; _cpick.onDone = null;
+  if (typeof done === 'function') done(_cpick.lastHex);
+}
+function cpickApplyPreset(hex) {
+  const rgb = _cpHexToRgb(hex); if (!rgb) return;
+  const hsv = _cpRgbToHsv(rgb.r, rgb.g, rgb.b);
+  _cpick.h = hsv.h; _cpick.s = hsv.s; _cpick.v = hsv.v;
+  _cpRender(true);
+}
+function _cpBindDrag(el, onMove) {
+  const handler = (e) => {
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    const pt = e.touches ? e.touches[0] : e;
+    onMove(rect, pt.clientX, pt.clientY);
+    _cpRender(true);
+  };
+  const start = (e) => {
+    handler(e);
+    const move = (ev) => handler(ev);
+    const up = () => {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', up);
+    };
+    document.addEventListener('pointermove', move);
+    document.addEventListener('pointerup', up);
+  };
+  el.addEventListener('pointerdown', start);
+}
+function _cpInit() {
+  const sv = document.getElementById('cpickSV');
+  const hue = document.getElementById('cpickHue');
+  const hexInput = document.getElementById('cpickHex');
+  if (!sv || sv._cpBound) return;
+  sv._cpBound = true;
+  _cpBindDrag(sv, (rect, x, y) => {
+    _cpick.s = _cpClamp01((x - rect.left) / rect.width);
+    _cpick.v = _cpClamp01(1 - (y - rect.top) / rect.height);
+  });
+  _cpBindDrag(hue, (rect, x) => {
+    _cpick.h = _cpClamp01((x - rect.left) / rect.width) * 360;
+  });
+  hexInput.addEventListener('input', () => {
+    const rgb = _cpHexToRgb(hexInput.value);
+    if (!rgb) return;
+    const hsv = _cpRgbToHsv(rgb.r, rgb.g, rgb.b);
+    _cpick.h = hsv.h; _cpick.s = hsv.s; _cpick.v = hsv.v;
+    _cpRender(true);
+  });
+  hexInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') closeColorPicker(); });
+}
+document.addEventListener('DOMContentLoaded', _cpInit);
+_cpInit();
+
+function setFlatType(type) { markDirtyStart(); getActiveEntry().bg.flatType = type; commitChange(); renderCanvas(); }
+function setBgGraphic(type) {
+  const bg = getActiveEntry().bg;
+  markDirtyStart();
+  bg.graphic = type;
+  if (bg.graphicOpacity == null) bg.graphicOpacity = 1;
+  if (bg.graphicPosX == null) bg.graphicPosX = 50;
+  if (bg.graphicPosY == null) bg.graphicPosY = 50;
+  if (bg.graphicScale == null) bg.graphicScale = 1;
+  if (type === 'band') { bg.graphicAngle = 352; if (bg.graphicBandThickness == null) bg.graphicBandThickness = 20; }
+  else if (type === 'diagonal') { bg.graphicAngle = 115; }
+  else if (type === 'arc') { bg.graphicPosX = 100; bg.graphicPosY = 0; }
+  else if (type === 'diamond') { bg.graphicPosX = 50; bg.graphicPosY = 50; if (bg.graphicDiamondLong == null) bg.graphicDiamondLong = 70; if (bg.graphicDiamondShort == null) bg.graphicDiamondShort = 45; }
+  commitChange(); renderCanvas(); renderBgPopup();
+}
+function currentStyleAccent() {
+  const p = getCurrentProject();
+  const preset = STYLE_PRESETS[(p && p.content.stylePreset) || 'clean-pro'];
+  return preset ? preset.swatch.accent : '#006EFF';
+}
+function applyGraphicToAllSizes() {
+  const p = getCurrentProject();
+  const src = getActiveEntry();
+  if (!p || !src) return;
+  markDirtyStart();
+  p.sizeOrder.forEach(sid => {
+    const e = p.sizes[sid];
+    if (!e || e === src) return;
+    Object.keys(src.bg).forEach(k => { if (k.indexOf('graphic') === 0) e.bg[k] = src.bg[k]; });
+  });
+  commitChange();
+  renderCanvas(); renderBgPopup();
+  flashApplyAll();
+}
+function applyTextToAllSizes() {
+  const p = getCurrentProject();
+  const src = getActiveEntry();
+  if (!p || !src) return;
+  const st = ensureEntryText(p, src);
+  markDirtyStart();
+  // Update the project-level template so any size added later inherits this copy too.
+  p.content.eyebrow = st.eyebrow;
+  p.content.headline = st.headline;
+  p.content.subheadline = st.subheadline;
+  p.content.features = st.features.slice();
+  p.sizeOrder.forEach(sid => {
+    const e = p.sizes[sid];
+    if (!e || e === src) return;
+    e.text = {
+      eyebrow: st.eyebrow,
+      subheadline: st.subheadline,
+      headline: st.headline,
+      features: st.features.slice()
+    };
+  });
+  commitChange();
+  renderCanvas(); renderContentPanel();
+  flashApplyAll();
+}
+function flashApplyAll() {
+  document.querySelectorAll('.apply-all-btn').forEach(b => {
+    const orig = b.innerHTML;
+    b.innerHTML = '<span class="mi">check_circle</span>Applied to all sizes';
+    b.classList.add('done');
+    setTimeout(() => { b.innerHTML = orig; b.classList.remove('done'); }, 1400);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   IMAGE LIBRARY MODAL — shared by Content panel, Properties panel,
+   and the New Project modal's pending-image pickers.
+   ══════════════════════════════════════════════════════════════════ */
+function openImageLibrary(kind, onPick) {
+  libModalKind = kind;
+  libModalOnPick = onPick;
+  document.getElementById('imageLibTitle').textContent = kind === 'background' ? 'Choose Background Image' : 'Choose Product Image';
+  document.getElementById('imageLibSearch').value = '';
+  renderImageLibGrid('');
+  document.getElementById('imageLibModal').classList.add('visible');
+}
+function closeImageLibrary() {
+  document.getElementById('imageLibModal').classList.remove('visible');
+  libModalOnPick = null;
+}
+function onImageLibSearch(v) { renderImageLibGrid(v); }
+function renderImageLibGrid(query) {
+  const entries = libModalKind === 'background' ? BG_IMAGE_ENTRIES : PRODUCT_IMAGE_ENTRIES;
+  const q = query.trim().toLowerCase();
+  const filtered = q ? entries.filter(e => e.key.includes(q) || e.label.toLowerCase().includes(q)) : entries;
+  const fitClass = libModalKind === 'background' ? 'is-cover' : 'is-contain';
+  let html = filtered.map(e => `
+    <button class="imglib-cell" onclick="pickLibraryImage('${e.url}')">
+      <div class="imglib-thumb ${fitClass}"><img src="${e.url}" loading="lazy" onerror="this.parentElement.classList.add('broken')" /></div>
+      <div class="imglib-name">${escapeHtml(e.label)}</div>
+    </button>`).join('');
+  if (!filtered.length) html = `<p class="empty-selection-hint" style="grid-column:1/-1;">No matches.</p>`;
+  document.getElementById('imageLibGrid').innerHTML = html;
+}
+async function pickLibraryImage(url) {
+  const cb = libModalOnPick;
+  closeImageLibrary();
+  if (!cb) return;
+  // Best effort: inline the remote asset as a data URL so later export (html2canvas)
+  // is never blocked by CORS. Falls back to the raw remote URL if the fetch fails.
+  try {
+    const res = await fetch(url, { mode: 'cors' });
+    if (!res.ok) throw new Error('fetch failed: ' + res.status);
+    const blob = await res.blob();
+    const dataUrl = await new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = reject;
+      fr.readAsDataURL(blob);
+    });
+    cb(dataUrl);
+  } catch (err) {
+    console.warn('MMB: could not inline library image (CORS?) — using remote URL directly. Export may need a manual re-upload of this image.', err);
+    cb(url);
+  }
+}
+function uploadIntoLibraryTarget(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const cb = libModalOnPick;
+  closeImageLibrary();
+  if (!cb) return;
+  const reader = new FileReader();
+  reader.onload = () => cb(reader.result);
+  reader.readAsDataURL(file);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EXPORT — always via the offscreen stage, live canvas is never touched
+   ══════════════════════════════════════════════════════════════════ */
+async function renderSizeToCanvasEl(content, entry, size, scale) {
+  scale = scale || 1;
+  const stage = document.getElementById('exportStage');
+  stage.innerHTML = '';
+  const el = document.createElement('div');
+  el.className = 'mmb-canvas exporting';
+  el.style.width = size.w + 'px';
+  el.style.height = size.h + 'px';
+  const fontEntry = findFontEntry((content.fontFamily) || 'Oswald');
+  el.style.fontFamily = fontEntry.css;
+  el.innerHTML = buildCanvasInnerHtml(content, entry, size, true);
+  stage.appendChild(el);
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const canvas = await html2canvas(el, { width: size.w, height: size.h, scale: scale, backgroundColor: '#ffffff', useCORS: true });
+  stage.innerHTML = '';
+  return canvas;
+}
+
+function safeFileName(s) { return String(s || 'creative').replace(/[^a-z0-9_\-]+/gi, '_'); }
+
+/* ── Export modal ── */
+function openExportModal() {
+  const p = getCurrentProject();
+  if (!p || !p.sizeOrder.length) return;
+  exportModalFormat = 'png';
+  exportModalScale = 1;
+  document.getElementById('exportFmtPng').classList.add('active');
+  document.getElementById('exportFmtJpg').classList.remove('active');
+  [1, 2, 4].forEach(s => document.getElementById('exportScale' + s).classList.toggle('active', s === 1));
+  _updateExportModalInfo();
+  document.getElementById('exportModal').classList.add('visible');
+}
+function closeExportModal() {
+  document.getElementById('exportModal').classList.remove('visible');
+}
+function setExportFormat(fmt) {
+  exportModalFormat = fmt;
+  document.getElementById('exportFmtPng').classList.toggle('active', fmt === 'png');
+  document.getElementById('exportFmtJpg').classList.toggle('active', fmt === 'jpeg');
+  _updateExportModalInfo();
+}
+function setExportScale(s) {
+  exportModalScale = s;
+  [1, 2, 4].forEach(n => document.getElementById('exportScale' + n).classList.toggle('active', n === s));
+  _updateExportModalInfo();
+}
+function _updateExportModalInfo() {
+  const p = getCurrentProject();
+  if (!p) return;
+  const n = p.sizeOrder.length;
+  const s = exportModalScale;
+  const fmt = exportModalFormat === 'jpeg' ? 'JPG' : 'PNG';
+  document.getElementById('exportModalHint').textContent =
+    `${n} size${n === 1 ? '' : 's'} · ${fmt} · ${s}× resolution`;
+  const firstSize = p.sizeOrder[0] ? findSize(p.sizeOrder[0]) : null;
+  document.getElementById('exportScaleNote').textContent = firstSize
+    ? `e.g. ${firstSize.w}×${firstSize.h}  →  ${firstSize.w * s}×${firstSize.h * s} px`
+    : '';
+}
+async function runExportAll() {
+  await exportAllSizes(exportModalFormat, exportModalScale);
+}
+async function exportAllSizes(format, scale) {
+  closeExportModal();
+  const p = getCurrentProject();
+  if (!p || !p.sizeOrder.length) return;
+  if (typeof JSZip === 'undefined') { alert('ZIP library failed to load — check your internet connection and try again.'); return; }
+  scale = scale || 1;
+  const btn = document.getElementById('downloadAllBtn');
+  const originalHtml = btn.innerHTML;
+  btn.disabled = true;
+  const zip = new JSZip();
+  const ext = format === 'jpeg' ? 'jpg' : 'png';
+  const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
+  try {
+    for (let i = 0; i < p.sizeOrder.length; i++) {
+      const sid = p.sizeOrder[i];
+      const entry = p.sizes[sid];
+      const size = findSize(sid);
+      btn.innerHTML = `<span class="mi">hourglass_top</span>${i + 1}/${p.sizeOrder.length}…`;
+      const canvas = await renderSizeToCanvasEl(effectiveContent(p, entry), entry, size, scale);
+      const dataUrl = canvas.toDataURL(mime, 0.92);
+      const base64 = dataUrl.split(',')[1];
+      const ow = size.w * scale, oh = size.h * scale;
+      zip.file(`${safeFileName(p.name)}_${sid}_${ow}x${oh}.${ext}`, base64, { base64: true });
+    }
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${safeFileName(p.name)}_all_${scale}x.zip`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    btn.innerHTML = '<span class="mi">check</span>Done';
+  } catch (err) {
+    console.error('Batch export failed', err);
+    alert('Batch export failed: ' + err.message);
+  } finally {
+    setTimeout(() => { btn.innerHTML = originalHtml; btn.disabled = false; }, 1800);
+  }
+}
+
+/* ── Utilities ── */
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ── Keyboard shortcuts ── */
+document.addEventListener('keydown', (e) => {
+  if (!currentProjectId) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+    e.preventDefault();
+    if (e.shiftKey) redo(); else undo();
+  }
+});
+
+/* ── Boot ── */
+loadDB();
+renderGallery();
+</script>
+
+<!-- ══════════════════════════════════════
+     Marcom Agent Studio — Embed (Marketing Material) Mode
+     Boots straight into the builder for a single project supplied by the
+     parent window; no gallery/top-bar chrome. Bridges via postMessage.
+     ══════════════════════════════════════ -->
+<script>
+function _mmbHideChrome() {
+  var tb = document.querySelector('.top-bar'); if (tb) tb.style.display = 'none';
+  var bc = document.getElementById('breadcrumbBar'); if (bc) bc.classList.remove('visible');
+  var gv = document.getElementById('galleryView'); if (gv) gv.classList.add('hidden');
+}
+
+function _mmbEmbedOpen(payload) {
+  var project = payload;
+  if (project && project.id && project.sizeOrder) {
+    project.__masScoped = true;
+    DB.projects[project.id] = project;
+    openProject(project.id);
+  } else {
+    var nm = (project && project.name) ? project.name : 'Graphic Asset';
+    var p = createProject(nm, []);
+    p.__masScoped = true;
+    DB.projects[p.id] = p;
+    openProject(p.id);
+  }
+  _mmbHideChrome();
+}
+
+function _mmbEmbedMessage(ev) {
+  var d = ev.data || {};
+  if (d.type === 'mas-asset-load') {
+    _mmbEmbedOpen(d.payload);
+  } else if (d.type === 'mas-asset-request-save') {
+    persist();
+    var proj = getCurrentProject() ? JSON.parse(JSON.stringify(getCurrentProject())) : null;
+    try { window.parent.postMessage({ type: 'mas-asset-save', payload: proj }, '*'); } catch (e) {}
+  }
+}
+
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var embed = params.get('embed');
+  if (embed !== 'mm') return;
+  _mmbEmbedMode = true;
+  var preview = params.get('preview') === '1';
+  document.body.classList.add('mas-embed');
+  var st = document.createElement('style');
+  if (preview) {
+    // Read-only, chrome-less preview used by Marcom Agent Studio asset cards.
+    document.body.classList.add('mas-thumb');
+    st.textContent =
+      '.mas-embed .top-bar{display:none !important;}' +
+      '.mas-embed .breadcrumb-bar{display:none !important;}' +
+      '.mas-embed .project-gallery{display:none !important;}' +
+      '.mas-thumb .builder-left,.mas-thumb .builder-right,.mas-thumb .builder-center-header,.mas-thumb .size-tab-strip{display:none !important;}' +
+      '.mas-thumb .builder-view{height:100vh;}' +
+      '.mas-thumb .builder-view.visible{padding-top:0;}' +
+      '.mas-thumb .builder-canvas{padding:0 !important;overflow:hidden !important;background:#fff !important;pointer-events:none !important;align-items:flex-start !important;justify-content:flex-start !important;}' +
+      '.mas-thumb .mmb-canvas{box-shadow:none !important;}';
+    document.head.appendChild(st);
+    window.addEventListener('message', function (ev) {
+      var d = ev.data || {};
+      if (d.type === 'mas-thumb-load') {
+        _mmbEmbedOpen(d.payload);
+        var w = 1200, h = 675;
+        try {
+          var p = getCurrentProject();
+          if (p && p.activeSizeId) {
+            var s = findSize(p.activeSizeId);
+            if (s) { w = s.w; h = s.h; }
+          }
+        } catch (e) {}
+        if (typeof zoom100 === 'function') zoom100();
+        try { window.parent.postMessage({ type: 'mas-thumb-rendered', width: w, height: h }, '*'); } catch (e) {}
+      }
+    });
+    try { window.parent.postMessage({ type: 'mas-thumb-ready' }, '*'); } catch (e) {}
+    return;
+  }
+  st.textContent =
+    '.mas-embed .top-bar{display:none !important;}' +
+    '.mas-embed .breadcrumb-bar{display:none !important;}' +
+    '.mas-embed .project-gallery{display:none !important;}' +
+    '.mas-embed .builder-view{height:100vh;}' +
+    '.mas-embed .builder-view.visible{padding-top:0;}';
+  document.head.appendChild(st);
+  window.addEventListener('message', _mmbEmbedMessage);
+  try { window.parent.postMessage({ type: 'mas-asset-ready' }, '*'); } catch (e) {}
+})();
+</script>
+</body>
+</html>

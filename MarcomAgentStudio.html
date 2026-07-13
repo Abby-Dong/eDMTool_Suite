@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Marcom Agent Studio</title>
+  <style>
+    .mi { font-family: 'Material Symbols Outlined'; font-size: 18px; vertical-align: -4px; margin-right: 4px; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; }
+    .top-bar .mi { font-size: 22px; vertical-align: -5px; }
+    .toast .mi { font-size: 16px; vertical-align: -3px; }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5; color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Thin Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+    * { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.15) transparent; }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #ffffff; color: #1a1a2e; padding: 0 32px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0,0,0,.08); border-bottom: 1px solid #e5e7eb;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
+    .top-bar-logo { height: 20px; display: block; }
+    .top-bar-divider { width: 1px; height: 24px; background: #e0e0e0; }
+    .top-bar h1 { font-size: 15px; font-weight: 700; color: #333; letter-spacing: .3px; display: flex; align-items: center; gap: 6px; }
+    .top-bar h1 .mi { font-size: 20px; color: #0059ff; margin-right: 0; }
+    .top-bar .badge {
+      background: linear-gradient(135deg, #0059ff, #7c3aed); color: #fff; font-size: 10px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px;
+    }
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb-bar {
+      background: #fff; border-bottom: 1px solid #e5e7eb; padding: 10px 32px;
+      font-size: 13px; color: #888; display: none; align-items: center; gap: 6px;
+      position: sticky; top: 56px; z-index: 999;
+    }
+    .breadcrumb-bar.visible { display: flex; }
+    .breadcrumb-bar a { color: #0059ff; text-decoration: none; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .breadcrumb-bar a:hover { text-decoration: underline; }
+    .breadcrumb-bar .sep { color: #ccc; margin: 0 2px; }
+    .breadcrumb-bar .current { color: #333; font-weight: 600; }
+
+    /* ══════════════ CAMPAIGN GALLERY ══════════════ */
+    .gallery-view { padding: 32px; }
+    .gallery-view.hidden { display: none; }
+    .gallery-header { text-align: center; padding: 24px 0 36px; }
+    .gallery-header h2 { font-size: 28px; font-weight: 800; color: #07071a; margin-bottom: 8px; }
+    .gallery-header p { font-size: 14px; color: #888; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+    .campaign-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .campaign-card {
+      background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
+      cursor: pointer; transition: all .2s ease;
+      display: flex; flex-direction: column; position: relative;
+    }
+    .campaign-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.15);
+    }
+    .campaign-card-banner {
+      height: 96px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0059ff 0%, #7c3aed 100%);
+    }
+    .campaign-card-banner .mi { font-size: 34px; color: rgba(255,255,255,.92); margin-right: 0; }
+    .campaign-card-region {
+      position: absolute; top: 10px; left: 12px;
+      background: rgba(255,255,255,.9); color: #333;
+      font-size: 10px; font-weight: 700; letter-spacing: .5px;
+      padding: 3px 9px; border-radius: 20px; backdrop-filter: blur(4px);
+    }
+    .campaign-card-body { padding: 16px; flex: 1; }
+    .campaign-card-name {
+      font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .campaign-card-meta {
+      display: flex; align-items: center; gap: 14px; font-size: 12px; color: #888;
+    }
+    .campaign-card-meta span { display: flex; align-items: center; gap: 4px; }
+    .campaign-card-meta .mi { font-size: 15px; margin-right: 0; color: #aaa; }
+    .campaign-card-footer {
+      padding: 10px 16px; border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .campaign-card-date { font-size: 11px; color: #999; }
+    .campaign-card-arrow { color: #bbb; font-size: 18px; transition: color .15s; margin-right: 0; }
+    .campaign-card:hover .campaign-card-arrow { color: #0059ff; }
+
+    /* kebab */
+    .card-kebab { position: absolute; top: 8px; right: 8px; z-index: 20; }
+    .card-kebab-btn {
+      background: rgba(255,255,255,.9); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: all .15s; backdrop-filter: blur(4px);
+      box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    }
+    .card-kebab-btn:hover { background: #fff; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .card-kebab-btn .mi { font-size: 18px; margin-right: 0; vertical-align: 0; }
+    .card-kebab-menu {
+      display: none; position: absolute; top: 36px; right: 0;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+      min-width: 170px; padding: 6px 0; z-index: 50;
+    }
+    .card-kebab-menu.open { display: block; }
+    .card-kebab-menu button {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 9px 16px; border: none; background: none;
+      font-size: 13px; font-weight: 500; color: #333;
+      cursor: pointer; text-align: left; font-family: inherit; transition: background .1s;
+    }
+    .card-kebab-menu button:hover { background: #f5f6f8; }
+    .card-kebab-menu button .mi { font-size: 17px; margin-right: 0; color: #888; }
+    .card-kebab-menu button.menu-delete { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete:hover { background: #fff0f0; }
+
+    /* Create new campaign card */
+    .campaign-card-new .campaign-card-banner {
+      background: linear-gradient(135deg, #10b981 0%, #0059ff 100%);
+    }
+    .campaign-card-new .campaign-card-name { color: #1a1a2e; }
+    .new-card-tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+      background: linear-gradient(135deg, #10b981, #0059ff); color: #fff; line-height: 1.4;
+    }
+    .new-card-tag .mi { font-size: 12px; margin-right: 0; vertical-align: -2px; }
+
+    .gallery-empty {
+      grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #bbb;
+    }
+    .gallery-empty .mi { font-size: 44px; display: block; margin: 0 auto 10px; color: #ddd; margin-right: 0; }
+
+    /* ══════════════ CAMPAIGN DETAIL ══════════════ */
+    .detail-view { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+    .detail-view.visible { display: block; }
+
+    .detail-hero {
+      background: #fff; border-radius: 16px; padding: 28px 32px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.06); margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .detail-hero-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
+    .detail-hero-icon {
+      width: 60px; height: 60px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, #0059ff 0%, #7c3aed 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-hero-icon .mi { font-size: 30px; color: #fff; margin-right: 0; }
+    .detail-hero-info { min-width: 0; }
+    .detail-hero-info h2 {
+      font-size: 22px; font-weight: 800; color: #07071a; margin-bottom: 6px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .detail-hero-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #888; }
+    .detail-hero-region {
+      background: #eef3ff; color: #0059ff; font-weight: 700; font-size: 11px;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px;
+    }
+    .detail-hero-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .hero-btn {
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: 1px solid #e0e0e0; background: #fff; color: #555;
+      display: flex; align-items: center; gap: 5px; transition: all .15s; font-family: inherit;
+    }
+    .hero-btn:hover { border-color: #c5d4ff; background: #f0f4ff; color: #0059ff; }
+    .hero-btn .mi { font-size: 17px; margin-right: 0; }
+
+    /* Asset sections */
+    .asset-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 1100px) { .asset-sections { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) { .asset-sections { grid-template-columns: 1fr; } }
+
+    .asset-section {
+      background: #fff; border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    }
+    .asset-section-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
+    }
+    .asset-section-title { display: flex; align-items: center; gap: 10px; }
+    .asset-section-title .icon-box {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .asset-section-title .icon-box.lp { background: #e8f5ff; }
+    .asset-section-title .icon-box.lp .mi { color: #0091d5; }
+    .asset-section-title .icon-box.edm { background: #f5f0ff; }
+    .asset-section-title .icon-box.edm .mi { color: #7c3aed; }
+    .asset-section-title .icon-box.mm { background: #fff3e8; }
+    .asset-section-title .icon-box.mm .mi { color: #e8730c; }
+    .asset-section-title .icon-box .mi { font-size: 20px; margin-right: 0; }
+    .asset-section-title h3 { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+    .asset-section-title .count { font-size: 12px; color: #999; font-weight: 500; }
+    .asset-add-btn {
+      padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; background: #0059ff; color: #fff;
+      display: flex; align-items: center; gap: 4px; transition: all .15s; font-family: inherit;
+    }
+    .asset-add-btn:hover { background: #003fcc; }
+    .asset-add-btn .mi { font-size: 16px; margin-right: 0; }
+
+    .asset-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+    .asset-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 10px; border: 1px solid #eee;
+      transition: all .15s; cursor: pointer;
+    }
+    .asset-item:hover { border-color: #c5d4ff; background: #f8faff; }
+    .asset-item-thumb {
+      width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+      background: #f0f2f5; display: flex; align-items: center; justify-content: center;
+    }
+    .asset-item-thumb .mi { font-size: 20px; color: #aaa; margin-right: 0; }
+    .asset-item-info { flex: 1; min-width: 0; }
+    .asset-item-name { font-size: 13px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-item-date { font-size: 11px; color: #999; }
+    .asset-item-arrow { color: #ccc; font-size: 18px; margin-right: 0; }
+
+    /* ── Asset preview cards (Campaign Page Builder gallery style) ── */
+    .asset-card {
+      background: #fff; border-radius: 12px; overflow: hidden; position: relative;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.05);
+      cursor: pointer; transition: transform .18s ease, box-shadow .18s ease;
+      display: flex; flex-direction: column;
+    }
+    .asset-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.22); }
+    .asset-card-thumb {
+      height: 180px; background: #f7f8fa; overflow: hidden; position: relative;
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+    .asset-card-thumb iframe {
+      border: 0; position: absolute; top: 16px; left: 0;
+      transform-origin: top left; pointer-events: none; background: #fff;
+      opacity: 0; transition: opacity .2s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,.10);
+      border-radius: 4px;
+    }
+    .asset-card-thumb.asset-card-thumb--mm {
+      height: 180px; background: #f7f8fa;
+      align-items: center; justify-content: center;
+    }
+    .asset-card-thumb.asset-card-thumb--mm iframe {
+      top: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,.12);
+    }
+    .asset-card-thumb .thumb-state {
+      align-self: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: #b6bcc6; font-size: 11px; font-weight: 600; text-align: center; padding: 0 10px;
+    }
+    .asset-card-thumb .thumb-state .mi { font-size: 26px; margin: 0; color: #cfd4dc; }
+    .asset-card-thumb .thumb-state.spin .mi { animation: spin 1s linear infinite; }
+    .asset-card-info {
+      padding: 10px 12px; border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .asset-card-meta { min-width: 0; }
+    .asset-card-name { font-size: 12.5px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-card-date { font-size: 10px; color: #999; margin-top: 1px; }
+    .asset-card-arrow { color: #ccc; font-size: 18px; margin-right: 0; flex-shrink: 0; transition: color .15s; }
+    .asset-card:hover .asset-card-arrow { color: #0059ff; }
+    .asset-card .card-kebab { position: absolute; top: 8px; right: 8px; z-index: 20; }
+
+    .asset-empty {
+      text-align: center; padding: 30px 16px; color: #bbb;
+      border: 1.5px dashed #e5e7eb; border-radius: 12px;
+    }
+    .asset-empty .mi { font-size: 32px; display: block; margin: 0 auto 8px; color: #ddd; margin-right: 0; }
+    .asset-empty p { font-size: 12px; line-height: 1.5; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background: rgba(7,7,26,.45); backdrop-filter: blur(3px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 16px; padding: 28px 28px 24px;
+      width: 800px; max-width: 92vw; box-shadow: 0 16px 48px rgba(0,0,0,.22);
+      animation: modalIn .2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.96) translateY(-8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-box h3 {
+      margin: 0 0 4px; font-size: 17px; font-weight: 700; color: #1a1a2e;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-box h3 .mi { font-size: 22px; color: #0059ff; margin-right: 0; }
+    .modal-box .modal-desc { margin: 0 0 18px; font-size: 12px; color: #999; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label {
+      display: block; font-size: 11px; font-weight: 700; color: #888;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+    }
+    .modal-field input, .modal-field select {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 14px; font-family: inherit;
+      outline: none; color: #333; box-sizing: border-box; background: #fff;
+    }
+    .modal-field input:focus, .modal-field select:focus {
+      border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1);
+    }
+    .modal-field input::placeholder { color: #ccc; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+    .modal-actions button {
+      padding: 10px 22px; border-radius: 8px; border: none;
+      font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .12s;
+    }
+    .modal-cancel { background: #f0f2f5; color: #555; }
+    .modal-cancel:hover { background: #e5e7eb; }
+    .modal-confirm { background: #0059ff; color: #fff; }
+    .modal-confirm:hover { background: #003fcc; }
+    .modal-confirm.danger { background: #e74c3c; }
+    .modal-confirm.danger:hover { background: #c0392b; }
+
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: #07071a; color: #fff; padding: 12px 28px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .25s, transform .25s;
+      pointer-events: none; z-index: 12000; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    /* ── Asset item kebab ── */
+    .asset-item-kebab { position: relative; flex-shrink: 0; }
+    .asset-item-kebab-btn {
+      background: none; border: none; cursor: pointer; color: #bbb;
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; transition: all .12s;
+    }
+    .asset-item-kebab-btn:hover { background: #eef3ff; color: #0059ff; }
+    .asset-item-kebab-btn .mi { font-size: 18px; margin-right: 0; }
+    .asset-item-kebab-menu {
+      display: none; position: absolute; top: 32px; right: 0;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.04);
+      min-width: 150px; padding: 6px 0; z-index: 60;
+    }
+    .asset-item-kebab-menu.open { display: block; }
+    .asset-item-kebab-menu button {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 8px 14px; border: none; background: none;
+      font-size: 13px; color: #333; cursor: pointer; text-align: left; font-family: inherit;
+    }
+    .asset-item-kebab-menu button:hover { background: #f5f6f8; }
+    .asset-item-kebab-menu button .mi { font-size: 16px; margin-right: 0; color: #888; }
+    .asset-item-kebab-menu button.menu-delete { color: #e74c3c; }
+    .asset-item-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+
+    /* ── Top-bar CTA buttons (shown in eDM editor) ── */
+    .tb-btn {
+      padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      font-family: inherit; transition: all .15s; border: 1px solid transparent;
+    }
+    .tb-btn .mi { font-size: 16px; margin-right: 0; }
+    .tb-btn-ghost { background: #f0f2f5; color: #555; border-color: #e5e7eb; }
+    .tb-btn-ghost:hover { background: #e5e7eb; }
+    .tb-btn-save { background: #0059ff; color: #fff; }
+    .tb-btn-save:hover { background: #003fcc; }
+
+    /* ── eDM Editor View (embeds ComponentCustomizer builder) ── */
+    .editor-view { display: none; }
+    .editor-view.visible { display: block; }
+    .editor-frame-wrap {
+      position: relative; overflow: hidden;
+      height: calc(100vh - 97px); background: #f0f2f5;
+    }
+    .editor-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .editor-loading {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; color: #888; background: #f0f2f5;
+    }
+    .editor-loading .mi { font-size: 36px; color: #c5d4ff; animation: spin 1s linear infinite; margin-right: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── LP style picker (matches Campaign Page Builder page settings popup) ── */
+    .lp-prefix-hint { font-size: 11px; color: #888; margin-top: 4px; }
+    .lp-prefix-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .style-grid-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all .15s;
+      background: #fff;
+    }
+    .style-grid-card:hover { border-color: #c5d4ff; }
+    .style-grid-card.selected { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.12); }
+    .style-grid-card .style-thumb {
+      height: 80px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #f7f8fa;
+      position: relative;
+    }
+    .style-grid-card .style-thumb .style-thumb-preview-iframe {
+      width: 1200px;
+      border: none;
+      pointer-events: none;
+      transform-origin: top left;
+      position: absolute;
+      top: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.10);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .style-grid-card .style-thumb .style-thumb-fallback {
+      align-self: center;
+      color: #9aa3b2;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .style-grid-card .style-name { font-size: 13px; font-weight: 700; color: #333; }
+    .style-grid-card .style-desc { font-size: 11px; color: #999; margin-top: 2px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
+    <span class="top-bar-divider"></span>
+    <h1><span class="mi">hub</span>Marcom Agent Studio</h1>
+    <span class="badge">BETA</span>
+  </div>
+  <div class="top-bar-right">
+    <button class="tb-btn tb-btn-ghost" id="tbCloseBtn" style="display:none" onclick="closeEdmEditor(true)"><span class="mi">close</span>Close</button>
+    <button class="tb-btn tb-btn-save" id="tbSaveBtn" style="display:none" onclick="saveEdmEditor()"><span class="mi">save</span>Save &amp; Close</button>
+  </div>
+</div>
+
+<!-- ── Breadcrumb ── -->
+<div class="breadcrumb-bar" id="breadcrumbBar">
+  <a onclick="showGallery()"><span class="mi">grid_view</span>Campaigns</a>
+  <span class="sep">›</span>
+  <span class="current" id="breadcrumbName"></span>
+</div>
+
+<!-- ══════════════ CAMPAIGN GALLERY ══════════════ -->
+<div class="gallery-view" id="galleryView">
+  <div class="gallery-header">
+    <h2>Campaign Workspace</h2>
+    <p>Start from a campaign and manage its landing pages and eDMs in one place.</p>
+  </div>
+  <div class="campaign-grid" id="campaignGrid"></div>
+</div>
+
+<!-- ══════════════ CAMPAIGN DETAIL ══════════════ -->
+<div class="detail-view" id="detailView">
+  <div class="detail-hero">
+    <div class="detail-hero-left">
+      <div class="detail-hero-icon"><span class="mi">campaign</span></div>
+      <div class="detail-hero-info">
+        <h2 id="detailName"></h2>
+        <div class="detail-hero-meta">
+          <span class="detail-hero-region" id="detailRegion"></span>
+          <span id="detailUpdated"></span>
+        </div>
+      </div>
+    </div>
+    <div class="detail-hero-actions">
+      <button class="hero-btn" onclick="openEditCampaign()"><span class="mi">edit</span>Edit</button>
+      <button class="hero-btn" onclick="showGallery()"><span class="mi">arrow_back</span>Back</button>
+    </div>
+  </div>
+
+  <div class="asset-sections">
+    <!-- Landing Pages -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box lp"><span class="mi">web</span></div>
+          <div>
+            <h3>Landing Pages</h3>
+            <span class="count" id="lpCount">0 pages</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addLandingPage()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="lpList"></div>
+    </div>
+
+    <!-- eDMs -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box edm"><span class="mi">mail</span></div>
+          <div>
+            <h3>eDM</h3>
+            <span class="count" id="edmCount">0 emails</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addEdm()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="edmList"></div>
+    </div>
+
+    <!-- Graphic Assets -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box mm"><span class="mi">image</span></div>
+          <div>
+            <h3>Graphic Assets</h3>
+            <span class="count" id="mmCount">0 assets</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addMaterial()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="mmList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Campaign Modal (create / edit) ── -->
+<div class="modal-overlay" id="campaignModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="campaignModalIcon">add_circle</span><span id="campaignModalTitle">New Campaign</span></h3>
+    <p class="modal-desc" id="campaignModalDesc">Name this campaign and choose its region</p>
+    <div class="modal-field">
+      <label>Campaign name</label>
+      <input type="text" id="campaignNameInput" placeholder="e.g. 2026 Spring Sale" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-field">
+      <label>Region</label>
+      <select id="campaignRegionInput">
+        <option value="Global">Global (International)</option>
+        <option value="KR">Korea</option>
+        <option value="EU">Europe</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeCampaignModal()">Cancel</button>
+      <button class="modal-confirm" id="campaignModalConfirm" onclick="confirmCampaignModal()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Delete Confirm Modal ── -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <h3><span class="mi" style="color:#e74c3c">delete</span>Delete Campaign</h3>
+    <p class="modal-desc" id="deleteModalDesc">Delete this campaign? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="modal-confirm danger" onclick="confirmDeleteModal()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── eDM Name Modal (create / rename) ── -->
+<div class="modal-overlay" id="edmModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="edmModalIcon">mail</span><span id="edmModalTitle">New eDM</span></h3>
+    <p class="modal-desc" id="edmModalDesc">Name this eDM, then open the editor</p>
+    <div class="modal-field">
+      <label>eDM name</label>
+      <input type="text" id="edmNameInput" placeholder="e.g. Spring Sale main email" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-field" id="edmThemeRow">
+      <label>Theme</label>
+      <select id="edmThemeInput"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeEdmModal()">Cancel</button>
+      <button class="modal-confirm" id="edmModalConfirm" onclick="confirmEdmModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Graphic Asset Modal (create / rename) ── -->
+<div class="modal-overlay" id="materialModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="materialModalIcon">image</span><span id="materialModalTitle">New Graphic Asset</span></h3>
+    <p class="modal-desc" id="materialModalDesc">Name this graphic asset, then open the builder</p>
+    <div class="modal-field">
+      <label>Graphic asset name</label>
+      <input type="text" id="materialNameInput" placeholder="e.g. Spring Sale ad set" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeMaterialModal()">Cancel</button>
+      <button class="modal-confirm" id="materialModalConfirm" onclick="confirmMaterialModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Landing Page Modal (create with page settings / rename) ── -->
+<div class="modal-overlay" id="lpModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="lpModalIcon">web</span><span id="lpModalTitle">New Landing Page</span></h3>
+    <p class="modal-desc" id="lpModalDesc">Name it, pick a starting style, then open the builder</p>
+    <div class="modal-field">
+      <label>Landing page name</label>
+      <input type="text" id="lpNameInput" placeholder="e.g. Spring Sale landing page" maxlength="60" autocomplete="off" oninput="_lpOnNameInput()" />
+    </div>
+    <div id="lpCreateFields">
+      <div class="modal-field">
+        <label>CSS class prefix <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(avoids host-site CSS conflicts)</span></label>
+        <input type="text" id="lpPrefixInput" placeholder="auto from name" maxlength="40" autocomplete="off" oninput="_lpOnPrefixInput()" />
+        <div class="lp-prefix-hint">Classes look like <code>.<span id="lpPrefixPreview">page</span>-hero</code></div>
+      </div>
+      <div class="modal-field">
+        <label>Starting style</label>
+        <div class="style-grid" id="lpStyleGrid"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeLpModal()">Cancel</button>
+      <button class="modal-confirm" id="lpModalConfirm" onclick="confirmLpModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── eDM Editor View (embeds ComponentCustomizer builder) ── -->
+<div class="editor-view" id="edmEditorView">
+  <div class="editor-frame-wrap">
+    <div class="editor-loading" id="editorLoading"><span class="mi">progress_activity</span>Loading eDM editor…</div>
+    <iframe id="edmEditorFrame" title="eDM Editor"></iframe>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// Storage
+// ══════════════════════════════════════
+const STORAGE_KEY = 'mas_campaigns_v1';
+
+function loadCampaigns() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCampaigns(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+let campaigns = loadCampaigns();
+let currentCampaignId = null;
+
+function newId(prefix) {
+  return (prefix || 'c') + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function findCampaign(id) {
+  return campaigns.find(c => c.id === id);
+}
+
+const REGION_LABELS = { Global: 'Global', KR: 'Korea', EU: 'Europe' };
+const EDM_THEMES = [
+  { id: 'light-blue', name: 'Blue' },
+  { id: 'light-orange', name: 'Orange' },
+  { id: 'lp-green', name: 'Green (LP extension)' },
+  { id: 'lp-purple', name: 'Purple (LP extension)' }
+];
+
+// ══════════════════════════════════════
+// Utils
+// ══════════════════════════════════════
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.innerHTML = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════════
+// Gallery
+// ══════════════════════════════════════
+function renderGallery() {
+  const grid = document.getElementById('campaignGrid');
+  grid.innerHTML = '';
+
+  // Create-new card
+  const newCard = document.createElement('div');
+  newCard.className = 'campaign-card campaign-card-new';
+  newCard.onclick = () => openCreateCampaign();
+  newCard.innerHTML = `
+    <div class="campaign-card-banner"><span class="mi">add_circle</span></div>
+    <div class="campaign-card-body">
+      <div class="campaign-card-name">New Campaign</div>
+      <div class="campaign-card-meta">
+        <span class="new-card-tag"><span class="mi">auto_awesome</span>New</span>
+        <span>Start from a campaign</span>
+      </div>
+    </div>
+    <div class="campaign-card-footer">
+      <span class="campaign-card-date">Landing Page + eDM</span>
+      <span class="mi campaign-card-arrow">arrow_forward</span>
+    </div>`;
+  grid.appendChild(newCard);
+
+  // Sort by updated desc
+  const sorted = [...campaigns].sort((a, b) => (b.updated || 0) - (a.updated || 0));
+
+  sorted.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'campaign-card';
+    card.onclick = () => openCampaign(c.id);
+    const lpN = (c.landingPages || []).length;
+    const edmN = (c.edms || []).length;
+    const mmN = (c.materials || []).length;
+    card.innerHTML = `
+      <div class="campaign-card-banner">
+        <span class="campaign-card-region">${escapeHtml(REGION_LABELS[c.region] || c.region || 'Global')}</span>
+        <span class="mi">campaign</span>
+      </div>
+      <div class="card-kebab">
+        <button class="card-kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More"><span class="mi">more_vert</span></button>
+        <div class="card-kebab-menu">
+          <button onclick="event.stopPropagation();openEditCampaignById('${c.id}')"><span class="mi">edit</span>Rename</button>
+          <button onclick="event.stopPropagation();duplicateCampaign('${c.id}')"><span class="mi">content_copy</span>Duplicate</button>
+          <button class="menu-delete" onclick="event.stopPropagation();openDeleteModal('${c.id}')"><span class="mi">delete</span>Delete</button>
+        </div>
+      </div>
+      <div class="campaign-card-body">
+        <div class="campaign-card-name" title="${escapeHtml(c.name)}">${escapeHtml(c.name)}</div>
+        <div class="campaign-card-meta">
+          <span><span class="mi">web</span>${lpN} LP</span>
+          <span><span class="mi">mail</span>${edmN} eDM</span>
+          <span><span class="mi">image</span>${mmN} MM</span>
+        </div>
+      </div>
+      <div class="campaign-card-footer">
+        <span class="campaign-card-date">Updated ${formatDate(c.updated)}</span>
+        <span class="mi campaign-card-arrow">arrow_forward</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// kebab
+function toggleKebab(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) menu.classList.add('open');
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.asset-item-kebab-menu.open').forEach(m => m.classList.remove('open'));
+});
+
+// ══════════════════════════════════════
+// View switching
+// ══════════════════════════════════════
+function showGallery() {
+  currentCampaignId = null;
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  document.getElementById('detailView').classList.remove('visible');
+  document.getElementById('galleryView').classList.remove('hidden');
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+  renderGallery();
+  window.scrollTo(0, 0);
+}
+
+function openCampaign(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  currentCampaignId = id;
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderDetailBreadcrumb();
+  renderDetail();
+  window.scrollTo(0, 0);
+}
+
+// ── Breadcrumb rendering ──
+function renderDetailBreadcrumb() {
+  const c = findCampaign(currentCampaignId);
+  document.getElementById('breadcrumbBar').innerHTML =
+    `<a onclick="showGallery()"><span class="mi">grid_view</span>Campaigns</a>` +
+    `<span class="sep">›</span>` +
+    `<span class="current">${escapeHtml(c ? c.name : '')}</span>`;
+}
+function renderEditorBreadcrumb(assetName) {
+  const c = findCampaign(currentCampaignId);
+  const cfg = ASSET_CFG[_editingType] || ASSET_CFG.edm;
+  document.getElementById('breadcrumbBar').innerHTML =
+    `<a onclick="editorBackToGallery()"><span class="mi">grid_view</span>Campaigns</a>` +
+    `<span class="sep">›</span>` +
+    `<a onclick="closeEdmEditor(true)">${escapeHtml(c ? c.name : '')}</a>` +
+    `<span class="sep">›</span>` +
+    `<span class="current"><span class="mi" style="font-size:15px;color:${cfg.color};vertical-align:-3px;">${cfg.icon}</span>${escapeHtml(assetName)}</span>`;
+}
+
+function renderDetail() {
+  const c = findCampaign(currentCampaignId);
+  if (!c) { showGallery(); return; }
+  document.getElementById('detailName').textContent = c.name;
+  document.getElementById('detailRegion').textContent = REGION_LABELS[c.region] || c.region || 'Global';
+  document.getElementById('detailUpdated').textContent = 'Updated ' + formatDate(c.updated);
+
+  // Landing pages
+  const lps = c.landingPages || [];
+  document.getElementById('lpCount').textContent = lps.length + ' pages';
+  renderLpList();
+
+  // eDMs
+  const edms = c.edms || [];
+  document.getElementById('edmCount').textContent = edms.length + ' emails';
+  renderEdmList();
+
+  // Marketing Materials
+  const materials = c.materials || [];
+  document.getElementById('mmCount').textContent = materials.length + ' assets';
+  renderMaterialList();
+}
+
+// ── Asset preview cards (shared renderer for LP / eDM / Marketing Material) ──
+const ASSET_META = {
+  lp:  { icon: 'web',      unit: 'sections', empty: 'No landing pages yet',
+         get: it => it.cpbProject, count: p => (p && Array.isArray(p.sections)) ? p.sections.length : 0,
+         open: 'openLpEditor', rename: 'openRenameLp', dup: 'duplicateLp', del: 'deleteLp' },
+  edm: { icon: 'mail',     unit: 'blocks',   empty: 'No eDMs yet',
+         get: it => it.snapshot, count: p => (p && Array.isArray(p.builderStack)) ? p.builderStack.length : 0,
+         open: 'openEdmEditor', rename: 'openRenameEdm', dup: 'duplicateEdm', del: 'deleteEdm' },
+  mm:  { icon: 'image', unit: 'sizes',    empty: 'No graphic assets yet',
+         get: it => it.mmbProject, count: p => (p && Array.isArray(p.sizeOrder)) ? p.sizeOrder.length : 0,
+         open: 'openMaterialEditor', rename: 'openRenameMaterial', dup: 'duplicateMaterial', del: 'deleteMaterial' }
+};
+
+// ── Thumbnail iframe bridge (live read-only preview of each builder) ──
+const THUMB_SRC = {
+  edm: 'ComponentCustomizer.html?embed=edm&preview=1',
+  lp:  'Campaign%20Page%20Builder/CampaignPageBuilder.html?embed=lp&preview=1',
+  mm:  'MarketingMaterialBuilder.html?embed=mm&preview=1'
+};
+const _thumbPending = new Map(); // iframe -> { payload, type }
+
+function _mountAssetThumb(thumb, type, payload) {
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('scrolling', 'no');
+  iframe.setAttribute('tabindex', '-1');
+  iframe.title = 'preview';
+  _thumbPending.set(iframe, { payload, type });
+  thumb.appendChild(iframe);
+  iframe.src = THUMB_SRC[type];
+}
+
+function _scaleThumb(iframe, naturalW, naturalH, type) {
+  const thumb = iframe.parentElement;
+  if (!thumb) return;
+  thumb.querySelectorAll('.thumb-state').forEach(s => s.remove());
+  const w = thumb.clientWidth || 200;
+  const baseW = naturalW || 1200;
+
+  if (type === 'mm') {
+    const h = thumb.clientHeight || 180;
+    const baseH = naturalH || Math.round(baseW * 0.6);
+    const pad = 10;
+    const availW = Math.max(w - pad * 2, 40);
+    const availH = Math.max(h - pad * 2, 40);
+    const scale = Math.min(availW / baseW, availH / baseH, 1);
+    const scaledW = baseW * scale;
+    const scaledH = baseH * scale;
+    const offsetX = (w - scaledW) / 2;
+    const offsetY = (h - scaledH) / 2;
+    iframe.style.width = baseW + 'px';
+    iframe.style.height = baseH + 'px';
+    iframe.style.top = offsetY + 'px';
+    iframe.style.left = offsetX + 'px';
+    iframe.style.transform = 'scale(' + scale + ')';
+    iframe.style.opacity = '1';
+    return;
+  }
+
+  const scale = (w * 0.7) / baseW;
+  const scaledW = baseW * scale;
+  const offsetX = (w - scaledW) / 2;
+  iframe.style.width = baseW + 'px';
+  iframe.style.height = Math.ceil(180 / scale) + 'px';
+  iframe.style.left = offsetX + 'px';
+  iframe.style.transform = 'scale(' + scale + ')';
+  iframe.style.opacity = '1';
+}
+
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type !== 'mas-thumb-ready' && d.type !== 'mas-thumb-rendered') return;
+  for (const [iframe, info] of _thumbPending) {
+    if (!document.contains(iframe)) { _thumbPending.delete(iframe); continue; }
+    if (iframe.contentWindow !== e.source) continue;
+    if (d.type === 'mas-thumb-ready') {
+      iframe.contentWindow.postMessage({ type: 'mas-thumb-load', payload: info.payload }, '*');
+    } else {
+      _scaleThumb(iframe, d.width, d.height, info.type);
+      _thumbPending.delete(iframe);
+    }
+    break;
+  }
+});
+
+function _renderAssetCards(containerId, items, type) {
+  const el = document.getElementById(containerId);
+  const M = ASSET_META[type];
+  if (!items.length) {
+    el.innerHTML = `
+      <div class="asset-empty">
+        <span class="mi">${M.icon}</span>
+        <p>${M.empty}<br>Click “New” to start</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = items.map(it => {
+    const n = M.count(M.get(it));
+    return `
+    <div class="asset-card" onclick="${M.open}('${it.id}')">
+      <div class="asset-card-thumb asset-card-thumb--${type}" data-thumb="${type}:${it.id}">
+        <span class="thumb-state spin"><span class="mi">progress_activity</span></span>
+      </div>
+      <div class="card-kebab">
+        <button class="card-kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More"><span class="mi">more_vert</span></button>
+        <div class="card-kebab-menu">
+          <button onclick="event.stopPropagation();${M.rename}('${it.id}')"><span class="mi">edit</span>Rename</button>
+          <button onclick="event.stopPropagation();${M.dup}('${it.id}')"><span class="mi">content_copy</span>Duplicate</button>
+          <button class="menu-delete" onclick="event.stopPropagation();${M.del}('${it.id}')"><span class="mi">delete</span>Delete</button>
+        </div>
+      </div>
+      <div class="asset-card-info">
+        <div class="asset-card-meta">
+          <div class="asset-card-name" title="${escapeHtml(it.name)}">${escapeHtml(it.name)}</div>
+          <div class="asset-card-date">${n} ${M.unit} · ${formatDate(it.updated)}</div>
+        </div>
+        <span class="mi asset-card-arrow">arrow_forward</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  items.forEach(it => {
+    const thumb = el.querySelector(`.asset-card-thumb[data-thumb="${type}:${it.id}"]`);
+    if (!thumb) return;
+    const payload = M.get(it);
+    if (!payload || !M.count(payload)) {
+      thumb.innerHTML = `<span class="thumb-state"><span class="mi">${M.icon}</span>Empty — no preview yet</span>`;
+      return;
+    }
+    _mountAssetThumb(thumb, type, payload);
+  });
+}
+
+function renderEdmList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('edmList', (c && c.edms) || [], 'edm');
+}
+
+function renderLpList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('lpList', (c && c.landingPages) || [], 'lp');
+}
+
+function toggleAssetKebab(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  document.querySelectorAll('.asset-item-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) menu.classList.add('open');
+}
+
+function renderAssetList(containerId, items, icon, emptyText) {
+  const el = document.getElementById(containerId);
+  if (!items.length) {
+    el.innerHTML = `
+      <div class="asset-empty">
+        <span class="mi">${icon === 'web' ? 'add_to_queue' : 'drafts'}</span>
+        <p>${emptyText}<br>Click “New” to start</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = items.map(it => `
+    <div class="asset-item">
+      <div class="asset-item-thumb"><span class="mi">${icon}</span></div>
+      <div class="asset-item-info">
+        <div class="asset-item-name">${escapeHtml(it.name)}</div>
+        <div class="asset-item-date">Updated ${formatDate(it.updated)}</div>
+      </div>
+      <span class="mi asset-item-arrow">chevron_right</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+// Campaign CRUD — Modal
+// ══════════════════════════════════════
+let _campaignModalMode = 'create'; // 'create' | 'edit'
+let _campaignEditId = null;
+
+function openCreateCampaign() {
+  _campaignModalMode = 'create';
+  _campaignEditId = null;
+  document.getElementById('campaignModalIcon').textContent = 'add_circle';
+  document.getElementById('campaignModalTitle').textContent = 'New Campaign';
+  document.getElementById('campaignModalDesc').textContent = 'Name this campaign and choose its region';
+  document.getElementById('campaignModalConfirm').textContent = 'Create';
+  document.getElementById('campaignNameInput').value = '';
+  document.getElementById('campaignRegionInput').value = 'Global';
+  openCampaignModal();
+}
+
+function openEditCampaign() {
+  openEditCampaignById(currentCampaignId);
+}
+
+function openEditCampaignById(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  _campaignModalMode = 'edit';
+  _campaignEditId = id;
+  document.getElementById('campaignModalIcon').textContent = 'edit';
+  document.getElementById('campaignModalTitle').textContent = 'Edit Campaign';
+  document.getElementById('campaignModalDesc').textContent = 'Update the campaign name and region';
+  document.getElementById('campaignModalConfirm').textContent = 'Save';
+  document.getElementById('campaignNameInput').value = c.name || '';
+  document.getElementById('campaignRegionInput').value = c.region || 'Global';
+  openCampaignModal();
+}
+
+function openCampaignModal() {
+  document.getElementById('campaignModal').classList.add('visible');
+  setTimeout(() => {
+    const input = document.getElementById('campaignNameInput');
+    input.focus(); input.select();
+  }, 120);
+}
+
+function closeCampaignModal() {
+  document.getElementById('campaignModal').classList.remove('visible');
+}
+
+function confirmCampaignModal() {
+  const name = document.getElementById('campaignNameInput').value.trim();
+  const region = document.getElementById('campaignRegionInput').value;
+  if (!name) { document.getElementById('campaignNameInput').focus(); return; }
+
+  if (_campaignModalMode === 'create') {
+    const c = {
+      id: newId('camp_'),
+      name, region,
+      landingPages: [],
+      edms: [],
+      materials: [],
+      created: Date.now(),
+      updated: Date.now()
+    };
+    campaigns.push(c);
+    saveCampaigns(campaigns);
+    closeCampaignModal();
+    showToast('<span class="mi">check_circle</span>Created “' + escapeHtml(name) + '”');
+    openCampaign(c.id);
+  } else {
+    const c = findCampaign(_campaignEditId);
+    if (c) {
+      c.name = name;
+      c.region = region;
+      c.updated = Date.now();
+      saveCampaigns(campaigns);
+      showToast('<span class="mi">check_circle</span>Updated');
+    }
+    closeCampaignModal();
+    if (currentCampaignId === _campaignEditId && document.getElementById('detailView').classList.contains('visible')) {
+      renderDetailBreadcrumb();
+      renderDetail();
+    } else {
+      renderGallery();
+    }
+  }
+}
+
+function duplicateCampaign(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  const copy = JSON.parse(JSON.stringify(c));
+  copy.id = newId('camp_');
+  copy.name = c.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  (copy.landingPages || []).forEach(lp => { lp.id = newId('lp_'); });
+  (copy.edms || []).forEach(e => { e.id = newId('edm_'); });
+  (copy.materials || []).forEach(m => { m.id = newId('mm_'); });
+  campaigns.push(copy);
+  saveCampaigns(campaigns);
+  renderGallery();
+  showToast('<span class="mi">content_copy</span>Campaign duplicated');
+}
+
+// ── Delete ──
+let _deleteId = null;
+function openDeleteModal(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  _deleteId = id;
+  document.getElementById('deleteModalDesc').textContent =
+    'Delete “' + c.name + '”? Its landing pages and eDMs will also be removed. This cannot be undone.';
+  document.getElementById('deleteModal').classList.add('visible');
+}
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('visible');
+  _deleteId = null;
+}
+function confirmDeleteModal() {
+  if (_deleteId) {
+    campaigns = campaigns.filter(c => c.id !== _deleteId);
+    saveCampaigns(campaigns);
+    const wasCurrent = currentCampaignId === _deleteId;
+    closeDeleteModal();
+    showToast('<span class="mi">delete</span>Campaign deleted');
+    if (wasCurrent) showGallery();
+    else renderGallery();
+  }
+}
+
+// ══════════════════════════════════════
+// Asset actions (Phase 2 / 3 hooks)
+// ══════════════════════════════════════
+function addLandingPage() { openCreateLp(); }
+
+// ── Landing Page CRUD (Campaign Page Builder) ──
+let _lpModalMode = 'create';
+let _lpEditId = null;
+
+function _lpSlug(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'page';
+}
+function _regionToStore(region) {
+  return (['Global', 'KR', 'EU'].indexOf(region) >= 0) ? region : 'Global';
+}
+
+// Style registry mirror (matches Campaign Page Builder STYLES)
+const LP_STYLES = [
+  { id: 'clean-pro',   num: '01', name: 'Style01 · Clean Pro',   desc: 'Minimal industrial light, professional clean.', cssFile: 'dist/cpb-style-clean-pro.css' },
+  { id: 'cyber-green', num: '02', name: 'Style02 · Cyber Green', desc: 'Cyber dark visual with neon green accents.',   cssFile: 'dist/cpb-style-cyber-green.css' },
+  { id: 'style03',     num: '03', name: 'Style03 · Draft',       desc: 'Starter style scaffold to extend.',            cssFile: 'dist/cpb-style-style03.css' }
+];
+let _lpSelectedStyle = 'clean-pro';
+let _lpPrefixTouched = false;
+
+function _buildLpStylePreviewSrcdoc(styleId) {
+  const style = LP_STYLES.find(s => s.id === styleId) || LP_STYLES[0];
+  const cssHref = new URL('Campaign Page Builder/' + (style.cssFile || ''), window.location.href).href;
+  const sid = escapeHtml(style.id);
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${cssHref}">
+<style>
+html, body { margin: 0; padding: 0; overflow: hidden; background: #fff; }
+.cpb-thumb-page { width: 1200px; margin: 0 auto; background: var(--cpb-c-bg, #fff); font-family: 'Inter', sans-serif; color: var(--cpb-c-text, #111); }
+.thumb-hero { padding: 56px 86px 42px; background: linear-gradient(135deg, var(--cpb-c-bg-alt, #f5f7fa) 0%, var(--cpb-c-bg, #fff) 100%); border-bottom: 1px solid var(--cpb-c-border, #e5e7eb); }
+.thumb-kicker { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cpb-c-text-subtle, #6b7280); font-weight: 700; margin-bottom: 8px; }
+.thumb-title { margin: 0; font-size: 34px; line-height: 1.15; font-weight: 800; color: var(--cpb-c-text, #111827); max-width: 760px; }
+.thumb-desc { margin: 10px 0 16px; font-size: 14px; line-height: 1.55; color: var(--cpb-c-text-muted, #4b5563); max-width: 760px; }
+.thumb-btn { display: inline-block; background: var(--cpb-c-primary, #0059ff); color: #fff; border-radius: 999px; font-size: 13px; font-weight: 700; padding: 9px 14px; }
+.thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 18px 86px 26px; background: var(--cpb-c-bg, #fff); }
+.thumb-card { border: var(--cpb-card-border, 1px solid #e5e7eb); border-radius: var(--cpb-radius-card, 8px); background: var(--cpb-c-surface, #fff); padding: 12px; box-shadow: var(--cpb-card-shadow, 0 1px 3px rgba(0,0,0,.04)); }
+.thumb-bar { height: 7px; border-radius: 999px; background: var(--cpb-c-primary, #0059ff); margin-bottom: 10px; opacity: .92; }
+.thumb-line { height: 6px; border-radius: 999px; background: var(--cpb-c-text-subtle, #94a3b8); opacity: .35; margin-top: 7px; }
+.thumb-line.w70 { width: 70%; }
+.thumb-line.w85 { width: 85%; }
+.thumb-line.w55 { width: 55%; }
+</style></head>
+<body><div class="cpb-thumb-page" data-style="${sid}">
+  <section class="thumb-hero">
+    <div class="thumb-kicker">Campaign Landing</div>
+    <h2 class="thumb-title">Scale Your Smart Edge Rollout Faster</h2>
+    <p class="thumb-desc">Style thumbnail preview generated with the same iframe srcdoc pipeline as Campaign Page Builder.</p>
+    <span class="thumb-btn">Explore Solutions</span>
+  </section>
+  <section class="thumb-grid">
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+  </section>
+</div></body></html>`;
+}
+
+function _renderLpStyleGridThumbPreviews() {
+  document.querySelectorAll('#lpStyleGrid .style-thumb[data-style-preview-sid]').forEach(thumb => {
+    const sid = thumb.getAttribute('data-style-preview-sid');
+    if (!sid) return;
+    const fallbackHtml = thumb.innerHTML;
+    thumb.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.className = 'style-thumb-preview-iframe';
+    iframe.setAttribute('sandbox', 'allow-same-origin');
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('tabindex', '-1');
+    iframe.setAttribute('loading', 'lazy');
+    iframe.srcdoc = _buildLpStylePreviewSrcdoc(sid);
+    iframe.onload = function () {
+      const thumbW = thumb.offsetWidth || 180;
+      const scale = (thumbW * 0.82) / 1200;
+      const scaledW = 1200 * scale;
+      const offsetX = (thumbW - scaledW) / 2;
+      this.style.transform = 'scale(' + scale + ')';
+      this.style.left = offsetX + 'px';
+      this.style.height = (80 / scale) + 'px';
+    };
+    iframe.onerror = function () {
+      thumb.innerHTML = fallbackHtml;
+    };
+    thumb.appendChild(iframe);
+  });
+}
+
+function _renderLpStyleGrid() {
+  const grid = document.getElementById('lpStyleGrid');
+  grid.innerHTML = LP_STYLES.map(s => `
+    <div class="style-grid-card${s.id === _lpSelectedStyle ? ' selected' : ''}" data-sid="${s.id}" onclick="pickLpStyle('${s.id}')">
+      <div class="style-thumb" data-style-preview-sid="${s.id}">
+        <span class="style-thumb-fallback">${s.num}</span>
+      </div>
+      <div class="style-name">${s.name}</div>
+      <div class="style-desc">${s.desc}</div>
+    </div>`).join('');
+  _renderLpStyleGridThumbPreviews();
+}
+function pickLpStyle(id) {
+  _lpSelectedStyle = id;
+  _renderLpStyleGrid();
+}
+function _lpUpdatePrefixPreview() {
+  const prefIn = document.getElementById('lpPrefixInput');
+  const nameIn = document.getElementById('lpNameInput');
+  const val = (_lpPrefixTouched && prefIn.value.trim()) ? _lpSlug(prefIn.value) : _lpSlug(nameIn.value);
+  document.getElementById('lpPrefixPreview').textContent = val || 'page';
+}
+function _lpOnNameInput() { if (!_lpPrefixTouched) _lpUpdatePrefixPreview(); }
+function _lpOnPrefixInput() { _lpPrefixTouched = true; _lpUpdatePrefixPreview(); }
+
+function openCreateLp() {
+  if (!currentCampaignId) return;
+  _lpModalMode = 'create';
+  _lpEditId = null;
+  _lpSelectedStyle = 'clean-pro';
+  _lpPrefixTouched = false;
+  document.getElementById('lpModalIcon').textContent = 'web';
+  document.getElementById('lpModalTitle').textContent = 'New Landing Page';
+  document.getElementById('lpModalDesc').textContent = 'Name it, pick a starting style, then open the builder';
+  document.getElementById('lpModalConfirm').textContent = 'Create & Open';
+  document.getElementById('lpNameInput').value = '';
+  document.getElementById('lpPrefixInput').value = '';
+  document.getElementById('lpCreateFields').style.display = '';
+  _renderLpStyleGrid();
+  _lpUpdatePrefixPreview();
+  openLpModal();
+}
+
+function openRenameLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  _lpModalMode = 'rename';
+  _lpEditId = id;
+  document.getElementById('lpModalIcon').textContent = 'edit';
+  document.getElementById('lpModalTitle').textContent = 'Rename Landing Page';
+  document.getElementById('lpModalDesc').textContent = "Update this landing page's name";
+  document.getElementById('lpModalConfirm').textContent = 'Save';
+  document.getElementById('lpNameInput').value = lp.name || '';
+  document.getElementById('lpCreateFields').style.display = 'none';
+  openLpModal();
+}
+
+function openLpModal() {
+  document.getElementById('lpModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('lpNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeLpModal() {
+  document.getElementById('lpModal').classList.remove('visible');
+}
+
+function confirmLpModal() {
+  const name = document.getElementById('lpNameInput').value.trim();
+  if (!name) { document.getElementById('lpNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.landingPages) c.landingPages = [];
+  if (_lpModalMode === 'create') {
+    const lpId = newId('lp_');
+    const prefix = _lpSlug(document.getElementById('lpPrefixInput').value || name);
+    const cpbProject = {
+      id: lpId,
+      name,
+      cssPrefix: prefix,
+      styleId: _lpSelectedStyle,
+      store: _regionToStore(c.region),
+      sections: [],
+      created: Date.now(),
+      updated: Date.now()
+    };
+    const lp = { id: lpId, name, cpbProject, created: Date.now(), updated: Date.now() };
+    c.landingPages.push(lp);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeLpModal();
+    renderDetail();
+    openLpEditor(lpId);
+  } else {
+    const lp = c.landingPages.find(x => x.id === _lpEditId);
+    if (lp) {
+      lp.name = name;
+      if (lp.cpbProject) lp.cpbProject.name = name;
+      lp.updated = Date.now();
+      c.updated = Date.now();
+      saveCampaigns(campaigns);
+    }
+    closeLpModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  const copy = JSON.parse(JSON.stringify(lp));
+  const newLpId = newId('lp_');
+  copy.id = newLpId;
+  copy.name = lp.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  if (copy.cpbProject) { copy.cpbProject.id = newLpId; copy.cpbProject.name = copy.name; }
+  c.landingPages.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>Landing Page duplicated');
+}
+
+function deleteLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  if (!confirm('Delete “' + lp.name + '”? This cannot be undone.')) return;
+  c.landingPages = c.landingPages.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>Landing Page deleted');
+}
+
+// ── eDM CRUD ──
+let _edmModalMode = 'create';
+let _edmEditId = null;
+
+function _renderEdmThemeOptions(selectedId) {
+  const sel = document.getElementById('edmThemeInput');
+  if (!sel) return;
+  const active = selectedId || 'light-blue';
+  sel.innerHTML = EDM_THEMES.map(t =>
+    `<option value="${t.id}"${t.id === active ? ' selected' : ''}>${t.name}</option>`
+  ).join('');
+}
+
+function _suggestEdmThemeByLandingPages(campaign) {
+  const lps = (campaign && campaign.landingPages) || [];
+  const latest = lps.slice().sort((a, b) => (b.updated || 0) - (a.updated || 0))[0];
+  const styleId = latest && latest.cpbProject && latest.cpbProject.styleId;
+  if (styleId === 'cyber-green') return 'lp-green';
+  if (styleId === 'style03') return 'lp-purple';
+  return 'light-blue';
+}
+
+function addEdm() { openCreateEdm(); }
+
+function openCreateEdm() {
+  if (!currentCampaignId) return;
+  const c = findCampaign(currentCampaignId);
+  _edmModalMode = 'create';
+  _edmEditId = null;
+  document.getElementById('edmModalIcon').textContent = 'mail';
+  document.getElementById('edmModalTitle').textContent = 'New eDM';
+  document.getElementById('edmModalDesc').textContent = 'Name this eDM, choose a solid-color theme, then open the editor';
+  document.getElementById('edmModalConfirm').textContent = 'Create & Open';
+  document.getElementById('edmNameInput').value = '';
+  document.getElementById('edmThemeRow').style.display = '';
+  _renderEdmThemeOptions(_suggestEdmThemeByLandingPages(c));
+  openEdmModal();
+}
+
+function openRenameEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  _edmModalMode = 'rename';
+  _edmEditId = id;
+  document.getElementById('edmModalIcon').textContent = 'edit';
+  document.getElementById('edmModalTitle').textContent = 'Rename eDM';
+  document.getElementById('edmModalDesc').textContent = "Update this eDM's name";
+  document.getElementById('edmModalConfirm').textContent = 'Save';
+  document.getElementById('edmNameInput').value = e.name || '';
+  document.getElementById('edmThemeRow').style.display = 'none';
+  openEdmModal();
+}
+
+function openEdmModal() {
+  document.getElementById('edmModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('edmNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeEdmModal() {
+  document.getElementById('edmModal').classList.remove('visible');
+}
+
+function confirmEdmModal() {
+  const name = document.getElementById('edmNameInput').value.trim();
+  if (!name) { document.getElementById('edmNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.edms) c.edms = [];
+  if (_edmModalMode === 'create') {
+    const selectedTheme = document.getElementById('edmThemeInput').value || 'light-blue';
+    const e = {
+      id: newId('edm_'),
+      name,
+      snapshot: { builderStack: [], colorState: {}, theme: selectedTheme },
+      created: Date.now(),
+      updated: Date.now()
+    };
+    c.edms.push(e);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeEdmModal();
+    renderDetail();
+    openEdmEditor(e.id);
+  } else {
+    const e = c.edms.find(x => x.id === _edmEditId);
+    if (e) { e.name = name; e.updated = Date.now(); c.updated = Date.now(); saveCampaigns(campaigns); }
+    closeEdmModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  const copy = JSON.parse(JSON.stringify(e));
+  copy.id = newId('edm_');
+  copy.name = e.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  c.edms.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>eDM duplicated');
+}
+
+function deleteEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  if (!confirm('Delete “' + e.name + '”? This cannot be undone.')) return;
+  c.edms = c.edms.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>eDM deleted');
+}
+
+// ── Marketing Material CRUD (MarketingMaterialBuilder) ──
+let _materialModalMode = 'create';
+let _materialEditId = null;
+
+function addMaterial() { openCreateMaterial(); }
+
+function renderMaterialList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('mmList', (c && c.materials) || [], 'mm');
+}
+
+function openCreateMaterial() {
+  if (!currentCampaignId) return;
+  _materialModalMode = 'create';
+  _materialEditId = null;
+  document.getElementById('materialModalIcon').textContent = 'image';
+  document.getElementById('materialModalTitle').textContent = 'New Graphic Asset';
+  document.getElementById('materialModalDesc').textContent = 'Name this graphic asset, then open the builder';
+  document.getElementById('materialModalConfirm').textContent = 'Create & Open';
+  document.getElementById('materialNameInput').value = '';
+  openMaterialModal();
+}
+
+function openRenameMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  _materialModalMode = 'rename';
+  _materialEditId = id;
+  document.getElementById('materialModalIcon').textContent = 'edit';
+  document.getElementById('materialModalTitle').textContent = 'Rename Graphic Asset';
+  document.getElementById('materialModalDesc').textContent = "Update this graphic asset's name";
+  document.getElementById('materialModalConfirm').textContent = 'Save';
+  document.getElementById('materialNameInput').value = m.name || '';
+  openMaterialModal();
+}
+
+function openMaterialModal() {
+  document.getElementById('materialModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('materialNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeMaterialModal() {
+  document.getElementById('materialModal').classList.remove('visible');
+}
+
+function confirmMaterialModal() {
+  const name = document.getElementById('materialNameInput').value.trim();
+  if (!name) { document.getElementById('materialNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.materials) c.materials = [];
+  if (_materialModalMode === 'create') {
+    const m = { id: newId('mm_'), name, mmbProject: null, created: Date.now(), updated: Date.now() };
+    c.materials.push(m);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeMaterialModal();
+    renderDetail();
+    openMaterialEditor(m.id);
+  } else {
+    const m = c.materials.find(x => x.id === _materialEditId);
+    if (m) { m.name = name; m.updated = Date.now(); c.updated = Date.now(); saveCampaigns(campaigns); }
+    closeMaterialModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  const copy = JSON.parse(JSON.stringify(m));
+  const newMid = newId('mm_');
+  copy.id = newMid;
+  copy.name = m.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  if (copy.mmbProject) { copy.mmbProject.id = newMid; copy.mmbProject.name = copy.name; }
+  c.materials.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>Graphic Asset duplicated');
+}
+
+function deleteMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  if (!confirm('Delete “' + m.name + '”? This cannot be undone.')) return;
+  c.materials = c.materials.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>Graphic Asset deleted');
+}
+
+// ── Asset Editor (eDM / Landing Page) — embedded via iframe + postMessage ──
+const ASSET_CFG = {
+  edm: { src: 'ComponentCustomizer.html?embed=edm', icon: 'mail', color: '#7c3aed' },
+  lp:  { src: 'Campaign%20Page%20Builder/CampaignPageBuilder.html?embed=lp', icon: 'web', color: '#0091d5' },
+  mm:  { src: 'MarketingMaterialBuilder.html?embed=mm', icon: 'image', color: '#e8730c' }
+};
+let _editingType = null;      // 'edm' | 'lp'
+let _editingAssetId = null;
+let _assetSaveThenClose = false;
+
+function _getAssetList(c, type) {
+  if (!c) return [];
+  if (type === 'lp') return c.landingPages || [];
+  if (type === 'mm') return c.materials || [];
+  return c.edms || [];
+}
+function getEditingAsset() {
+  const c = findCampaign(currentCampaignId);
+  return _getAssetList(c, _editingType).find(x => x.id === _editingAssetId) || null;
+}
+
+function openEdmEditor(id) { _openAssetEditor(id, 'edm'); }
+function openLpEditor(id) { _openAssetEditor(id, 'lp'); }
+function openMaterialEditor(id) { _openAssetEditor(id, 'mm'); }
+
+function _openAssetEditor(id, type) {
+  const c = findCampaign(currentCampaignId);
+  const item = _getAssetList(c, type).find(x => x.id === id);
+  if (!item) return;
+  _editingType = type;
+  _editingAssetId = id;
+  _assetSaveThenClose = false;
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.remove('visible');
+  document.getElementById('edmEditorView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderEditorBreadcrumb(item.name);
+  setEditorCtas(true);
+  document.getElementById('editorLoading').style.display = 'flex';
+  const frame = document.getElementById('edmEditorFrame');
+  frame.src = ASSET_CFG[type].src;
+  _sizeEditorFrame();
+  window.scrollTo(0, 0);
+}
+
+function setEditorCtas(show) {
+  document.getElementById('tbCloseBtn').style.display = show ? '' : 'none';
+  document.getElementById('tbSaveBtn').style.display = show ? '' : 'none';
+}
+
+function _sizeEditorFrame() {
+  const wrap = document.querySelector('.editor-frame-wrap');
+  if (!wrap) return;
+  const tb = document.querySelector('.top-bar');
+  const bc = document.getElementById('breadcrumbBar');
+  const tbh = tb ? tb.offsetHeight : 56;
+  const bch = (bc && bc.classList.contains('visible')) ? bc.offsetHeight : 0;
+  wrap.style.height = (window.innerHeight - tbh - bch) + 'px';
+}
+window.addEventListener('resize', () => {
+  if (document.getElementById('edmEditorView').classList.contains('visible')) _sizeEditorFrame();
+});
+
+function confirmLeaveEditor() {
+  return confirm('Leave the editor? Changes not saved via “Save & Close” will be lost.');
+}
+function _closeEditorSilently() {
+  document.getElementById('edmEditorFrame').src = 'about:blank';
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  _editingAssetId = null;
+  _editingType = null;
+  _assetSaveThenClose = false;
+}
+function _returnToDetail() {
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderDetailBreadcrumb();
+  renderDetail();
+  window.scrollTo(0, 0);
+}
+
+function closeEdmEditor(ask) {
+  if (ask && !confirmLeaveEditor()) return;
+  _closeEditorSilently();
+  _returnToDetail();
+}
+
+function editorBackToGallery() {
+  if (!confirmLeaveEditor()) return;
+  _closeEditorSilently();
+  showGallery();
+}
+
+function saveEdmEditor() {
+  const frame = document.getElementById('edmEditorFrame');
+  if (!frame.contentWindow) { closeEdmEditor(); return; }
+  _assetSaveThenClose = true;
+  frame.contentWindow.postMessage({ type: 'mas-asset-request-save' }, '*');
+}
+
+window.addEventListener('message', (ev) => {
+  const d = ev.data || {};
+  if (d.type === 'mas-asset-ready') {
+    const item = getEditingAsset();
+    const frame = document.getElementById('edmEditorFrame');
+    document.getElementById('editorLoading').style.display = 'none';
+    if (frame && frame.contentWindow) {
+      let payload = null;
+      if (item) {
+        if (_editingType === 'lp') payload = item.cpbProject;
+        else if (_editingType === 'mm') payload = item.mmbProject || { name: item.name };
+        else payload = item.snapshot;
+      }
+      frame.contentWindow.postMessage({ type: 'mas-asset-load', payload: payload }, '*');
+    }
+  } else if (d.type === 'mas-asset-save') {
+    const item = getEditingAsset();
+    if (item) {
+      if (_editingType === 'lp') {
+        if (d.payload) {
+          item.cpbProject = d.payload;
+          if (d.payload.name) item.name = d.payload.name;
+        }
+      } else if (_editingType === 'mm') {
+        if (d.payload) {
+          item.mmbProject = d.payload;
+          if (d.payload.name) item.name = d.payload.name;
+        }
+      } else {
+        item.snapshot = d.payload;
+      }
+      item.updated = Date.now();
+      const c = findCampaign(currentCampaignId);
+      if (c) c.updated = Date.now();
+      saveCampaigns(campaigns);
+    }
+    if (_assetSaveThenClose) {
+      const savedMsg = _editingType === 'lp' ? 'Landing Page saved' : (_editingType === 'mm' ? 'Graphic Asset saved' : 'eDM saved');
+      closeEdmEditor();
+      showToast('<span class="mi">check_circle</span>' + savedMsg);
+    } else {
+      showToast('<span class="mi">check_circle</span>Saved');
+    }
+  }
+});
+
+// ══════════════════════════════════════
+// Keyboard handling for modals
+// ══════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  const campaignOpen = document.getElementById('campaignModal').classList.contains('visible');
+  const deleteOpen = document.getElementById('deleteModal').classList.contains('visible');
+  const edmOpen = document.getElementById('edmModal').classList.contains('visible');
+  const materialOpen = document.getElementById('materialModal').classList.contains('visible');
+  const lpOpen = document.getElementById('lpModal').classList.contains('visible');
+  if (campaignOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmCampaignModal(); }
+    if (e.key === 'Escape') closeCampaignModal();
+  } else if (edmOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmEdmModal(); }
+    if (e.key === 'Escape') closeEdmModal();
+  } else if (materialOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmMaterialModal(); }
+    if (e.key === 'Escape') closeMaterialModal();
+  } else if (lpOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmLpModal(); }
+    if (e.key === 'Escape') closeLpModal();
+  } else if (deleteOpen) {
+    if (e.key === 'Escape') closeDeleteModal();
+  }
+});
+[['campaignModal', closeCampaignModal], ['deleteModal', closeDeleteModal], ['edmModal', closeEdmModal], ['materialModal', closeMaterialModal], ['lpModal', closeLpModal]].forEach(([id, fn]) => {
+  document.getElementById(id).addEventListener('click', (e) => {
+    if (e.target.id === id) fn();
+  });
+});
+
+// ══════════════════════════════════════
+// Init
+// ══════════════════════════════════════
+showGallery();
+</script>
+
+</body>
+</html>

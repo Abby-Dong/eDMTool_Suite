@@ -1,0 +1,154 @@
+/* ══════════════════════════════════════════════════════════════════════
+   NEW STYLE TEMPLATE — tail layer (style-specific visuals only)
+   ----------------------------------------------------------------------
+   • Structure / layout / responsive lives in cpb-style-base.css (shared).
+   • This file only overrides COLOR / SHADOW / RADIUS / BEHAVIOR per style.
+   • Keep section banners in THIS exact order so all styles stay parallel.
+   • Replace __STYLE_ID__ with your style id (must match the tokens file).
+   • Delete any block you don't need to customise — base provides a default.
+   • G1 FAQ Accordion is fully styled in base.css; only add a G1 block here
+     if this style needs a visual override (otherwise leave it out).
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ════════ Headlines & text ════════ */
+[data-style="__STYLE_ID__"] .cpb-eyebrow {
+  font-size: clamp(10px, 1.1vw, 12px); font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--cpb-c-primary);
+  display: inline-block;
+}
+[data-style="__STYLE_ID__"] .cpb-headline {
+  font-size: clamp(28px, 4vw, 48px); font-weight: var(--cpb-headline-weight);
+  line-height: 1.15; letter-spacing: -0.01em;
+  color: var(--cpb-c-text); margin-bottom: 16px;
+}
+[data-style="__STYLE_ID__"] .cpb-subtitle {
+  font-size: clamp(15px, 1.5vw, 18px); font-weight: 400;
+  line-height: 1.3; color: var(--cpb-c-primary); margin-bottom: 12px;
+}
+[data-style="__STYLE_ID__"] .cpb-body {
+  font-size: 15px; line-height: 1.7; color: var(--cpb-c-text-muted);
+}
+[data-style="__STYLE_ID__"] .cpb-section-title {
+  font-size: clamp(22px, 2.5vw, 32px); font-weight: 700;
+  color: var(--cpb-c-text); margin-bottom: 8px;
+}
+[data-style="__STYLE_ID__"] .cpb-section-subtitle {
+  font-size: 15px; color: var(--cpb-c-primary);
+}
+
+/* ════════ Buttons ════════
+   SOLID  = .cpb-btn-primary  (also P3 CTA, P4 CTA, E2 primary)
+   STROKE = .cpb-btn-secondary (also E2 secondary)
+   Keep default / :hover / :active consistent across all four sections. */
+[data-style="__STYLE_ID__"] .cpb-btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cpb-c-primary); color: #fff;
+  padding: 12px 28px; border-radius: var(--cpb-radius-btn);
+  font-size: 14px; font-weight: 600;
+  border: 2px solid var(--cpb-c-primary);
+  transition: var(--cpb-transition);
+}
+[data-style="__STYLE_ID__"] .cpb-btn-primary:hover {
+  background: var(--cpb-c-primary-hover);
+  border-color: var(--cpb-c-primary-hover);
+  transform: translateY(-1px); color: #fff;
+}
+[data-style="__STYLE_ID__"] .cpb-btn-primary:active {
+  background: var(--cpb-c-primary-hover);
+  border-color: var(--cpb-c-primary-hover);
+  transform: translateY(0);
+}
+[data-style="__STYLE_ID__"] .cpb-btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--cpb-c-primary);
+  padding: 12px 28px; border-radius: var(--cpb-radius-btn);
+  font-size: 14px; font-weight: 600;
+  border: 2px solid var(--cpb-c-primary);
+  transition: var(--cpb-transition);
+}
+[data-style="__STYLE_ID__"] .cpb-btn-secondary:hover {
+  background: var(--cpb-c-primary); color: #fff;
+}
+[data-style="__STYLE_ID__"] .cpb-btn-secondary:active {
+  background: var(--cpb-c-primary-hover);
+  border-color: var(--cpb-c-primary-hover); color: #fff;
+}
+
+/* ════════ Cards ════════ */
+[data-style="__STYLE_ID__"] .cpb-card-title {
+  font-size: 18px; font-weight: 700; color: var(--cpb-c-primary);
+  margin-bottom: 6px; line-height: 1.2;
+}
+[data-style="__STYLE_ID__"] .cpb-card-desc {
+  font-size: 14px; line-height: 1.2; color: var(--cpb-c-text);
+}
+[data-style="__STYLE_ID__"] .cpb-card-cta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 13px; font-weight: 600; color: var(--cpb-c-primary);
+  margin-top: 10px; text-decoration: none !important; transition: gap .15s;
+}
+[data-style="__STYLE_ID__"] .cpb-card-cta:hover { gap: 8px; }
+
+/* ════════ B1 Hero Banner — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-hero-mask-wrap {
+  background: var(--cpb-hero-mask-color, #eaf3ff);
+}
+
+/* ════════ D1 Feature Cards Grid — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-feature-head .cpb-feature-divider {
+  width: 80px; height: 4px; background: var(--cpb-c-primary);
+  border: 0; margin: 0; padding: 0;
+}
+
+/* ════════ D2 Feature Cards Split — style-specific visuals only ════════ */
+/* Decide: inherit D1 card visuals (leave empty) OR add a dedicated block. */
+
+/* ════════ D3 Feature Gallery — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-feature-gallery-card::before {
+  background: rgba(0,0,0,.35);
+}
+
+/* ════════ P1 Product Anchor — style-specific visuals only ════════ */
+
+/* ════════ P2 Product Showcase — style-specific visuals only ════════ */
+
+/* ════════ P3 Product Series Matrix — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-product-series-item-cta {
+  font-weight: 600; background: var(--cpb-c-primary); color: #fff;
+}
+[data-style="__STYLE_ID__"] .cpb-product-series-item:hover .cpb-product-series-item-cta {
+  background: var(--cpb-c-primary-hover); color: #fff;
+}
+[data-style="__STYLE_ID__"] .cpb-product-series-item:active .cpb-product-series-item-cta {
+  background: var(--cpb-c-primary-hover);
+}
+
+/* ════════ P4 Product Rich Content — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-prc-product-btn {
+  background: var(--cpb-c-primary); color: #fff;
+  border-radius: var(--cpb-radius-btn); font-weight: 600;
+}
+[data-style="__STYLE_ID__"] .cpb-prc-product-card:hover .cpb-prc-product-btn {
+  background: var(--cpb-c-primary-hover);
+}
+[data-style="__STYLE_ID__"] .cpb-prc-product-card:active .cpb-prc-product-btn {
+  background: var(--cpb-c-primary-hover);
+}
+
+/* ════════ E1 Related Content Hub — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-related-content-card {
+  border-radius: var(--cpb-radius-card);
+  border: var(--cpb-card-border);
+  background: var(--cpb-c-surface);
+  box-shadow: var(--cpb-card-shadow);
+}
+[data-style="__STYLE_ID__"] .cpb-related-content-card:hover {
+  box-shadow: var(--cpb-card-shadow-hover);
+}
+
+/* ════════ E2 Need Help CTA — style-specific visuals only ════════ */
+[data-style="__STYLE_ID__"] .cpb-need-help-section {
+  background: var(--cpb-c-primary);
+}
+/* E2 buttons follow the global SOLID/STROKE system above; add overrides
+   here ONLY if the banner background needs different button colours. */

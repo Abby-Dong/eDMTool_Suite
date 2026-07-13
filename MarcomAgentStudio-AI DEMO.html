@@ -1,0 +1,3213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Marcom Agent Studio</title>
+  <style>
+    .mi { font-family: 'Material Symbols Outlined'; font-size: 18px; vertical-align: -4px; margin-right: 4px; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; }
+    .top-bar .mi { font-size: 22px; vertical-align: -5px; }
+    .toast .mi { font-size: 16px; vertical-align: -3px; }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5; color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Thin Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+    * { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.15) transparent; }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #ffffff; color: #1a1a2e; padding: 0 32px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0,0,0,.08); border-bottom: 1px solid #e5e7eb;
+    }
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
+    .top-bar-logo { height: 20px; display: block; }
+    .top-bar-divider { width: 1px; height: 24px; background: #e0e0e0; }
+    .top-bar h1 { font-size: 15px; font-weight: 700; color: #333; letter-spacing: .3px; display: flex; align-items: center; gap: 6px; }
+    .top-bar h1 .mi { font-size: 20px; color: #0059ff; margin-right: 0; }
+    .top-bar .badge {
+      background: linear-gradient(135deg, #0059ff, #7c3aed); color: #fff; font-size: 10px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px;
+    }
+    .top-bar-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb-bar {
+      background: #fff; border-bottom: 1px solid #e5e7eb; padding: 10px 32px;
+      font-size: 13px; color: #888; display: none; align-items: center; gap: 6px;
+      position: sticky; top: 56px; z-index: 999;
+    }
+    .breadcrumb-bar.visible { display: flex; }
+    .breadcrumb-bar a { color: #0059ff; text-decoration: none; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .breadcrumb-bar a:hover { text-decoration: underline; }
+    .breadcrumb-bar .sep { color: #ccc; margin: 0 2px; }
+    .breadcrumb-bar .current { color: #333; font-weight: 600; }
+
+    /* ══════════════ CAMPAIGN GALLERY ══════════════ */
+    .gallery-view { padding: 32px; }
+    .gallery-view.hidden { display: none; }
+    .gallery-header { text-align: center; padding: 24px 0 36px; }
+    .gallery-header h2 { font-size: 28px; font-weight: 800; color: #07071a; margin-bottom: 8px; }
+    .gallery-header p { font-size: 14px; color: #888; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+    .campaign-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .campaign-card {
+      background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
+      cursor: pointer; transition: all .2s ease;
+      display: flex; flex-direction: column; position: relative;
+    }
+    .campaign-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.15);
+    }
+    .campaign-card-banner {
+      height: 96px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0059ff 0%, #7c3aed 100%);
+    }
+    .campaign-card-banner .mi { font-size: 34px; color: rgba(255,255,255,.92); margin-right: 0; }
+    .campaign-card-region {
+      position: absolute; top: 10px; left: 12px;
+      background: rgba(255,255,255,.9); color: #333;
+      font-size: 10px; font-weight: 700; letter-spacing: .5px;
+      padding: 3px 9px; border-radius: 20px; backdrop-filter: blur(4px);
+    }
+    .campaign-card-body { padding: 16px; flex: 1; }
+    .campaign-card-name {
+      font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .campaign-card-meta {
+      display: flex; align-items: center; gap: 14px; font-size: 12px; color: #888;
+    }
+    .campaign-card-meta span { display: flex; align-items: center; gap: 4px; }
+    .campaign-card-meta .mi { font-size: 15px; margin-right: 0; color: #aaa; }
+    .campaign-card-footer {
+      padding: 10px 16px; border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .campaign-card-date { font-size: 11px; color: #999; }
+    .campaign-card-arrow { color: #bbb; font-size: 18px; transition: color .15s; margin-right: 0; }
+    .campaign-card:hover .campaign-card-arrow { color: #0059ff; }
+
+    /* kebab */
+    .card-kebab { position: absolute; top: 8px; right: 8px; z-index: 20; }
+    .card-kebab-btn {
+      background: rgba(255,255,255,.9); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; transition: all .15s; backdrop-filter: blur(4px);
+      box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    }
+    .card-kebab-btn:hover { background: #fff; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .card-kebab-btn .mi { font-size: 18px; margin-right: 0; vertical-align: 0; }
+    .card-kebab-menu {
+      display: none; position: absolute; top: 36px; right: 0;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+      min-width: 170px; padding: 6px 0; z-index: 50;
+    }
+    .card-kebab-menu.open { display: block; }
+    .card-kebab-menu button {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 9px 16px; border: none; background: none;
+      font-size: 13px; font-weight: 500; color: #333;
+      cursor: pointer; text-align: left; font-family: inherit; transition: background .1s;
+    }
+    .card-kebab-menu button:hover { background: #f5f6f8; }
+    .card-kebab-menu button .mi { font-size: 17px; margin-right: 0; color: #888; }
+    .card-kebab-menu button.menu-delete { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+    .card-kebab-menu button.menu-delete:hover { background: #fff0f0; }
+
+    /* Create new campaign card */
+    .campaign-card-new .campaign-card-banner {
+      background: linear-gradient(135deg, #10b981 0%, #0059ff 100%);
+    }
+    .campaign-card-new .campaign-card-name { color: #1a1a2e; }
+    .new-card-tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+      background: linear-gradient(135deg, #10b981, #0059ff); color: #fff; line-height: 1.4;
+    }
+    .new-card-tag .mi { font-size: 12px; margin-right: 0; vertical-align: -2px; }
+
+    .gallery-empty {
+      grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #bbb;
+    }
+    .gallery-empty .mi { font-size: 44px; display: block; margin: 0 auto 10px; color: #ddd; margin-right: 0; }
+
+    /* ══════════════ CAMPAIGN DETAIL ══════════════ */
+    .detail-view { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+    .detail-view.visible { display: block; }
+
+    .detail-hero {
+      background: #fff; border-radius: 16px; padding: 28px 32px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.06); margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .detail-hero-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
+    .detail-hero-icon {
+      width: 60px; height: 60px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, #0059ff 0%, #7c3aed 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-hero-icon .mi { font-size: 30px; color: #fff; margin-right: 0; }
+    .detail-hero-info { min-width: 0; }
+    .detail-hero-info h2 {
+      font-size: 22px; font-weight: 800; color: #07071a; margin-bottom: 6px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .detail-hero-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #888; }
+    .detail-hero-region {
+      background: #eef3ff; color: #0059ff; font-weight: 700; font-size: 11px;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px;
+    }
+    .detail-hero-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .hero-btn {
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: 1px solid #e0e0e0; background: #fff; color: #555;
+      display: flex; align-items: center; gap: 5px; transition: all .15s; font-family: inherit;
+    }
+    .hero-btn:hover { border-color: #c5d4ff; background: #f0f4ff; color: #0059ff; }
+    .hero-btn .mi { font-size: 17px; margin-right: 0; }
+
+    /* Asset sections */
+    .asset-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 1100px) { .asset-sections { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) { .asset-sections { grid-template-columns: 1fr; } }
+
+    .asset-section {
+      background: #fff; border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    }
+    .asset-section-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
+    }
+    .asset-section-title { display: flex; align-items: center; gap: 10px; }
+    .asset-section-title .icon-box {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .asset-section-title .icon-box.lp { background: #e8f5ff; }
+    .asset-section-title .icon-box.lp .mi { color: #0091d5; }
+    .asset-section-title .icon-box.edm { background: #f5f0ff; }
+    .asset-section-title .icon-box.edm .mi { color: #7c3aed; }
+    .asset-section-title .icon-box.mm { background: #fff3e8; }
+    .asset-section-title .icon-box.mm .mi { color: #e8730c; }
+    .asset-section-title .icon-box .mi { font-size: 20px; margin-right: 0; }
+    .asset-section-title h3 { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+    .asset-section-title .count { font-size: 12px; color: #999; font-weight: 500; }
+    .asset-add-btn {
+      padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; background: #0059ff; color: #fff;
+      display: flex; align-items: center; gap: 4px; transition: all .15s; font-family: inherit;
+    }
+    .asset-add-btn:hover { background: #003fcc; }
+    .asset-add-btn .mi { font-size: 16px; margin-right: 0; }
+
+    .asset-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+    .asset-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 10px; border: 1px solid #eee;
+      transition: all .15s; cursor: pointer;
+    }
+    .asset-item:hover { border-color: #c5d4ff; background: #f8faff; }
+    .asset-item-thumb {
+      width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0;
+      background: #f0f2f5; display: flex; align-items: center; justify-content: center;
+    }
+    .asset-item-thumb .mi { font-size: 20px; color: #aaa; margin-right: 0; }
+    .asset-item-info { flex: 1; min-width: 0; }
+    .asset-item-name { font-size: 13px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-item-date { font-size: 11px; color: #999; }
+    .asset-item-arrow { color: #ccc; font-size: 18px; margin-right: 0; }
+
+    /* ── Asset preview cards (Campaign Page Builder gallery style) ── */
+    .asset-card {
+      background: #fff; border-radius: 12px; overflow: hidden; position: relative;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.05);
+      cursor: pointer; transition: transform .18s ease, box-shadow .18s ease;
+      display: flex; flex-direction: column;
+    }
+    .asset-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,.1), 0 0 0 1px rgba(0,89,255,.22); }
+    .asset-card-thumb {
+      height: 180px; background: #f7f8fa; overflow: hidden; position: relative;
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+    .asset-card-thumb iframe {
+      border: 0; position: absolute; top: 16px; left: 0;
+      transform-origin: top left; pointer-events: none; background: #fff;
+      opacity: 0; transition: opacity .2s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,.10);
+      border-radius: 4px;
+    }
+    .asset-card-thumb.asset-card-thumb--mm {
+      height: 180px; background: #f7f8fa;
+      align-items: center; justify-content: center;
+    }
+    .asset-card-thumb.asset-card-thumb--mm iframe {
+      top: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,.12);
+    }
+    .asset-card-thumb .thumb-state {
+      align-self: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: #b6bcc6; font-size: 11px; font-weight: 600; text-align: center; padding: 0 10px;
+    }
+    .asset-card-thumb .thumb-state .mi { font-size: 26px; margin: 0; color: #cfd4dc; }
+    .asset-card-thumb .thumb-state.spin .mi { animation: spin 1s linear infinite; }
+    .asset-card-info {
+      padding: 10px 12px; border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .asset-card-meta { min-width: 0; }
+    .asset-card-name { font-size: 12.5px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-card-date { font-size: 10px; color: #999; margin-top: 1px; }
+    .asset-card-arrow { color: #ccc; font-size: 18px; margin-right: 0; flex-shrink: 0; transition: color .15s; }
+    .asset-card:hover .asset-card-arrow { color: #0059ff; }
+    .asset-card .card-kebab { position: absolute; top: 8px; right: 8px; z-index: 20; }
+
+    .asset-empty {
+      text-align: center; padding: 30px 16px; color: #bbb;
+      border: 1.5px dashed #e5e7eb; border-radius: 12px;
+    }
+    .asset-empty .mi { font-size: 32px; display: block; margin: 0 auto 8px; color: #ddd; margin-right: 0; }
+    .asset-empty p { font-size: 12px; line-height: 1.5; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background: rgba(7,7,26,.45); backdrop-filter: blur(3px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 16px; padding: 28px 28px 24px;
+      width: 800px; max-width: 92vw; box-shadow: 0 16px 48px rgba(0,0,0,.22);
+      animation: modalIn .2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.96) translateY(-8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-box h3 {
+      margin: 0 0 4px; font-size: 17px; font-weight: 700; color: #1a1a2e;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-box h3 .mi { font-size: 22px; color: #0059ff; margin-right: 0; }
+    .modal-box .modal-desc { margin: 0 0 18px; font-size: 12px; color: #999; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label {
+      display: block; font-size: 11px; font-weight: 700; color: #888;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+    }
+    .modal-field input, .modal-field select {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 14px; font-family: inherit;
+      outline: none; color: #333; box-sizing: border-box; background: #fff;
+    }
+    .modal-field input:focus, .modal-field select:focus {
+      border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1);
+    }
+    .modal-field input::placeholder { color: #ccc; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+    .modal-actions button {
+      padding: 10px 22px; border-radius: 8px; border: none;
+      font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .12s;
+    }
+    .modal-cancel { background: #f0f2f5; color: #555; }
+    .modal-cancel:hover { background: #e5e7eb; }
+    .modal-confirm { background: #0059ff; color: #fff; }
+    .modal-confirm:hover { background: #003fcc; }
+    .modal-confirm.danger { background: #e74c3c; }
+    .modal-confirm.danger:hover { background: #c0392b; }
+
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: #07071a; color: #fff; padding: 12px 28px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; opacity: 0; transition: opacity .25s, transform .25s;
+      pointer-events: none; z-index: 12000; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    /* ── Asset item kebab ── */
+    .asset-item-kebab { position: relative; flex-shrink: 0; }
+    .asset-item-kebab-btn {
+      background: none; border: none; cursor: pointer; color: #bbb;
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; transition: all .12s;
+    }
+    .asset-item-kebab-btn:hover { background: #eef3ff; color: #0059ff; }
+    .asset-item-kebab-btn .mi { font-size: 18px; margin-right: 0; }
+    .asset-item-kebab-menu {
+      display: none; position: absolute; top: 32px; right: 0;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.04);
+      min-width: 150px; padding: 6px 0; z-index: 60;
+    }
+    .asset-item-kebab-menu.open { display: block; }
+    .asset-item-kebab-menu button {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 8px 14px; border: none; background: none;
+      font-size: 13px; color: #333; cursor: pointer; text-align: left; font-family: inherit;
+    }
+    .asset-item-kebab-menu button:hover { background: #f5f6f8; }
+    .asset-item-kebab-menu button .mi { font-size: 16px; margin-right: 0; color: #888; }
+    .asset-item-kebab-menu button.menu-delete { color: #e74c3c; }
+    .asset-item-kebab-menu button.menu-delete .mi { color: #e74c3c; }
+
+    /* ── Top-bar CTA buttons (shown in eDM editor) ── */
+    .tb-btn {
+      padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      font-family: inherit; transition: all .15s; border: 1px solid transparent;
+    }
+    .tb-btn .mi { font-size: 16px; margin-right: 0; }
+    .tb-btn-ghost { background: #f0f2f5; color: #555; border-color: #e5e7eb; }
+    .tb-btn-ghost:hover { background: #e5e7eb; }
+    .tb-btn-save { background: #0059ff; color: #fff; }
+    .tb-btn-save:hover { background: #003fcc; }
+
+    /* ── eDM Editor View (embeds ComponentCustomizer builder) ── */
+    .editor-view { display: none; }
+    .editor-view.visible { display: block; }
+    .editor-frame-wrap {
+      position: relative; overflow: hidden;
+      height: calc(100vh - 97px); background: #f0f2f5;
+    }
+    .editor-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .editor-loading {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; color: #888; background: #f0f2f5;
+    }
+    .editor-loading .mi { font-size: 36px; color: #c5d4ff; animation: spin 1s linear infinite; margin-right: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── LP style picker (matches Campaign Page Builder page settings popup) ── */
+    .lp-prefix-hint { font-size: 11px; color: #888; margin-top: 4px; }
+    .lp-prefix-hint code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .style-grid-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all .15s;
+      background: #fff;
+    }
+    .style-grid-card:hover { border-color: #c5d4ff; }
+    .style-grid-card.selected { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.12); }
+    .style-grid-card .style-thumb {
+      height: 80px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #f7f8fa;
+      position: relative;
+    }
+    .style-grid-card .style-thumb .style-thumb-preview-iframe {
+      width: 1200px;
+      border: none;
+      pointer-events: none;
+      transform-origin: top left;
+      position: absolute;
+      top: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.10);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .style-grid-card .style-thumb .style-thumb-fallback {
+      align-self: center;
+      color: #9aa3b2;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .style-grid-card .style-name { font-size: 13px; font-weight: 700; color: #333; }
+    .style-grid-card .style-desc { font-size: 11px; color: #999; margin-top: 2px; line-height: 1.4; }
+
+    /* ── AI Campaign Composer — visual extensions of existing components ── */
+    .campaign-card-ai .campaign-card-banner { background: linear-gradient(135deg, #7c3aed 0%, #0059ff 100%); }
+    .campaign-card-ai .campaign-card-name { color: #1a1a2e; }
+    .ai-card-tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;
+      background: linear-gradient(135deg, #7c3aed, #0059ff); color: #fff; line-height: 1.4;
+    }
+    .ai-card-tag .mi { font-size: 12px; margin-right: 0; vertical-align: -2px; }
+
+    .icon-box { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon-box .mi { font-size: 20px; margin-right: 0; }
+    .icon-box.lp { background: #e8f5ff; } .icon-box.lp .mi { color: #0091d5; }
+    .icon-box.edm { background: #f5f0ff; } .icon-box.edm .mi { color: #7c3aed; }
+    .icon-box.mm { background: #fff3e8; } .icon-box.mm .mi { color: #e8730c; }
+
+    .ai-step { display: none; }
+    .ai-step.active { display: block; }
+    .ai-brief-textarea {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 13.5px; font-family: inherit;
+      outline: none; color: #333; box-sizing: border-box; resize: vertical; min-height: 84px; line-height: 1.5;
+    }
+    .ai-brief-textarea:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+    .ai-brief-textarea::placeholder { color: #ccc; }
+    .ai-style-grid-sm.style-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .ai-style-grid-sm .style-grid-card { padding: 10px; }
+    .ai-style-grid-sm .style-thumb { height: 44px; }
+    .ai-style-grid-sm .style-name { font-size: 12px; }
+    .ai-style-grid-sm .style-desc { display: none; }
+    .ai-type-card { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .ai-type-card .icon-box { width: 32px; height: 32px; border-radius: 8px; }
+    .ai-type-card .icon-box .mi { font-size: 17px; }
+    .ai-type-card .ai-type-name { font-size: 12.5px; font-weight: 700; color: #333; }
+    .ai-type-card .ai-type-desc { display: none; }
+
+    .ai-gen-list { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 4px; }
+    .ai-gen-item {
+      display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px;
+      background: #f7f8fa; border: 1px solid #eef0f3; transition: background .2s, border-color .2s;
+    }
+    .ai-gen-item.active { background: #eef3ff; border-color: #c5d4ff; }
+    .ai-gen-item.done { background: #f0fbf5; border-color: #d3f0e0; }
+    .ai-gen-item .mi { font-size: 19px; margin-right: 0; color: #c7cbd3; }
+    .ai-gen-item.active .mi { color: #0059ff; animation: spin 1s linear infinite; }
+    .ai-gen-item.done .mi { color: #10b981; }
+    .ai-gen-item .ai-gen-label { font-size: 13px; color: #555; font-weight: 600; }
+    .ai-gen-item.active .ai-gen-label, .ai-gen-item.done .ai-gen-label { color: #1a1a2e; }
+
+    .ai-review-list { display: flex; flex-direction: column; gap: 10px; margin: 4px 0 6px; }
+    .ai-review-card { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1px solid #eef0f3; background: #fff; }
+    .ai-review-name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+    .ai-review-desc { font-size: 11.5px; color: #999; margin-top: 2px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 440px; }
+
+    /* ── AI Composer v2: stepper, fixed-size modal, clarify, notes, guide ── */
+    .ai-modal-box { width: 720px; }
+    .ai-step-body { min-height: 360px; }
+    .ai-stepper { display: flex; align-items: center; margin: 4px 0 20px; }
+    .ai-stepper-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+    .ai-stepper-dot {
+      width: 26px; height: 26px; border-radius: 50%; background: #f0f2f5; color: #999;
+      display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+      transition: all .2s;
+    }
+    .ai-stepper-item.active .ai-stepper-dot { background: #0059ff; color: #fff; }
+    .ai-stepper-item.done .ai-stepper-dot { background: #10b981; color: #fff; }
+    .ai-stepper-label { font-size: 10.5px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: .04em; }
+    .ai-stepper-item.active .ai-stepper-label { color: #0059ff; }
+    .ai-stepper-item.done .ai-stepper-label { color: #10b981; }
+    .ai-stepper-line { flex: 1; height: 2px; background: #eef0f3; margin: 0 6px 18px; transition: background .2s; }
+    .ai-stepper-line.done { background: #10b981; }
+
+    .ai-file-chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .ai-file-chip {
+      display: inline-flex; align-items: center; gap: 6px; background: #f0f2f5; border-radius: 8px;
+      padding: 5px 8px 5px 10px; font-size: 11.5px; color: #555; font-weight: 600;
+    }
+    .ai-file-chip .mi { font-size: 15px; margin-right: 0; color: #999; }
+    .ai-file-chip button { background: none; border: none; cursor: pointer; display: flex; padding: 2px; color: #aaa; }
+    .ai-file-chip button .mi { font-size: 14px; }
+    .ai-file-chip button:hover .mi { color: #e74c3c; }
+
+    .ai-clarify-list { display: flex; flex-direction: column; gap: 16px; }
+    .ai-clarify-item { padding: 14px 16px; border-radius: 10px; background: #f7f8fa; border: 1px solid #eef0f3; }
+    .ai-clarify-q { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .ai-clarify-q .mi { font-size: 16px; color: #0059ff; margin-right: 0; }
+    .ai-clarify-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ai-clarify-chip {
+      padding: 7px 14px; border-radius: 20px; border: 1.5px solid #e0e0e0; background: #fff;
+      font-size: 12.5px; font-weight: 600; color: #555; cursor: pointer; transition: all .12s; font-family: inherit;
+    }
+    .ai-clarify-chip:hover { border-color: #c5d4ff; }
+    .ai-clarify-chip.selected { border-color: #0059ff; background: #eef3ff; color: #0059ff; }
+    .ai-clarify-freetext {
+      width: 100%; border: 1px solid #e0e0e0; border-radius: 8px; padding: 8px 12px; margin-top: 10px;
+      font-size: 13px; font-family: inherit; outline: none; color: #333; box-sizing: border-box;
+    }
+    .ai-clarify-freetext:focus { border-color: #0059ff; box-shadow: 0 0 0 3px rgba(0,89,255,.1); }
+
+    .ai-notes-box { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: #fffaf0; border: 1px solid #fbe6c2; }
+    .ai-notes-box .ai-notes-title { font-size: 12px; font-weight: 700; color: #b8860b; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .ai-notes-box .ai-notes-title .mi { font-size: 16px; margin-right: 0; }
+    .ai-note-row { font-size: 12px; color: #7a6a3a; line-height: 1.6; padding-left: 4px; }
+
+    /* AI Guide floating widget */
+    .ai-guide-btn {
+      position: fixed; right: 24px; bottom: 24px; width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed 0%, #0059ff 100%); color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,89,255,.35);
+      z-index: 9000; transition: transform .15s;
+    }
+    .ai-guide-btn:hover { transform: scale(1.06); }
+    .ai-guide-btn .mi { font-size: 26px; margin-right: 0; }
+    .ai-guide-panel {
+      display: none; position: fixed; right: 24px; bottom: 88px; width: 340px; height: 480px;
+      background: #fff; border-radius: 16px; box-shadow: 0 16px 48px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.04);
+      z-index: 9000; flex-direction: column; overflow: hidden;
+    }
+    .ai-guide-panel.open { display: flex; }
+    .ai-guide-header {
+      display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
+      background: linear-gradient(135deg, #7c3aed 0%, #0059ff 100%); color: #fff; flex-shrink: 0;
+    }
+    .ai-guide-header-title { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; }
+    .ai-guide-header-title .mi { font-size: 18px; margin-right: 0; }
+    .ai-guide-header-sub { font-size: 10.5px; color: rgba(255,255,255,.75); font-weight: 500; margin-left: 26px; margin-top: -2px; }
+    .ai-guide-close { background: rgba(255,255,255,.18); border: none; border-radius: 6px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; flex-shrink: 0; }
+    .ai-guide-close .mi { font-size: 16px; margin-right: 0; }
+    .ai-guide-body { padding: 14px 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .ai-guide-intro { font-size: 12px; color: #999; line-height: 1.5; margin-bottom: 2px; }
+    .ai-guide-topic {
+      display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px;
+      border-radius: 9px; border: 1px solid #eef0f3; background: #f7f8fa; cursor: pointer; margin-bottom: 8px;
+      font-size: 12.5px; font-weight: 600; color: #333; font-family: inherit; transition: all .12s;
+    }
+    .ai-guide-topic:hover { border-color: #c5d4ff; background: #eef3ff; }
+    .ai-guide-topic .mi { font-size: 17px; color: #0059ff; margin-right: 0; flex-shrink: 0; }
+    .ai-guide-answer { font-size: 12.5px; color: #555; line-height: 1.7; }
+    .ai-guide-back {
+      display: flex; align-items: center; gap: 4px; background: none; border: none; color: #0059ff;
+      font-size: 12px; font-weight: 700; cursor: pointer; padding: 0 0 12px; font-family: inherit;
+    }
+    .ai-guide-back .mi { font-size: 16px; margin-right: 0; }
+    .ai-guide-tip-row { display: flex; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f2f3f5; font-size: 12px; color: #555; line-height: 1.5; }
+    .ai-guide-tip-row:last-child { border-bottom: none; }
+    .ai-guide-tip-row .mi { font-size: 15px; color: #f59e0b; margin-right: 0; flex-shrink: 0; margin-top: 1px; }
+
+    /* Chat thread */
+    .ai-guide-msg { max-width: 86%; font-size: 12.5px; line-height: 1.6; padding: 9px 12px; border-radius: 12px; }
+    .ai-guide-msg-user { align-self: flex-end; background: #0059ff; color: #fff; border-bottom-right-radius: 3px; }
+    .ai-guide-msg-bot { align-self: flex-start; background: #f2f3f7; color: #333; border-bottom-left-radius: 3px; white-space: pre-line; }
+    .ai-guide-msg-bot.unmatched { background: #fff7e6; color: #8a6d1d; }
+    .ai-guide-suggest-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ai-guide-chip {
+      font-size: 11px; font-weight: 600; color: #0059ff; background: #eef3ff; border: 1px solid #d8e4ff;
+      border-radius: 999px; padding: 5px 10px; cursor: pointer; font-family: inherit; transition: all .12s;
+    }
+    .ai-guide-chip:hover { background: #dce8ff; }
+    .ai-guide-input-row { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-top: 1px solid #eef0f3; flex-shrink: 0; background: #fff; }
+    .ai-guide-input {
+      flex: 1; border: 1px solid #e2e4ea; border-radius: 20px; padding: 9px 14px; font-size: 12.5px;
+      font-family: inherit; outline: none; min-width: 0;
+    }
+    .ai-guide-input:focus { border-color: #0059ff; }
+    .ai-guide-send {
+      width: 32px; height: 32px; border-radius: 50%; border: none; background: #0059ff; color: #fff;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    }
+    .ai-guide-send:hover { background: #0047cc; }
+    .ai-guide-send .mi { font-size: 17px; margin-right: 0; }
+    .ai-guide-typing { display: flex; gap: 4px; align-self: flex-start; padding: 9px 12px; background: #f2f3f7; border-radius: 12px; border-bottom-left-radius: 3px; }
+    .ai-guide-typing span { width: 5px; height: 5px; border-radius: 50%; background: #aab; animation: aiGuideBlink 1.2s infinite; }
+    .ai-guide-typing span:nth-child(2) { animation-delay: .2s; }
+    .ai-guide-typing span:nth-child(3) { animation-delay: .4s; }
+    @keyframes aiGuideBlink { 0%, 60%, 100% { opacity: .3; } 30% { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ── -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <img src="https://irp.cdn-website.com/56869327/dms3rep/multi/ADVANTECH+IoTMart+LOGO.png" alt="Advantech IoTMart" class="top-bar-logo" />
+    <span class="top-bar-divider"></span>
+    <h1><span class="mi">hub</span>Marcom Agent Studio</h1>
+    <span class="badge">BETA</span>
+  </div>
+  <div class="top-bar-right">
+    <button class="tb-btn tb-btn-ghost" id="tbCloseBtn" style="display:none" onclick="closeEdmEditor(true)"><span class="mi">close</span>Close</button>
+    <button class="tb-btn tb-btn-save" id="tbSaveBtn" style="display:none" onclick="saveEdmEditor()"><span class="mi">save</span>Save &amp; Close</button>
+  </div>
+</div>
+
+<!-- ── Breadcrumb ── -->
+<div class="breadcrumb-bar" id="breadcrumbBar">
+  <a onclick="showGallery()"><span class="mi">grid_view</span>Campaigns</a>
+  <span class="sep">›</span>
+  <span class="current" id="breadcrumbName"></span>
+</div>
+
+<!-- ══════════════ CAMPAIGN GALLERY ══════════════ -->
+<div class="gallery-view" id="galleryView">
+  <div class="gallery-header">
+    <h2>Campaign Workspace</h2>
+    <p>Start from a campaign and manage its landing pages and eDMs in one place.</p>
+  </div>
+  <div class="campaign-grid" id="campaignGrid"></div>
+</div>
+
+<!-- ══════════════ CAMPAIGN DETAIL ══════════════ -->
+<div class="detail-view" id="detailView">
+  <div class="detail-hero">
+    <div class="detail-hero-left">
+      <div class="detail-hero-icon"><span class="mi">campaign</span></div>
+      <div class="detail-hero-info">
+        <h2 id="detailName"></h2>
+        <div class="detail-hero-meta">
+          <span class="detail-hero-region" id="detailRegion"></span>
+          <span id="detailUpdated"></span>
+        </div>
+      </div>
+    </div>
+    <div class="detail-hero-actions">
+      <button class="hero-btn" onclick="openEditCampaign()"><span class="mi">edit</span>Edit</button>
+      <button class="hero-btn" onclick="showGallery()"><span class="mi">arrow_back</span>Back</button>
+    </div>
+  </div>
+
+  <div class="asset-sections">
+    <!-- Landing Pages -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box lp"><span class="mi">web</span></div>
+          <div>
+            <h3>Landing Pages</h3>
+            <span class="count" id="lpCount">0 pages</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addLandingPage()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="lpList"></div>
+    </div>
+
+    <!-- eDMs -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box edm"><span class="mi">mail</span></div>
+          <div>
+            <h3>eDM</h3>
+            <span class="count" id="edmCount">0 emails</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addEdm()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="edmList"></div>
+    </div>
+
+    <!-- Graphic Assets -->
+    <div class="asset-section">
+      <div class="asset-section-header">
+        <div class="asset-section-title">
+          <div class="icon-box mm"><span class="mi">image</span></div>
+          <div>
+            <h3>Graphic Assets</h3>
+            <span class="count" id="mmCount">0 assets</span>
+          </div>
+        </div>
+        <button class="asset-add-btn" onclick="addMaterial()"><span class="mi">add</span>New</button>
+      </div>
+      <div class="asset-list" id="mmList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Campaign Modal (create / edit) ── -->
+<div class="modal-overlay" id="campaignModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="campaignModalIcon">add_circle</span><span id="campaignModalTitle">New Campaign</span></h3>
+    <p class="modal-desc" id="campaignModalDesc">Name this campaign and choose its region</p>
+    <div class="modal-field">
+      <label>Campaign name</label>
+      <input type="text" id="campaignNameInput" placeholder="e.g. 2026 Spring Sale" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-field">
+      <label>Region</label>
+      <select id="campaignRegionInput">
+        <option value="Global">Global (International)</option>
+        <option value="KR">Korea</option>
+        <option value="EU">Europe</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeCampaignModal()">Cancel</button>
+      <button class="modal-confirm" id="campaignModalConfirm" onclick="confirmCampaignModal()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Delete Confirm Modal ── -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <h3><span class="mi" style="color:#e74c3c">delete</span>Delete Campaign</h3>
+    <p class="modal-desc" id="deleteModalDesc">Delete this campaign? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="modal-confirm danger" onclick="confirmDeleteModal()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── eDM Name Modal (create / rename) ── -->
+<div class="modal-overlay" id="edmModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="edmModalIcon">mail</span><span id="edmModalTitle">New eDM</span></h3>
+    <p class="modal-desc" id="edmModalDesc">Name this eDM, then open the editor</p>
+    <div class="modal-field">
+      <label>eDM name</label>
+      <input type="text" id="edmNameInput" placeholder="e.g. Spring Sale main email" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-field" id="edmThemeRow">
+      <label>Theme</label>
+      <select id="edmThemeInput"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeEdmModal()">Cancel</button>
+      <button class="modal-confirm" id="edmModalConfirm" onclick="confirmEdmModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Graphic Asset Modal (create / rename) ── -->
+<div class="modal-overlay" id="materialModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="materialModalIcon">image</span><span id="materialModalTitle">New Graphic Asset</span></h3>
+    <p class="modal-desc" id="materialModalDesc">Name this graphic asset, then open the builder</p>
+    <div class="modal-field">
+      <label>Graphic asset name</label>
+      <input type="text" id="materialNameInput" placeholder="e.g. Spring Sale ad set" maxlength="60" autocomplete="off" />
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeMaterialModal()">Cancel</button>
+      <button class="modal-confirm" id="materialModalConfirm" onclick="confirmMaterialModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Landing Page Modal (create with page settings / rename) ── -->
+<div class="modal-overlay" id="lpModal">
+  <div class="modal-box">
+    <h3><span class="mi" id="lpModalIcon">web</span><span id="lpModalTitle">New Landing Page</span></h3>
+    <p class="modal-desc" id="lpModalDesc">Name it, pick a starting style, then open the builder</p>
+    <div class="modal-field">
+      <label>Landing page name</label>
+      <input type="text" id="lpNameInput" placeholder="e.g. Spring Sale landing page" maxlength="60" autocomplete="off" oninput="_lpOnNameInput()" />
+    </div>
+    <div id="lpCreateFields">
+      <div class="modal-field">
+        <label>CSS class prefix <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(avoids host-site CSS conflicts)</span></label>
+        <input type="text" id="lpPrefixInput" placeholder="auto from name" maxlength="40" autocomplete="off" oninput="_lpOnPrefixInput()" />
+        <div class="lp-prefix-hint">Classes look like <code>.<span id="lpPrefixPreview">page</span>-hero</code></div>
+      </div>
+      <div class="modal-field">
+        <label>Starting style</label>
+        <div class="style-grid" id="lpStyleGrid"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeLpModal()">Cancel</button>
+      <button class="modal-confirm" id="lpModalConfirm" onclick="confirmLpModal()">Create &amp; Open</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── AI Campaign Composer Modal ── -->
+<div class="modal-overlay" id="aiComposerModal">
+  <div class="modal-box ai-modal-box">
+    <h3><span class="mi">auto_awesome</span><span id="aiModalTitle">AI Campaign Composer</span></h3>
+    <p class="modal-desc">Describe the campaign once — generate a Landing Page, eDM, and Graphic Asset together as data, not hand-built HTML.</p>
+
+    <div class="ai-stepper" id="aiStepper">
+      <div class="ai-stepper-item" data-step="1"><span class="ai-stepper-dot">1</span><span class="ai-stepper-label">Brief</span></div>
+      <div class="ai-stepper-line" data-line="1"></div>
+      <div class="ai-stepper-item" data-step="2"><span class="ai-stepper-dot">2</span><span class="ai-stepper-label">Clarify</span></div>
+      <div class="ai-stepper-line" data-line="2"></div>
+      <div class="ai-stepper-item" data-step="3"><span class="ai-stepper-dot">3</span><span class="ai-stepper-label">Generate</span></div>
+      <div class="ai-stepper-line" data-line="3"></div>
+      <div class="ai-stepper-item" data-step="4"><span class="ai-stepper-dot">4</span><span class="ai-stepper-label">Deliver</span></div>
+    </div>
+
+    <div class="ai-step-body" id="aiStepBody">
+    <div class="ai-step active" id="aiStep1">
+      <div class="modal-field">
+        <label>Campaign name</label>
+        <input type="text" id="aiCampaignName" placeholder="e.g. 2026 Edge AI Launch" maxlength="60" autocomplete="off" />
+      </div>
+      <div class="modal-field">
+        <label>Region</label>
+        <select id="aiRegionInput">
+          <option value="Global">Global (International)</option>
+          <option value="KR">Korea</option>
+          <option value="EU">Europe</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Brief — product, offer, or campaign goal</label>
+        <textarea class="ai-brief-textarea" id="aiBriefInput" placeholder="e.g. Launch our new edge AI controller for smart factories. Real-time inference at the edge. Rugged industrial design. Easy PLC integration. Target: factory automation engineers."></textarea>
+      </div>
+      <div class="modal-field">
+        <label>Reference files <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;">(optional, up to 5)</span></label>
+        <input type="file" id="aiBriefFileInput" multiple accept=".pdf,.doc,.docx,.txt,.md" onchange="_aiHandleBriefFiles(event)" style="display:none" />
+        <button type="button" class="hero-btn" onclick="document.getElementById('aiBriefFileInput').click()"><span class="mi">attach_file</span>Attach files</button>
+        <div class="ai-file-chip-list" id="aiFileChipList"></div>
+      </div>
+      <div class="modal-field">
+        <label>Assets to generate</label>
+        <div class="style-grid ai-style-grid-sm" id="aiAssetTypeGrid"></div>
+      </div>
+      <div class="modal-field" id="aiStyleFieldWrap">
+        <label>Landing page starting style</label>
+        <div class="style-grid ai-style-grid-sm" id="aiStyleGrid"></div>
+      </div>
+      <div class="modal-field">
+        <label>Language</label>
+        <select id="aiLanguageInput">
+          <option value="en">English</option>
+          <option value="zh-TW">繁體中文</option>
+          <option value="ko">한국어</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ai-step" id="aiStep2">
+      <p class="modal-desc" style="margin-bottom:14px;">A few quick questions to fill in the gaps before generating — this keeps the output grounded in what you actually said, not assumptions.</p>
+      <div class="ai-clarify-list" id="aiClarifyList"></div>
+    </div>
+
+    <div class="ai-step" id="aiStep3">
+      <p class="modal-desc" style="margin-bottom:14px;">Composing sections and components as JSON for the existing builders to render…</p>
+      <div class="ai-gen-list" id="aiGenList"></div>
+    </div>
+
+    <div class="ai-step" id="aiStep4">
+      <p class="modal-desc" style="margin-bottom:14px;">Ready to add to a new campaign. You can fine-tune every asset afterward in its builder.</p>
+      <div class="ai-review-list" id="aiReviewList"></div>
+      <div class="ai-notes-box" id="aiNotesBox"></div>
+    </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-cancel" id="aiBtnCancel" onclick="closeAiComposer()">Cancel</button>
+      <button class="modal-cancel" id="aiBtnBack" style="display:none" onclick="_aiGoBack()">Back</button>
+      <button class="modal-confirm" id="aiBtnPrimary" onclick="_aiPrimaryAction()"><span class="mi" style="font-size:16px;vertical-align:-3px;margin-right:2px;">auto_awesome</span>Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── AI Guide floating widget ── -->
+<div class="ai-guide-btn" id="aiGuideBtn" onclick="toggleAiGuide()" title="AI Guide">
+  <span class="mi">support_agent</span>
+</div>
+<div class="ai-guide-panel" id="aiGuidePanel">
+  <div class="ai-guide-header">
+    <div>
+      <div class="ai-guide-header-title"><span class="mi">support_agent</span>AI Guide</div>
+      <div class="ai-guide-header-sub">Ask me anything about this tool</div>
+    </div>
+    <button class="ai-guide-close" onclick="toggleAiGuide(false)"><span class="mi">close</span></button>
+  </div>
+  <div class="ai-guide-body" id="aiGuideBody"></div>
+  <div class="ai-guide-input-row">
+    <input type="text" class="ai-guide-input" id="aiGuideInput" placeholder="Type a question…" autocomplete="off"
+           onkeydown="if(event.key==='Enter'){event.preventDefault();_aiGuideSubmit();}" />
+    <button type="button" class="ai-guide-send" onclick="_aiGuideSubmit()" title="Send"><span class="mi">send</span></button>
+  </div>
+</div>
+
+<!-- ── eDM Editor View (embeds ComponentCustomizer builder) ── -->
+<div class="editor-view" id="edmEditorView">
+  <div class="editor-frame-wrap">
+    <div class="editor-loading" id="editorLoading"><span class="mi">progress_activity</span>Loading eDM editor…</div>
+    <iframe id="edmEditorFrame" title="eDM Editor"></iframe>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// Storage
+// ══════════════════════════════════════
+const STORAGE_KEY = 'mas_campaigns_v1';
+
+function loadCampaigns() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCampaigns(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+let campaigns = loadCampaigns();
+let currentCampaignId = null;
+
+function newId(prefix) {
+  return (prefix || 'c') + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function findCampaign(id) {
+  return campaigns.find(c => c.id === id);
+}
+
+const REGION_LABELS = { Global: 'Global', KR: 'Korea', EU: 'Europe' };
+const EDM_THEMES = [
+  { id: 'light-blue', name: 'Blue' },
+  { id: 'light-orange', name: 'Orange' },
+  { id: 'lp-green', name: 'Green (LP extension)' },
+  { id: 'lp-purple', name: 'Purple (LP extension)' }
+];
+
+// ══════════════════════════════════════
+// Utils
+// ══════════════════════════════════════
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.innerHTML = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════════
+// Gallery
+// ══════════════════════════════════════
+function renderGallery() {
+  const grid = document.getElementById('campaignGrid');
+  grid.innerHTML = '';
+
+  // AI Composer entry card
+  const aiCard = document.createElement('div');
+  aiCard.className = 'campaign-card campaign-card-new campaign-card-ai';
+  aiCard.onclick = () => openAiComposer();
+  aiCard.innerHTML = `
+    <div class="campaign-card-banner"><span class="mi">auto_awesome</span></div>
+    <div class="campaign-card-body">
+      <div class="campaign-card-name">AI Campaign Composer</div>
+      <div class="campaign-card-meta">
+        <span class="ai-card-tag"><span class="mi">bolt</span>AI</span>
+        <span>Brief in, full campaign out</span>
+      </div>
+    </div>
+    <div class="campaign-card-footer">
+      <span class="campaign-card-date">Landing Page + eDM + Graphic Asset</span>
+      <span class="mi campaign-card-arrow">arrow_forward</span>
+    </div>`;
+  grid.appendChild(aiCard);
+
+  // Create-new card
+  const newCard = document.createElement('div');
+  newCard.className = 'campaign-card campaign-card-new';
+  newCard.onclick = () => openCreateCampaign();
+  newCard.innerHTML = `
+    <div class="campaign-card-banner"><span class="mi">add_circle</span></div>
+    <div class="campaign-card-body">
+      <div class="campaign-card-name">New Campaign</div>
+      <div class="campaign-card-meta">
+        <span class="new-card-tag"><span class="mi">auto_awesome</span>New</span>
+        <span>Start from a campaign</span>
+      </div>
+    </div>
+    <div class="campaign-card-footer">
+      <span class="campaign-card-date">Landing Page + eDM</span>
+      <span class="mi campaign-card-arrow">arrow_forward</span>
+    </div>`;
+  grid.appendChild(newCard);
+
+  // Sort by updated desc
+  const sorted = [...campaigns].sort((a, b) => (b.updated || 0) - (a.updated || 0));
+
+  sorted.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'campaign-card';
+    card.onclick = () => openCampaign(c.id);
+    const lpN = (c.landingPages || []).length;
+    const edmN = (c.edms || []).length;
+    const mmN = (c.materials || []).length;
+    card.innerHTML = `
+      <div class="campaign-card-banner">
+        <span class="campaign-card-region">${escapeHtml(REGION_LABELS[c.region] || c.region || 'Global')}</span>
+        <span class="mi">campaign</span>
+      </div>
+      <div class="card-kebab">
+        <button class="card-kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More"><span class="mi">more_vert</span></button>
+        <div class="card-kebab-menu">
+          <button onclick="event.stopPropagation();openEditCampaignById('${c.id}')"><span class="mi">edit</span>Rename</button>
+          <button onclick="event.stopPropagation();duplicateCampaign('${c.id}')"><span class="mi">content_copy</span>Duplicate</button>
+          <button class="menu-delete" onclick="event.stopPropagation();openDeleteModal('${c.id}')"><span class="mi">delete</span>Delete</button>
+        </div>
+      </div>
+      <div class="campaign-card-body">
+        <div class="campaign-card-name" title="${escapeHtml(c.name)}">${escapeHtml(c.name)}</div>
+        <div class="campaign-card-meta">
+          <span><span class="mi">web</span>${lpN} LP</span>
+          <span><span class="mi">mail</span>${edmN} eDM</span>
+          <span><span class="mi">image</span>${mmN} MM</span>
+        </div>
+      </div>
+      <div class="campaign-card-footer">
+        <span class="campaign-card-date">Updated ${formatDate(c.updated)}</span>
+        <span class="mi campaign-card-arrow">arrow_forward</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// kebab
+function toggleKebab(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) menu.classList.add('open');
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.card-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.asset-item-kebab-menu.open').forEach(m => m.classList.remove('open'));
+});
+
+// ══════════════════════════════════════
+// View switching
+// ══════════════════════════════════════
+function showGallery() {
+  currentCampaignId = null;
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  document.getElementById('detailView').classList.remove('visible');
+  document.getElementById('galleryView').classList.remove('hidden');
+  document.getElementById('breadcrumbBar').classList.remove('visible');
+  renderGallery();
+  window.scrollTo(0, 0);
+  _aiGuideRefreshIfOpen();
+}
+
+function openCampaign(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  currentCampaignId = id;
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderDetailBreadcrumb();
+  renderDetail();
+  window.scrollTo(0, 0);
+  _aiGuideRefreshIfOpen();
+}
+
+// ── Breadcrumb rendering ──
+function renderDetailBreadcrumb() {
+  const c = findCampaign(currentCampaignId);
+  document.getElementById('breadcrumbBar').innerHTML =
+    `<a onclick="showGallery()"><span class="mi">grid_view</span>Campaigns</a>` +
+    `<span class="sep">›</span>` +
+    `<span class="current">${escapeHtml(c ? c.name : '')}</span>`;
+}
+function renderEditorBreadcrumb(assetName) {
+  const c = findCampaign(currentCampaignId);
+  const cfg = ASSET_CFG[_editingType] || ASSET_CFG.edm;
+  document.getElementById('breadcrumbBar').innerHTML =
+    `<a onclick="editorBackToGallery()"><span class="mi">grid_view</span>Campaigns</a>` +
+    `<span class="sep">›</span>` +
+    `<a onclick="closeEdmEditor(true)">${escapeHtml(c ? c.name : '')}</a>` +
+    `<span class="sep">›</span>` +
+    `<span class="current"><span class="mi" style="font-size:15px;color:${cfg.color};vertical-align:-3px;">${cfg.icon}</span>${escapeHtml(assetName)}</span>`;
+}
+
+function renderDetail() {
+  const c = findCampaign(currentCampaignId);
+  if (!c) { showGallery(); return; }
+  document.getElementById('detailName').textContent = c.name;
+  document.getElementById('detailRegion').textContent = REGION_LABELS[c.region] || c.region || 'Global';
+  document.getElementById('detailUpdated').textContent = 'Updated ' + formatDate(c.updated);
+
+  // Landing pages
+  const lps = c.landingPages || [];
+  document.getElementById('lpCount').textContent = lps.length + ' pages';
+  renderLpList();
+
+  // eDMs
+  const edms = c.edms || [];
+  document.getElementById('edmCount').textContent = edms.length + ' emails';
+  renderEdmList();
+
+  // Marketing Materials
+  const materials = c.materials || [];
+  document.getElementById('mmCount').textContent = materials.length + ' assets';
+  renderMaterialList();
+}
+
+// ── Asset preview cards (shared renderer for LP / eDM / Marketing Material) ──
+const ASSET_META = {
+  lp:  { icon: 'web',      unit: 'sections', empty: 'No landing pages yet',
+         get: it => it.cpbProject, count: p => (p && Array.isArray(p.sections)) ? p.sections.length : 0,
+         open: 'openLpEditor', rename: 'openRenameLp', dup: 'duplicateLp', del: 'deleteLp' },
+  edm: { icon: 'mail',     unit: 'blocks',   empty: 'No eDMs yet',
+         get: it => it.snapshot, count: p => (p && Array.isArray(p.builderStack)) ? p.builderStack.length : 0,
+         open: 'openEdmEditor', rename: 'openRenameEdm', dup: 'duplicateEdm', del: 'deleteEdm' },
+  mm:  { icon: 'image', unit: 'sizes',    empty: 'No graphic assets yet',
+         get: it => it.mmbProject, count: p => (p && Array.isArray(p.sizeOrder)) ? p.sizeOrder.length : 0,
+         open: 'openMaterialEditor', rename: 'openRenameMaterial', dup: 'duplicateMaterial', del: 'deleteMaterial' }
+};
+
+// ── Thumbnail iframe bridge (live read-only preview of each builder) ──
+const THUMB_SRC = {
+  edm: 'ComponentCustomizer.html?embed=edm&preview=1',
+  lp:  'Campaign%20Page%20Builder/CampaignPageBuilder.html?embed=lp&preview=1',
+  mm:  'MarketingMaterialBuilder.html?embed=mm&preview=1'
+};
+const _thumbPending = new Map(); // iframe -> { payload, type }
+
+function _mountAssetThumb(thumb, type, payload) {
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('scrolling', 'no');
+  iframe.setAttribute('tabindex', '-1');
+  iframe.title = 'preview';
+  _thumbPending.set(iframe, { payload, type });
+  thumb.appendChild(iframe);
+  iframe.src = THUMB_SRC[type];
+}
+
+function _scaleThumb(iframe, naturalW, naturalH, type) {
+  const thumb = iframe.parentElement;
+  if (!thumb) return;
+  thumb.querySelectorAll('.thumb-state').forEach(s => s.remove());
+  const w = thumb.clientWidth || 200;
+  const baseW = naturalW || 1200;
+
+  if (type === 'mm') {
+    const h = thumb.clientHeight || 180;
+    const baseH = naturalH || Math.round(baseW * 0.6);
+    const pad = 10;
+    const availW = Math.max(w - pad * 2, 40);
+    const availH = Math.max(h - pad * 2, 40);
+    const scale = Math.min(availW / baseW, availH / baseH, 1);
+    const scaledW = baseW * scale;
+    const scaledH = baseH * scale;
+    const offsetX = (w - scaledW) / 2;
+    const offsetY = (h - scaledH) / 2;
+    iframe.style.width = baseW + 'px';
+    iframe.style.height = baseH + 'px';
+    iframe.style.top = offsetY + 'px';
+    iframe.style.left = offsetX + 'px';
+    iframe.style.transform = 'scale(' + scale + ')';
+    iframe.style.opacity = '1';
+    return;
+  }
+
+  const scale = (w * 0.7) / baseW;
+  const scaledW = baseW * scale;
+  const offsetX = (w - scaledW) / 2;
+  iframe.style.width = baseW + 'px';
+  iframe.style.height = Math.ceil(180 / scale) + 'px';
+  iframe.style.left = offsetX + 'px';
+  iframe.style.transform = 'scale(' + scale + ')';
+  iframe.style.opacity = '1';
+}
+
+window.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type !== 'mas-thumb-ready' && d.type !== 'mas-thumb-rendered') return;
+  for (const [iframe, info] of _thumbPending) {
+    if (!document.contains(iframe)) { _thumbPending.delete(iframe); continue; }
+    if (iframe.contentWindow !== e.source) continue;
+    if (d.type === 'mas-thumb-ready') {
+      iframe.contentWindow.postMessage({ type: 'mas-thumb-load', payload: info.payload }, '*');
+    } else {
+      _scaleThumb(iframe, d.width, d.height, info.type);
+      _thumbPending.delete(iframe);
+    }
+    break;
+  }
+});
+
+function _renderAssetCards(containerId, items, type) {
+  const el = document.getElementById(containerId);
+  const M = ASSET_META[type];
+  if (!items.length) {
+    el.innerHTML = `
+      <div class="asset-empty">
+        <span class="mi">${M.icon}</span>
+        <p>${M.empty}<br>Click “New” to start</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = items.map(it => {
+    const n = M.count(M.get(it));
+    return `
+    <div class="asset-card" onclick="${M.open}('${it.id}')">
+      <div class="asset-card-thumb asset-card-thumb--${type}" data-thumb="${type}:${it.id}">
+        <span class="thumb-state spin"><span class="mi">progress_activity</span></span>
+      </div>
+      <div class="card-kebab">
+        <button class="card-kebab-btn" onclick="event.stopPropagation();toggleKebab(this)" title="More"><span class="mi">more_vert</span></button>
+        <div class="card-kebab-menu">
+          <button onclick="event.stopPropagation();${M.rename}('${it.id}')"><span class="mi">edit</span>Rename</button>
+          <button onclick="event.stopPropagation();${M.dup}('${it.id}')"><span class="mi">content_copy</span>Duplicate</button>
+          <button class="menu-delete" onclick="event.stopPropagation();${M.del}('${it.id}')"><span class="mi">delete</span>Delete</button>
+        </div>
+      </div>
+      <div class="asset-card-info">
+        <div class="asset-card-meta">
+          <div class="asset-card-name" title="${escapeHtml(it.name)}">${escapeHtml(it.name)}</div>
+          <div class="asset-card-date">${n} ${M.unit} · ${formatDate(it.updated)}</div>
+        </div>
+        <span class="mi asset-card-arrow">arrow_forward</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  items.forEach(it => {
+    const thumb = el.querySelector(`.asset-card-thumb[data-thumb="${type}:${it.id}"]`);
+    if (!thumb) return;
+    const payload = M.get(it);
+    if (!payload || !M.count(payload)) {
+      thumb.innerHTML = `<span class="thumb-state"><span class="mi">${M.icon}</span>Empty — no preview yet</span>`;
+      return;
+    }
+    _mountAssetThumb(thumb, type, payload);
+  });
+}
+
+function renderEdmList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('edmList', (c && c.edms) || [], 'edm');
+}
+
+function renderLpList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('lpList', (c && c.landingPages) || [], 'lp');
+}
+
+function toggleAssetKebab(btn) {
+  const menu = btn.nextElementSibling;
+  const wasOpen = menu.classList.contains('open');
+  document.querySelectorAll('.asset-item-kebab-menu.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) menu.classList.add('open');
+}
+
+function renderAssetList(containerId, items, icon, emptyText) {
+  const el = document.getElementById(containerId);
+  if (!items.length) {
+    el.innerHTML = `
+      <div class="asset-empty">
+        <span class="mi">${icon === 'web' ? 'add_to_queue' : 'drafts'}</span>
+        <p>${emptyText}<br>Click “New” to start</p>
+      </div>`;
+    return;
+  }
+  el.innerHTML = items.map(it => `
+    <div class="asset-item">
+      <div class="asset-item-thumb"><span class="mi">${icon}</span></div>
+      <div class="asset-item-info">
+        <div class="asset-item-name">${escapeHtml(it.name)}</div>
+        <div class="asset-item-date">Updated ${formatDate(it.updated)}</div>
+      </div>
+      <span class="mi asset-item-arrow">chevron_right</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+// Campaign CRUD — Modal
+// ══════════════════════════════════════
+let _campaignModalMode = 'create'; // 'create' | 'edit'
+let _campaignEditId = null;
+
+function openCreateCampaign() {
+  _campaignModalMode = 'create';
+  _campaignEditId = null;
+  document.getElementById('campaignModalIcon').textContent = 'add_circle';
+  document.getElementById('campaignModalTitle').textContent = 'New Campaign';
+  document.getElementById('campaignModalDesc').textContent = 'Name this campaign and choose its region';
+  document.getElementById('campaignModalConfirm').textContent = 'Create';
+  document.getElementById('campaignNameInput').value = '';
+  document.getElementById('campaignRegionInput').value = 'Global';
+  openCampaignModal();
+}
+
+function openEditCampaign() {
+  openEditCampaignById(currentCampaignId);
+}
+
+function openEditCampaignById(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  _campaignModalMode = 'edit';
+  _campaignEditId = id;
+  document.getElementById('campaignModalIcon').textContent = 'edit';
+  document.getElementById('campaignModalTitle').textContent = 'Edit Campaign';
+  document.getElementById('campaignModalDesc').textContent = 'Update the campaign name and region';
+  document.getElementById('campaignModalConfirm').textContent = 'Save';
+  document.getElementById('campaignNameInput').value = c.name || '';
+  document.getElementById('campaignRegionInput').value = c.region || 'Global';
+  openCampaignModal();
+}
+
+function openCampaignModal() {
+  document.getElementById('campaignModal').classList.add('visible');
+  setTimeout(() => {
+    const input = document.getElementById('campaignNameInput');
+    input.focus(); input.select();
+  }, 120);
+}
+
+function closeCampaignModal() {
+  document.getElementById('campaignModal').classList.remove('visible');
+}
+
+function confirmCampaignModal() {
+  const name = document.getElementById('campaignNameInput').value.trim();
+  const region = document.getElementById('campaignRegionInput').value;
+  if (!name) { document.getElementById('campaignNameInput').focus(); return; }
+
+  if (_campaignModalMode === 'create') {
+    const c = {
+      id: newId('camp_'),
+      name, region,
+      landingPages: [],
+      edms: [],
+      materials: [],
+      created: Date.now(),
+      updated: Date.now()
+    };
+    campaigns.push(c);
+    saveCampaigns(campaigns);
+    closeCampaignModal();
+    showToast('<span class="mi">check_circle</span>Created “' + escapeHtml(name) + '”');
+    openCampaign(c.id);
+  } else {
+    const c = findCampaign(_campaignEditId);
+    if (c) {
+      c.name = name;
+      c.region = region;
+      c.updated = Date.now();
+      saveCampaigns(campaigns);
+      showToast('<span class="mi">check_circle</span>Updated');
+    }
+    closeCampaignModal();
+    if (currentCampaignId === _campaignEditId && document.getElementById('detailView').classList.contains('visible')) {
+      renderDetailBreadcrumb();
+      renderDetail();
+    } else {
+      renderGallery();
+    }
+  }
+}
+
+function duplicateCampaign(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  const copy = JSON.parse(JSON.stringify(c));
+  copy.id = newId('camp_');
+  copy.name = c.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  (copy.landingPages || []).forEach(lp => { lp.id = newId('lp_'); });
+  (copy.edms || []).forEach(e => { e.id = newId('edm_'); });
+  (copy.materials || []).forEach(m => { m.id = newId('mm_'); });
+  campaigns.push(copy);
+  saveCampaigns(campaigns);
+  renderGallery();
+  showToast('<span class="mi">content_copy</span>Campaign duplicated');
+}
+
+// ── Delete ──
+let _deleteId = null;
+function openDeleteModal(id) {
+  const c = findCampaign(id);
+  if (!c) return;
+  _deleteId = id;
+  document.getElementById('deleteModalDesc').textContent =
+    'Delete “' + c.name + '”? Its landing pages and eDMs will also be removed. This cannot be undone.';
+  document.getElementById('deleteModal').classList.add('visible');
+}
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('visible');
+  _deleteId = null;
+}
+function confirmDeleteModal() {
+  if (_deleteId) {
+    campaigns = campaigns.filter(c => c.id !== _deleteId);
+    saveCampaigns(campaigns);
+    const wasCurrent = currentCampaignId === _deleteId;
+    closeDeleteModal();
+    showToast('<span class="mi">delete</span>Campaign deleted');
+    if (wasCurrent) showGallery();
+    else renderGallery();
+  }
+}
+
+// ══════════════════════════════════════
+// Asset actions (Phase 2 / 3 hooks)
+// ══════════════════════════════════════
+function addLandingPage() { openCreateLp(); }
+
+// ── Landing Page CRUD (Campaign Page Builder) ──
+let _lpModalMode = 'create';
+let _lpEditId = null;
+
+function _lpSlug(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'page';
+}
+function _regionToStore(region) {
+  return (['Global', 'KR', 'EU'].indexOf(region) >= 0) ? region : 'Global';
+}
+
+// Style registry mirror (matches Campaign Page Builder STYLES)
+const LP_STYLES = [
+  { id: 'clean-pro',   num: '01', name: 'Style01 · Clean Pro',   desc: 'Minimal industrial light, professional clean.', cssFile: 'dist/cpb-style-clean-pro.css' },
+  { id: 'cyber-green', num: '02', name: 'Style02 · Cyber Green', desc: 'Cyber dark visual with neon green accents.',   cssFile: 'dist/cpb-style-cyber-green.css' },
+  { id: 'style03',     num: '03', name: 'Style03 · Draft',       desc: 'Starter style scaffold to extend.',            cssFile: 'dist/cpb-style-style03.css' }
+];
+let _lpSelectedStyle = 'clean-pro';
+let _lpPrefixTouched = false;
+
+function _buildLpStylePreviewSrcdoc(styleId) {
+  const style = LP_STYLES.find(s => s.id === styleId) || LP_STYLES[0];
+  const cssHref = new URL('Campaign Page Builder/' + (style.cssFile || ''), window.location.href).href;
+  const sid = escapeHtml(style.id);
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${cssHref}">
+<style>
+html, body { margin: 0; padding: 0; overflow: hidden; background: #fff; }
+.cpb-thumb-page { width: 1200px; margin: 0 auto; background: var(--cpb-c-bg, #fff); font-family: 'Inter', sans-serif; color: var(--cpb-c-text, #111); }
+.thumb-hero { padding: 56px 86px 42px; background: linear-gradient(135deg, var(--cpb-c-bg-alt, #f5f7fa) 0%, var(--cpb-c-bg, #fff) 100%); border-bottom: 1px solid var(--cpb-c-border, #e5e7eb); }
+.thumb-kicker { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cpb-c-text-subtle, #6b7280); font-weight: 700; margin-bottom: 8px; }
+.thumb-title { margin: 0; font-size: 34px; line-height: 1.15; font-weight: 800; color: var(--cpb-c-text, #111827); max-width: 760px; }
+.thumb-desc { margin: 10px 0 16px; font-size: 14px; line-height: 1.55; color: var(--cpb-c-text-muted, #4b5563); max-width: 760px; }
+.thumb-btn { display: inline-block; background: var(--cpb-c-primary, #0059ff); color: #fff; border-radius: 999px; font-size: 13px; font-weight: 700; padding: 9px 14px; }
+.thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 18px 86px 26px; background: var(--cpb-c-bg, #fff); }
+.thumb-card { border: var(--cpb-card-border, 1px solid #e5e7eb); border-radius: var(--cpb-radius-card, 8px); background: var(--cpb-c-surface, #fff); padding: 12px; box-shadow: var(--cpb-card-shadow, 0 1px 3px rgba(0,0,0,.04)); }
+.thumb-bar { height: 7px; border-radius: 999px; background: var(--cpb-c-primary, #0059ff); margin-bottom: 10px; opacity: .92; }
+.thumb-line { height: 6px; border-radius: 999px; background: var(--cpb-c-text-subtle, #94a3b8); opacity: .35; margin-top: 7px; }
+.thumb-line.w70 { width: 70%; }
+.thumb-line.w85 { width: 85%; }
+.thumb-line.w55 { width: 55%; }
+</style></head>
+<body><div class="cpb-thumb-page" data-style="${sid}">
+  <section class="thumb-hero">
+    <div class="thumb-kicker">Campaign Landing</div>
+    <h2 class="thumb-title">Scale Your Smart Edge Rollout Faster</h2>
+    <p class="thumb-desc">Style thumbnail preview generated with the same iframe srcdoc pipeline as Campaign Page Builder.</p>
+    <span class="thumb-btn">Explore Solutions</span>
+  </section>
+  <section class="thumb-grid">
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+    <article class="thumb-card"><div class="thumb-bar"></div><div class="thumb-line w85"></div><div class="thumb-line w70"></div><div class="thumb-line w55"></div></article>
+  </section>
+</div></body></html>`;
+}
+
+function _renderLpStyleGridThumbPreviews() {
+  document.querySelectorAll('#lpStyleGrid .style-thumb[data-style-preview-sid]').forEach(thumb => {
+    const sid = thumb.getAttribute('data-style-preview-sid');
+    if (!sid) return;
+    const fallbackHtml = thumb.innerHTML;
+    thumb.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.className = 'style-thumb-preview-iframe';
+    iframe.setAttribute('sandbox', 'allow-same-origin');
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('tabindex', '-1');
+    iframe.setAttribute('loading', 'lazy');
+    iframe.srcdoc = _buildLpStylePreviewSrcdoc(sid);
+    iframe.onload = function () {
+      const thumbW = thumb.offsetWidth || 180;
+      const scale = (thumbW * 0.82) / 1200;
+      const scaledW = 1200 * scale;
+      const offsetX = (thumbW - scaledW) / 2;
+      this.style.transform = 'scale(' + scale + ')';
+      this.style.left = offsetX + 'px';
+      this.style.height = (80 / scale) + 'px';
+    };
+    iframe.onerror = function () {
+      thumb.innerHTML = fallbackHtml;
+    };
+    thumb.appendChild(iframe);
+  });
+}
+
+function _renderLpStyleGrid() {
+  const grid = document.getElementById('lpStyleGrid');
+  grid.innerHTML = LP_STYLES.map(s => `
+    <div class="style-grid-card${s.id === _lpSelectedStyle ? ' selected' : ''}" data-sid="${s.id}" onclick="pickLpStyle('${s.id}')">
+      <div class="style-thumb" data-style-preview-sid="${s.id}">
+        <span class="style-thumb-fallback">${s.num}</span>
+      </div>
+      <div class="style-name">${s.name}</div>
+      <div class="style-desc">${s.desc}</div>
+    </div>`).join('');
+  _renderLpStyleGridThumbPreviews();
+}
+function pickLpStyle(id) {
+  _lpSelectedStyle = id;
+  _renderLpStyleGrid();
+}
+function _lpUpdatePrefixPreview() {
+  const prefIn = document.getElementById('lpPrefixInput');
+  const nameIn = document.getElementById('lpNameInput');
+  const val = (_lpPrefixTouched && prefIn.value.trim()) ? _lpSlug(prefIn.value) : _lpSlug(nameIn.value);
+  document.getElementById('lpPrefixPreview').textContent = val || 'page';
+}
+function _lpOnNameInput() { if (!_lpPrefixTouched) _lpUpdatePrefixPreview(); }
+function _lpOnPrefixInput() { _lpPrefixTouched = true; _lpUpdatePrefixPreview(); }
+
+function openCreateLp() {
+  if (!currentCampaignId) return;
+  _lpModalMode = 'create';
+  _lpEditId = null;
+  _lpSelectedStyle = 'clean-pro';
+  _lpPrefixTouched = false;
+  document.getElementById('lpModalIcon').textContent = 'web';
+  document.getElementById('lpModalTitle').textContent = 'New Landing Page';
+  document.getElementById('lpModalDesc').textContent = 'Name it, pick a starting style, then open the builder';
+  document.getElementById('lpModalConfirm').textContent = 'Create & Open';
+  document.getElementById('lpNameInput').value = '';
+  document.getElementById('lpPrefixInput').value = '';
+  document.getElementById('lpCreateFields').style.display = '';
+  _renderLpStyleGrid();
+  _lpUpdatePrefixPreview();
+  openLpModal();
+}
+
+function openRenameLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  _lpModalMode = 'rename';
+  _lpEditId = id;
+  document.getElementById('lpModalIcon').textContent = 'edit';
+  document.getElementById('lpModalTitle').textContent = 'Rename Landing Page';
+  document.getElementById('lpModalDesc').textContent = "Update this landing page's name";
+  document.getElementById('lpModalConfirm').textContent = 'Save';
+  document.getElementById('lpNameInput').value = lp.name || '';
+  document.getElementById('lpCreateFields').style.display = 'none';
+  openLpModal();
+}
+
+function openLpModal() {
+  document.getElementById('lpModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('lpNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeLpModal() {
+  document.getElementById('lpModal').classList.remove('visible');
+}
+
+function confirmLpModal() {
+  const name = document.getElementById('lpNameInput').value.trim();
+  if (!name) { document.getElementById('lpNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.landingPages) c.landingPages = [];
+  if (_lpModalMode === 'create') {
+    const lpId = newId('lp_');
+    const prefix = _lpSlug(document.getElementById('lpPrefixInput').value || name);
+    const cpbProject = {
+      id: lpId,
+      name,
+      cssPrefix: prefix,
+      styleId: _lpSelectedStyle,
+      store: _regionToStore(c.region),
+      sections: [],
+      created: Date.now(),
+      updated: Date.now()
+    };
+    const lp = { id: lpId, name, cpbProject, created: Date.now(), updated: Date.now() };
+    c.landingPages.push(lp);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeLpModal();
+    renderDetail();
+    openLpEditor(lpId);
+  } else {
+    const lp = c.landingPages.find(x => x.id === _lpEditId);
+    if (lp) {
+      lp.name = name;
+      if (lp.cpbProject) lp.cpbProject.name = name;
+      lp.updated = Date.now();
+      c.updated = Date.now();
+      saveCampaigns(campaigns);
+    }
+    closeLpModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  const copy = JSON.parse(JSON.stringify(lp));
+  const newLpId = newId('lp_');
+  copy.id = newLpId;
+  copy.name = lp.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  if (copy.cpbProject) { copy.cpbProject.id = newLpId; copy.cpbProject.name = copy.name; }
+  c.landingPages.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>Landing Page duplicated');
+}
+
+function deleteLp(id) {
+  const c = findCampaign(currentCampaignId);
+  const lp = c && (c.landingPages || []).find(x => x.id === id);
+  if (!lp) return;
+  if (!confirm('Delete “' + lp.name + '”? This cannot be undone.')) return;
+  c.landingPages = c.landingPages.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>Landing Page deleted');
+}
+
+// ── eDM CRUD ──
+let _edmModalMode = 'create';
+let _edmEditId = null;
+
+function _renderEdmThemeOptions(selectedId) {
+  const sel = document.getElementById('edmThemeInput');
+  if (!sel) return;
+  const active = selectedId || 'light-blue';
+  sel.innerHTML = EDM_THEMES.map(t =>
+    `<option value="${t.id}"${t.id === active ? ' selected' : ''}>${t.name}</option>`
+  ).join('');
+}
+
+function _suggestEdmThemeByLandingPages(campaign) {
+  const lps = (campaign && campaign.landingPages) || [];
+  const latest = lps.slice().sort((a, b) => (b.updated || 0) - (a.updated || 0))[0];
+  const styleId = latest && latest.cpbProject && latest.cpbProject.styleId;
+  if (styleId === 'cyber-green') return 'lp-green';
+  if (styleId === 'style03') return 'lp-purple';
+  return 'light-blue';
+}
+
+function addEdm() { openCreateEdm(); }
+
+function openCreateEdm() {
+  if (!currentCampaignId) return;
+  const c = findCampaign(currentCampaignId);
+  _edmModalMode = 'create';
+  _edmEditId = null;
+  document.getElementById('edmModalIcon').textContent = 'mail';
+  document.getElementById('edmModalTitle').textContent = 'New eDM';
+  document.getElementById('edmModalDesc').textContent = 'Name this eDM, choose a solid-color theme, then open the editor';
+  document.getElementById('edmModalConfirm').textContent = 'Create & Open';
+  document.getElementById('edmNameInput').value = '';
+  document.getElementById('edmThemeRow').style.display = '';
+  _renderEdmThemeOptions(_suggestEdmThemeByLandingPages(c));
+  openEdmModal();
+}
+
+function openRenameEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  _edmModalMode = 'rename';
+  _edmEditId = id;
+  document.getElementById('edmModalIcon').textContent = 'edit';
+  document.getElementById('edmModalTitle').textContent = 'Rename eDM';
+  document.getElementById('edmModalDesc').textContent = "Update this eDM's name";
+  document.getElementById('edmModalConfirm').textContent = 'Save';
+  document.getElementById('edmNameInput').value = e.name || '';
+  document.getElementById('edmThemeRow').style.display = 'none';
+  openEdmModal();
+}
+
+function openEdmModal() {
+  document.getElementById('edmModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('edmNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeEdmModal() {
+  document.getElementById('edmModal').classList.remove('visible');
+}
+
+function confirmEdmModal() {
+  const name = document.getElementById('edmNameInput').value.trim();
+  if (!name) { document.getElementById('edmNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.edms) c.edms = [];
+  if (_edmModalMode === 'create') {
+    const selectedTheme = document.getElementById('edmThemeInput').value || 'light-blue';
+    const e = {
+      id: newId('edm_'),
+      name,
+      snapshot: { builderStack: [], colorState: {}, theme: selectedTheme },
+      created: Date.now(),
+      updated: Date.now()
+    };
+    c.edms.push(e);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeEdmModal();
+    renderDetail();
+    openEdmEditor(e.id);
+  } else {
+    const e = c.edms.find(x => x.id === _edmEditId);
+    if (e) { e.name = name; e.updated = Date.now(); c.updated = Date.now(); saveCampaigns(campaigns); }
+    closeEdmModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  const copy = JSON.parse(JSON.stringify(e));
+  copy.id = newId('edm_');
+  copy.name = e.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  c.edms.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>eDM duplicated');
+}
+
+function deleteEdm(id) {
+  const c = findCampaign(currentCampaignId);
+  const e = c && (c.edms || []).find(x => x.id === id);
+  if (!e) return;
+  if (!confirm('Delete “' + e.name + '”? This cannot be undone.')) return;
+  c.edms = c.edms.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>eDM deleted');
+}
+
+// ── Marketing Material CRUD (MarketingMaterialBuilder) ──
+let _materialModalMode = 'create';
+let _materialEditId = null;
+
+function addMaterial() { openCreateMaterial(); }
+
+function renderMaterialList() {
+  const c = findCampaign(currentCampaignId);
+  _renderAssetCards('mmList', (c && c.materials) || [], 'mm');
+}
+
+function openCreateMaterial() {
+  if (!currentCampaignId) return;
+  _materialModalMode = 'create';
+  _materialEditId = null;
+  document.getElementById('materialModalIcon').textContent = 'image';
+  document.getElementById('materialModalTitle').textContent = 'New Graphic Asset';
+  document.getElementById('materialModalDesc').textContent = 'Name this graphic asset, then open the builder';
+  document.getElementById('materialModalConfirm').textContent = 'Create & Open';
+  document.getElementById('materialNameInput').value = '';
+  openMaterialModal();
+}
+
+function openRenameMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  _materialModalMode = 'rename';
+  _materialEditId = id;
+  document.getElementById('materialModalIcon').textContent = 'edit';
+  document.getElementById('materialModalTitle').textContent = 'Rename Graphic Asset';
+  document.getElementById('materialModalDesc').textContent = "Update this graphic asset's name";
+  document.getElementById('materialModalConfirm').textContent = 'Save';
+  document.getElementById('materialNameInput').value = m.name || '';
+  openMaterialModal();
+}
+
+function openMaterialModal() {
+  document.getElementById('materialModal').classList.add('visible');
+  setTimeout(() => { const i = document.getElementById('materialNameInput'); i.focus(); i.select(); }, 120);
+}
+function closeMaterialModal() {
+  document.getElementById('materialModal').classList.remove('visible');
+}
+
+function confirmMaterialModal() {
+  const name = document.getElementById('materialNameInput').value.trim();
+  if (!name) { document.getElementById('materialNameInput').focus(); return; }
+  const c = findCampaign(currentCampaignId);
+  if (!c) return;
+  if (!c.materials) c.materials = [];
+  if (_materialModalMode === 'create') {
+    const m = { id: newId('mm_'), name, mmbProject: null, created: Date.now(), updated: Date.now() };
+    c.materials.push(m);
+    c.updated = Date.now();
+    saveCampaigns(campaigns);
+    closeMaterialModal();
+    renderDetail();
+    openMaterialEditor(m.id);
+  } else {
+    const m = c.materials.find(x => x.id === _materialEditId);
+    if (m) { m.name = name; m.updated = Date.now(); c.updated = Date.now(); saveCampaigns(campaigns); }
+    closeMaterialModal();
+    renderDetail();
+    showToast('<span class="mi">check_circle</span>Updated');
+  }
+}
+
+function duplicateMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  const copy = JSON.parse(JSON.stringify(m));
+  const newMid = newId('mm_');
+  copy.id = newMid;
+  copy.name = m.name + ' (copy)';
+  copy.created = Date.now();
+  copy.updated = Date.now();
+  if (copy.mmbProject) { copy.mmbProject.id = newMid; copy.mmbProject.name = copy.name; }
+  c.materials.push(copy);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">content_copy</span>Graphic Asset duplicated');
+}
+
+function deleteMaterial(id) {
+  const c = findCampaign(currentCampaignId);
+  const m = c && (c.materials || []).find(x => x.id === id);
+  if (!m) return;
+  if (!confirm('Delete “' + m.name + '”? This cannot be undone.')) return;
+  c.materials = c.materials.filter(x => x.id !== id);
+  c.updated = Date.now();
+  saveCampaigns(campaigns);
+  renderDetail();
+  showToast('<span class="mi">delete</span>Graphic Asset deleted');
+}
+
+// ── Asset Editor (eDM / Landing Page) — embedded via iframe + postMessage ──
+const ASSET_CFG = {
+  edm: { src: 'ComponentCustomizer.html?embed=edm', icon: 'mail', color: '#7c3aed' },
+  lp:  { src: 'Campaign%20Page%20Builder/CampaignPageBuilder.html?embed=lp', icon: 'web', color: '#0091d5' },
+  mm:  { src: 'MarketingMaterialBuilder.html?embed=mm', icon: 'image', color: '#e8730c' }
+};
+let _editingType = null;      // 'edm' | 'lp'
+let _editingAssetId = null;
+let _assetSaveThenClose = false;
+
+function _getAssetList(c, type) {
+  if (!c) return [];
+  if (type === 'lp') return c.landingPages || [];
+  if (type === 'mm') return c.materials || [];
+  return c.edms || [];
+}
+function getEditingAsset() {
+  const c = findCampaign(currentCampaignId);
+  return _getAssetList(c, _editingType).find(x => x.id === _editingAssetId) || null;
+}
+
+function openEdmEditor(id) { _openAssetEditor(id, 'edm'); }
+function openLpEditor(id) { _openAssetEditor(id, 'lp'); }
+function openMaterialEditor(id) { _openAssetEditor(id, 'mm'); }
+
+function _openAssetEditor(id, type) {
+  const c = findCampaign(currentCampaignId);
+  const item = _getAssetList(c, type).find(x => x.id === id);
+  if (!item) return;
+  _editingType = type;
+  _editingAssetId = id;
+  _assetSaveThenClose = false;
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.remove('visible');
+  document.getElementById('edmEditorView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderEditorBreadcrumb(item.name);
+  setEditorCtas(true);
+  document.getElementById('editorLoading').style.display = 'flex';
+  const frame = document.getElementById('edmEditorFrame');
+  frame.src = ASSET_CFG[type].src;
+  _sizeEditorFrame();
+  window.scrollTo(0, 0);
+}
+
+function setEditorCtas(show) {
+  document.getElementById('tbCloseBtn').style.display = show ? '' : 'none';
+  document.getElementById('tbSaveBtn').style.display = show ? '' : 'none';
+}
+
+function _sizeEditorFrame() {
+  const wrap = document.querySelector('.editor-frame-wrap');
+  if (!wrap) return;
+  const tb = document.querySelector('.top-bar');
+  const bc = document.getElementById('breadcrumbBar');
+  const tbh = tb ? tb.offsetHeight : 56;
+  const bch = (bc && bc.classList.contains('visible')) ? bc.offsetHeight : 0;
+  wrap.style.height = (window.innerHeight - tbh - bch) + 'px';
+}
+window.addEventListener('resize', () => {
+  if (document.getElementById('edmEditorView').classList.contains('visible')) _sizeEditorFrame();
+});
+
+function confirmLeaveEditor() {
+  return confirm('Leave the editor? Changes not saved via “Save & Close” will be lost.');
+}
+function _closeEditorSilently() {
+  document.getElementById('edmEditorFrame').src = 'about:blank';
+  document.getElementById('edmEditorView').classList.remove('visible');
+  setEditorCtas(false);
+  _editingAssetId = null;
+  _editingType = null;
+  _assetSaveThenClose = false;
+}
+function _returnToDetail() {
+  document.getElementById('galleryView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('visible');
+  document.getElementById('breadcrumbBar').classList.add('visible');
+  renderDetailBreadcrumb();
+  renderDetail();
+  window.scrollTo(0, 0);
+  _aiGuideRefreshIfOpen();
+}
+
+function closeEdmEditor(ask) {
+  if (ask && !confirmLeaveEditor()) return;
+  _closeEditorSilently();
+  _returnToDetail();
+}
+
+function editorBackToGallery() {
+  if (!confirmLeaveEditor()) return;
+  _closeEditorSilently();
+  showGallery();
+}
+
+function saveEdmEditor() {
+  const frame = document.getElementById('edmEditorFrame');
+  if (!frame.contentWindow) { closeEdmEditor(); return; }
+  _assetSaveThenClose = true;
+  frame.contentWindow.postMessage({ type: 'mas-asset-request-save' }, '*');
+}
+
+window.addEventListener('message', (ev) => {
+  const d = ev.data || {};
+  if (d.type === 'mas-asset-ready') {
+    const item = getEditingAsset();
+    const frame = document.getElementById('edmEditorFrame');
+    document.getElementById('editorLoading').style.display = 'none';
+    if (frame && frame.contentWindow) {
+      let payload = null;
+      if (item) {
+        if (_editingType === 'lp') payload = item.cpbProject;
+        else if (_editingType === 'mm') payload = item.mmbProject || { name: item.name };
+        else payload = item.snapshot;
+      }
+      frame.contentWindow.postMessage({ type: 'mas-asset-load', payload: payload }, '*');
+    }
+  } else if (d.type === 'mas-asset-save') {
+    const item = getEditingAsset();
+    if (item) {
+      if (_editingType === 'lp') {
+        if (d.payload) {
+          item.cpbProject = d.payload;
+          if (d.payload.name) item.name = d.payload.name;
+        }
+      } else if (_editingType === 'mm') {
+        if (d.payload) {
+          item.mmbProject = d.payload;
+          if (d.payload.name) item.name = d.payload.name;
+        }
+      } else {
+        item.snapshot = d.payload;
+      }
+      item.updated = Date.now();
+      const c = findCampaign(currentCampaignId);
+      if (c) c.updated = Date.now();
+      saveCampaigns(campaigns);
+    }
+    if (_assetSaveThenClose) {
+      const savedMsg = _editingType === 'lp' ? 'Landing Page saved' : (_editingType === 'mm' ? 'Graphic Asset saved' : 'eDM saved');
+      closeEdmEditor();
+      showToast('<span class="mi">check_circle</span>' + savedMsg);
+    } else {
+      showToast('<span class="mi">check_circle</span>Saved');
+    }
+  }
+});
+
+// ══════════════════════════════════════
+// AI Campaign Composer
+// Produces plain JSON consumed by the existing builders (Campaign Page
+// Builder sections, ComponentCustomizer builderStack, Marketing Material
+// Builder project) — the composer never authors HTML directly.
+// ══════════════════════════════════════
+let _aiStep = 1;
+let _aiAssetTypes = new Set(['lp', 'edm', 'mm']);
+let _aiSelectedStyle = 'clean-pro';
+let _aiSelectedLanguage = 'en';
+let _aiBriefFiles = [];       // [{name, size}] — attached for reference, not parsed (demo)
+let _aiClarifyQuestions = []; // [{id, icon, question, type, options}]
+let _aiClarifyAnswers = {};   // qid -> answer string
+let _aiDraft = { name: '', region: 'Global', brief: '' };
+let _aiResult = null; // { campaignName, region, brief, clarify, images, lp, edm, mm }
+
+const AI_ASSET_TYPE_INFO = {
+  lp:  { label: 'Landing Page',   desc: 'Campaign Page Builder sections',      cls: 'lp',  icon: 'web' },
+  edm: { label: 'eDM Email',      desc: 'ComponentCustomizer builder stack',   cls: 'edm', icon: 'mail' },
+  mm:  { label: 'Graphic Asset',  desc: 'Marketing Material Builder project',  cls: 'mm',  icon: 'image' }
+};
+
+function openAiComposer() {
+  _aiStep = 1;
+  _aiAssetTypes = new Set(['lp', 'edm', 'mm']);
+  _aiSelectedStyle = 'clean-pro';
+  _aiSelectedLanguage = 'en';
+  _aiBriefFiles = [];
+  _aiClarifyQuestions = [];
+  _aiClarifyAnswers = {};
+  _aiDraft = { name: '', region: 'Global', brief: '' };
+  _aiResult = null;
+  document.getElementById('aiCampaignName').value = '';
+  document.getElementById('aiRegionInput').value = 'Global';
+  document.getElementById('aiBriefInput').value = '';
+  document.getElementById('aiLanguageInput').value = 'en';
+  document.getElementById('aiFileChipList').innerHTML = '';
+  document.getElementById('aiClarifyList').innerHTML = '';
+  document.getElementById('aiNotesBox').innerHTML = '';
+  _aiRenderAssetTypeGrid();
+  _aiRenderStyleGrid();
+  _aiGoStep(1);
+  document.getElementById('aiComposerModal').classList.add('visible');
+  setTimeout(() => { document.getElementById('aiCampaignName').focus(); }, 120);
+}
+function closeAiComposer() {
+  document.getElementById('aiComposerModal').classList.remove('visible');
+}
+
+// ── Reference file attachments (demo: filenames only, no content parsing) ──
+function _aiHandleBriefFiles(event) {
+  const incoming = Array.from(event.target.files || []);
+  incoming.forEach(f => { if (_aiBriefFiles.length < 5) _aiBriefFiles.push({ name: f.name, size: f.size }); });
+  event.target.value = '';
+  _aiRenderFileChips();
+}
+function _aiRemoveBriefFile(idx) {
+  _aiBriefFiles.splice(idx, 1);
+  _aiRenderFileChips();
+}
+function _aiRenderFileChips() {
+  const wrap = document.getElementById('aiFileChipList');
+  wrap.innerHTML = _aiBriefFiles.map((f, i) => `
+    <span class="ai-file-chip"><span class="mi">description</span>${escapeHtml(f.name)}<button type="button" onclick="_aiRemoveBriefFile(${i})"><span class="mi">close</span></button></span>`).join('');
+}
+
+// ── Clarify: rule-based gap detection, presented as a short Q&A ──
+function _aiGenerateClarifyQuestions(brief) {
+  const b = String(brief || '').toLowerCase();
+  const qs = [];
+  if (!/audience|target|engineer|manager|customer|user|partner|buyer/.test(b)) {
+    qs.push({ id: 'audience', icon: 'groups', question: 'Who is the primary audience for this campaign?', type: 'chips',
+      options: ['Factory Automation Engineers', 'IT / OT Managers', 'Channel Partners', 'General Business'] });
+  }
+  if (!/image|photo|picture|visual|background/.test(b) && _aiBriefFiles.length === 0) {
+    qs.push({ id: 'visual', icon: 'image', question: 'No image was mentioned — auto-pick one from the IoTMart image library?', type: 'chips',
+      options: ['Yes, auto-pick for me', "I'll add my own later"] });
+  }
+  if (String(brief || '').trim().split(/\s+/).filter(Boolean).length < 20) {
+    qs.push({ id: 'more_detail', icon: 'edit_note', question: 'The brief is fairly short — any other selling points worth including?', type: 'freetext' });
+  }
+  qs.push({ id: 'tone', icon: 'record_voice_over', question: 'What tone should the copy use?', type: 'chips',
+    options: ['Professional', 'Bold & Confident', 'Friendly & Approachable'] });
+  return qs.slice(0, 4);
+}
+function _aiRenderClarifyList() {
+  const list = document.getElementById('aiClarifyList');
+  if (!_aiClarifyQuestions.length) {
+    list.innerHTML = '<p class="modal-desc" style="margin:0;">Your brief already covers the essentials — nothing to clarify. Hit Generate to continue.</p>';
+    return;
+  }
+  list.innerHTML = _aiClarifyQuestions.map(q => {
+    if (q.type === 'chips') {
+      return `
+      <div class="ai-clarify-item">
+        <div class="ai-clarify-q"><span class="mi">${q.icon}</span>${escapeHtml(q.question)}</div>
+        <div class="ai-clarify-chips">
+          ${q.options.map(opt => `<button type="button" class="ai-clarify-chip${_aiClarifyAnswers[q.id] === opt ? ' selected' : ''}" data-qid="${escapeHtml(q.id)}" data-value="${encodeURIComponent(opt)}">${escapeHtml(opt)}</button>`).join('')}
+        </div>
+      </div>`;
+    }
+    return `
+      <div class="ai-clarify-item">
+        <div class="ai-clarify-q"><span class="mi">${q.icon}</span>${escapeHtml(q.question)}</div>
+        <textarea class="ai-clarify-freetext" rows="2" placeholder="Optional…" oninput="_aiClarifyAnswers['${q.id}'] = this.value">${escapeHtml(_aiClarifyAnswers[q.id] || '')}</textarea>
+      </div>`;
+  }).join('');
+  list.querySelectorAll('.ai-clarify-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      _aiSelectClarifyChip(btn.dataset.qid || '', decodeURIComponent(btn.dataset.value || ''));
+    });
+  });
+}
+function _aiSelectClarifyChip(qid, value) {
+  _aiClarifyAnswers[qid] = value;
+  _aiRenderClarifyList();
+}
+
+function _aiRenderAssetTypeGrid() {
+  const grid = document.getElementById('aiAssetTypeGrid');
+  grid.innerHTML = Object.keys(AI_ASSET_TYPE_INFO).map(type => {
+    const info = AI_ASSET_TYPE_INFO[type];
+    const on = _aiAssetTypes.has(type);
+    return `
+    <div class="style-grid-card ai-type-card${on ? ' selected' : ''}" onclick="_aiToggleAssetType('${type}')">
+      <div class="icon-box ${info.cls}"><span class="mi">${info.icon}</span></div>
+      <div>
+        <div class="ai-type-name">${info.label}</div>
+        <div class="ai-type-desc">${info.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function _aiToggleAssetType(type) {
+  if (_aiAssetTypes.has(type)) {
+    if (_aiAssetTypes.size === 1) return; // keep at least one asset selected
+    _aiAssetTypes.delete(type);
+  } else {
+    _aiAssetTypes.add(type);
+  }
+  _aiRenderAssetTypeGrid();
+  document.getElementById('aiStyleFieldWrap').style.display = _aiAssetTypes.has('lp') ? '' : 'none';
+}
+
+function _aiRenderStyleGrid() {
+  const grid = document.getElementById('aiStyleGrid');
+  grid.innerHTML = LP_STYLES.map(s => `
+    <div class="style-grid-card${s.id === _aiSelectedStyle ? ' selected' : ''}" onclick="_aiPickStyle('${s.id}')">
+      <div class="style-thumb"><span class="style-thumb-fallback">${s.num}</span></div>
+      <div class="style-name">${s.name}</div>
+      <div class="style-desc">${s.desc}</div>
+    </div>`).join('');
+  document.getElementById('aiStyleFieldWrap').style.display = _aiAssetTypes.has('lp') ? '' : 'none';
+}
+function _aiPickStyle(id) {
+  _aiSelectedStyle = id;
+  _aiRenderStyleGrid();
+}
+
+function _aiRenderStepper() {
+  for (let i = 1; i <= 4; i++) {
+    const item = document.querySelector('.ai-stepper-item[data-step="' + i + '"]');
+    if (item) { item.classList.toggle('active', i === _aiStep); item.classList.toggle('done', i < _aiStep); }
+  }
+  for (let i = 1; i <= 3; i++) {
+    const line = document.querySelector('.ai-stepper-line[data-line="' + i + '"]');
+    if (line) line.classList.toggle('done', i < _aiStep);
+  }
+}
+
+function _aiGoStep(n) {
+  _aiStep = n;
+  [1, 2, 3, 4].forEach(i => document.getElementById('aiStep' + i).classList.toggle('active', i === n));
+  _aiRenderStepper();
+  const back = document.getElementById('aiBtnBack');
+  const cancel = document.getElementById('aiBtnCancel');
+  const primary = document.getElementById('aiBtnPrimary');
+  if (n === 1) {
+    back.style.display = 'none'; cancel.style.display = '';
+    primary.style.display = ''; primary.disabled = false;
+    primary.innerHTML = '<span class="mi" style="font-size:16px;vertical-align:-3px;margin-right:2px;">auto_awesome</span>Continue';
+  } else if (n === 2) {
+    back.style.display = ''; cancel.style.display = '';
+    primary.style.display = ''; primary.disabled = false;
+    primary.innerHTML = '<span class="mi" style="font-size:16px;vertical-align:-3px;margin-right:2px;">auto_awesome</span>Generate';
+  } else if (n === 3) {
+    back.style.display = 'none'; cancel.style.display = 'none';
+    primary.style.display = 'none';
+  } else {
+    back.style.display = ''; cancel.style.display = '';
+    primary.style.display = ''; primary.disabled = false;
+    primary.innerHTML = '<span class="mi" style="font-size:16px;vertical-align:-3px;margin-right:2px;">add_circle</span>Add to New Campaign';
+  }
+}
+function _aiGoBack() {
+  if (_aiStep === 2) _aiGoStep(1);
+  else if (_aiStep === 4) _aiGoStep(2);
+}
+
+function _aiPrimaryAction() {
+  if (_aiStep === 1) {
+    const name = document.getElementById('aiCampaignName').value.trim();
+    const brief = document.getElementById('aiBriefInput').value.trim();
+    if (!brief) { document.getElementById('aiBriefInput').focus(); return; }
+    if (!name) { document.getElementById('aiCampaignName').focus(); return; }
+    _aiDraft = { name, region: document.getElementById('aiRegionInput').value, brief };
+    _aiSelectedLanguage = document.getElementById('aiLanguageInput').value;
+    _aiClarifyQuestions = _aiGenerateClarifyQuestions(brief);
+    _aiClarifyAnswers = {};
+    _aiRenderClarifyList();
+    _aiGoStep(2);
+  } else if (_aiStep === 2) {
+    _aiGoStep(3);
+    _aiRunGeneration();
+  } else if (_aiStep === 4) {
+    _aiApply();
+  }
+}
+
+// ── Step 3: run the (local, deterministic) composition pipeline ──
+function _aiRunGeneration() {
+  const { name: campaignName, region, brief } = _aiDraft;
+  const steps = [{ key: 'parse', label: 'Parsing brief & clarify answers' }];
+  if (_aiAssetTypes.has('lp')) steps.push({ key: 'lp', label: 'Composing Landing Page sections' });
+  if (_aiAssetTypes.has('edm')) steps.push({ key: 'edm', label: 'Composing eDM builder stack' });
+  if (_aiAssetTypes.has('mm')) steps.push({ key: 'mm', label: 'Composing Graphic Asset sizes' });
+  steps.push({ key: 'assemble', label: 'Assembling campaign JSON' });
+
+  const list = document.getElementById('aiGenList');
+  list.innerHTML = steps.map(s => `
+    <div class="ai-gen-item" data-key="${s.key}">
+      <span class="mi">radio_button_unchecked</span>
+      <span class="ai-gen-label">${s.label}</span>
+    </div>`).join('');
+
+  // Compute the actual content synchronously (pure, no network) — the
+  // step-by-step animation below is UI pacing only, not a real delay.
+  const content = _aiComposeContent(brief, campaignName, _aiClarifyAnswers, _aiSelectedLanguage);
+  const images = _aiPickImages(brief);
+  const result = { campaignName, region, brief, clarify: Object.assign({}, _aiClarifyAnswers), images, content };
+  if (_aiAssetTypes.has('lp')) result.lp = _aiBuildLpSections(content, _aiSelectedStyle, images, brief);
+  if (_aiAssetTypes.has('edm')) result.edm = _aiBuildEdmSnapshot(content, _aiSelectedStyle, brief);
+  if (_aiAssetTypes.has('mm')) {
+    if (_aiLooksJetsonBrief(brief)) {
+      const mmContent = {
+        eyebrow: 'Advantech × NVIDIA Elite Partner',
+        headline: 'Accelerating Edge AI with NVIDIA® Jetson™',
+        subheadline: '21 TOPS to 2,070 TFLOPS — the broadest Jetson-powered portfolio for real-world AI deployment.',
+        features: [
+          'Built-in DRAM. Stable supply. Zero sourcing risk.',
+          'Pre-validated, industrial-grade Jetson systems.',
+          '40+ years of Advantech engineering & global support.'
+        ]
+      };
+      const mmImages = {
+        bg: AI_IMG + 'solutionBG-12_robotic-arm.jpeg',
+        product: AI_IMG + 'Edge-ai_P_AFE-A702-X1A1U.png'
+      };
+      result.mm = _aiBuildMmbProject(campaignName, mmContent, mmImages);
+    } else {
+      result.mm = _aiBuildMmbProject(campaignName, content, images);
+    }
+  }
+  _aiResult = result;
+
+  let i = 0;
+  function runStep() {
+    if (i > 0) {
+      const prevEl = list.querySelector(`[data-key="${steps[i - 1].key}"]`);
+      prevEl.classList.remove('active'); prevEl.classList.add('done');
+      prevEl.querySelector('.mi').textContent = 'check_circle';
+    }
+    if (i >= steps.length) {
+      setTimeout(() => { _aiRenderReview(); _aiRenderNotes(); _aiGoStep(4); }, 250);
+      return;
+    }
+    const el = list.querySelector(`[data-key="${steps[i].key}"]`);
+    el.classList.add('active');
+    el.querySelector('.mi').textContent = 'progress_activity';
+    i++;
+    setTimeout(runStep, 420);
+  }
+  runStep();
+}
+
+// ── Per-language fallback copy (used only for gaps the brief doesn't cover —
+//    the user's own words are never translated, just the filler/CTA text) ──
+const AI_LANG_FALLBACKS = {
+  en: {
+    subheadline: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipiscing elit.',
+    body: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    features: ['Real-time performance built for demanding environments.', 'Seamless integration with your existing systems.', 'Backed by Advantech engineering and global support.'],
+    cta1: 'Learn More', cta2: 'Contact Sales'
+  },
+  'zh-TW': {
+    subheadline: '為關鍵應用打造，穩定可靠，隨時因應現場挑戰。',
+    body: '從邊緣到雲端的完整軟硬體整合，協助團隊更快落地部署。',
+    features: ['專為嚴苛環境設計的即時效能。', '與現有系統無縫整合。', '源自 Advantech 工程團隊與全球技術支援。'],
+    cta1: '了解更多', cta2: '聯絡業務'
+  },
+  ko: {
+    subheadline: '까다로운 환경을 위해 설계된 신뢰할 수 있는 솔루션입니다.',
+    body: '엣지부터 클라우드까지, 팀이 더 빠르게 구축할 수 있도록 지원합니다.',
+    features: ['까다로운 환경을 위한 실시간 성능.', '기존 시스템과의 원활한 통합.', 'Advantech의 엔지니어링과 글로벌 지원.'],
+    cta1: '더 알아보기', cta2: '문의하기'
+  }
+};
+
+// ── Content parsing — genuinely derived from the brief text (+ Clarify
+//    answers), not hardcoded. Only the filler/CTA text falls back to the
+//    selected Language's template; the user's own words are left as-is. ──
+function _aiComposeContent(brief, campaignName, clarify, language) {
+  clarify = clarify || {};
+  const fb = AI_LANG_FALLBACKS[language] || AI_LANG_FALLBACKS.en;
+  const extra = String(clarify.more_detail || '').trim();
+  const raw = (String(brief || '').trim() + (extra ? ('. ' + extra) : '')).trim();
+  const lines = raw.split(/\n+/).map(s => s.trim()).filter(Boolean);
+  // A brief typed as explicit line breaks treats line 1 as the headline;
+  // a brief typed as one flowing paragraph (the common textarea case)
+  // treats the first sentence as the headline instead, so long single-line
+  // briefs don't get truncated mid-sentence into the headline.
+  const useLines = lines.length > 1;
+  let headline, rest;
+  if (useLines) {
+    headline = lines[0];
+    rest = lines.slice(1).join(' ').split(/[.!?]+\s+/).map(s => s.trim()).filter(Boolean);
+  } else {
+    const sentences = raw.split(/[.!?]+\s+|[.!?]+$/).map(s => s.trim()).filter(Boolean);
+    headline = sentences[0];
+    rest = sentences.slice(1);
+  }
+  headline = String(headline || campaignName || 'Lorem Ipsum Launch').slice(0, 90);
+  const subheadline = (rest[0] || fb.subheadline).slice(0, 160);
+  const bodyText = (rest.slice(1).join('. ') || fb.body).slice(0, 400);
+  let features = rest.slice(1, 4);
+  while (features.length < 3) features.push(fb.features[features.length]);
+  features = features.slice(0, 3).map(f => String(f).slice(0, 140));
+  const eyebrow = '#' + (campaignName || 'Campaign').split(/\s+/).slice(0, 2).join(' ');
+  return {
+    headline, subheadline, bodyText, features, eyebrow,
+    cta1Text: fb.cta1, cta2Text: fb.cta2,
+    audience: clarify.audience || '', tone: clarify.tone || '', language: language || 'en'
+  };
+}
+
+const AI_BG_POOL = [
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-06_smart-factory.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-01_smart-city.jpeg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-28_AI.jpg',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/solutionBG-03_smart-factory.jpeg'
+];
+const AI_PRODUCT_POOL = [
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_ARK-3534B-00A1.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/ADAM-4571.png',
+  'https://irp.cdn-website.com/56869327/dms3rep/multi/Edge-ai_P_IDK-1110WP-50XGB2.png'
+];
+function _aiPickImages(brief) {
+  const b = String(brief || '').toLowerCase();
+  let bg = AI_BG_POOL[0], product = AI_PRODUCT_POOL[0];
+  if (/city|urban/.test(b)) bg = AI_BG_POOL[1];
+  else if (/\bai\b|edge ai|inference|machine learning/.test(b)) bg = AI_BG_POOL[2];
+  else if (/factory|manufactur|industrial/.test(b)) bg = AI_BG_POOL[3];
+  if (/sensor|module|adam|data acquisition/.test(b)) product = AI_PRODUCT_POOL[1];
+  else if (/panel|display|hmi|monitor/.test(b)) product = AI_PRODUCT_POOL[2];
+  return { bg, product };
+}
+
+function _aiLooksJetsonBrief(brief) {
+  const b = String(brief || '').toLowerCase();
+  return /jetson|nvidia|orin|thor/.test(b);
+}
+
+function _aiExtractAudience(brief) {
+  const m = String(brief || '').match(/target\s+audience\s*:\s*([^\.\n]+)/i);
+  return m ? m[1].trim() : '';
+}
+
+function _aiExtractCtas(brief, fallback1, fallback2) {
+  const m = String(brief || '').match(/ctas?\s*:\s*([^\.\n]+)/i);
+  if (!m) return [fallback1 || 'Explore Solutions', fallback2 || 'Service Request'];
+  const cands = m[1]
+    .split(/,|;|\|| and |\//i)
+    .map(s => s.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+  const cta1 = cands[0] || fallback1 || 'Explore Solutions';
+  const cta2 = cands[1] || fallback2 || 'Service Request';
+  return [cta1, cta2];
+}
+
+function _aiHeadlineForLp(content, brief) {
+  if (_aiLooksJetsonBrief(brief)) return 'Accelerating Edge AI with NVIDIA Jetson';
+  return content.headline || 'Accelerating Edge AI Solutions';
+}
+
+// ── Landing Page: hand-authored, schema-verified Campaign Page Builder
+//    sections. Unset edits/options fall back to each section's own
+//    registered defaults (see cpb-canvas.js makeHelpers/resolveEdit) so a
+//    sparse override object is always safe to render. ──
+function _aiSectionUid() { return newId('u_'); }
+
+// The Jetson brief maps to a fixed, hand-verified reference campaign so the
+// generated Landing Page is byte-for-byte equivalent to the approved demo
+// (AI Demo Campaign - NVIDIA Jetson/NVIDIA_Jetson_LandingPage.html).
+const AI_IMG = 'https://irp.cdn-website.com/56869327/dms3rep/multi/';
+function _aiBuildLpSections(content, styleId, images, brief) {
+  if (_aiLooksJetsonBrief(brief)) return _aiBuildJetsonLpSections();
+  return _aiBuildGenericLpSections(content, styleId, images, brief);
+}
+
+// Exact port of the approved NVIDIA Jetson reference landing page.
+function _aiBuildJetsonLpSections() {
+  return [
+    { uid: _aiSectionUid(), sectionType: 'site-header', anchorId: '', mode: 'light', bg: 'plain', options: {}, edits: {} },
+
+    { uid: _aiSectionUid(), sectionType: 'hero-banner', anchorId: '', mode: 'dark', bg: 'plain', layout: 'split',
+      options: { heroBgType: 'image', mask: 'none', showEyebrow: true, showSubtitle: true, showBody: true, showFirstCta: true, showSecondCta: true },
+      edits: {
+        eyebrow: 'Advantech × NVIDIA Elite Partner',
+        headline: 'Accelerating Edge AI with NVIDIA® Jetson™',
+        subtitle: 'Built-In Memory. Built-In Confidence.',
+        body: "Advantech is an NVIDIA Elite Partner delivering the broadest portfolio of industrial AI platforms powered by NVIDIA Jetson. Purpose-built for real-world AI deployment, Advantech's solutions combine rugged industrial-grade design, software toolkits, design-in services, global R&D support, and long product lifecycles to accelerate scalable AI adoption across manufacturing, smart cities, healthcare, and robotics.",
+        image: AI_IMG + 'Edge-ai_P_AFE-A702-X1A1U.png',
+        bgImage: AI_IMG + 'solutionBG-12_robotic-arm.jpg',
+        maskColor: '#ffffff',
+        cta1Text: 'Explore Solutions', cta1Url: '#find-your-solution', cta1Style: 'solid', cta1HasIcon: 'true', cta1Icon: 'arrow_downward', cta1IconPos: 'right',
+        cta2Text: 'Service Request', cta2Url: '#need-help', cta2Style: 'line', cta2HasIcon: 'false'
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'feature-cards-split', anchorId: '', mode: 'dark', bg: 'alt', layout: '4',
+      options: { headerAlign: 'left', showEyebrow: true, showHeadline: true, showSubtitle: false, showDivider: true, showBody: true, cardFrame: 'outlined', iconPos: 'top', hoverFx: true },
+      edits: {
+        eyebrow: 'Memory Advantage',
+        sectionTitle: 'No Memory Headache, Just AI Deployment',
+        sectionBody: 'The memory market is evolving rapidly, with rising costs and supply constraints. NVIDIA Jetson integrates validated DRAM directly on-module, eliminating the need to source, qualify, and design with external memory. It provides a scalable platform — from Jetson Orin Nano to Jetson AGX Thor — delivering optimized runtime inference for leading open generative AI models and robotics applications.',
+        cards: [
+          { icon: 'memory', title: 'Built-In DRAM', desc: 'Validated memory on-module — no external DRAM sourcing or qualification required.' },
+          { icon: 'inventory_2', title: 'Stable Supply', desc: 'Insulated from spot-market volatility with long-term, pre-validated supply.' },
+          { icon: 'verified', title: 'Pre-Validated', desc: 'Every configuration is qualified end-to-end, cutting design-in risk and time.' },
+          { icon: 'trending_up', title: 'Scalable Platform', desc: 'One architecture spans Jetson Orin Nano through Jetson AGX Thor.' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'feature-gallery', anchorId: '', mode: 'dark', bg: 'alt', layout: '4',
+      options: { headerAlign: 'left', showEyebrow: true, showHeadline: true, showSubtitle: true, showDivider: true, showBody: true },
+      edits: {
+        eyebrow: 'Open-Source Models',
+        sectionTitle: 'Software-Ready for Faster Development',
+        sectionSubtitle: 'NVIDIA open-source models plus Advantech Edge AI software services, ready to integrate.',
+        sectionBody: 'To accelerate AI deployment, NVIDIA provides open-source models for Agentic AI, Physical AI, and robotics. Advantech Edge AI software services add ready-to-use development environments with pre-integrated hardware support and optimized software.',
+        items: [
+          { tag: 'Agentic AI', title: 'NVIDIA Nemotron™', desc: 'Open models tuned for reasoning, tool use, and multi-step agent workflows on the edge.', image: AI_IMG + 'NV-nemotron.png', ctaEnabled: false, ctaText: 'Learn More', ctaLink: '#' },
+          { tag: 'Physical AI', title: 'NVIDIA Cosmos™', desc: 'Generates photorealistic, physics-aware synthetic data to accelerate training of autonomous machines.', image: AI_IMG + 'NV-cosmos.png', ctaEnabled: false, ctaText: 'Learn More', ctaLink: '#' },
+          { tag: 'Robotics', title: 'NVIDIA Isaac™ GR00T', desc: 'A general-purpose foundation model for humanoid robots — language, perception, and manipulation.', image: AI_IMG + 'NV-robotics.png', ctaEnabled: false, ctaText: 'Learn More', ctaLink: '#' },
+          { tag: 'SDK', title: 'Edge AI SDK', desc: "Advantech's rapid AI development toolkit for faster time-to-deployment.", image: AI_IMG + 'SDK.png', ctaEnabled: true, ctaText: 'Learn More', ctaLink: 'https://campaign.advantech.online/en/edgeaisdk/' },
+          { tag: 'Robotics', title: 'Robotic Suite', desc: 'Container-based software architecture purpose-built for robotics.', image: AI_IMG + 'Robotic.png', ctaEnabled: false, ctaText: 'Learn More', ctaLink: '#' },
+          { tag: 'OS', title: 'Ubuntu Pro', desc: 'Secure, reliable OS with long-term support for production edge fleets.', image: AI_IMG + 'Ubunto.png', ctaEnabled: true, ctaText: 'Learn More', ctaLink: '#' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'product-anchor', anchorId: 'find-your-solution', mode: 'dark', bg: 'alt', layout: '3',
+      options: { cardVisual: 'image', headerAlign: 'center', showEyebrow: true, showHeadline: true, showSubtitle: true, showDivider: true, showBody: true },
+      edits: {
+        bgColor: '#05070d',
+        eyebrow: 'Find Your NVIDIA Jetson Solution',
+        sectionTitle: 'Groundbreaking Edge AI Systems Powered by NVIDIA Jetson Thor',
+        sectionSubtitle: 'Up to 2,070 FP4 TFLOPS of AI performance, applied to real-world robotics, medical AI, and LLM/VLM deployment.',
+        sectionBody: 'The NVIDIA Jetson Thor series sets a new benchmark for edge AI. Advantech brings this power to real-world applications through hardware-software integrated solutions.',
+        items: [
+          { number: '01', title: 'Robotics', subtitle: 'AMRs, humanoids & manipulation', anchor: 'vertical-robotics', image: AI_IMG + 'Edge-ai_P_AFE-A702-X1A1U.png', bgImage: AI_IMG + 'BG-robotic.png', icon: 'smart_toy' },
+          { number: '02', title: 'Medical AI', subtitle: 'Imaging & diagnostic workflows', anchor: 'vertical-medical', image: AI_IMG + 'Edge-ai_P_EPC-T52940A-00Y1U.png', bgImage: AI_IMG + 'BG-medical.png', icon: 'medical_services' },
+          { number: '03', title: 'Edge LLM / VLM', subtitle: 'On-device language & vision models', anchor: 'vertical-llm', image: AI_IMG + 'Edge-ai_P_AIR-021O-S0A1U.png', bgImage: AI_IMG + 'BG-LLM.png', icon: 'forum' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'product-series-matrix', anchorId: '', mode: 'dark', bg: 'plain', layout: '3',
+      options: { headerAlign: 'left', showEyebrow: true, showHeadline: true, showSubtitle: true, showDivider: true, showBody: true },
+      edits: {
+        bgColor: '#000000',
+        eyebrow: 'Product Portfolio',
+        sectionTitle: 'Full Spectrum of AI Power',
+        sectionSubtitle: '21 TOPS to 2,070 TFLOPS — one partner across the entire NVIDIA Jetson lineup.',
+        sectionBody: "Advantech offers a comprehensive solution powered by NVIDIA Jetson, delivering AI performance from 21 TOPS to 2,070 TFLOPS. Combined with Advantech's Edge AI SDK and major open-source models, customers can accelerate development and bring diverse AI applications to market faster.",
+        series: [
+          { key: '1', tag: 'NVIDIA JetPack™ 7.2 and above', title: 'Jetson Thor™', subtitle: 'Up to 2,070 FP4 TFLOPS', bullets: 'Jetson T5000™ & T4000™;128/64GB memory;40–130W / 40–70W;Robotics, Medical AI, LLM/VLM', image: AI_IMG + 'Edge-ai_P_jetson-T5000-T4000.png', introBgImage: AI_IMG + 'solutionBG-30_Chip.jpg', productCount: '3' },
+          { key: '2', tag: 'NVIDIA JetPack™ 6.2', title: 'Jetson AGX Orin™', subtitle: 'Up to 275 TOPS', bullets: '32/64GB memory;15–60W configurable power;Multi-sensor fusion;3D perception & NLU', image: AI_IMG + 'Edge-ai_P_AGX-Orin.png', introBgImage: AI_IMG + 'solutionBG-26_Industrial-screen.jpg', productCount: '2' },
+          { key: '3', tag: 'NVIDIA JetPack™ 6.2', title: 'Jetson Orin™ NX / Nano', subtitle: 'Up to 157 TOPS', bullets: '8/16GB memory;7–40W configurable power;Super Mode: up to 2× performance;Smallest Jetson form factor', image: AI_IMG + 'Edge-ai_P_Orin-NX.png', introBgImage: AI_IMG + 'solutionBG-21_AMR.jpg', productCount: '2' }
+        ],
+        products: [
+          { seriesKey: '1', name: 'AFE-A702-X1A1U', desc: 'Robotic AI System built on NVIDIA Jetson Thor.', image: AI_IMG + 'Edge-ai_P_AFE-A702-X1A1U.png', ctaText: 'Shop Now', ctaLink: 'https://www.iotmart.com/s/product/afea702x1a1u/01tfS0000026rrhQAA?language=en_US' },
+          { seriesKey: '1', name: 'ASR-A702', desc: 'Robotic Controller Board for Jetson Thor deployments.', image: AI_IMG + 'Edge-ai_P_ASR-A702.png', ctaText: 'Configure', ctaLink: '#' },
+          { seriesKey: '1', name: 'AFE-R750-X0A1U', desc: 'Robotic AI System with rugged industrial design.', image: AI_IMG + 'Edge-ai_P_AFE-R750-X1A1U.png', ctaText: 'Shop Now', ctaLink: 'https://www.iotmart.com/s/product/afer750x0a1u/01tIi00000081iwIAA?language=en_US' },
+          { seriesKey: '2', name: 'AFE-R750-X0A1U', desc: 'Robotic Controller System powered by Jetson AGX Orin.', image: AI_IMG + 'Edge-ai_P_AFE-R750-X1A1U.png', ctaText: 'Shop Now', ctaLink: 'https://www.iotmart.com/s/product/afer750x0a1u/01tIi00000081iwIAA?language=en_US' },
+          { seriesKey: '2', name: 'ASR-A701', desc: 'Robotic Controller Board for AGX Orin deployments.', image: AI_IMG + 'Edge-ai_P_ASR-A702.png', ctaText: 'Configure', ctaLink: '#' },
+          { seriesKey: '3', name: 'DS-015', desc: 'Digital Signage System powered by Jetson Orin NX/Nano.', image: AI_IMG + 'Edge-ai_P_DS-015VB-U0A1U.png', ctaText: 'More in IoTMart', ctaLink: 'https://www.iotmart.com/s/global-search/DS/?page=1&language=en_US' },
+          { seriesKey: '3', name: 'EPC-R7300IH-ALA1NN', desc: 'Edge AI PC for compact, entry-level deployments.', image: AI_IMG + 'Edge-ai_P_EPC-R7300IJ-ALA1NN.png', ctaText: 'Shop Now', ctaLink: 'https://www.iotmart.com/s/product/epcr7300ihala1nn/01t2y000001Q8TZAA0?language=en_US' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'feature-cards', anchorId: '', mode: 'dark', bg: 'alt', layout: '6',
+      options: { headerAlign: 'left', showEyebrow: true, showHeadline: true, showSubtitle: false, showDivider: true, showBody: true, cardFrame: 'borderless', iconPos: 'top' },
+      edits: {
+        eyebrow: 'Industry Coverage',
+        sectionTitle: 'AI Solutions Across Industries',
+        sectionBody: 'NVIDIA-powered Advantech platforms are deployed across these key verticals — from the factory floor to the data center.',
+        cards: [
+          { icon: 'smart_toy', title: 'AMR & Robotics', desc: 'Navigation, path planning, and object detection for autonomous mobile robots.' },
+          { icon: 'precision_manufacturing', title: 'Factory Automation', desc: 'Real-time defect detection, worker safety, and predictive maintenance on the production line.' },
+          { icon: 'medical_services', title: 'Medical', desc: 'Medical imaging, patient monitoring, and clinical decision support systems.' },
+          { icon: 'location_city', title: 'Smart City', desc: 'Urban infrastructure monitoring, public safety analytics, and environmental sensing.' },
+          { icon: 'local_shipping', title: 'Transportation', desc: 'AI-powered traffic management, fleet monitoring, and V2X communications.' },
+          { icon: 'security', title: 'Security & Safety', desc: 'Intelligent video analytics for perimeter protection and access control.' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'feature-cards', anchorId: '', mode: 'dark', bg: 'plain', layout: '3',
+      options: { headerAlign: 'center', showEyebrow: true, showHeadline: true, showSubtitle: false, showDivider: true, showBody: true, cardFrame: 'outlined', iconPos: 'top' },
+      edits: {
+        eyebrow: 'Why Advantech',
+        sectionTitle: 'Domain Expertise for AI Deployment',
+        sectionBody: 'Advantech integrates NVIDIA technologies with 40+ years of industrial computing experience to deliver solutions that work in the real world.',
+        cards: [
+          { icon: 'public', title: 'Integration of NVIDIA Technologies with Global Customization', desc: 'Combines NVIDIA technologies with worldwide engineering teams to deliver tight software integration and rapid prototyping for regional needs.' },
+          { icon: 'hardware', title: 'Purpose-Built Industrial Hardware for Edge', desc: 'Industrial-grade hardware designed for harsh environments, wide temperature ranges, and 24/7 operation.' },
+          { icon: 'engineering', title: 'End-to-End Software & Manufacturing Support', desc: 'Comprehensive services from prototype to mass production, accelerating AI development and management.' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'related-content-hub', anchorId: '', mode: 'dark', bg: 'alt', layout: '3',
+      options: { headerAlign: 'center', showEyebrow: true, showHeadline: true, showSubtitle: false, showDivider: true, showBody: true },
+      edits: {
+        eyebrow: 'Learn More',
+        sectionTitle: 'Explore More Resources',
+        sectionBody: 'Dive deeper into Advantech edge AI systems powered by NVIDIA Jetson Thor through our latest eBook and product walkthrough videos.',
+        cards: [
+          { type: 'eBook', image: AI_IMG + 'R-01.png', title: 'Edge AI Computing Solution eBook', desc: 'Get the comprehensive guide on Jetson Thor architecture, software stack and reference designs for next-gen edge AI.', ctaText: 'Download Now', ctaLink: '#' },
+          { type: 'Video · Robotics', image: AI_IMG + 'R-02.png', title: 'Unboxing Next-Gen Robotics: Advantech Edge AI System Powered by NVIDIA Jetson Thor', desc: "A hands-on look at how Advantech's Jetson Thor systems power the next wave of autonomous mobile robots and humanoids.", ctaText: 'Watch on YouTube', ctaLink: '#' },
+          { type: 'Video · Medical', image: AI_IMG + 'R-03.png', title: 'Introducing Advantech Medical AI Solutions Powered by NVIDIA Jetson Thor', desc: 'Discover how Jetson Thor accelerates surgical imaging, diagnostic workflows and Holoscan-ready medical AI deployments.', ctaText: 'Watch on YouTube', ctaLink: '#' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'faq-accordion', anchorId: '', mode: 'dark', bg: 'plain', layout: 'multi-open',
+      options: { faqItemCount: 6, showEyebrow: true, showHeadline: true, showSubtitle: false, showDivider: true, showBody: true },
+      edits: {
+        eyebrow: 'FAQ',
+        headline: 'Common Questions About Jetson-Powered Deployment',
+        body: "Can't find what you're looking for? Submit a service request and our specialists will help.",
+        items: [
+          { q: 'Which NVIDIA Jetson module is right for my application?', a: 'It depends on your AI workload and power envelope — Jetson Orin Nano and NX suit compact, lower-power edge devices, Jetson AGX Orin fits multi-sensor fusion and larger models, and Jetson Thor is built for the most demanding robotics, medical AI, and LLM/VLM workloads. Submit a service request and our team will help you match a configuration to your use case.' },
+          { q: 'Does Advantech support custom hardware design-in?', a: "Yes. Advantech's engineering teams offer design-in services, from mechanical customization to I/O configuration, backed by global R&D support and long product lifecycles." },
+          { q: 'What software is included with Jetson-powered systems?', a: "Systems ship ready for NVIDIA JetPack, and can be paired with Advantech's Edge AI SDK, Robotic Suite, and Ubuntu Pro for a production-ready software stack." },
+          { q: 'Can I evaluate NVIDIA open-source models on Advantech hardware?', a: 'Yes — NVIDIA Nemotron, Cosmos, and Isaac GR00T are all supported on the Jetson platform, and Advantech provides pre-integrated environments to accelerate evaluation.' },
+          { q: 'What industries are these systems deployed in today?', a: 'Current deployments span AMR & robotics, factory automation, medical AI, smart city infrastructure, transportation, and security & safety applications.' },
+          { q: 'How do I get pricing or a demo unit?', a: 'Submit a service request with your application details and timeline, and our specialists will follow up with configuration recommendations and next steps.' }
+        ]
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'related-need-help-cta', anchorId: 'need-help', mode: 'dark', bg: 'alt',
+      options: { heroBgType: 'color', showEyebrow: true, showHeadline: true, showSubtitle: true, showDivider: true, showBody: false, showFirstCta: true, showSecondCta: false, primaryCta: 'cta1' },
+      edits: {
+        eyebrow: 'Need Support',
+        title: 'Need Help?',
+        subtitle: 'Submit a service request and our team will help you find the perfect Jetson-powered configuration for your edge AI deployment.',
+        cta1Text: 'Service Request Form',
+        cta1Link: 'https://www.iotmart.com/en-en/s/service-request?language=en_US'
+      } },
+
+    { uid: _aiSectionUid(), sectionType: 'site-footer', anchorId: '', mode: 'dark', bg: 'plain', options: {}, edits: {} }
+  ];
+}
+
+function _aiBuildGenericLpSections(content, styleId, images, brief) {
+  const mode = styleId === 'clean-pro' ? 'light' : 'dark';
+  const audience = _aiExtractAudience(brief);
+  const ctas = _aiExtractCtas(brief, content.cta1Text || 'Explore Solutions', content.cta2Text || 'Service Request');
+  const cta1 = ctas[0];
+  const cta2 = ctas[1];
+  return [
+    { uid: _aiSectionUid(), sectionType: 'site-header', anchorId: '', mode: 'light', bg: 'plain', options: {}, edits: {} },
+    { uid: _aiSectionUid(), sectionType: 'hero-banner', anchorId: '', mode: 'dark', bg: 'plain', layout: 'split',
+      options: { heroBgType: images.bg ? 'image' : 'color', mask: 'arc' },
+      edits: {
+        eyebrow: content.eyebrow, headline: content.headline, subtitle: content.subheadline, body: content.bodyText,
+        image: images.product, bgImage: images.bg, cta1Text: cta1, cta2Text: cta2, cta1Style: 'solid', cta2Style: 'line'
+      } },
+    { uid: _aiSectionUid(), sectionType: 'feature-cards', anchorId: '', mode, bg: 'alt', layout: '3',
+      options: { headerAlign: 'left' },
+      edits: {
+        eyebrow: '#Highlights', sectionTitle: 'Why it matters', sectionSubtitle: content.subheadline,
+        cards: content.features.map((f, i) => ({
+          icon: ['bolt', 'hub', 'shield'][i] || 'check_circle',
+          title: 'Point ' + (i + 1), desc: f, ctaText: 'Learn more', ctaUrl: '#'
+        }))
+      } },
+    { uid: _aiSectionUid(), sectionType: 'product-anchor', anchorId: '', mode, bg: 'alt', layout: '3',
+      options: {}, edits: { eyebrow: content.eyebrow, sectionTitle: 'Explore the lineup' } },
+    { uid: _aiSectionUid(), sectionType: 'related-need-help-cta', anchorId: '', mode, bg: 'alt', options: { showSecondCta: true, primaryCta: 'cta1' }, edits: {
+      eyebrow: '#Need Help', title: 'Ready to Get Started?',
+      subtitle: audience ? ('For ' + audience + '.') : 'Talk with our team to scope your deployment.',
+      cta1Text: cta1, cta2Text: cta2
+    } },
+    { uid: _aiSectionUid(), sectionType: 'site-footer', anchorId: '', mode: mode === 'dark' ? 'dark' : 'light', bg: 'plain', options: {}, edits: {} }
+  ];
+}
+
+// ── eDM: ComponentCustomizer builderStack. Edits keyed by the tool's own
+//    "<compId>__<mc:edit-name>__html" convention (see applyEdits() /
+//    buildComponentEditMap() in ComponentCustomizer.html); any key that
+//    doesn't match is simply ignored (safe), never breaks rendering. ──
+function _aiBuildEdmSnapshot(content, styleId, brief) {
+  const theme = styleId === 'cyber-green' ? 'lp-green' : (styleId === 'style03' ? 'lp-purple' : 'light-blue');
+  const ctas = _aiExtractCtas(brief, 'Shop Now', 'Contact Us');
+  const isJetson = _aiLooksJetsonBrief(brief);
+  const heroTitle = isJetson ? 'Accelerating Edge AI with NVIDIA® Jetson™' : content.headline;
+  const heroSub = isJetson
+    ? 'Built-In Memory, Built-In Confidence — validated on-board DRAM removes memory sourcing risk across the full Jetson lineup.'
+    : content.subheadline;
+  const mk = (compId, edits) => ({ uid: newId('b_'), compId, edits: edits || {}, options: {}, colors: {} });
+  return {
+    builderStack: [
+      mk('header'),
+      mk('banner-v1', {
+        'banner_v1__hero_eyebrow__html': isJetson ? '#NVIDIA Jetson' : content.eyebrow,
+        'banner_v1__hero_title__html': heroTitle,
+        'banner_v1__hero_subtitle__html': heroSub,
+        'banner_v1__hero_cta__html': (ctas[0] || 'Explore Solutions') + ' →'
+      }),
+      mk('products-v2', {
+        'products_v2__product1_name__html': 'AIR-020X-S9A1',
+        'products_v2__product1_desc__html': 'NVIDIA® Jetson™ Orin NX Edge AI Inference System',
+        'products_v2__product2_name__html': 'AFE-A702-X1A1U',
+        'products_v2__product2_desc__html': 'NVIDIA® Jetson Thor™ Robotic AI System',
+        'products_v2__product3_name__html': 'AIR-030-B90A1',
+        'products_v2__product3_desc__html': 'NVIDIA® Jetson AGX Orin™ AI Inference System'
+      }),
+      mk('product-cards', {
+        'product_cards__pcards_eyebrow__html': 'WHY BUILT-IN MEMORY',
+        'product_cards__pcard1_title__html': 'Validated On-Board DRAM',
+        'product_cards__pcard1_body__html': 'Memory is qualified as part of every Jetson module — no external sourcing, no compatibility guesswork, no supply surprises.',
+        'product_cards__pcard2_title__html': 'One Scalable Platform',
+        'product_cards__pcard2_body__html': 'From Jetson Orin Nano to AGX Thor, a single architecture spans the full performance range for robotics, medical AI, and edge LLM/VLM.'
+      }),
+      mk('coupon-v1', {
+        'coupon_v1__coupon_eyebrow__html': 'Exclusive Launch Offer',
+        'coupon_v1__coupon_headline__html': 'Save <span>$50</span> on Your First Jetson Order',
+        'coupon_v1__coupon_code__html': 'JETSON50'
+      }),
+      mk('three-button-bar', {
+        'three_button_bar__btn3_cta1__html': 'Explore Solutions',
+        'three_button_bar__btn3_cta2__html': 'Service Request',
+        'three_button_bar__btn3_cta3__html': 'Browse Jetson Lineup'
+      }),
+      mk('footer')
+    ],
+    colorState: {},
+    theme
+  };
+}
+
+// ── Graphic Asset: a self-contained port of MarketingMaterialBuilder's
+//    own size catalog / typography formulas (kept in sync with
+//    MarketingMaterialBuilder.html) so the generated project matches
+//    exactly what that builder expects when reopened. ──
+const AI_MMB_SIZE_GROUPS = [
+  { id: 'iotmart', sizes: [{ id: 'iotmart-a1', w: 1200, h: 675 }] },
+  { id: 'social', sizes: [{ id: 'social-fb-li', w: 1080, h: 1080 }] },
+  { id: 'gda', sizes: [{ id: 'gda-01', w: 300, h: 250 }, { id: 'gda-02', w: 336, h: 280 }, { id: 'gda-03', w: 728, h: 90 }, { id: 'gda-04', w: 300, h: 600 }, { id: 'gda-05', w: 320, h: 100 }] },
+  { id: 'pmax', sizes: [{ id: 'pmax-01', w: 1200, h: 628 }, { id: 'pmax-02', w: 960, h: 1200 }] },
+  { id: 'sig', sizes: [{ id: 'sig-banner', w: 650, h: 120 }] }
+];
+const AI_MMB_GROUP_SHOW = {
+  iotmart: { eyebrow: true, headline: true, subheadline: true, features: true, background: true, product: true },
+  social: { eyebrow: true, headline: true, subheadline: true, features: true, background: true, product: true },
+  sig: { eyebrow: false, headline: true, subheadline: true, features: false, background: true, product: true },
+  pmax: { eyebrow: false, headline: true, subheadline: true, features: false, background: true, product: true },
+  gda: { eyebrow: false, headline: true, subheadline: true, features: false, background: true, product: true }
+};
+const AI_MMB_DEFAULT_LAYOUT = { 'social-fb-li': 'image-top', 'iotmart-a1': 'image-right' };
+const AI_MMB_TYPO_OVERRIDES = {
+  'iotmart-a1': { eyebrow: 16, headline: 52, subheadline: 22, features: 19 },
+  'social-fb-li': { eyebrow: 20, headline: 68, subheadline: 30, features: 22 },
+  'gda-01': { eyebrow: 10, headline: 24, subheadline: 14, features: 10 },
+  'gda-02': { eyebrow: 10, headline: 24, subheadline: 14, features: 10 },
+  'gda-03': { eyebrow: 9, headline: 24, subheadline: 11, features: 10 },
+  'gda-04': { eyebrow: 13, headline: 40, subheadline: 17, features: 15 },
+  'gda-05': { eyebrow: 9, headline: 22, subheadline: 8, features: 10 },
+  'pmax-01': { eyebrow: 28, headline: 80, subheadline: 36, features: 20 },
+  'pmax-02': { eyebrow: 28, headline: 96, subheadline: 44, features: 20 },
+  'sig-banner': { eyebrow: 10, headline: 24, subheadline: 14, features: 12 }
+};
+const AI_MMB_LH_OVERRIDES = {
+  'gda-01': { eyebrow: 1, headline: 1.1, subheadline: 1.1, features: 1 },
+  'gda-02': { eyebrow: 1, headline: 1.1, subheadline: 1.1, features: 1 }
+};
+function _aiMmbFindSize(sid) { for (const g of AI_MMB_SIZE_GROUPS) { const s = g.sizes.find(s => s.id === sid); if (s) return s; } return null; }
+function _aiMmbGroupOf(sid) { for (const g of AI_MMB_SIZE_GROUPS) if (g.sizes.some(s => s.id === sid)) return g.id; return null; }
+function _aiMmbOrientation(size) { const r = size.w / size.h; if (r >= 1.15) return 'wide'; if (r <= 0.87) return 'tall'; return 'square'; }
+function _aiMmbLayoutOptions(orient) {
+  if (orient === 'wide') return ['image-left', 'image-right'];
+  if (orient === 'tall') return ['image-top', 'image-bottom'];
+  return ['image-left', 'image-right', 'image-top', 'image-bottom'];
+}
+function _aiMmbClamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function _aiMmbAutoSpacing(size) {
+  const shortSide = Math.min(size.w, size.h);
+  const aspect = size.w / size.h;
+  let pad = Math.round(shortSide * 0.075);
+  let gapBase = Math.round(shortSide * 0.04);
+  if (aspect >= 3.8) { pad = Math.max(pad, 10); gapBase = Math.max(gapBase, 8); }
+  if (aspect <= 0.72) { gapBase = Math.max(gapBase, 10); }
+  pad = _aiMmbClamp(pad, 8, 46);
+  gapBase = _aiMmbClamp(gapBase, 6, 28);
+  return { pad, contentGap: Math.round(gapBase * 1.4) };
+}
+function _aiMmbDefaultTypo(sizeId, kind) {
+  const size = _aiMmbFindSize(sizeId);
+  const base = Math.min(size.w, size.h);
+  const specs = {
+    eyebrow: { m: 0.040, min: 9, weight: 700, color: '#8ab625', align: 'left', lineHeight: 1.2, letterSpacing: '0.12em', textTransform: 'uppercase' },
+    headline: { m: 0.115, min: 14, weight: 700, color: '#ffffff', align: 'left', lineHeight: 1.12, letterSpacing: '-0.005em', textTransform: '' },
+    subheadline: { m: 0.048, min: 10, weight: 500, color: '#8ab625', align: 'left', lineHeight: 1.36, letterSpacing: '0', textTransform: '' },
+    features: { m: 0.042, min: 9, weight: 500, color: '#ffffff', align: 'left', lineHeight: 1.38, letterSpacing: '0', textTransform: '' }
+  };
+  const s = specs[kind];
+  const override = (AI_MMB_TYPO_OVERRIDES[sizeId] || {})[kind];
+  const fontSize = override != null ? override : Math.max(s.min, Math.round(base * s.m));
+  const lhOverride = (AI_MMB_LH_OVERRIDES[sizeId] || {})[kind];
+  const lineHeight = lhOverride != null ? lhOverride : s.lineHeight;
+  return { fontSize, fontWeight: s.weight, color: s.color, align: s.align, lineHeight, letterSpacing: s.letterSpacing, textTransform: s.textTransform };
+}
+function _aiMmbUid(prefix) { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function _aiMmbMakeSizeEntry(sizeId) {
+  const size = _aiMmbFindSize(sizeId);
+  const g = _aiMmbGroupOf(sizeId);
+  const orient = _aiMmbOrientation(size);
+  const layoutOpts = _aiMmbLayoutOptions(orient);
+  const layout = AI_MMB_DEFAULT_LAYOUT[sizeId] || layoutOpts[0];
+  const spacing = _aiMmbAutoSpacing(size);
+  return {
+    sizeId,
+    show: Object.assign({}, AI_MMB_GROUP_SHOW[g]),
+    layout,
+    mediaSize: 35,
+    spacing: { padTop: spacing.pad, padRight: spacing.pad, padBottom: spacing.pad, padLeft: spacing.pad, contentGap: spacing.contentGap, linked: true },
+    bg: {
+      flatType: 'color', color: '#05070d',
+      gradFrom: '#5C7B14', gradTo: '#1f2c00', gradAngle: 135,
+      overlayType: 'gradient', overlayColor: '#000000', overlayOpacity: 0.80, overlayGradOpacity: 0.80,
+      overlayGradFrom: '#5C7B14', overlayGradTo: '#1f2c00', overlayGradAngle: 180,
+      imgOpacity: 1, imgSaturation: 10,
+      imgPosX: 50, imgPosY: 50, imgScale: 1,
+      graphic: 'none', graphicColor: '', graphicOpacity: 1, graphicAngle: 115,
+      graphicPosX: 50, graphicPosY: 50, graphicScale: 1,
+      graphicBandThickness: 20, graphicDiamondLong: 70, graphicDiamondShort: 45
+    },
+    typo: {
+      eyebrow: _aiMmbDefaultTypo(sizeId, 'eyebrow'),
+      headline: _aiMmbDefaultTypo(sizeId, 'headline'),
+      subheadline: _aiMmbDefaultTypo(sizeId, 'subheadline'),
+      features: _aiMmbDefaultTypo(sizeId, 'features')
+    },
+    mode: 'dark'
+  };
+}
+function _aiBuildMmbProject(name, content, images) {
+  const id = _aiMmbUid('proj');
+  const proj = {
+    id, name: name || 'Untitled Project', createdAt: Date.now(), updatedAt: Date.now(),
+    content: {
+      eyebrow: content.eyebrow, headline: content.headline, subheadline: content.subheadline,
+      features: content.features,
+      backgroundImage: images.bg || '', productImage: images.product || '',
+      fontFamily: 'Rajdhani', stylePreset: 'cyber-green'
+    },
+    sizes: {}, sizeOrder: [], activeSizeId: null
+  };
+  const allSizeIds = [];
+  AI_MMB_SIZE_GROUPS.forEach(g => g.sizes.forEach(s => allSizeIds.push(s.id)));
+  allSizeIds.forEach(sid => { proj.sizes[sid] = _aiMmbMakeSizeEntry(sid); proj.sizeOrder.push(sid); });
+  proj.activeSizeId = allSizeIds[0] || null;
+  return proj;
+}
+
+// ── Step 3: review ──
+function _aiRenderReview() {
+  const r = _aiResult;
+  const list = document.getElementById('aiReviewList');
+  const rows = [];
+  if (r.lp) rows.push({ type: 'lp', name: r.campaignName + ' — Landing Page', desc: r.content.headline + ' · ' + r.lp.length + ' sections · style ' + _aiSelectedStyle });
+  if (r.edm) rows.push({ type: 'edm', name: r.campaignName + ' — eDM', desc: r.content.headline + ' · ' + r.edm.builderStack.length + ' components · theme ' + r.edm.theme });
+  if (r.mm) rows.push({ type: 'mm', name: r.campaignName + ' — Graphic Asset', desc: r.content.headline + ' · ' + r.mm.sizeOrder.length + ' sizes' });
+  list.innerHTML = rows.map(row => {
+    const info = AI_ASSET_TYPE_INFO[row.type];
+    return `
+    <div class="ai-review-card">
+      <div class="icon-box ${info.cls}"><span class="mi">${info.icon}</span></div>
+      <div>
+        <div class="ai-review-name">${escapeHtml(row.name)}</div>
+        <div class="ai-review-desc">${escapeHtml(row.desc)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Deliver: transparency notes — what got auto-filled and why, sourced
+//    from the actual Brief/Clarify state (not generic boilerplate). ──
+function _aiRenderNotes() {
+  const box = document.getElementById('aiNotesBox');
+  const r = _aiResult;
+  const notes = [];
+  const b = String(r.brief || '').toLowerCase();
+  if (r.images && !/image|photo|picture|visual|background/.test(b) && _aiBriefFiles.length === 0) {
+    const bgName = (r.images.bg || '').split('/').pop();
+    const productName = (r.images.product || '').split('/').pop();
+    notes.push(`No image was specified, so <b>${escapeHtml(bgName)}</b> and <b>${escapeHtml(productName)}</b> were auto-picked from the IoTMart image library based on keywords in your brief.`);
+  }
+  if (r.clarify && r.clarify.audience) notes.push(`Audience set to <b>${escapeHtml(r.clarify.audience)}</b>, per your Clarify answer.`);
+  if (r.clarify && r.clarify.tone) notes.push(`Copy tone leans <b>${escapeHtml(r.clarify.tone)}</b>, per your Clarify answer.`);
+  if (r.clarify && r.clarify.more_detail) notes.push(`The extra detail you added in Clarify was folded into the body copy and feature bullets.`);
+  if (r.content && r.content.language && r.content.language !== 'en') notes.push(`Fallback copy (subheadline/body/CTA where your brief didn't cover it) used the <b>${escapeHtml(r.content.language)}</b> template — your own wording was kept as written.`);
+  if (r.lp) {
+    const untouchedProduct = r.lp.find(s => s.sectionType === 'product-anchor');
+    if (untouchedProduct) notes.push('The Product Anchor section is using its default lineup cards — swap in real SKUs in Campaign Page Builder when ready.');
+  }
+  if (!notes.length) notes.push('No real gaps detected — everything below was generated directly from your brief.');
+  box.innerHTML = '<div class="ai-notes-title"><span class="mi">info</span>What we assumed</div>' +
+    notes.map(n => '<div class="ai-note-row">• ' + n + '</div>').join('');
+}
+
+// ── Apply: write the generated JSON into a new campaign using the exact
+//    same object shapes confirmLpModal()/confirmEdmModal()/
+//    confirmMaterialModal() already produce. ──
+function _aiApply() {
+  const r = _aiResult;
+  if (!r) return;
+  const c = {
+    id: newId('camp_'), name: r.campaignName, region: r.region,
+    landingPages: [], edms: [], materials: [],
+    created: Date.now(), updated: Date.now()
+  };
+  if (r.lp) {
+    const lpId = newId('lp_');
+    const isJetson = _aiLooksJetsonBrief(r.brief);
+    const cpbProject = {
+      id: lpId, name: r.campaignName,
+      cssPrefix: isJetson ? 'nv-jetson' : _lpSlug(r.campaignName),
+      styleId: isJetson ? 'cyber-green' : _aiSelectedStyle, store: _regionToStore(r.region),
+      sections: r.lp, created: Date.now(), updated: Date.now()
+    };
+    c.landingPages.push({ id: lpId, name: r.campaignName, cpbProject, created: Date.now(), updated: Date.now() });
+  }
+  if (r.edm) {
+    c.edms.push({ id: newId('edm_'), name: r.campaignName + ' — Main Email', snapshot: r.edm, created: Date.now(), updated: Date.now() });
+  }
+  if (r.mm) {
+    c.materials.push({ id: newId('mm_'), name: r.campaignName + ' — Ad Set', mmbProject: r.mm, created: Date.now(), updated: Date.now() });
+  }
+  campaigns.push(c);
+  saveCampaigns(campaigns);
+  closeAiComposer();
+  showToast('<span class="mi">auto_awesome</span>AI-generated campaign created');
+  openCampaign(c.id);
+}
+
+// ══════════════════════════════════════
+// AI Guide — simulated help assistant. No real LLM/API call: free-text
+// questions are matched against a keyword-scored knowledge base covering
+// the whole tool suite, with a graceful fallback when nothing matches.
+// Inside a campaign it also answers a few questions dynamically from that
+// campaign's own live data (asset counts, empty assets, etc.).
+// ══════════════════════════════════════
+const AI_GUIDE_KB = [
+  { id: 'what-is', icon: 'info',
+    keywords: ['what is marcom', 'what is this tool', 'what is this', 'what does this do', 'purpose of this', 'about this tool'],
+    q: 'What is Marcom Agent Studio?',
+    a: 'It\'s a campaign workspace that ties together three builders you\'d otherwise use separately: Campaign Page Builder (landing pages), ComponentCustomizer (eDMs), and Marketing Material Builder (graphic ad sets). A "Campaign" groups any number of each together, and the AI Campaign Composer can draft all three at once from a short brief.' },
+  { id: 'start', icon: 'rocket_launch',
+    keywords: ['start a campaign', 'create a campaign', 'new campaign', 'begin', 'first campaign', 'how do i start'],
+    q: 'How do I start a campaign?',
+    a: 'Click "New Campaign" on the gallery, name it, and pick a region. Inside a campaign you can add any number of Landing Pages, eDMs, and Graphic Assets — everything lives together instead of scattered across separate files.' },
+  { id: 'composer', icon: 'auto_awesome',
+    keywords: ['ai campaign composer', 'ai composer', 'what does the composer do', 'composer do', 'generate a campaign'],
+    q: 'What does the AI Campaign Composer do?',
+    a: 'It turns a short brief into a full campaign draft: a Landing Page (Campaign Page Builder sections), an eDM (ComponentCustomizer builder stack), and a Graphic Asset set (Marketing Material Builder sizes) — all as structured data handed to the existing builders, never hand-written HTML. It asks a few clarifying questions first so the draft reflects what you actually said, then you fine-tune everything afterward.' },
+  { id: 'composer-real-ai', icon: 'psychology',
+    keywords: ['real ai', 'real llm', 'actual ai', 'gpt', 'chatgpt', 'is this a real ai', 'does this call an api', 'connected to an api', 'how does the ai work', 'is this really ai'],
+    q: 'Does the AI Composer use a real AI/LLM?',
+    a: 'No — and this AI Guide doesn\'t either. Both are deterministic and rule-based: the Composer parses your brief text and clarify answers with plain string logic and fills in gaps from a small template bank, and I match your question against a keyword-scored FAQ. Nothing here calls an external AI API or leaves your browser — that\'s intentional, this whole suite runs with zero backend.' },
+  { id: 'composer-clarify', icon: 'help',
+    keywords: ['clarify question', 'why does it ask', 'clarify step', 'what are the clarify'],
+    q: 'What are the Clarify questions for?',
+    a: 'After you submit a brief, the Composer scans it for gaps — no named audience, no image mentioned, a very short brief, or no stated tone — and only asks about what\'s actually missing. If your brief already covers something, that question is skipped entirely.' },
+  { id: 'composer-short-brief', icon: 'short_text',
+    keywords: ['short brief', 'brief too short', 'not enough detail', 'what if my brief is short'],
+    q: 'What happens if my brief is very short?',
+    a: 'The Composer fills gaps (subheadline, body copy, one or two features) from a small language-specific filler template, but it never invents or overwrites the words you actually typed — only the parts you left blank.' },
+  { id: 'composer-languages', icon: 'translate',
+    keywords: ['language', 'korean', 'chinese', 'multilingual', 'what languages'],
+    q: 'What languages are supported?',
+    a: 'English, Traditional Chinese (繁體中文), and Korean (한국어). The Language field controls which fallback-copy template fills any gaps — your own written words are never auto-translated.' },
+  { id: 'composer-files', icon: 'attach_file',
+    keywords: ['reference file', 'attach file', 'upload file', 'what do attached files do'],
+    q: 'What do the attached reference files do?',
+    a: 'In this demo, attaching a file just adds its name as a chip and skips the "no image mentioned" clarify question — it doesn\'t parse the file\'s contents. It\'s a placeholder for where real document parsing would plug in.' },
+  { id: 'assets', icon: 'category',
+    keywords: ['difference between', 'landing page vs', 'edm vs', 'vs graphic asset', 'what is the difference'],
+    q: 'Landing Page vs eDM vs Graphic Asset — what\'s the difference?',
+    a: 'Landing Page (Campaign Page Builder) is a full web page built from sections like Hero, Feature Cards, Product Anchor. eDM (ComponentCustomizer) is an email built from stackable components. Graphic Asset (Marketing Material Builder) is a set of ad creative sizes — banners, social posts, display ads — generated from one shared headline and image so you\'re not rebuilding ten sizes by hand.' },
+  { id: 'export', icon: 'ios_share',
+    keywords: ['export', 'publish', 'download', 'how do i export'],
+    q: 'How do I export or publish?',
+    a: 'Graphic Assets export as PNG or JPG per size, or all sizes zipped together. Landing Pages and eDMs are edited live in their own builder — use that builder\'s copy/export controls once the draft looks right.' },
+  { id: 'lp-editing', icon: 'web',
+    keywords: ['edit a landing page', 'edit landing page', 'change landing page', 'landing page editor'],
+    q: 'How do I edit a Landing Page?',
+    a: 'Open it from inside a campaign — it launches Campaign Page Builder embedded in this app. Click any section to edit its text, images, or layout; add new sections from the section library; and pick a visual style that applies to the whole page.' },
+  { id: 'lp-sections', icon: 'view_agenda',
+    keywords: ['what sections', 'section types', 'add a section', 'hero banner', 'feature cards', 'product anchor', 'faq accordion'],
+    q: 'What sections can I add to a Landing Page?',
+    a: 'Hero Banner, Feature Cards (and the split/gallery variants), Product Anchor, Product Series Matrix, Related Content Hub, FAQ Accordion, and a Need-Help CTA, plus the fixed Header/Footer. Sections can be reordered and each has its own light/dark mode.' },
+  { id: 'lp-styles', icon: 'palette',
+    keywords: ['landing page style', 'landing page theme', 'cyber green', 'change the style'],
+    q: 'What styles are available for Landing Pages?',
+    a: 'Each style is a full token set (colors, section backgrounds, accents) applied via a single "styleId" on the project — for example Cyber Green, which uses NVIDIA-green (#97c430) as the primary accent on a near-black background.' },
+  { id: 'edm-editing', icon: 'mail',
+    keywords: ['edit an edm', 'edit edm', 'edm editor', 'edit an email', 'edit the email'],
+    q: 'How do I edit an eDM?',
+    a: 'Open it from inside a campaign to launch ComponentCustomizer embedded in this app. You stack components top to bottom, click any text/link/image to edit it inline, and set colors either per-component or via a shared theme.' },
+  { id: 'edm-components', icon: 'view_list',
+    keywords: ['edm components', 'what components', 'countdown', 'product grid', 'section heading', 'button bar'],
+    q: 'What components can I add to an eDM?',
+    a: 'Header, two hero banner layouts, a countdown/urgency bar, a section heading, product grids (2×2 and 3-column), coupons and promo codes, image+text splits, icon grids, button bars, a survey block, and the footer — all designed to render correctly in Outlook/Gmail/Apple Mail.' },
+  { id: 'edm-theme', icon: 'format_color_fill',
+    keywords: ['edm theme', 'edm color', 'change edm color', 'edm palette'],
+    q: 'How do I change the eDM color theme?',
+    a: 'Pick a theme (like the Green theme) and it resets every component\'s color keys to that theme\'s palette in one click. You can still override any single component\'s color afterward without breaking the rest.' },
+  { id: 'edm-export-format', icon: 'code',
+    keywords: ['edm export format', 'edm html', 'what format does the edm', 'xhtml', 'outlook compatible'],
+    q: 'What format does the eDM export as?',
+    a: 'A self-contained XHTML document with MSO conditional comments and inlined, table-based layout — built for email client compatibility (Outlook, Gmail, Apple Mail), not a modern responsive webpage.' },
+  { id: 'mmb-sizes', icon: 'aspect_ratio',
+    keywords: ['ad sizes', 'graphic asset sizes', 'what sizes', 'google display ad', 'pmax', 'signature banner'],
+    q: 'What ad sizes does Graphic Asset Builder support?',
+    a: 'IoTMart homepage banner, a square social post (FB/LinkedIn), 5 Google Display Ad sizes, 2 Google PMAX sizes, and an email signature banner — 10 sizes total, all sharing one headline/subheadline/feature/image source.' },
+  { id: 'mmb-style', icon: 'style',
+    keywords: ['keep consistent', 'match landing page and edm', 'same style across', 'visual consistency'],
+    q: 'How do I keep my Graphic Assets, Landing Page, and eDM visually consistent?',
+    a: 'Pick the same style family across all three — e.g. Cyber Green exists as a style in Campaign Page Builder, a theme in ComponentCustomizer, and a style preset in Marketing Material Builder — so one color choice carries across every asset type in the campaign.' },
+  { id: 'mmb-export', icon: 'download',
+    keywords: ['export graphic asset', 'download png', 'export all sizes', 'zip'],
+    q: 'How do I export Graphic Assets?',
+    a: 'Export a single size as PNG or JPG, or export every size in the project at once as a zipped folder — both render pixel-for-pixel from the same live canvas you\'re editing.' },
+  { id: 'data-storage', icon: 'lock',
+    keywords: ['where is my data stored', 'data storage', 'server', 'privacy', 'is anything sent', 'backend', 'api key'],
+    q: 'Where is my data stored? Is anything sent to a server?',
+    a: 'Everything lives in your browser\'s local storage. There\'s no backend, no account, and no API key anywhere in this suite — nothing you create here is sent anywhere.' },
+  { id: 'duplicate-delete', icon: 'content_copy',
+    keywords: ['duplicate', 'delete a campaign', 'delete an asset', 'copy a campaign', 'remove'],
+    q: 'Can I duplicate or delete a campaign/asset?',
+    a: 'Yes — each campaign and each asset card has a kebab (⋮) menu with duplicate and delete. Duplicating deep-copies the underlying project data, so edits to the copy never touch the original.' },
+  { id: 'regions', icon: 'public',
+    keywords: ['what are regions', 'region for', 'global korea europe'],
+    q: 'What are Regions for?',
+    a: 'A campaign-level tag (Global, Korea, Europe) used for organization and filtering on the gallery — it doesn\'t change generated content, though the AI Composer\'s Region field is there for future locale-aware generation.' },
+  { id: 'undo-redo', icon: 'undo',
+    keywords: ['undo', 'redo', 'ctrl z'],
+    q: 'Is there undo/redo?',
+    a: 'Yes, inside Campaign Page Builder, ComponentCustomizer, and Marketing Material Builder each keep their own history stack while you\'re editing that asset.' },
+  { id: 'countdown', icon: 'timer',
+    keywords: ['countdown', 'urgency', 'deadline banner'],
+    q: 'How do I add urgency / a countdown to my eDM?',
+    a: 'Add the Countdown component to the eDM builder stack — it\'s a single-line banner meant for a deadline message (e.g. "Offer ends 08/15") and its accent color follows whatever theme you\'ve applied.' },
+  { id: 'faq-accordion', icon: 'quiz',
+    keywords: ['faq section', 'accordion', 'add faq'],
+    q: 'Can I add an FAQ section to my Landing Page?',
+    a: 'Yes — the FAQ Accordion section holds any number of question/answer pairs and matches whatever light/dark mode you set for that section.' },
+  { id: 'product-data', icon: 'inventory_2',
+    keywords: ['product images', 'product database', 'where do products come from', 'product info'],
+    q: 'Where do product images and info come from?',
+    a: 'From a shared product database file used across the builders, plus a curated image library for cases where a specific product photo isn\'t needed (e.g. generic backgrounds for Graphic Assets).' }
+];
+
+let _aiGuideThread = []; // { role: 'user'|'bot', text }
+
+function toggleAiGuide(force) {
+  const panel = document.getElementById('aiGuidePanel');
+  const open = typeof force === 'boolean' ? force : !panel.classList.contains('open');
+  panel.classList.toggle('open', open);
+  if (open) { _aiGuideRenderThread(); setTimeout(() => document.getElementById('aiGuideInput').focus(), 80); }
+}
+function _aiGuideGreetingHtml() {
+  const inCampaign = currentCampaignId && document.getElementById('detailView').classList.contains('visible');
+  let html = '<div class="ai-guide-intro">Ask me anything about Marcom Agent Studio — how the builders work, styling, export, where your data lives, or what the AI Composer actually does under the hood.</div>';
+  if (inCampaign) html += _aiGuideProjectAssistantHtml();
+  const starter = ['What does the AI Campaign Composer do?', 'Does the AI Composer use a real AI/LLM?', 'How do I keep my Graphic Assets, Landing Page, and eDM visually consistent?', 'Where is my data stored?'];
+  html += '<div class="ai-guide-suggest-chips">' + starter.map(s => `<button type="button" class="ai-guide-chip" onclick="_aiGuideAsk(${JSON.stringify(s)})">${escapeHtml(s)}</button>`).join('') + '</div>';
+  return html;
+}
+function _aiGuideRenderThread() {
+  const body = document.getElementById('aiGuideBody');
+  if (!body) return;
+  let html = _aiGuideThread.length ? '' : _aiGuideGreetingHtml();
+  html += _aiGuideThread.map(m => m.role === 'user'
+    ? '<div class="ai-guide-msg ai-guide-msg-user">' + escapeHtml(m.text) + '</div>'
+    : '<div class="ai-guide-msg ai-guide-msg-bot' + (m.unmatched ? ' unmatched' : '') + '">' + m.text + '</div>'
+  ).join('');
+  body.innerHTML = html;
+  body.scrollTop = body.scrollHeight;
+}
+function _aiGuideSubmit() {
+  const input = document.getElementById('aiGuideInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  _aiGuideAsk(text);
+}
+function _aiGuideAsk(question) {
+  question = String(question || '').trim();
+  if (!question) return;
+  _aiGuideThread.push({ role: 'user', text: question });
+  _aiGuideRenderThread();
+  // Simulated "thinking" beat so the free-text answer feels conversational
+  // rather than an instant lookup — still fully local/deterministic.
+  const body = document.getElementById('aiGuideBody');
+  body.insertAdjacentHTML('beforeend', '<div class="ai-guide-typing" id="aiGuideTyping"><span></span><span></span><span></span></div>');
+  body.scrollTop = body.scrollHeight;
+  setTimeout(() => {
+    const typing = document.getElementById('aiGuideTyping');
+    if (typing) typing.remove();
+    const result = _aiGuideAnswer(question);
+    _aiGuideThread.push({ role: 'bot', text: result.html, unmatched: result.unmatched });
+    _aiGuideRenderThread();
+  }, 420);
+}
+function _aiGuideAnswer(question) {
+  const dyn = _aiGuideDynamicAnswer(question);
+  if (dyn) return { html: dyn };
+  const q = question.toLowerCase();
+  let best = null, bestScore = 0;
+  AI_GUIDE_KB.forEach(entry => {
+    let score = 0;
+    entry.keywords.forEach(k => { if (q.includes(k)) score += k.split(' ').length; });
+    if (score > bestScore) { bestScore = score; best = entry; }
+  });
+  if (best) return { html: best.a };
+  const nearby = AI_GUIDE_KB.slice(0, 4).map(t => `<button type="button" class="ai-guide-chip" onclick="_aiGuideAsk(${JSON.stringify(t.q)})">${escapeHtml(t.q)}</button>`).join('');
+  return {
+    unmatched: true,
+    html: 'I don\'t have a specific answer for that yet — I\'m a keyword-matched FAQ, not a full AI, so I only know what\'s in my topic list. Try rephrasing, or ask one of these:<div class="ai-guide-suggest-chips" style="margin-top:8px;">' + nearby + '</div>'
+  };
+}
+// A few questions get answered from the current campaign's live data
+// instead of the static knowledge base, when one is open.
+function _aiGuideDynamicAnswer(question) {
+  const inCampaign = currentCampaignId && document.getElementById('detailView').classList.contains('visible');
+  if (!inCampaign) return null;
+  const c = findCampaign(currentCampaignId);
+  if (!c) return null;
+  const q = question.toLowerCase();
+  if (/how many|count of|what.?s in this campaign|assets? (do i have|are in)/.test(q)) {
+    const lpN = (c.landingPages || []).length, edmN = (c.edms || []).length, mmN = (c.materials || []).length;
+    return `"${escapeHtml(c.name)}" currently has ${lpN} Landing Page${lpN === 1 ? '' : 's'}, ${edmN} eDM${edmN === 1 ? '' : 's'}, and ${mmN} Graphic Asset${mmN === 1 ? '' : 's'}.`;
+  }
+  if (/empty|missing content|nothing (in|added)|which asset.*(empty|blank)/.test(q)) {
+    const empties = [];
+    (c.landingPages || []).forEach(lp => { if (!lp.cpbProject || !(lp.cpbProject.sections || []).length) empties.push('Landing Page "' + escapeHtml(lp.name) + '"'); });
+    (c.edms || []).forEach(e => { if (!e.snapshot || !(e.snapshot.builderStack || []).length) empties.push('eDM "' + escapeHtml(e.name) + '"'); });
+    (c.materials || []).forEach(m => { if (!m.mmbProject) empties.push('Graphic Asset "' + escapeHtml(m.name) + '"'); });
+    return empties.length ? 'Still empty: ' + empties.join(', ') + '.' : 'Everything in this campaign already has content.';
+  }
+  return null;
+}
+function _aiGuideRefreshIfOpen() {
+  const panel = document.getElementById('aiGuidePanel');
+  if (panel && panel.classList.contains('open') && !_aiGuideThread.length) _aiGuideRenderThread();
+}
+function _aiGuideProjectAssistantHtml() {
+  const c = findCampaign(currentCampaignId);
+  if (!c) return '';
+  const lpN = (c.landingPages || []).length;
+  const edmN = (c.edms || []).length;
+  const mmN = (c.materials || []).length;
+  const tips = [];
+  if (lpN + edmN + mmN === 0) {
+    tips.push({ icon: 'auto_awesome', text: 'This campaign has no assets yet — try the AI Campaign Composer to draft a Landing Page, eDM, and Graphic Asset in one pass.' });
+  }
+  (c.landingPages || []).forEach(lp => {
+    if (!lp.cpbProject || !(lp.cpbProject.sections || []).length) tips.push({ icon: 'web', text: '"' + escapeHtml(lp.name) + '" has no sections yet — open it in Campaign Page Builder to add content.' });
+  });
+  (c.edms || []).forEach(e => {
+    if (!e.snapshot || !(e.snapshot.builderStack || []).length) tips.push({ icon: 'mail', text: '"' + escapeHtml(e.name) + '" is an empty email — open it in the eDM editor to add components.' });
+  });
+  (c.materials || []).forEach(m => {
+    if (!m.mmbProject) tips.push({ icon: 'image', text: '"' + escapeHtml(m.name) + '" hasn\'t been set up yet — open it to choose sizes and content.' });
+  });
+  if (!tips.length) tips.push({ icon: 'check_circle', text: 'All assets in this campaign have content. Use each builder\'s export controls when you\'re ready to publish.' });
+  return '<div class="ai-guide-intro">Project Assistant · ' + escapeHtml(c.name) + '<br>' + lpN + ' Landing Page · ' + edmN + ' eDM · ' + mmN + ' Graphic Asset</div>' +
+    tips.map(t => '<div class="ai-guide-tip-row"><span class="mi">' + t.icon + '</span>' + t.text + '</div>').join('');
+}
+
+// ══════════════════════════════════════
+// Keyboard handling for modals
+// ══════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  const campaignOpen = document.getElementById('campaignModal').classList.contains('visible');
+  const deleteOpen = document.getElementById('deleteModal').classList.contains('visible');
+  const edmOpen = document.getElementById('edmModal').classList.contains('visible');
+  const materialOpen = document.getElementById('materialModal').classList.contains('visible');
+  const lpOpen = document.getElementById('lpModal').classList.contains('visible');
+  const aiOpen = document.getElementById('aiComposerModal').classList.contains('visible');
+  if (campaignOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmCampaignModal(); }
+    if (e.key === 'Escape') closeCampaignModal();
+  } else if (edmOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmEdmModal(); }
+    if (e.key === 'Escape') closeEdmModal();
+  } else if (materialOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmMaterialModal(); }
+    if (e.key === 'Escape') closeMaterialModal();
+  } else if (lpOpen) {
+    if (e.key === 'Enter') { e.preventDefault(); confirmLpModal(); }
+    if (e.key === 'Escape') closeLpModal();
+  } else if (aiOpen) {
+    if (e.key === 'Escape') closeAiComposer();
+  } else if (deleteOpen) {
+    if (e.key === 'Escape') closeDeleteModal();
+  }
+});
+[['campaignModal', closeCampaignModal], ['deleteModal', closeDeleteModal], ['edmModal', closeEdmModal], ['materialModal', closeMaterialModal], ['lpModal', closeLpModal], ['aiComposerModal', closeAiComposer]].forEach(([id, fn]) => {
+  document.getElementById(id).addEventListener('click', (e) => {
+    if (e.target.id === id) fn();
+  });
+});
+
+// ══════════════════════════════════════
+// Init
+// ══════════════════════════════════════
+showGallery();
+</script>
+
+</body>
+</html>

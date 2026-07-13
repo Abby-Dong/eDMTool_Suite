@@ -814,6 +814,7 @@ var COMPONENTS = [
       ]},
       { key: 'showImgText', label: 'Image Text', default: true, optionGate: 'showImage' },
       { key: 'showEyebrow', label: 'Eyebrow', default: true },
+      { key: 'showAmount', label: 'Amount', default: true },
       { key: 'showValidity', label: 'Valid Date', default: true },
       { key: 'showCta', label: 'CTA Button', default: true }
     ],
@@ -850,7 +851,7 @@ var COMPONENTS = [
               </table>
             </td></tr>
             <tr><td style="padding: 16px 20px ${opts.showCta !== false ? '6px' : '20px'} 20px; background-color: #ffffff;">
-              <p mc:edit="coupon1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$50.00</p>
+              ${opts.showAmount !== false ? `<p mc:edit="coupon1_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$50.00</p>` : ''}
               ${opts.showValidity !== false ? `<p mc:edit="coupon1_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
             </td></tr>
             ${opts.showCta !== false ? `<tr><td align="right" style="padding: 8px 20px 20px 20px; background-color: #ffffff;">
@@ -883,7 +884,7 @@ var COMPONENTS = [
               </table>
             </td></tr>
             <tr><td style="padding: 16px 20px ${opts.showCta !== false ? '6px' : '20px'} 20px; background-color: #ffffff;">
-              <p mc:edit="coupon2_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$30.00</p>
+              ${opts.showAmount !== false ? `<p mc:edit="coupon2_amount" style="margin: 0 0 4px 0; font-size: 28px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.15;" data-color="coupon2Amount">$30.00</p>` : ''}
               ${opts.showValidity !== false ? `<p mc:edit="coupon2_validity" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="coupon2Validity">Valid through 2026/7/31</p>` : ''}
             </td></tr>
             ${opts.showCta !== false ? `<tr><td align="right" style="padding: 8px 20px 20px 20px; background-color: #ffffff;">
@@ -907,7 +908,7 @@ var COMPONENTS = [
       { label: 'Card 1 Image BG', key: 'coupon2Card1ImgBg', type: 'bg', default: '#0059ff', optionGate: 'showImage' },
       { label: 'Card 2 Image BG', key: 'coupon2Card2ImgBg', type: 'bg', default: '#0059ff', optionGate: 'showImage' },
       { label: 'Headline', key: 'coupon2Headline', type: 'color', default: '#1a1a2e' },
-      { label: 'Amount', key: 'coupon2Amount', type: 'color', default: '#07071a' },
+      { label: 'Amount', key: 'coupon2Amount', type: 'color', default: '#07071a', optionGate: 'showAmount' },
       { label: 'Validity', key: 'coupon2Validity', type: 'color', default: '#888888', optionGate: 'showValidity' },
       { label: 'CTA BG', key: 'coupon2CtaBg', type: 'bg', default: '#0059ff', optionGate: 'showCta' }
     ]
@@ -2093,6 +2094,98 @@ var THEMES = {
       showcaseSpecsBg: 'rgba(243,152,0,0.85)', showcaseEyebrow: '#f39800',
       // Survey
       surveyEyebrow: '#f39800', surveyCtaBg: '#f39800'
+    }
+  },
+  'lp-green': {
+    name: 'Green',
+    swatches: ['#ffffff', '#97c430', '#07071a', '#1a1a2e'],
+    overrides: {
+      // Banner v1
+      bannerBg: '#4f7f17', bannerEyebrow: '#cbe58f', bannerSubtitle: '#cbe58f',
+      bannerCtaText: '#4f7f17',
+      // Banner v2
+      banner2Bg: '#97c430', banner2Eyebrow: '#d7f19f', banner2Subtitle: '#d7f19f',
+      banner2CtaText: '#4f7f17',
+      // Section Heading
+      sectionEyebrow: '#4f7f17',
+      // Image-Text Split
+      splitEyebrow: '#4f7f17', splitCtaBg: '#97c430',
+      // Text-Image Split
+      split2Eyebrow: '#4f7f17', split2CtaBg: '#97c430',
+      // Promo Code Single
+      couponAccent: '#97c430', couponCode: '#97c430', couponCodeBorder: '#97c430',
+      // Coupon Single
+      cpn1Eyebrow: '#97c430', cpn1ImgBg: '#97c430', cpn1CtaBg: '#97c430',
+      // Coupon Dual
+      coupon2Eyebrow: '#97c430', coupon2Card1ImgBg: '#97c430', coupon2Card2ImgBg: '#4dd0e1', coupon2CtaBg: '#97c430',
+      // Promo Code Dual — Card 1
+      promo2Color1Bg: '#97c430', promo2Color1Text: '#97c430', promo2Color1Border: '#97c430',
+      // Promo Code Dual — Card 2
+      promo2Color2Bg: '#4dd0e1', promo2Color2Text: '#1a8fa1', promo2Color2Border: '#4dd0e1',
+      // Activities
+      actEyebrow: '#4f7f17', actLabel: '#97c430', actCtaBg: '#97c430',
+      // Button Bars
+      singleBtnCtaBg: '#97c430',
+      dualBtn1Bg: '#97c430', dualBtn2Border: '#97c430', dualBtn2Text: '#4f7f17',
+      btn3CtaBg: '#97c430',
+      // Products v1
+      prodCtaBg: '#97c430',
+      // Products v2
+      prod2CtaBg: '#97c430',
+      // Product Spotlight
+      spotEyebrow: '#4f7f17', spotCtaBg: '#97c430',
+      // Product Cards
+      pcardsEyebrow: '#4f7f17', pcardsAccent: '#97c430', pcardsCtaBg: '#97c430',
+      // Product Showcase
+      showcaseSpecsBg: 'rgba(151,196,48,0.88)', showcaseEyebrow: '#4f7f17',
+      // Survey
+      surveyEyebrow: '#4f7f17', surveyCtaBg: '#97c430'
+    }
+  },
+  'lp-purple': {
+    name: 'Purple',
+    swatches: ['#ffffff', '#8b5cf6', '#07071a', '#1a1a2e'],
+    overrides: {
+      // Banner v1
+      bannerBg: '#6d28d9', bannerEyebrow: '#c4b5fd', bannerSubtitle: '#c4b5fd',
+      bannerCtaText: '#6d28d9',
+      // Banner v2
+      banner2Bg: '#8b5cf6', banner2Eyebrow: '#ddd6fe', banner2Subtitle: '#ddd6fe',
+      banner2CtaText: '#6d28d9',
+      // Section Heading
+      sectionEyebrow: '#6d28d9',
+      // Image-Text Split
+      splitEyebrow: '#6d28d9', splitCtaBg: '#8b5cf6',
+      // Text-Image Split
+      split2Eyebrow: '#6d28d9', split2CtaBg: '#8b5cf6',
+      // Promo Code Single
+      couponAccent: '#8b5cf6', couponCode: '#8b5cf6', couponCodeBorder: '#8b5cf6',
+      // Coupon Single
+      cpn1Eyebrow: '#8b5cf6', cpn1ImgBg: '#8b5cf6', cpn1CtaBg: '#8b5cf6',
+      // Coupon Dual
+      coupon2Eyebrow: '#8b5cf6', coupon2Card1ImgBg: '#8b5cf6', coupon2Card2ImgBg: '#6d28d9', coupon2CtaBg: '#8b5cf6',
+      // Promo Code Dual — Card 1
+      promo2Color1Bg: '#8b5cf6', promo2Color1Text: '#8b5cf6', promo2Color1Border: '#8b5cf6',
+      // Promo Code Dual — Card 2
+      promo2Color2Bg: '#6d28d9', promo2Color2Text: '#6d28d9', promo2Color2Border: '#6d28d9',
+      // Activities
+      actEyebrow: '#6d28d9', actLabel: '#8b5cf6', actCtaBg: '#8b5cf6',
+      // Button Bars
+      singleBtnCtaBg: '#8b5cf6',
+      dualBtn1Bg: '#8b5cf6', dualBtn2Border: '#8b5cf6', dualBtn2Text: '#6d28d9',
+      btn3CtaBg: '#8b5cf6',
+      // Products v1
+      prodCtaBg: '#8b5cf6',
+      // Products v2
+      prod2CtaBg: '#8b5cf6',
+      // Product Spotlight
+      spotEyebrow: '#6d28d9', spotCtaBg: '#8b5cf6',
+      // Product Cards
+      pcardsEyebrow: '#6d28d9', pcardsAccent: '#8b5cf6', pcardsCtaBg: '#8b5cf6',
+      // Product Showcase
+      showcaseSpecsBg: 'rgba(139,92,246,0.88)', showcaseEyebrow: '#6d28d9',
+      // Survey
+      surveyEyebrow: '#6d28d9', surveyCtaBg: '#8b5cf6'
     }
   }
 };

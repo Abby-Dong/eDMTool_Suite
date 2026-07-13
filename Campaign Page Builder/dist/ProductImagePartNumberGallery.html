@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Image + Part Number Gallery</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --border: #dbe3ee;
+      --accent: #0f6bff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top right, #e7f0ff 0%, var(--bg) 42%, #eef3fb 100%);
+      color: var(--text);
+    }
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+    .header {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 2.4vw, 34px);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+    .count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      background: #eef4ff;
+      border: 1px solid #d8e4ff;
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+      display: grid;
+      grid-template-rows: 160px auto;
+      min-height: 220px;
+    }
+    .thumb {
+      margin: 0;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef4fd 100%);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      padding: 10px;
+    }
+    .thumb img {
+      max-width: 100%;
+      max-height: 140px;
+      object-fit: contain;
+      display: block;
+    }
+    .img-missing {
+      color: #8aa0c0;
+      font-size: 12px;
+      text-align: center;
+      border: 1px dashed #bfd0ea;
+      border-radius: 10px;
+      padding: 16px;
+      width: 100%;
+    }
+    .meta {
+      padding: 10px 12px 12px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+    .pn {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      word-break: break-word;
+    }
+    .desc {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #64748b;
+      min-height: 30px;
+    }
+    .region-links {
+      margin-top: 2px;
+      display: grid;
+      gap: 6px;
+    }
+    .region-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid #e0e8f4;
+      border-radius: 8px;
+      padding: 6px 8px;
+      background: #f8fbff;
+      text-decoration: none;
+      color: #0b4fbe;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+    .region-link:hover {
+      border-color: #bfd3fb;
+      background: #eef5ff;
+    }
+    .region-name {
+      font-weight: 700;
+      color: #1e3a8a;
+      min-width: 34px;
+    }
+    .region-type {
+      color: #4b6284;
+      font-weight: 600;
+      text-align: right;
+    }
+    .empty {
+      margin-top: 24px;
+      padding: 16px;
+      border: 1px dashed #c3d3ea;
+      border-radius: 12px;
+      background: #f8fbff;
+      color: #5f7597;
+      font-size: 13px;
+    }
+    .footer-note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: #8092ad;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <h1>產品圖 + 料號總覽</h1>
+      <div id="productCount" class="count">Loading...</div>
+    </section>
+
+    <section id="gallery" class="grid" aria-live="polite"></section>
+    <div class="footer-note">資料來源: product-database.js (window.CPB_PRODUCT_DATABASE.products)</div>
+  </main>
+
+  <script src="product-database.js"></script>
+  <script>
+    (function renderGallery() {
+      var db = window.CPB_PRODUCT_DATABASE;
+      var products = Array.isArray(db && db.products) ? db.products : [];
+      var gallery = document.getElementById('gallery');
+      var count = document.getElementById('productCount');
+
+      count.textContent = 'Total: ' + products.length + ' products';
+
+      if (!products.length) {
+        gallery.innerHTML = '<div class="empty">找不到產品資料。請確認 product-database.js 是否可讀取。</div>';
+        return;
+      }
+
+      var html = products.map(function (p) {
+        var partNumber = String((p && p.PartNumber) || '').trim() || '(No PartNumber)';
+        var image = String((p && p.image) || '').trim();
+        var desc = String((p && p.description) || '').trim();
+        var sfccSku = String((p && p.SFCCSKU) || '').trim();
+
+        var imageHtml = image
+          ? '<img src="' + escapeHtmlAttr(image) + '" alt="' + escapeHtmlAttr(partNumber) + '" loading="lazy" onerror="this.replaceWith(buildMissingNode())">'
+          : '<div class="img-missing">No image</div>';
+
+        var global = buildRegionalProductLink('global', partNumber, sfccSku);
+        var kr = buildRegionalProductLink('kr', partNumber, sfccSku);
+        var eu = buildRegionalProductLink('eu', partNumber, sfccSku);
+
+        var linksHtml = '' +
+          '<div class="region-links">' +
+            '<a class="region-link" href="' + escapeHtmlAttr(global.url) + '" target="_blank" rel="noopener noreferrer">' +
+              '<span class="region-name">Global</span>' +
+              '<span class="region-type">' + escapeHtml(global.typeLabel) + '</span>' +
+            '</a>' +
+            '<a class="region-link" href="' + escapeHtmlAttr(kr.url) + '" target="_blank" rel="noopener noreferrer">' +
+              '<span class="region-name">KR</span>' +
+              '<span class="region-type">' + escapeHtml(kr.typeLabel) + '</span>' +
+            '</a>' +
+            '<a class="region-link" href="' + escapeHtmlAttr(eu.url) + '" target="_blank" rel="noopener noreferrer">' +
+              '<span class="region-name">EU</span>' +
+              '<span class="region-type">' + escapeHtml(eu.typeLabel) + '</span>' +
+            '</a>' +
+          '</div>';
+
+        return '' +
+          '<article class="card">' +
+            '<figure class="thumb">' + imageHtml + '</figure>' +
+            '<div class="meta">' +
+              '<div class="pn">' + escapeHtml(partNumber) + '</div>' +
+              '<div class="desc">' + escapeHtml(desc) + '</div>' +
+              linksHtml +
+            '</div>' +
+          '</article>';
+      }).join('');
+
+      gallery.innerHTML = html;
+    })();
+
+    function buildMissingNode() {
+      var div = document.createElement('div');
+      div.className = 'img-missing';
+      div.textContent = 'Image load failed';
+      return div;
+    }
+
+    function buildRegionalProductLink(region, partNumber, sfccSku) {
+      var cfg = getRegionConfig(region);
+      var hasSku = !!sfccSku;
+      if (hasSku) {
+        return {
+          url: cfg.pdpPrefix + encodeURIComponent(sfccSku) + cfg.pdpSuffix,
+          typeLabel: 'Product detail page'
+        };
+      }
+      return {
+        url: cfg.searchPrefix + encodeURIComponent(partNumber) + cfg.searchSuffix,
+        typeLabel: 'Search page'
+      };
+    }
+
+    function getRegionConfig(region) {
+      if (region === 'global') {
+        return {
+          pdpPrefix: 'https://www.iotmart.com/en-en/s/product/',
+          pdpSuffix: '?language=en_US',
+          searchPrefix: 'https://www.iotmart.com/en-en/s/global-search/',
+          searchSuffix: '/?page=1&language=en_US'
+        };
+      }
+      if (region === 'kr') {
+        return {
+          pdpPrefix: 'https://www.iotmart.com/ko-kr/ko/product-details?productSku=',
+          pdpSuffix: '',
+          searchPrefix: 'https://www.iotmart.com/ko-kr/ko/search?searchTerm=',
+          searchSuffix: ''
+        };
+      }
+      if (region === 'eu') {
+        return {
+          pdpPrefix: 'https://www.iotmart.com/en-eu/en/product-details?productSku=',
+          pdpSuffix: '',
+          searchPrefix: 'https://www.iotmart.com/en-eu/en/search?searchTerm=',
+          searchSuffix: ''
+        };
+      }
+      return {
+        pdpPrefix: 'https://www.iotmart.com/en-en/s/product/',
+        pdpSuffix: '?language=en_US',
+        searchPrefix: 'https://www.iotmart.com/en-en/s/global-search/',
+        searchSuffix: '/?page=1&language=en_US'
+      };
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeHtmlAttr(text) {
+      return escapeHtml(text).replace(/`/g, '&#96;');
+    }
+  </script>
+</body>
+</html>
