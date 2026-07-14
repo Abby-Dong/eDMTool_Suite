@@ -5434,9 +5434,25 @@ function _galleryFoldersDoc() {
 
 function _normalizeFolderState(raw) {
   return {
-    folders: Array.isArray(raw && raw.folders) ? raw.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name) })) : [],
+    folders: Array.isArray(raw && raw.folders) ? raw.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name), color: f.color || FOLDER_DEFAULT_COLOR, icon: f.icon || FOLDER_DEFAULT_ICON })) : [],
     projectFolderMap: (raw && raw.projectFolderMap && typeof raw.projectFolderMap === 'object') ? Object.assign({}, raw.projectFolderMap) : {}
   };
+}
+
+function _mergeFolderState(localState, remoteState) {
+  const local = _normalizeFolderState(localState || {});
+  const remote = _normalizeFolderState(remoteState || {});
+  const byId = new Map();
+
+  remote.folders.forEach(f => byId.set(f.id, Object.assign({}, f)));
+  local.folders.forEach(f => {
+    if (!byId.has(f.id)) byId.set(f.id, Object.assign({}, f));
+  });
+
+  const mergedFolders = Array.from(byId.values());
+  const mergedProjectFolderMap = Object.assign({}, remote.projectFolderMap || {}, local.projectFolderMap || {});
+
+  return { folders: mergedFolders, projectFolderMap: mergedProjectFolderMap };
 }
 
 async function _pushGalleryFoldersToFirebase() {
@@ -5465,8 +5481,16 @@ async function _loadGalleryFoldersFromFirebase() {
   try {
     const doc = await ref.get();
     if (doc.exists) {
-      _galleryFoldersState = _normalizeFolderState(doc.data());
+      const remoteState = _normalizeFolderState(doc.data());
+      const merged = _mergeFolderState(_galleryFoldersState, remoteState);
+      _galleryFoldersState = merged;
       _saveGalleryFoldersLocal();
+      // If local had data missing from remote, push merged state back to cloud.
+      const remoteJson = JSON.stringify(remoteState);
+      const mergedJson = JSON.stringify(merged);
+      if (remoteJson !== mergedJson) {
+        await _pushGalleryFoldersToFirebase();
+      }
     } else {
       // Remote not initialized yet — seed it from local cache.
       await _pushGalleryFoldersToFirebase();
@@ -5488,6 +5512,24 @@ function _startFolderSync() {
     const gv = document.getElementById('galleryView');
     if (gv && !gv.classList.contains('hidden')) renderGallery();
   }, err => console.warn('[Folders] snapshot error:', err));
+}
+
+let _folderSyncBooted = false;
+function _bootFolderSyncWhenReady() {
+  if (_folderSyncBooted) return;
+  _folderSyncBooted = true;
+  const tryBoot = () => {
+    if (window._fbReady && window._db) {
+      _loadGalleryFoldersFromFirebase().finally(() => {
+        const gv = document.getElementById('galleryView');
+        if (gv && !gv.classList.contains('hidden')) renderGallery();
+        _startFolderSync();
+      });
+      return;
+    }
+    setTimeout(tryBoot, 800);
+  };
+  tryBoot();
 }
 
 function _newGalleryFolderId() {
@@ -7127,13 +7169,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) { console.warn('[GlobalPresence] start failed:', e); }
     // Load gallery folder organization from Firebase (local cache fallback) + live sync
-    if (window.Collab && typeof Collab.ready === 'function' && Collab.ready()) {
-      _loadGalleryFoldersFromFirebase().finally(() => {
-        const gv = document.getElementById('galleryView');
-        if (gv && !gv.classList.contains('hidden')) renderGallery();
-        _startFolderSync();
-      });
-    }
+    _bootFolderSyncWhenReady();
     const params = new URLSearchParams(window.location.search);
     const pid = params.get('project');
     if (pid && window.Collab) {
