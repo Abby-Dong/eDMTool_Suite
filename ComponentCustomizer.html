@@ -1054,7 +1054,7 @@
     }
     .builder-right-empty .mi {
       font-size: 36px; color: #ddd; margin-bottom: 8px;
-      vertical-align: 0; margin-right: 0; display: block;
+      margin-right: 0; display: block;
     }
     .builder-right-empty p { font-size: 13px; color: #bbb; line-height: 1.5; }
 
@@ -1065,7 +1065,7 @@
     }
     .gallery-card-builder .builder-card-content { text-align: center; color: #fff; }
     .gallery-card-builder .builder-card-content .mi {
-      font-size: 40px; vertical-align: 0; display: block;
+      font-size: 40px; display: block;
       margin: 0 auto 8px; color: rgba(255,255,255,.9); margin-right: 0;
     }
     .gallery-card-builder .builder-card-content .builder-card-title {
@@ -1360,7 +1360,7 @@
 
     /* Project Gallery Cards (follow NewsletterCustomizer style) */
     .proj-gallery-card {
-      background: #fff; border-radius: 12px; overflow: hidden;
+      background: #fff; border-radius: 12px; overflow: visible; position: relative;
       box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
       cursor: pointer; transition: all .2s ease;
       display: flex; flex-direction: column;
@@ -1372,7 +1372,7 @@
     .proj-gallery-card-thumb {
       height: 180px; background: #f7f8fa; overflow: hidden;
       display: flex; align-items: flex-start; justify-content: center;
-      position: relative;
+      position: relative; border-radius: 12px 12px 0 0;
     }
     .proj-gallery-card-thumb .thumb-preview-iframe {
       width: 600px; border: none; pointer-events: none;
@@ -1505,10 +1505,11 @@
     }
     .proj-gallery-card-new .new-card-content { text-align: center; color: #fff; }
     .proj-gallery-card-new .new-card-content .mi {
-      font-size: 40px; vertical-align: 0; display: block;
+      font-size: 40px; display: block;
       margin: 0 auto 8px; color: rgba(255,255,255,.9); margin-right: 0;
     }
-    .proj-gallery-card-new .new-card-content .new-card-title {
+    .proj-gallery-card-new .new-card-content .new-card-title,
+    .proj-gallery-folder-new .new-card-content .new-card-title {
       font-size: 15px; font-weight: 700; display: block;
     }
     .new-card-tag {
@@ -1517,6 +1518,60 @@
       font-size: 10px; font-weight: 700; letter-spacing: .5px;
       background: linear-gradient(135deg, #0059ff, #7c3aed);
       color: #fff; white-space: nowrap; line-height: 1.4;
+    }
+
+    .gallery-folder-bar {
+      max-width: 1100px; margin: 0 auto 14px;
+      display: none; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      background: #fff; border: 1px solid #e8ebf0;
+    }
+    .gallery-folder-bar.visible { display: flex; }
+    .gallery-folder-path {
+      display: flex; align-items: center; gap: 8px; min-width: 0;
+      font-size: 12px; color: #666; font-weight: 600;
+    }
+    .gallery-folder-path .folder-name {
+      color: #1a1a2e; font-weight: 700;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      max-width: 420px;
+    }
+    .gallery-folder-btn {
+      border: 1px solid #dbe3f6; background: #f7f9ff; color: #0059ff;
+      border-radius: 8px; padding: 6px 10px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: inherit; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .gallery-folder-btn .mi { font-size: 15px; margin-right: 0; }
+    .gallery-folder-btn:hover { background: #edf2ff; border-color: #c5d4ff; }
+
+    .proj-gallery-folder-card .proj-gallery-card-thumb {
+      background: linear-gradient(135deg, #f7f9ff 0%, #eef3ff 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-gallery-folder-card .folder-card-content { text-align: center; color: #0059ff; }
+    .proj-gallery-folder-card .folder-card-content .mi {
+      font-size: 40px; display: block; margin: 0 auto 8px;
+      color: rgba(0,89,255,.85); margin-right: 0;
+    }
+    .proj-gallery-folder-card .folder-card-content .folder-card-title {
+      font-size: 15px; font-weight: 700; display: block;
+      color: #1a1a2e;
+    }
+    .proj-gallery-folder-card .folder-count {
+      font-size: 10px; color: #557; font-weight: 700;
+      background: #eaf0ff; border-radius: 10px;
+      padding: 2px 8px; white-space: nowrap;
+    }
+
+    .proj-gallery-folder-new .proj-gallery-card-thumb {
+      background: linear-gradient(135deg, #f4fbff 0%, #edf7ff 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-gallery-folder-new .new-card-content { text-align: center; color: #0b5fcf; }
+    .proj-gallery-folder-new .new-card-content .mi {
+      font-size: 40px; display: block;
+      margin: 0 auto 8px; margin-right: 0;
     }
 
     /* Project Modal */
@@ -1629,6 +1684,10 @@
   <div class="rename-modal-box">
     <h3><span class="mi" id="renameModalIcon">edit</span><span id="renameModalTitle" data-i18n="collab.renameProject">Rename Project</span></h3>
     <p id="renameModalDesc" data-i18n="collab.renameDesc">Enter a new name for this project</p>
+    <div id="renameModalFolderRow" style="display:none;margin-bottom:12px;">
+      <label style="display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Folder</label>
+      <select id="renameModalFolder" onchange="_onRenameFolderSelectChange()" style="width:100%;padding:10px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;color:#333;background:#fff;"></select>
+    </div>
     <input type="text" id="renameModalInput" data-i18n-placeholder="collab.projectNamePlaceholder" placeholder="Project name" maxlength="50" autocomplete="off" />
     <div id="renameModalSiteRow" style="display:none;margin-top:12px;">
       <label style="display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Site / Region</label>
@@ -1741,6 +1800,7 @@
       <span class="mi">help_outline</span><span data-i18n="gallery.howToUse">How to use</span>
     </button>
   </div>
+  <div class="gallery-folder-bar" id="galleryFolderBar"></div>
   <div class="project-gallery-grid" id="projectGalleryGrid"></div>
 </div>
 
@@ -4786,6 +4846,213 @@ function downloadBuilderHtml() {
 // ══════════════════════════════════════
 function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+const GALLERY_FOLDER_STORAGE_KEY = 'edm_component_gallery_folders_v1';
+let _galleryFolderViewId = null;
+
+function _loadGalleryFoldersState() {
+  try {
+    const raw = localStorage.getItem(GALLERY_FOLDER_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return {
+      folders: Array.isArray(parsed && parsed.folders) ? parsed.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name) })) : [],
+      projectFolderMap: (parsed && parsed.projectFolderMap && typeof parsed.projectFolderMap === 'object') ? parsed.projectFolderMap : {}
+    };
+  } catch (_) {
+    return { folders: [], projectFolderMap: {} };
+  }
+}
+
+let _galleryFoldersState = _loadGalleryFoldersState();
+
+function _saveGalleryFoldersState() {
+  try { localStorage.setItem(GALLERY_FOLDER_STORAGE_KEY, JSON.stringify(_galleryFoldersState)); } catch (_) {}
+}
+
+function _newGalleryFolderId() {
+  return 'fld_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function _getFolderById(id) {
+  return (_galleryFoldersState.folders || []).find(f => f.id === id) || null;
+}
+
+function _getFolderNameById(id) {
+  const f = _getFolderById(id);
+  return f ? f.name : '';
+}
+
+function _ensureFolderByName(name) {
+  const n = String(name || '').trim();
+  if (!n) return null;
+  const hit = (_galleryFoldersState.folders || []).find(f => f.name.toLowerCase() === n.toLowerCase());
+  if (hit) return hit.id;
+  const id = _newGalleryFolderId();
+  _galleryFoldersState.folders.push({ id, name: n });
+  _saveGalleryFoldersState();
+  return id;
+}
+
+function _getProjectFolderId(projectId) {
+  return _galleryFoldersState.projectFolderMap[String(projectId)] || null;
+}
+
+function _setProjectFolder(projectId, folderId) {
+  const pid = String(projectId);
+  if (folderId && _getFolderById(folderId)) {
+    _galleryFoldersState.projectFolderMap[pid] = folderId;
+  } else {
+    delete _galleryFoldersState.projectFolderMap[pid];
+  }
+  _saveGalleryFoldersState();
+}
+
+function _syncGalleryFoldersWithProjects(projects) {
+  const validProjectIds = new Set((projects || []).map(p => String(p.id)));
+  const validFolderIds = new Set((_galleryFoldersState.folders || []).map(f => f.id));
+  let changed = false;
+
+  Object.keys(_galleryFoldersState.projectFolderMap || {}).forEach(pid => {
+    const fid = _galleryFoldersState.projectFolderMap[pid];
+    if (!validProjectIds.has(pid) || !validFolderIds.has(fid)) {
+      delete _galleryFoldersState.projectFolderMap[pid];
+      changed = true;
+    }
+  });
+
+  if (_galleryFolderViewId && !validFolderIds.has(_galleryFolderViewId)) {
+    _galleryFolderViewId = null;
+    changed = true;
+  }
+
+  if (changed) _saveGalleryFoldersState();
+}
+
+function _createFolderFromGallery() {
+  openRenameModal({
+    icon: 'create_new_folder',
+    title: 'Create Folder',
+    desc: 'Create a folder for grouping project cards.',
+    value: '',
+    placeholder: 'Folder name',
+    confirmText: 'Create',
+    onConfirm: async (name) => {
+      const folderId = _ensureFolderByName(name);
+      if (!folderId) return;
+      _galleryFolderViewId = folderId;
+      renderGallery();
+    }
+  });
+}
+
+function _renameFolderFromGallery(folderId) {
+  const folder = _getFolderById(folderId);
+  if (!folder) return;
+  openRenameModal({
+    icon: 'drive_file_rename_outline',
+    title: 'Rename Folder',
+    desc: 'Update folder name.',
+    value: folder.name,
+    placeholder: 'Folder name',
+    confirmText: 'Save',
+    onConfirm: async (name) => {
+      const n = String(name || '').trim();
+      if (!n) return;
+      folder.name = n;
+      _saveGalleryFoldersState();
+      renderGallery();
+    }
+  });
+}
+
+function _deleteFolderFromGallery(folderId) {
+  const folder = _getFolderById(folderId);
+  if (!folder) return;
+  const count = Object.values(_galleryFoldersState.projectFolderMap || {}).filter(fid => fid === folderId).length;
+  if (!confirm(`Delete folder "${folder.name}"? ${count ? 'Projects will be moved back to root.' : ''}`)) return;
+  _galleryFoldersState.folders = _galleryFoldersState.folders.filter(f => f.id !== folderId);
+  Object.keys(_galleryFoldersState.projectFolderMap || {}).forEach(pid => {
+    if (_galleryFoldersState.projectFolderMap[pid] === folderId) delete _galleryFoldersState.projectFolderMap[pid];
+  });
+  if (_galleryFolderViewId === folderId) _galleryFolderViewId = null;
+  _saveGalleryFoldersState();
+  renderGallery();
+}
+
+function _moveProjectToFolder(projectId) {
+  const currentFolderId = _getProjectFolderId(projectId);
+  const folderOptions = (_galleryFoldersState.folders || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+  openRenameModal({
+    icon: 'drive_folder_upload',
+    title: 'Move To Folder',
+    desc: 'Select an existing folder or create a new one.',
+    value: '',
+    placeholder: 'New folder name',
+    confirmText: 'Move',
+    showFolder: true,
+    folderOptions: folderOptions,
+    folderValue: currentFolderId || ((folderOptions[0]) ? folderOptions[0].id : '__new__'),
+    onConfirm: async (result) => {
+      let folderId = null;
+      if (result && result.mode === 'existing') {
+        folderId = result.folderId;
+      } else if (result && result.mode === 'new') {
+        folderId = _ensureFolderByName(result.name);
+      }
+      if (!folderId) return;
+      _setProjectFolder(projectId, folderId);
+      renderGallery();
+    }
+  });
+}
+
+function _removeProjectFromFolder(projectId) {
+  _setProjectFolder(projectId, null);
+  renderGallery();
+}
+
+function _openGalleryFolder(folderId) {
+  if (!_getFolderById(folderId)) return;
+  _galleryFolderViewId = folderId;
+  renderGallery();
+}
+
+function _backToGalleryRootFolders() {
+  _galleryFolderViewId = null;
+  renderGallery();
+}
+
+function _renderGalleryFolderBar(projects) {
+  const bar = document.getElementById('galleryFolderBar');
+  if (!bar) return;
+
+  if (!_galleryFolderViewId) {
+    bar.innerHTML = '';
+    bar.classList.remove('visible');
+    return;
+  }
+
+  const folder = _getFolderById(_galleryFolderViewId);
+  if (!folder) {
+    _galleryFolderViewId = null;
+    _renderGalleryFolderBar(projects);
+    return;
+  }
+
+  const count = (projects || []).filter(p => _getProjectFolderId(p.id) === _galleryFolderViewId).length;
+  bar.innerHTML = `
+    <div class="gallery-folder-path">
+      <button type="button" class="gallery-folder-btn" onclick="_backToGalleryRootFolders()"><span class="mi">arrow_back</span>All Projects</button>
+      <span class="mi" style="font-size:16px;margin-right:0;color:#0059ff;">chevron_right</span>
+      <span class="folder-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
+      <span style="color:#889;">(${count})</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button type="button" class="gallery-folder-btn" onclick="_renameFolderFromGallery('${folder.id}')"><span class="mi">drive_file_rename_outline</span>Rename</button>
+      <button type="button" class="gallery-folder-btn" onclick="_deleteFolderFromGallery('${folder.id}')"><span class="mi">delete</span>Delete</button>
+    </div>`;
+  bar.classList.add('visible');
+}
+
 function buildProjectPreviewSrcdoc(project) {
   const stack = Array.isArray(project && project.builderStack) ? project.builderStack : [];
   if (!stack.length) return '';
@@ -4879,8 +5146,8 @@ function renderGallery() {
     libCard.innerHTML = `
       <div class="proj-gallery-card-thumb" style="background:linear-gradient(135deg,#0059ff 0%,#00b4d8 100%);display:flex;align-items:center;justify-content:center;">
         <div style="text-align:center;color:#fff;">
-          <span class="mi" style="font-size:36px;display:block;margin-bottom:4px;margin-right:0;color:rgba(255,255,255,.9)">widgets</span>
-          <span style="font-size:12px;font-weight:600;opacity:.85">${t('projectGallery.compLibrary')}</span>
+          <span class="mi" style="font-size:40px;display:block;margin:0 auto 8px;margin-right:0;color:rgba(255,255,255,.9)">widgets</span>
+          <span style="font-size:15px;font-weight:700;color:#fff">${t('projectGallery.compLibrary')}</span>
         </div>
       </div>
       <div class="proj-gallery-card-info">
@@ -4894,6 +5161,8 @@ function renderGallery() {
 
   if (!window.Collab || !Collab.ready()) {
     grid.innerHTML = '';
+    const bar = document.getElementById('galleryFolderBar');
+    if (bar) bar.classList.remove('visible');
     // Show Component Library card even without Firebase
     grid.appendChild(_buildCompLibraryCard());
     // Fallback: start without saving
@@ -4912,33 +5181,83 @@ function renderGallery() {
 
   Collab.list().then(projects => {
     projects = (projects || []).filter(p => !(p && p.__masScoped));
+    _syncGalleryFoldersWithProjects(projects);
+    _renderGalleryFolderBar(projects);
     grid.innerHTML = '';
 
-    // ── Component Library card ──
-    grid.appendChild(_buildCompLibraryCard());
+    if (!_galleryFolderViewId) {
+      // ── Component Library card ──
+      grid.appendChild(_buildCompLibraryCard());
 
-    // ── "Create New Project" card ──
-    const newCard = document.createElement('div');
-    newCard.className = 'proj-gallery-card proj-gallery-card-new';
-    newCard.onclick = () => createNewFromGallery();
-    newCard.innerHTML = `
-      <div class="proj-gallery-card-thumb">
-        <div class="new-card-content">
-          <span class="mi">add_circle</span>
-          <span class="new-card-title">${t('projectGallery.createNew')}</span>
+      // ── "Create New Project" card ──
+      const newCard = document.createElement('div');
+      newCard.className = 'proj-gallery-card proj-gallery-card-new';
+      newCard.onclick = () => createNewFromGallery();
+      newCard.innerHTML = `
+        <div class="proj-gallery-card-thumb">
+          <div class="new-card-content">
+            <span class="mi">add_circle</span>
+            <span class="new-card-title">${t('projectGallery.createNew')}</span>
+          </div>
         </div>
-      </div>
-      <div class="proj-gallery-card-info">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">auto_awesome</span>${t('gallery.new')}</span>
-          <span class="card-name">${t('projectGallery.blankEdm')}</span>
-        </div>
-        <span class="mi card-arrow">arrow_forward</span>
-      </div>`;
-    grid.appendChild(newCard);
+        <div class="proj-gallery-card-info">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">auto_awesome</span>${t('gallery.new')}</span>
+            <span class="card-name">${t('projectGallery.blankEdm')}</span>
+          </div>
+          <span class="mi card-arrow">arrow_forward</span>
+        </div>`;
+      grid.appendChild(newCard);
+
+      const folders = (_galleryFoldersState.folders || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+      folders.forEach(folder => {
+        const cnt = projects.filter(pp => _getProjectFolderId(pp.id) === folder.id).length;
+        const folderCard = document.createElement('div');
+        folderCard.className = 'proj-gallery-card proj-gallery-folder-card';
+        folderCard.onclick = () => _openGalleryFolder(folder.id);
+        folderCard.innerHTML = `
+          <div class="proj-gallery-card-thumb">
+            <div class="folder-card-content">
+              <span class="mi">folder</span>
+              <span class="folder-card-title" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
+            </div>
+          </div>
+          <div class="proj-gallery-card-info">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+              <span class="card-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="folder-count">${cnt} project${cnt === 1 ? '' : 's'}</span>
+              <span class="mi card-arrow">arrow_forward</span>
+            </div>
+          </div>`;
+
+        const folderThumb = folderCard.querySelector('.proj-gallery-card-thumb');
+        const kebab = document.createElement('div');
+        kebab.className = 'card-kebab';
+        kebab.innerHTML = `
+          <button class="card-kebab-btn" onclick="event.stopPropagation();toggleCardMenu(this)" title="More options">
+            <span class="mi">more_vert</span>
+          </button>
+          <div class="card-kebab-menu">
+            <button onclick="event.stopPropagation();_renameFolderFromGallery('${folder.id}')">
+              <span class="mi">drive_file_rename_outline</span>Rename folder
+            </button>
+            <button class="menu-delete" onclick="event.stopPropagation();_deleteFolderFromGallery('${folder.id}')">
+              <span class="mi">delete</span>Delete folder
+            </button>
+          </div>`;
+        folderCard.appendChild(kebab);
+        grid.appendChild(folderCard);
+      });
+    }
+
+    const visibleProjects = _galleryFolderViewId
+      ? projects.filter(p => _getProjectFolderId(p.id) === _galleryFolderViewId)
+      : projects.filter(p => !_getProjectFolderId(p.id));
 
     // ── Project cards ──
-    projects.forEach(p => {
+    visibleProjects.forEach(p => {
       const card = document.createElement('div');
       card.className = 'proj-gallery-card';
 
@@ -4996,28 +5315,39 @@ function renderGallery() {
       const kebab = document.createElement('div');
       kebab.className = 'card-kebab';
       const safeId = p.id;
-      const safeName = escapeHtml(p.name);
+      const folderId = _getProjectFolderId(p.id);
       kebab.innerHTML = `
         <button class="card-kebab-btn" onclick="event.stopPropagation();toggleCardMenu(this)" title="${t('collab.moreOptions')}">
           <span class="mi">more_vert</span>
         </button>
         <div class="card-kebab-menu">
-          <button onclick="event.stopPropagation();renameFromGallery('${safeId}')">
+          <button onclick='event.stopPropagation();renameFromGallery(${JSON.stringify(safeId)})'>
             <span class="mi">edit</span>${t('collab.rename')}
           </button>
-          <button onclick="event.stopPropagation();duplicateFromGallery('${safeId}')">
+          <button onclick='event.stopPropagation();duplicateFromGallery(${JSON.stringify(safeId)})'>
             <span class="mi">content_copy</span>${t('collab.duplicate')}
           </button>
-          <button class="menu-delete" onclick="event.stopPropagation();deleteFromGallery('${safeId}','${safeName}')">
+          <button onclick='event.stopPropagation();_moveProjectToFolder(${JSON.stringify(safeId)})'>
+            <span class="mi">drive_folder_upload</span>Move to folder
+          </button>
+          ${folderId ? `<button onclick='event.stopPropagation();_removeProjectFromFolder(${JSON.stringify(safeId)})'><span class="mi">folder_off</span>Remove from folder</button>` : ''}
+          <button class="menu-delete" onclick='event.stopPropagation();deleteFromGallery(${JSON.stringify(safeId)}, ${JSON.stringify(String(p.name || ''))})'>
             <span class="mi">delete</span>${t('collab.delete')}
           </button>
         </div>`;
-      thumb.appendChild(kebab);
+      card.appendChild(kebab);
 
       // Click card → open project
       card.onclick = () => openProjectFromGallery(p.id);
       grid.appendChild(card);
     });
+
+    if (!visibleProjects.length) {
+      const empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:38px 20px;color:#bbb;grid-column:1/-1;border:1px dashed #e5e7eb;border-radius:12px;background:#fff;';
+      empty.innerHTML = '<span class="mi" style="font-size:28px;display:block;margin-bottom:6px;color:#d4d9e2;margin-right:0;">inbox</span>No projects in this view yet.';
+      grid.appendChild(empty);
+    }
   });
 }
 
@@ -5044,12 +5374,15 @@ function openRenameModal(opts) {
   const confirmBtn = document.getElementById('renameModalConfirm');
   const siteRow = document.getElementById('renameModalSiteRow');
   const siteSelect = document.getElementById('renameModalSite');
+  const folderRow = document.getElementById('renameModalFolderRow');
+  const folderSelect = document.getElementById('renameModalFolder');
   if (!overlay) return;
   icon.textContent = opts.icon || 'edit';
   title.textContent = opts.title || t('collab.renameProject');
   desc.textContent = opts.desc || t('collab.renameDesc');
   input.value = opts.value || '';
   input.placeholder = opts.placeholder || t('collab.projectNamePlaceholder');
+  input.style.display = '';
   confirmBtn.textContent = opts.confirmText || t('collab.save');
   // Show site selector only if showSite is true
   if (opts.showSite) {
@@ -5058,9 +5391,36 @@ function openRenameModal(opts) {
   } else {
     siteRow.style.display = 'none';
   }
+  // Show folder selector only if showFolder is true
+  if (opts.showFolder && folderRow && folderSelect) {
+    let optionsHtml = '';
+    (opts.folderOptions || []).forEach(f => {
+      optionsHtml += `<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}</option>`;
+    });
+    optionsHtml += `<option value="__new__">＋ New folder…</option>`;
+    folderSelect.innerHTML = optionsHtml;
+    folderSelect.value = opts.folderValue || ((opts.folderOptions && opts.folderOptions[0]) ? opts.folderOptions[0].id : '__new__');
+    folderRow.style.display = 'block';
+    _onRenameFolderSelectChange();
+  } else if (folderRow) {
+    folderRow.style.display = 'none';
+  }
   _renameModalCallback = opts.onConfirm || null;
   overlay.classList.add('visible');
   setTimeout(() => { input.focus(); input.select(); }, 150);
+}
+
+function _onRenameFolderSelectChange() {
+  const folderSelect = document.getElementById('renameModalFolder');
+  const input = document.getElementById('renameModalInput');
+  if (!folderSelect || !input) return;
+  if (folderSelect.value === '__new__') {
+    input.style.display = '';
+    input.value = '';
+    setTimeout(() => { input.focus(); }, 30);
+  } else {
+    input.style.display = 'none';
+  }
 }
 
 function closeRenameModal() {
@@ -5072,7 +5432,23 @@ function closeRenameModal() {
 function confirmRenameModal() {
   const input = document.getElementById('renameModalInput');
   const siteSelect = document.getElementById('renameModalSite');
+  const folderRow = document.getElementById('renameModalFolderRow');
+  const folderSelect = document.getElementById('renameModalFolder');
   const val = input ? input.value.trim() : '';
+
+  // Folder-select mode (Move To Folder)
+  if (folderRow && folderRow.style.display !== 'none' && folderSelect) {
+    const sel = folderSelect.value;
+    if (sel === '__new__') {
+      if (!val) { input.focus(); return; }
+      if (_renameModalCallback) _renameModalCallback({ mode: 'new', name: val });
+    } else {
+      if (_renameModalCallback) _renameModalCallback({ mode: 'existing', folderId: sel });
+    }
+    closeRenameModal();
+    return;
+  }
+
   if (!val) { input.focus(); return; }
   const site = siteSelect ? siteSelect.value : 'Global';
   if (_renameModalCallback) _renameModalCallback(val, site);
@@ -5111,8 +5487,10 @@ async function renameFromGallery(id) {
 async function duplicateFromGallery(id) {
   if (!window.Collab) return;
   try {
+    const sourceFolderId = _getProjectFolderId(id);
     const newId = await Collab.duplicate(id);
     if (newId) {
+      if (sourceFolderId) _setProjectFolder(newId, sourceFolderId);
       showToast('<span class="mi">content_copy</span>' + t('collab.projectDuplicated'));
       renderGallery();
       let copyName = '';
@@ -5142,6 +5520,7 @@ async function deleteFromGallery(id, name) {
   if (!confirm(t('collab.confirmDelete').replace('${name}', name))) return;
   if (window.Collab) {
     await Collab.delete(id);
+    _setProjectFolder(id, null);
     renderGallery();
   }
 }
@@ -5221,10 +5600,12 @@ async function createNewFromGallery() {
     onConfirm: async function(name, site) {
       resetCanvasToBlank();
       window._currentProjectSite = site || 'Global';
+      const pendingFolderId = _galleryFolderViewId;
       enterBuilder();
       if (window.Collab && Collab.ready()) {
         const id = await Collab.save(name.trim() || t('collab.untitledEdm'), { site: site });
         if (id) {
+          if (pendingFolderId) _setProjectFolder(id, pendingFolderId);
           showToast('<span class="mi">check_circle</span>' + t('collab.projectCreated').replace('${name}', escapeHtml(name)));
         }
       }
