@@ -125,6 +125,20 @@ service cloud.firestore {
       allow delete: if true;
     }
 
+    // ──────────────────────────────────────
+    // edm_component_folders — gallery folder organization (Component Customizer)
+    // Single shared state document (doc id: "state").
+    // ──────────────────────────────────────
+    match /edm_component_folders/{docId} {
+      allow read: if true;
+
+      allow create, update: if
+        request.resource.data.folders is list
+        && request.resource.data.projectFolderMap is map;
+
+      allow delete: if true;
+    }
+
     // Deny everything else
     match /{document=**} {
       allow read, write: if false;

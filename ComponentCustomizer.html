@@ -960,6 +960,7 @@
     .builder-float-ur button { pointer-events: auto; }
     .builder-float-br {
       position: absolute; bottom: 16px; right: 16px; z-index: 60;
+      display: flex; flex-direction: column; gap: 8px;
     }
     .builder-floating-source, .builder-floating-btn {
       background: rgba(255,255,255,.92); color: #555; border: 1px solid #ddd;
@@ -1564,6 +1565,34 @@
       padding: 2px 8px; white-space: nowrap;
     }
 
+    /* Folder Edit Modal */
+    .folder-edit-section { margin-top: 14px; }
+    .folder-edit-section > label {
+      display: block; font-size: 11px; font-weight: 700; color: #888;
+      text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
+    }
+    .folder-color-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+    .folder-color-swatch {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 2.5px solid transparent; cursor: pointer;
+      transition: transform .15s, border-color .15s;
+      flex-shrink: 0;
+    }
+    .folder-color-swatch:hover { transform: scale(1.15); }
+    .folder-color-swatch.selected { border-color: #1a1a2e; transform: scale(1.18); }
+    .folder-icon-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+    }
+    .folder-icon-btn {
+      aspect-ratio: 1; border-radius: 8px; border: 2px solid #eef0f3;
+      background: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .folder-icon-btn:hover { border-color: #c5d4ff; background: #f0f4ff; }
+    .folder-icon-btn.selected { border-color: #0059ff; background: #eef3ff; }
+    .folder-icon-btn .mi { font-size: 22px; margin-right: 0; }
+
     .proj-gallery-folder-new .proj-gallery-card-thumb {
       background: linear-gradient(135deg, #f4fbff 0%, #edf7ff 100%);
       display: flex; align-items: center; justify-content: center;
@@ -1700,6 +1729,17 @@
     <div class="rename-modal-actions">
       <button class="rename-cancel" onclick="closeRenameModal()" data-i18n="collab.cancel">Cancel</button>
       <button class="rename-confirm" id="renameModalConfirm" onclick="confirmRenameModal()" data-i18n="collab.save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Survey Unsupported Modal -->
+<div class="rename-modal-overlay" id="surveyUnsupportedModal" onclick="if(event.target===this) closeSurveyUnsupportedModal()">
+  <div class="rename-modal-box" style="max-width:460px;">
+    <h3><span class="mi">warning</span><span>Survey Temporarily Unsupported</span></h3>
+    <p>MCAE currently does not support the Survey component. Please use other components for now.</p>
+    <div class="rename-modal-actions">
+      <button class="rename-confirm" onclick="closeSurveyUnsupportedModal()">OK</button>
     </div>
   </div>
 </div>
@@ -1857,6 +1897,9 @@
           <button class="builder-copy-btn" id="builderCopyBtn" onclick="copyBuilderHtml()">
             <span class="mi">content_copy</span><span data-i18n="builder.copyFullHtml">Copy Full HTML</span>
           </button>
+          <button class="builder-copy-btn" id="builderCopyTextBtn" onclick="copyBuilderText()" title="Copy Text Version">
+            <span class="mi">article</span><span>Copy Text Ver</span>
+          </button>
           <button class="builder-code-btn" onclick="downloadBuilderHtml()" title="Download HTML" data-i18n-title="builder.downloadHtml">
             <span class="mi" style="margin-right:0">download</span>
           </button>
@@ -1876,7 +1919,10 @@
           </button>
         </div>
         <div class="builder-float-br">
-          <button class="builder-floating-source" onclick="toggleBuilderCode()">
+          <button class="builder-floating-source" id="builderViewTextBtn" onclick="toggleBuilderTextView()">
+            <span class="mi">article</span><span>View Text Ver</span>
+          </button>
+          <button class="builder-floating-source" id="builderViewSourceBtn" onclick="toggleBuilderCode()">
             <span class="mi">code</span><span data-i18n="builder.viewSource">View Source</span>
           </button>
         </div>
@@ -1891,6 +1937,28 @@
         </div>
       </div>
     </aside>
+  </div>
+</div>
+
+<!-- Folder Edit Modal -->
+<div class="rename-modal-overlay" id="folderEditModal">
+  <div class="rename-modal-box" style="width:400px;max-width:92vw;">
+    <h3><span class="mi" id="folderEditIcon">folder</span><span id="folderEditTitle">Edit Folder</span></h3>
+    <p id="folderEditDesc">Customize name, color, and icon.</p>
+    <input type="text" id="folderEditName" placeholder="Folder name" maxlength="50" autocomplete="off"
+           onkeydown="if(event.key==='Enter'){event.preventDefault();_applyFolderEdit();}" />
+    <div class="folder-edit-section">
+      <label>Color</label>
+      <div class="folder-color-swatches" id="folderColorSwatches"></div>
+    </div>
+    <div class="folder-edit-section">
+      <label>Icon</label>
+      <div class="folder-icon-grid" id="folderIconGrid"></div>
+    </div>
+    <div class="rename-modal-actions">
+      <button class="rename-cancel" onclick="closeFolderEditModal()">Cancel</button>
+      <button class="rename-confirm" onclick="_applyFolderEdit()">Save</button>
+    </div>
   </div>
 </div>
 
@@ -3984,6 +4052,18 @@ function transformForMcae(html) {
   }
   // 4. Generic legacy merge tokens %%token%% -> {{token}}
   out = out.replace(/%%([a-zA-Z0-9_.]+)%%/g, '{{$1}}');
+  // 5. Inject "View Online" preheader bar immediately after <body ...>
+  const VIEW_ONLINE_BAR = `
+<!-- View Online Bar -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#D6D9DD;">
+  <tr>
+    <td align="center" style="padding:10px 16px;font-family:Arial,Helvetica,sans-serif;font-size:10px;line-height:1.4;color:#999999;">
+      Having trouble viewing this email?&nbsp;
+      <a href="{{View_Online}}" style="color:#0059ff;text-decoration:underline;font-size:10px;font-family:Arial,Helvetica,sans-serif;">View&nbsp;Online</a>
+    </td>
+  </tr>
+</table>`;
+  out = out.replace(/(<body[^>]*>)/, '$1' + VIEW_ONLINE_BAR);
   return out;
 }
 
@@ -4150,6 +4230,18 @@ function showBuilder() {
   window.scrollTo(0, 0);
 }
 
+function showSurveyUnsupportedPopup() {
+  const modal = document.getElementById('surveyUnsupportedModal');
+  if (!modal) return;
+  modal.classList.add('visible');
+}
+
+function closeSurveyUnsupportedModal() {
+  const modal = document.getElementById('surveyUnsupportedModal');
+  if (!modal) return;
+  modal.classList.remove('visible');
+}
+
 let _dragDropIndex = -1;
 
 function _getDropIndex(canvas, clientY) {
@@ -4212,6 +4304,10 @@ function initBuilderDragDrop() {
 function addToBuilder(compId, insertIndex) {
   const uid = 'b' + (++_builderUid);
   const comp = COMPONENTS.find(c => c.id === compId);
+  if (comp && comp.isSurvey) {
+    showSurveyUnsupportedPopup();
+    return;
+  }
   const edits = {};
   if (comp) buildComponentEditMap(comp).forEach(e => { edits[e.key] = e.default; });
   const options = {};
@@ -4232,10 +4328,6 @@ function addToBuilder(compId, insertIndex) {
   pushBuilderHistory();
   renderBuilderPreview();
   selectBuilderItem(uid);
-  // Auto-open Survey Editor popup for survey components
-  if (comp && comp.isSurvey) {
-    setTimeout(() => openSurveyEditor(uid), 100);
-  }
 }
 
 function removeFromBuilder(uid) {
@@ -4315,9 +4407,11 @@ function renderBuilderLeft() {
   const list = document.getElementById('builderCompList');
   let html = '';
   COMPONENTS.forEach(comp => {
+    const dragAttr = comp.isSurvey
+      ? `draggable="false" onclick="showSurveyUnsupportedPopup()"`
+      : `draggable="true" ondragstart="event.dataTransfer.setData('text/comp-id','${comp.id}'); event.dataTransfer.effectAllowed='copy';"`;
     html += `
-      <div class="builder-comp-item" draggable="true"
-           ondragstart="event.dataTransfer.setData('text/comp-id','${comp.id}'); event.dataTransfer.effectAllowed='copy';">
+      <div class="builder-comp-item" ${dragAttr}>
         <div class="bci-thumb" id="bci-thumb-${comp.id}"></div>
         <div class="bci-meta">
           <span class="bci-name">${tCompName(comp)}</span>
@@ -4373,8 +4467,11 @@ function renderBuilderPreview() {
     if (isCodeView) {
       codePanel.classList.remove('open');
       canvas.style.display = '';
-      const btn = document.querySelector('.builder-floating-source');
-      if (btn) btn.innerHTML = '<span class="mi">code</span>' + t('builder.viewSource');
+      const sourceBtn = document.getElementById('builderViewSourceBtn');
+      const textBtn = document.getElementById('builderViewTextBtn');
+      if (sourceBtn) sourceBtn.innerHTML = '<span class="mi">code</span><span data-i18n="builder.viewSource">' + t('builder.viewSource') + '</span>';
+      if (textBtn) textBtn.innerHTML = '<span class="mi">article</span><span>View Text Ver</span>';
+      builderPanelMode = 'html';
     }
     return;
   }
@@ -4685,9 +4782,31 @@ ${parts}
 function updateBuilderCode() {
   const cp = document.getElementById('builderCodePanel');
   if (cp && cp.classList.contains('open')) {
-    document.getElementById('builderCode').textContent = buildFullEdmDoc();
+    document.getElementById('builderCode').textContent = (builderPanelMode === 'text')
+      ? buildBuilderTextDoc()
+      : buildFullEdmDoc();
   }
   // If code view is active and canvas is re-rendered, keep canvas hidden
+}
+
+let builderPanelMode = 'html';
+
+function _setBuilderPanelButtonState(isOpen) {
+  const sourceBtn = document.getElementById('builderViewSourceBtn');
+  const textBtn = document.getElementById('builderViewTextBtn');
+  if (!sourceBtn || !textBtn) return;
+  if (!isOpen) {
+    sourceBtn.innerHTML = '<span class="mi">code</span><span data-i18n="builder.viewSource">' + t('builder.viewSource') + '</span>';
+    textBtn.innerHTML = '<span class="mi">article</span><span>View Text Ver</span>';
+    return;
+  }
+  if (builderPanelMode === 'text') {
+    textBtn.innerHTML = '<span class="mi">preview</span><span>' + t('builder.edmPreviewBtn') + '</span>';
+    sourceBtn.innerHTML = '<span class="mi">code</span><span data-i18n="builder.viewSource">' + t('builder.viewSource') + '</span>';
+  } else {
+    sourceBtn.innerHTML = '<span class="mi">preview</span><span>' + t('builder.edmPreviewBtn') + '</span>';
+    textBtn.innerHTML = '<span class="mi">article</span><span>View Text Ver</span>';
+  }
 }
 
 function pushBuilderHistory() {
@@ -4727,6 +4846,25 @@ function updateUndoRedoBtns() {
   const redoBtn = document.getElementById('builderRedoBtn');
   if (undoBtn) undoBtn.disabled = builderHistoryIdx <= 0;
   if (redoBtn) redoBtn.disabled = builderHistoryIdx >= builderHistory.length - 1;
+}
+
+function toggleBuilderTextView() {
+  const canvas = document.getElementById('builderCanvas');
+  const panel = document.getElementById('builderCodePanel');
+  if (!panel || !canvas) return;
+  const showing = panel.classList.contains('open');
+  if (showing && builderPanelMode === 'text') {
+    panel.classList.remove('open');
+    canvas.style.display = '';
+    _setBuilderPanelButtonState(false);
+    builderPanelMode = 'html';
+    return;
+  }
+  builderPanelMode = 'text';
+  document.getElementById('builderCode').textContent = buildBuilderTextDoc();
+  canvas.style.display = 'none';
+  panel.classList.add('open');
+  _setBuilderPanelButtonState(true);
 }
 
 // ══════════════════════════════════════
@@ -4797,18 +4935,18 @@ function toggleDeviceView(mode, context) {
 function toggleBuilderCode() {
   const canvas = document.getElementById('builderCanvas');
   const panel = document.getElementById('builderCodePanel');
-  const btn = document.querySelector('.builder-floating-source');
   if (!panel || !canvas) return;
   const showing = panel.classList.contains('open');
-  if (showing) {
+  if (showing && builderPanelMode === 'html') {
     panel.classList.remove('open');
     canvas.style.display = '';
-    if (btn) btn.innerHTML = '<span class="mi">code</span>' + t('builder.viewSource');
+    _setBuilderPanelButtonState(false);
   } else {
+    builderPanelMode = 'html';
     document.getElementById('builderCode').textContent = buildFullEdmDoc();
     canvas.style.display = 'none';
     panel.classList.add('open');
-    if (btn) btn.innerHTML = '<span class="mi">preview</span>' + t('builder.edmPreviewBtn');
+    _setBuilderPanelButtonState(true);
   }
 }
 
@@ -4841,6 +4979,399 @@ function downloadBuilderHtml() {
   showToast('<span class="mi">download_done</span>' + t('builder.htmlDownloaded'));
 }
 
+function _richHtmlToText(html) {
+  if (!html) return '';
+  const normalized = String(html)
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|li|tr|h1|h2|h3|h4|h5|h6)>/gi, '\n');
+  const d = document.createElement('div');
+  d.innerHTML = normalized;
+  return (d.textContent || '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\r/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function _getFirstMcEl(wrapper, mc) {
+  return wrapper ? wrapper.querySelector('[mc\\:edit="' + mc + '"]') : null;
+}
+
+function _mcText(wrapper, mc) {
+  const el = _getFirstMcEl(wrapper, mc);
+  if (!el) return '';
+  return _richHtmlToText(el.innerHTML || el.textContent || '');
+}
+
+function _mcHref(wrapper, mc) {
+  const el = _getFirstMcEl(wrapper, mc);
+  if (!el) return '';
+  if (el.tagName && el.tagName.toLowerCase() === 'a') return el.getAttribute('href') || '';
+  const parentA = el.closest('a');
+  return parentA ? (parentA.getAttribute('href') || '') : '';
+}
+
+function _buildItemWrapperForText(item, comp) {
+  const w = document.createElement('div');
+  w.innerHTML = comp.getHtml(item.options || {});
+  applyEdits(w, comp, item.edits || {});
+  return w;
+}
+
+function _ctaLine(wrapper, mc) {
+  const label = _mcText(wrapper, mc);
+  const href = _mcHref(wrapper, mc);
+  if (!label && !href) return '';
+  return (label || 'Learn More') + ' -> ' + (href || '#');
+}
+
+function _pushIf(arr, line) {
+  if (line && String(line).trim()) arr.push(String(line).trim());
+}
+
+function _buildTextBlockForItem(item) {
+  const comp = COMPONENTS.find(c => c.id === item.compId);
+  if (!comp || comp.isSurvey || comp.id === 'footer' || comp.id === 'header') return '';
+  const w = _buildItemWrapperForText(item, comp);
+  const lines = [];
+
+  switch (comp.id) {
+    case 'banner-v1':
+      _pushIf(lines, _mcText(w, 'hero_eyebrow'));
+      _pushIf(lines, _mcText(w, 'hero_title'));
+      _pushIf(lines, _mcText(w, 'hero_subtitle'));
+      _pushIf(lines, _ctaLine(w, 'hero_cta'));
+      break;
+    case 'banner-v2':
+      _pushIf(lines, _mcText(w, 'hero_eyebrow'));
+      _pushIf(lines, _mcText(w, 'hero_title'));
+      _pushIf(lines, _mcText(w, 'hero_subtitle2'));
+      _pushIf(lines, _mcText(w, 'hero_subtitle'));
+      _pushIf(lines, _ctaLine(w, 'hero_cta'));
+      break;
+    case 'countdown':
+      _pushIf(lines, _mcText(w, 'countdown_text'));
+      break;
+    case 'section-heading':
+      _pushIf(lines, _mcText(w, 'section_eyebrow'));
+      _pushIf(lines, _mcText(w, 'section_title'));
+      _pushIf(lines, _mcText(w, 'section_subtitle'));
+      break;
+    case 'products-v1':
+    case 'products-v2': {
+      const maxN = comp.id === 'products-v1' ? 4 : 3;
+      for (let n = 1; n <= maxN; n++) {
+        const name = _mcText(w, 'product' + n + '_name');
+        const desc = _mcText(w, 'product' + n + '_desc');
+        const price = _mcText(w, 'product' + n + '_price');
+        const op = _mcText(w, 'product' + n + '_original_price');
+        const cta = _ctaLine(w, 'product' + n + '_cta');
+        if (!name && !desc && !cta) continue;
+        lines.push('* ' + (name || ('Product ' + n)));
+        _pushIf(lines, '  ' + desc);
+        if (price) {
+          _pushIf(lines, op ? ('  ' + price + ' (was ' + op + ')') : ('  ' + price));
+        }
+        _pushIf(lines, '  ' + cta);
+      }
+      break;
+    }
+    case 'image-text-split':
+      _pushIf(lines, _mcText(w, 'split_eyebrow'));
+      _pushIf(lines, _mcText(w, 'split_title'));
+      _pushIf(lines, _mcText(w, 'split_subtitle'));
+      _pushIf(lines, _mcText(w, 'split_body'));
+      _pushIf(lines, _ctaLine(w, 'split_cta'));
+      break;
+    case 'text-image-split':
+      _pushIf(lines, _mcText(w, 'split2_eyebrow'));
+      _pushIf(lines, _mcText(w, 'split2_title'));
+      _pushIf(lines, _mcText(w, 'split2_subtitle'));
+      _pushIf(lines, _mcText(w, 'split2_body'));
+      _pushIf(lines, _ctaLine(w, 'split2_cta'));
+      break;
+    case 'coupon-v1':
+      _pushIf(lines, _mcText(w, 'coupon_eyebrow'));
+      _pushIf(lines, _mcText(w, 'coupon_headline'));
+      _pushIf(lines, 'Promo Code: ' + _mcText(w, 'coupon_code'));
+      _pushIf(lines, _mcText(w, 'coupon_terms'));
+      break;
+    case 'coupon-single':
+      _pushIf(lines, _mcText(w, 'cpn1_eyebrow'));
+      _pushIf(lines, _mcText(w, 'cpn1_title'));
+      _pushIf(lines, _mcText(w, 'cpn1_subtitle'));
+      _pushIf(lines, _mcText(w, 'cpn1_headline'));
+      _pushIf(lines, 'Amount: ' + _mcText(w, 'cpn1_amount'));
+      _pushIf(lines, _mcText(w, 'cpn1_validity'));
+      _pushIf(lines, _ctaLine(w, 'cpn1_cta'));
+      break;
+    case 'coupon-v2': {
+      _pushIf(lines, _mcText(w, 'coupon_eyebrow'));
+      _pushIf(lines, _mcText(w, 'coupon_title'));
+      _pushIf(lines, _mcText(w, 'coupon_subtitle'));
+      for (let n = 1; n <= 2; n++) {
+        const headline = _mcText(w, 'coupon' + n + '_headline');
+        const amount = _mcText(w, 'coupon' + n + '_amount');
+        const validity = _mcText(w, 'coupon' + n + '_validity');
+        const cta = _ctaLine(w, 'coupon' + n + '_cta');
+        if (!headline && !amount && !cta) continue;
+        lines.push('* ' + headline);
+        _pushIf(lines, amount ? ('  Amount: ' + amount) : '');
+        _pushIf(lines, validity ? ('  ' + validity) : '');
+        _pushIf(lines, cta ? ('  ' + cta) : '');
+      }
+      break;
+    }
+    case 'promo-code-dual': {
+      _pushIf(lines, _mcText(w, 'promo_eyebrow'));
+      for (let n = 1; n <= 2; n++) {
+        const tag = _mcText(w, 'promo' + n + '_tag');
+        const headline = _mcText(w, 'promo' + n + '_headline');
+        const code = _mcText(w, 'promo' + n + '_code');
+        const cta = _ctaLine(w, 'promo' + n + '_cta');
+        if (!headline && !code && !cta) continue;
+        lines.push('* ' + [tag, headline].filter(Boolean).join(' '));
+        _pushIf(lines, code ? ('  Code: ' + code) : '');
+        _pushIf(lines, cta ? ('  ' + cta) : '');
+      }
+      break;
+    }
+    case 'service-benefits':
+      lines.push('OUR SERVICES:');
+      for (let n = 1; n <= 4; n++) {
+        const t1 = _mcText(w, 'svc' + n + '_title');
+        const d1 = _mcText(w, 'svc' + n + '_desc');
+        if (!t1 && !d1) continue;
+        lines.push('* ' + (t1 || ('Service ' + n)) + (d1 ? (': ' + d1) : ''));
+      }
+      break;
+    case 'other-activities':
+      _pushIf(lines, _mcText(w, 'other_eyebrow'));
+      _pushIf(lines, _mcText(w, 'other_headline'));
+      for (let n = 1; n <= 3; n++) {
+        const lbl = _mcText(w, 'activity' + n + '_label');
+        const ttl = _mcText(w, 'activity' + n + '_title');
+        const desc = _mcText(w, 'activity' + n + '_desc');
+        const cta = _ctaLine(w, 'activity' + n + '_cta');
+        if (!ttl && !desc && !cta) continue;
+        lines.push('* ' + [lbl, ttl].filter(Boolean).join(' - '));
+        _pushIf(lines, desc ? ('  ' + desc) : '');
+        _pushIf(lines, cta ? ('  ' + cta) : '');
+      }
+      break;
+    case 'three-col-image-text':
+      for (let n = 1; n <= 3; n++) {
+        const badge = _mcText(w, 'col' + n + '_badge');
+        const ttl = _mcText(w, 'col' + n + '_title');
+        const desc = _mcText(w, 'col' + n + '_desc');
+        if (!ttl && !desc) continue;
+        lines.push('* ' + [badge, ttl].filter(Boolean).join(' '));
+        _pushIf(lines, desc ? ('  ' + desc) : '');
+      }
+      break;
+    case 'single-button-bar':
+      _pushIf(lines, _ctaLine(w, 'single_btn_cta'));
+      break;
+    case 'dual-button-bar':
+      _pushIf(lines, _ctaLine(w, 'dual_btn1_cta'));
+      _pushIf(lines, _ctaLine(w, 'dual_btn2_cta'));
+      break;
+    case 'four-col-image-text':
+      for (let n = 1; n <= 4; n++) {
+        const badge = _mcText(w, 'col' + n + '_badge');
+        const ttl = _mcText(w, 'col' + n + '_title');
+        const desc = _mcText(w, 'col' + n + '_desc');
+        if (!ttl && !desc) continue;
+        lines.push('* ' + [badge, ttl].filter(Boolean).join(' ') + (desc ? (': ' + desc) : ''));
+      }
+      break;
+    case 'three-button-bar':
+      _pushIf(lines, _ctaLine(w, 'btn3_cta1'));
+      _pushIf(lines, _ctaLine(w, 'btn3_cta2'));
+      _pushIf(lines, _ctaLine(w, 'btn3_cta3'));
+      break;
+    case 'product-spotlight':
+      _pushIf(lines, _mcText(w, 'spot_eyebrow'));
+      _pushIf(lines, _mcText(w, 'spot_title'));
+      _pushIf(lines, _mcText(w, 'spot_body'));
+      _pushIf(lines, _ctaLine(w, 'spot_cta'));
+      break;
+    case 'product-cards':
+      _pushIf(lines, _mcText(w, 'pcards_eyebrow'));
+      for (let n = 1; n <= 2; n++) {
+        const ttl = _mcText(w, 'pcard' + n + '_title');
+        const body = _mcText(w, 'pcard' + n + '_body');
+        const cta = _ctaLine(w, 'pcard' + n + '_cta');
+        if (!ttl && !body && !cta) continue;
+        lines.push('* ' + (ttl || ('Card ' + n)));
+        _pushIf(lines, body ? ('  ' + body) : '');
+        _pushIf(lines, cta ? ('  ' + cta) : '');
+      }
+      break;
+    case 'product-showcase': {
+      _pushIf(lines, _mcText(w, 'showcase_eyebrow'));
+      _pushIf(lines, _mcText(w, 'showcase_title'));
+      _pushIf(lines, _mcText(w, 'showcase_body'));
+      const stats = [];
+      for (let n = 1; n <= 5; n++) {
+        const num = _mcText(w, 'showcase_num' + n);
+        const lbl = _mcText(w, 'showcase_label' + n);
+        if (!num && !lbl) continue;
+        stats.push('* ' + [num, lbl].filter(Boolean).join(' '));
+      }
+      if (stats.length) {
+        lines.push('Stats:');
+        Array.prototype.push.apply(lines, stats);
+      }
+      break;
+    }
+    case 'grid-2x2-image-text':
+      for (let n = 1; n <= 4; n++) {
+        const ttl = _mcText(w, 'grid2x2_item' + n + '_title');
+        const desc = _mcText(w, 'grid2x2_item' + n + '_desc');
+        if (!ttl && !desc) continue;
+        lines.push('* ' + (ttl || ('Feature ' + n)) + (desc ? (': ' + desc) : ''));
+      }
+      break;
+    case 'grid-3col-image-text':
+      for (let n = 1; n <= 3; n++) {
+        const ttl = _mcText(w, 'grid3col_item' + n + '_title');
+        const desc = _mcText(w, 'grid3col_item' + n + '_desc');
+        if (!ttl && !desc) continue;
+        lines.push('* ' + (ttl || ('Feature ' + n)) + (desc ? (': ' + desc) : ''));
+      }
+      break;
+    case 'full-width-image': {
+      const href = _mcHref(w, 'fwimg_link');
+      if (href) lines.push('Open Image / Learn More -> ' + href);
+      break;
+    }
+    default:
+      break;
+  }
+
+  return lines.filter(Boolean).join('\n').trim();
+}
+
+function _buildHeaderText(item) {
+  const comp = COMPONENTS.find(c => c.id === 'header');
+  if (!comp || !item) return '';
+  const w = _buildItemWrapperForText(item, comp);
+  const link1 = _mcHref(w, 'header_link1');
+  const link2 = _mcHref(w, 'header_link2');
+  const lines = [];
+  _pushIf(lines, 'DEALS & OFFERS: ' + (link1 || '#'));
+  _pushIf(lines, 'CONTACT US: ' + (link2 || '#'));
+  return lines.join('\n');
+}
+
+function _buildFooterText(item) {
+  const comp = COMPONENTS.find(c => c.id === 'footer');
+  if (!comp || !item) return '';
+  const w = _buildItemWrapperForText(item, comp);
+  const lines = [];
+  const socials = [];
+  const socialImgs = w.querySelectorAll('img[mc\\:edit^="footer_social"]');
+  socialImgs.forEach(img => {
+    const a = img.closest('a');
+    const href = a ? (a.getAttribute('href') || '') : '';
+    const name = (img.getAttribute('alt') || '').trim() || 'Social';
+    if (href) socials.push('* ' + name + ': ' + href);
+  });
+
+  lines.push('------------------------------------------------');
+  lines.push('');
+  lines.push('CONNECT WITH US:');
+  if (socials.length) lines.push.apply(lines, socials);
+  else {
+    lines.push('* Facebook: https://www.facebook.com/Advantech.Corp');
+    lines.push('* YouTube: https://www.youtube.com/@AdvantechCorp');
+    lines.push('* LinkedIn: https://www.linkedin.com/company/advantech/');
+  }
+  lines.push('');
+  lines.push('------------------------------------------------');
+  lines.push('');
+
+  const unsubHref = _mcHref(w, 'footer_unsubscribe');
+  lines.push('To unsubscribe, click here: ' + (unsubHref || (exportFormat === 'mcae' ? '{{Unsubscribe}}' : '#')));
+  lines.push('');
+  lines.push('Advantech IoTMart');
+  lines.push('{{{Organization.Address}}}');
+  lines.push('');
+
+  const legalAnchors = w.querySelectorAll('[mc\\:edit="footer_legal_links"] a');
+  if (legalAnchors.length) {
+    legalAnchors.forEach(a => {
+      const label = _richHtmlToText(a.innerHTML || a.textContent || '') || 'Link';
+      const href = a.getAttribute('href') || '#';
+      lines.push('* ' + label + ': ' + href);
+    });
+  } else {
+    lines.push('* Privacy Policy: https://www.advantech.com/en/legal/privacy');
+    lines.push('* Terms & Conditions: https://www.iotmart.com/en-en/s/terms-conditions?language=en_US');
+    lines.push('* Shopping FAQ: https://www.iotmart.com/en-en/s/faq?language=en_US');
+  }
+  lines.push('');
+  lines.push('Copyright © 1983 - 2025 Advantech Co., Ltd.');
+  lines.push('All Rights Reserved');
+  return lines.join('\n');
+}
+
+function buildBuilderTextDoc() {
+  if (!builderStack.length) return '';
+  const mainSep = '----------------------------------------------------------------------';
+  let headerItem = null;
+  let footerItem = null;
+  const blocks = [];
+
+  builderStack.forEach(item => {
+    if (item.compId === 'header') { headerItem = item; return; }
+    if (item.compId === 'footer') { footerItem = item; return; }
+    const block = _buildTextBlockForItem(item);
+    if (block) blocks.push(block);
+  });
+
+  const out = [];
+  out.push('Advantech IoTMart');
+  out.push('');
+
+  const headerText = _buildHeaderText(headerItem);
+  if (headerText) {
+    out.push(headerText);
+    out.push('');
+  }
+
+  if (blocks.length) {
+    out.push(mainSep);
+    out.push('');
+    out.push(blocks.join('\n\n' + mainSep + '\n\n'));
+    out.push('');
+  }
+
+  const footerText = _buildFooterText(footerItem);
+  if (footerText) out.push(footerText);
+
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+function copyBuilderText() {
+  const txt = buildBuilderTextDoc();
+  if (!txt) { showToast('<span class="mi">info</span>' + t('builder.addFirst')); return; }
+  navigator.clipboard.writeText(txt).then(() => {
+    showToast('<span class="mi">check_circle</span>Text version copied');
+    const btn = document.getElementById('builderCopyTextBtn');
+    if (btn) {
+      btn.innerHTML = '<span class="mi">check_circle</span><span>Copied</span>';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = '<span class="mi">article</span><span>Copy Text Ver</span>';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+  });
+}
+
 // ══════════════════════════════════════
 // Gallery View — Collab-enabled
 // ══════════════════════════════════════
@@ -4849,12 +5380,34 @@ function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&l
 const GALLERY_FOLDER_STORAGE_KEY = 'edm_component_gallery_folders_v1';
 let _galleryFolderViewId = null;
 
+// ── Folder color + icon presets ──
+const FOLDER_COLORS = [
+  { id: 'blue',   from: '#0059ff', to: '#c5d4ff', accent: '#0059ff' },
+  { id: 'purple', from: '#7c3aed', to: '#ddd6fe', accent: '#7c3aed' },
+  { id: 'green',  from: '#10b981', to: '#d1fae5', accent: '#10b981' },
+  { id: 'orange', from: '#f97316', to: '#fed7aa', accent: '#f97316' },
+  { id: 'red',    from: '#ef4444', to: '#fecaca', accent: '#ef4444' },
+  { id: 'teal',   from: '#0891b2', to: '#cffafe', accent: '#0891b2' },
+  { id: 'gray',   from: '#6b7280', to: '#f3f4f6', accent: '#6b7280' },
+  { id: 'pink',   from: '#ec4899', to: '#fce7f3', accent: '#ec4899' },
+];
+const FOLDER_DEFAULT_COLOR = 'blue';
+const FOLDER_ICONS = [
+  'folder','campaign','email','star','label','bookmark',
+  'inventory_2','send','notifications','workspace_premium','favorite','business_center',
+];
+const FOLDER_DEFAULT_ICON = 'folder';
+
+function _folderColorPreset(colorId) {
+  return FOLDER_COLORS.find(c => c.id === colorId) || FOLDER_COLORS[0];
+}
+
 function _loadGalleryFoldersState() {
   try {
     const raw = localStorage.getItem(GALLERY_FOLDER_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : null;
     return {
-      folders: Array.isArray(parsed && parsed.folders) ? parsed.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name) })) : [],
+      folders: Array.isArray(parsed && parsed.folders) ? parsed.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name), color: f.color || FOLDER_DEFAULT_COLOR, icon: f.icon || FOLDER_DEFAULT_ICON })) : [],
       projectFolderMap: (parsed && parsed.projectFolderMap && typeof parsed.projectFolderMap === 'object') ? parsed.projectFolderMap : {}
     };
   } catch (_) {
@@ -4864,8 +5417,77 @@ function _loadGalleryFoldersState() {
 
 let _galleryFoldersState = _loadGalleryFoldersState();
 
-function _saveGalleryFoldersState() {
+function _saveGalleryFoldersLocal() {
   try { localStorage.setItem(GALLERY_FOLDER_STORAGE_KEY, JSON.stringify(_galleryFoldersState)); } catch (_) {}
+}
+
+// ── Firebase-backed folder sync (shared org across sessions / devices) ──
+const GALLERY_FOLDER_COLLECTION = 'edm_component_folders';
+const GALLERY_FOLDER_DOC_ID = 'state';
+let _folderSyncUnsub = null;
+let _folderLocalWriteAt = 0;
+
+function _galleryFoldersDoc() {
+  if (!window._db) return null;
+  return window._db.collection(GALLERY_FOLDER_COLLECTION).doc(GALLERY_FOLDER_DOC_ID);
+}
+
+function _normalizeFolderState(raw) {
+  return {
+    folders: Array.isArray(raw && raw.folders) ? raw.folders.filter(f => f && f.id && f.name).map(f => ({ id: String(f.id), name: String(f.name) })) : [],
+    projectFolderMap: (raw && raw.projectFolderMap && typeof raw.projectFolderMap === 'object') ? Object.assign({}, raw.projectFolderMap) : {}
+  };
+}
+
+async function _pushGalleryFoldersToFirebase() {
+  const ref = _galleryFoldersDoc();
+  if (!ref || !window._fbReady) return;
+  try {
+    _folderLocalWriteAt = Date.now();
+    await ref.set({
+      folders: (_galleryFoldersState.folders || []),
+      projectFolderMap: (_galleryFoldersState.projectFolderMap || {}),
+      updatedAt: (window.firebase && firebase.firestore) ? firebase.firestore.FieldValue.serverTimestamp() : Date.now()
+    });
+  } catch (e) {
+    console.warn('[Folders] Firebase save failed:', e);
+  }
+}
+
+function _saveGalleryFoldersState() {
+  _saveGalleryFoldersLocal();
+  _pushGalleryFoldersToFirebase();
+}
+
+async function _loadGalleryFoldersFromFirebase() {
+  const ref = _galleryFoldersDoc();
+  if (!ref || !window._fbReady) return;
+  try {
+    const doc = await ref.get();
+    if (doc.exists) {
+      _galleryFoldersState = _normalizeFolderState(doc.data());
+      _saveGalleryFoldersLocal();
+    } else {
+      // Remote not initialized yet — seed it from local cache.
+      await _pushGalleryFoldersToFirebase();
+    }
+  } catch (e) {
+    console.warn('[Folders] Firebase load failed, using local cache:', e);
+  }
+}
+
+function _startFolderSync() {
+  const ref = _galleryFoldersDoc();
+  if (!ref || !window._fbReady || _folderSyncUnsub) return;
+  _folderSyncUnsub = ref.onSnapshot(doc => {
+    if (!doc.exists) return;
+    // Skip our own recent write echo
+    if (Date.now() - _folderLocalWriteAt < 1500) return;
+    _galleryFoldersState = _normalizeFolderState(doc.data());
+    _saveGalleryFoldersLocal();
+    const gv = document.getElementById('galleryView');
+    if (gv && !gv.classList.contains('hidden')) renderGallery();
+  }, err => console.warn('[Folders] snapshot error:', err));
 }
 
 function _newGalleryFolderId() {
@@ -4881,15 +5503,93 @@ function _getFolderNameById(id) {
   return f ? f.name : '';
 }
 
-function _ensureFolderByName(name) {
+function _ensureFolderByName(name, opts) {
   const n = String(name || '').trim();
   if (!n) return null;
   const hit = (_galleryFoldersState.folders || []).find(f => f.name.toLowerCase() === n.toLowerCase());
   if (hit) return hit.id;
   const id = _newGalleryFolderId();
-  _galleryFoldersState.folders.push({ id, name: n });
+  _galleryFoldersState.folders.push({ id, name: n, color: (opts && opts.color) || FOLDER_DEFAULT_COLOR, icon: (opts && opts.icon) || FOLDER_DEFAULT_ICON });
   _saveGalleryFoldersState();
   return id;
+}
+
+// ── Folder Edit Modal ──
+let _folderEditTargetId = null;
+let _folderEditColor = FOLDER_DEFAULT_COLOR;
+let _folderEditIcon = FOLDER_DEFAULT_ICON;
+
+function openFolderEditModal(folderId, opts) {
+  const folder = _getFolderById(folderId);
+  if (!folder && !opts) return;
+  _folderEditTargetId = folderId;
+  _folderEditColor = (folder && folder.color) || FOLDER_DEFAULT_COLOR;
+  _folderEditIcon  = (folder && folder.icon)  || FOLDER_DEFAULT_ICON;
+
+  const modal = document.getElementById('folderEditModal');
+  const nameInput = document.getElementById('folderEditName');
+  const title = document.getElementById('folderEditTitle');
+  const desc  = document.getElementById('folderEditDesc');
+  if (!modal) return;
+
+  title.textContent = (opts && opts.title) || 'Edit Folder';
+  desc.textContent  = (opts && opts.desc)  || 'Customize name, color, and icon.';
+  nameInput.value   = folder ? folder.name : '';
+
+  // Color swatches
+  const swatchWrap = document.getElementById('folderColorSwatches');
+  swatchWrap.innerHTML = FOLDER_COLORS.map(c => `
+    <div class="folder-color-swatch${_folderEditColor === c.id ? ' selected' : ''}"
+         style="background:${c.accent};"
+         data-color="${c.id}"
+         title="${c.id.charAt(0).toUpperCase() + c.id.slice(1)}"
+         onclick="_folderEditPickColor('${c.id}')"></div>`).join('');
+
+  // Icon grid
+  const iconWrap = document.getElementById('folderIconGrid');
+  iconWrap.innerHTML = FOLDER_ICONS.map(ic => `
+    <button type="button" class="folder-icon-btn${_folderEditIcon === ic ? ' selected' : ''}"
+            data-icon="${ic}" onclick="_folderEditPickIcon('${ic}')" title="${ic}">
+      <span class="mi">${ic}</span>
+    </button>`).join('');
+
+  modal.classList.add('visible');
+  setTimeout(() => { nameInput.focus(); nameInput.select(); }, 120);
+}
+
+function closeFolderEditModal() {
+  const modal = document.getElementById('folderEditModal');
+  if (modal) modal.classList.remove('visible');
+  _folderEditTargetId = null;
+}
+
+function _folderEditPickColor(colorId) {
+  _folderEditColor = colorId;
+  document.querySelectorAll('#folderColorSwatches .folder-color-swatch').forEach(el => {
+    el.classList.toggle('selected', el.dataset.color === colorId);
+  });
+}
+
+function _folderEditPickIcon(iconName) {
+  _folderEditIcon = iconName;
+  document.querySelectorAll('#folderIconGrid .folder-icon-btn').forEach(el => {
+    el.classList.toggle('selected', el.dataset.icon === iconName);
+  });
+}
+
+function _applyFolderEdit() {
+  const nameInput = document.getElementById('folderEditName');
+  const name = nameInput ? nameInput.value.trim() : '';
+  if (!name) { if (nameInput) nameInput.focus(); return; }
+  const folder = _getFolderById(_folderEditTargetId);
+  if (folder) {
+    folder.name  = name;
+    folder.color = _folderEditColor;
+    folder.icon  = _folderEditIcon;
+    _saveGalleryFoldersState();
+    closeFolderEditModal();
+    renderGallery();
+  }
 }
 
 function _getProjectFolderId(projectId) {
@@ -4945,23 +5645,74 @@ function _createFolderFromGallery() {
 }
 
 function _renameFolderFromGallery(folderId) {
+  openFolderEditModal(folderId);
+}
+
+function _makeUniqueFolderCopyName(baseName) {
+  const existing = new Set((_galleryFoldersState.folders || []).map(f => String(f.name || '').toLowerCase()));
+  const base = String(baseName || 'Folder').trim() || 'Folder';
+  let candidate = base + ' Copy';
+  if (!existing.has(candidate.toLowerCase())) return candidate;
+  let i = 2;
+  while (existing.has((base + ' Copy ' + i).toLowerCase())) i++;
+  return base + ' Copy ' + i;
+}
+
+async function _duplicateFolderFromGallery(folderId) {
   const folder = _getFolderById(folderId);
   if (!folder) return;
-  openRenameModal({
-    icon: 'drive_file_rename_outline',
-    title: 'Rename Folder',
-    desc: 'Update folder name.',
-    value: folder.name,
-    placeholder: 'Folder name',
-    confirmText: 'Save',
-    onConfirm: async (name) => {
-      const n = String(name || '').trim();
-      if (!n) return;
-      folder.name = n;
-      _saveGalleryFoldersState();
-      renderGallery();
+  if (!window.Collab || !Collab.ready()) {
+    showToast('<span class="mi">cloud_off</span>' + t('collab.firebaseNotConfigured'));
+    return;
+  }
+
+  const projects = ((await Collab.list()) || []).filter(p => !(p && p.__masScoped));
+  const sourceProjects = projects.filter(p => _getProjectFolderId(p.id) === folderId);
+  if (!sourceProjects.length) {
+    showToast('<span class="mi">info</span>No projects found in this folder.');
+    return;
+  }
+
+  const newFolderName = _makeUniqueFolderCopyName(folder.name);
+  const newFolderId = _ensureFolderByName(newFolderName);
+  if (!newFolderId) {
+    showToast('<span class="mi">error</span>Failed to create duplicated folder.');
+    return;
+  }
+
+  const duplicatedIds = [];
+  const failedNames = [];
+  for (const p of sourceProjects) {
+    try {
+      const newId = await Collab.duplicate(p.id);
+      if (newId) duplicatedIds.push(newId);
+      else failedNames.push(p.name || p.id);
+    } catch (_) {
+      failedNames.push(p.name || p.id);
     }
-  });
+  }
+
+  duplicatedIds.forEach(id => _setProjectFolder(id, newFolderId));
+
+  if (!duplicatedIds.length) {
+    // No successful copies: roll back newly created empty folder.
+    _galleryFoldersState.folders = _galleryFoldersState.folders.filter(f => f.id !== newFolderId);
+    _saveGalleryFoldersState();
+    showToast('<span class="mi">error</span>Duplicate folder failed.');
+    renderGallery();
+    return;
+  }
+
+  _galleryFolderViewId = newFolderId;
+  renderGallery();
+
+  const toastMsg = failedNames.length
+    ? '<span class="mi">warning</span>Folder duplicated with partial failures (' + failedNames.length + ').'
+    : '<span class="mi">content_copy</span>Folder duplicated (' + duplicatedIds.length + ').';
+  showToast(toastMsg);
+
+  // Prompt rename + customise the new folder
+  openFolderEditModal(newFolderId, { title: 'Name the Duplicate', desc: 'Rename the copied folder and customize its appearance.' });
 }
 
 function _deleteFolderFromGallery(folderId) {
@@ -5039,15 +5790,18 @@ function _renderGalleryFolderBar(projects) {
   }
 
   const count = (projects || []).filter(p => _getProjectFolderId(p.id) === _galleryFolderViewId).length;
+  const fbc = _folderColorPreset(folder.color);
+  const fbi = folder.icon || FOLDER_DEFAULT_ICON;
   bar.innerHTML = `
     <div class="gallery-folder-path">
       <button type="button" class="gallery-folder-btn" onclick="_backToGalleryRootFolders()"><span class="mi">arrow_back</span>All Projects</button>
-      <span class="mi" style="font-size:16px;margin-right:0;color:#0059ff;">chevron_right</span>
+      <span class="mi" style="font-size:16px;margin-right:0;color:#ccc;">chevron_right</span>
+      <span class="mi" style="font-size:18px;margin-right:4px;color:${fbc.accent};">${fbi}</span>
       <span class="folder-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
-      <span style="color:#889;">(${count})</span>
+      <span style="color:#aaa;font-size:12px;">(${count})</span>
     </div>
     <div style="display:flex;gap:8px;">
-      <button type="button" class="gallery-folder-btn" onclick="_renameFolderFromGallery('${folder.id}')"><span class="mi">drive_file_rename_outline</span>Rename</button>
+      <button type="button" class="gallery-folder-btn" onclick="openFolderEditModal('${folder.id}')"><span class="mi">edit</span>Edit</button>
       <button type="button" class="gallery-folder-btn" onclick="_deleteFolderFromGallery('${folder.id}')"><span class="mi">delete</span>Delete</button>
     </div>`;
   bar.classList.add('visible');
@@ -5215,19 +5969,22 @@ function renderGallery() {
         const folderCard = document.createElement('div');
         folderCard.className = 'proj-gallery-card proj-gallery-folder-card';
         folderCard.onclick = () => _openGalleryFolder(folder.id);
+        const fc = _folderColorPreset(folder.color);
+        const fi = folder.icon || FOLDER_DEFAULT_ICON;
         folderCard.innerHTML = `
-          <div class="proj-gallery-card-thumb">
+          <div class="proj-gallery-card-thumb" style="background:linear-gradient(135deg,${fc.to} 0%,${fc.to} 100%)">
             <div class="folder-card-content">
-              <span class="mi">folder</span>
+              <span class="mi" style="color:${fc.accent};">${fi}</span>
               <span class="folder-card-title" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
             </div>
           </div>
           <div class="proj-gallery-card-info">
             <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+              <span class="mi" style="font-size:14px;color:${fc.accent};margin-right:0">${fi}</span>
               <span class="card-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <span class="folder-count">${cnt} project${cnt === 1 ? '' : 's'}</span>
+              <span class="folder-count" style="background:${fc.to};color:${fc.accent};">${cnt} project${cnt === 1 ? '' : 's'}</span>
               <span class="mi card-arrow">arrow_forward</span>
             </div>
           </div>`;
@@ -5240,8 +5997,11 @@ function renderGallery() {
             <span class="mi">more_vert</span>
           </button>
           <div class="card-kebab-menu">
-            <button onclick="event.stopPropagation();_renameFolderFromGallery('${folder.id}')">
-              <span class="mi">drive_file_rename_outline</span>Rename folder
+            <button onclick="event.stopPropagation();openFolderEditModal('${folder.id}')">
+              <span class="mi">edit</span>Edit folder
+            </button>
+            <button onclick="event.stopPropagation();_duplicateFolderFromGallery('${folder.id}')">
+              <span class="mi">content_copy</span>Duplicate folder
             </button>
             <button class="menu-delete" onclick="event.stopPropagation();_deleteFolderFromGallery('${folder.id}')">
               <span class="mi">delete</span>Delete folder
@@ -5638,6 +6398,10 @@ function renderCompLibraryTabs(activeId) {
 function selectCompTab(compId) {
   initState();
   const comp = COMPONENTS.find(c => c.id === compId);
+  if (comp && comp.isSurvey) {
+    showSurveyUnsupportedPopup();
+    return;
+  }
   if (comp && comp.optionMap && !custOptionState[compId]) {
     custOptionState[compId] = {};
     comp.optionMap.forEach(o => { custOptionState[compId][o.key] = o.default; });
@@ -6362,6 +7126,14 @@ document.addEventListener('DOMContentLoaded', () => {
         Collab.startGlobalPresence();
       }
     } catch (e) { console.warn('[GlobalPresence] start failed:', e); }
+    // Load gallery folder organization from Firebase (local cache fallback) + live sync
+    if (window.Collab && typeof Collab.ready === 'function' && Collab.ready()) {
+      _loadGalleryFoldersFromFirebase().finally(() => {
+        const gv = document.getElementById('galleryView');
+        if (gv && !gv.classList.contains('hidden')) renderGallery();
+        _startFolderSync();
+      });
+    }
     const params = new URLSearchParams(window.location.search);
     const pid = params.get('project');
     if (pid && window.Collab) {
