@@ -997,7 +997,10 @@ var COMPONENTS = [
     id: 'service-benefits',
     num: '18',
     name: 'Icon Grid — 4-Col',
-    optionMap: [{ key: 'showDesc', label: 'Description', default: true }],
+    optionMap: [
+      { key: 'showDesc', label: 'Description', default: true },
+      { key: 'showCta', label: 'CTA Link', default: false }
+    ],
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
        style="width: 600px;" data-color="svcBg">
   <tr><td align="center" style="padding: 28px 20px;">
@@ -1007,21 +1010,25 @@ var COMPONENTS = [
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc1_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Multiple Payment" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc1_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Multiple Payment</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc1_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Flexible options<br/>for every buyer</p>` : ''}
+          ${opts.showCta ? `<p style="margin: 0; text-align: center; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="svc1_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="svcCta">Learn More &rarr;</a></p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc2_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Dispatch in 24 Hrs" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc2_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Dispatch in 24 Hrs</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc2_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Fast fulfilment<br/>on all orders</p>` : ''}
+          ${opts.showCta ? `<p style="margin: 0; text-align: center; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="svc2_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="svcCta">Learn More &rarr;</a></p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc3_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="Cross-Border" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc3_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">Cross-Border</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc3_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Shipping to<br/>global destinations</p>` : ''}
+          ${opts.showCta ? `<p style="margin: 0; text-align: center; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="svc3_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="svcCta">Learn More &rarr;</a></p>` : ''}
         </td>
         <td class="col-service" width="140" align="center" valign="top" style="width: 140px; padding: 0 8px; text-align: center; vertical-align: top;">
           <p style="margin: 0 0 8px 0; font-size: 0; line-height: 0;"><img mc:edit="svc4_icon" src="https://irp.cdn-website.com/56869327/dms3rep/multi/remote-io-icon1-1.png" width="40" height="40" alt="24/7 Support" data-crop="1:1" style="display: block; margin: 0 auto; width: 40px; height: 40px;" /></p>
           <p mc:edit="svc4_title" style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcTitle">24/7 Online Support</p>
           ${opts.showDesc !== false ? `<p mc:edit="svc4_desc" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; text-align: center;" data-color="svcDesc">Always here<br/>when you need us</p>` : ''}
+          ${opts.showCta ? `<p style="margin: 0; text-align: center; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="svc4_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="svcCta">Learn More &rarr;</a></p>` : ''}
         </td>
       </tr>
     </table>
@@ -1030,7 +1037,8 @@ var COMPONENTS = [
     colorMap: [
       { label: 'Background', key: 'svcBg', type: 'bg', default: '#ffffff' },
       { label: 'Title', key: 'svcTitle', type: 'color', default: '#1a1a2e' },
-      { label: 'Description', key: 'svcDesc', type: 'color', default: '#888888', optionGate: 'showDesc' }
+      { label: 'Description', key: 'svcDesc', type: 'color', default: '#888888', optionGate: 'showDesc' },
+      { label: 'CTA Link', key: 'svcCta', type: 'color', default: '#0059ff', optionGate: 'showCta' }
     ]
   },
 
@@ -1865,6 +1873,7 @@ ${questionBlocks}
     name: 'Icon Grid — 2×2',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true },
+      { key: 'showCta', label: 'CTA Link', default: false },
       { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '14', choices: [{label: 'S', value: '12'}, {label: 'M', value: '14'}, {label: 'L', value: '16'}] },
       { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '12', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}], optionGate: 'showDesc' }
     ],
@@ -1885,6 +1894,7 @@ ${questionBlocks}
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item1_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature One</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item1_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid2x2_item1_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid2x2ItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -1899,6 +1909,7 @@ ${questionBlocks}
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item2_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Two</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item2_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid2x2_item2_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid2x2ItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -1915,6 +1926,7 @@ ${questionBlocks}
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item3_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Three</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item3_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid2x2_item3_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid2x2ItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -1929,6 +1941,7 @@ ${questionBlocks}
               <td align="left" valign="middle" style="padding-left: 12px;">
                 <p mc:edit="grid2x2_item4_title" style="margin: 0 0 4px 0; font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemTitle">Feature Four</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid2x2_item4_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid2x2ItemDesc">Brief description of this feature.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid2x2_item4_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid2x2ItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -1941,7 +1954,8 @@ ${questionBlocks}
     colorMap: [
       { label: 'Background', key: 'grid2x2Bg', type: 'bg', default: '#ffffff' },
       { label: 'Item Title', key: 'grid2x2ItemTitle', type: 'color', default: '#1a1a2e' },
-      { label: 'Description', key: 'grid2x2ItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
+      { label: 'Description', key: 'grid2x2ItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' },
+      { label: 'CTA Link', key: 'grid2x2ItemCta', type: 'color', default: '#0059ff', optionGate: 'showCta' }
     ]
   },
 
@@ -1952,6 +1966,7 @@ ${questionBlocks}
     name: 'Icon Grid — 3-Col',
     optionMap: [
       { key: 'showDesc', label: 'Description', default: true },
+      { key: 'showCta', label: 'CTA Link', default: false },
       { key: 'titleFontSize', label: 'Title Font Size', type: 'select', default: '13', choices: [{label: 'S', value: '12'}, {label: 'M', value: '13'}, {label: 'L', value: '16'}] },
       { key: 'bodyFontSize', label: 'Body Font Size', type: 'select', default: '10', choices: [{label: 'S', value: '8'}, {label: 'M', value: '10'}, {label: 'L', value: '12'}], optionGate: 'showDesc' }
     ],
@@ -1974,6 +1989,7 @@ ${questionBlocks}
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
                 <p mc:edit="grid3col_item1_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature One</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item1_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid3col_item1_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid3colItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -1988,6 +2004,7 @@ ${questionBlocks}
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
                 <p mc:edit="grid3col_item2_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature Two</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item2_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid3col_item2_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid3colItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -2002,6 +2019,7 @@ ${questionBlocks}
               <td align="left" valign="${vAlign}" style="padding-left: 10px;">
                 <p mc:edit="grid3col_item3_title" style="${titleMargin} font-size: ${titleSize}px; font-weight: 700; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemTitle">Feature Three</p>
                 ${opts.showDesc !== false ? `<p mc:edit="grid3col_item3_desc" style="margin: 0; font-size: ${bodySize}px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="grid3colItemDesc">Brief description here.</p>` : ''}
+                ${opts.showCta ? `<p style="margin: 0; line-height: 1;"><a href="https://www.iotmart.com/s/?language=en_US" mc:edit="grid3col_item3_cta" style="font-size: 11px; font-weight: bold; text-decoration: none; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1;" data-color="grid3colItemCta">Learn More &rarr;</a></p>` : ''}
               </td>
             </tr>
           </table>
@@ -2014,7 +2032,8 @@ ${questionBlocks}
     colorMap: [
       { label: 'Background', key: 'grid3colBg', type: 'bg', default: '#ffffff' },
       { label: 'Item Title', key: 'grid3colItemTitle', type: 'color', default: '#1a1a2e' },
-      { label: 'Description', key: 'grid3colItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' }
+      { label: 'Description', key: 'grid3colItemDesc', type: 'color', default: '#666666', optionGate: 'showDesc' },
+      { label: 'CTA Link', key: 'grid3colItemCta', type: 'color', default: '#0059ff', optionGate: 'showCta' }
     ]
   },
 
