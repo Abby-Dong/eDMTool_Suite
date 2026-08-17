@@ -1040,7 +1040,9 @@ var COMPONENTS = [
     num: '10',
     name: 'Card Grid — 3-Col',
     optionMap: [
-      { key: 'showEyebrow', label: 'Eyebrow + Headline', default: true },
+      { key: 'showEyebrow', label: 'Section Eyebrow', default: true },
+      { key: 'showHeadline', label: 'Section Headline', default: true },
+      { key: 'showCardLabel', label: 'Card Eyebrow', default: true },
       { key: 'showCta', label: 'CTA Buttons', default: true },
       { key: 'imgRatio', label: 'Image Ratio', type: 'select', default: 'free', choices: [
         { label: '16:9', value: '16:9' }, { label: '1:1', value: '1:1' }, { label: 'Free', value: 'free' }
@@ -1049,10 +1051,10 @@ var COMPONENTS = [
     getHtml: (opts = {}) => `<table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="width: 600px;">
   <tr>
     <td width="600" align="center" valign="top" style="width: 600px; padding: 36px 20px;" data-color="actBg">
-      ${opts.showEyebrow !== false ? `<table border="0" cellpadding="0" cellspacing="0" width="560" class="split-table" style="width: 560px;">
+      ${(opts.showEyebrow !== false || opts.showHeadline !== false) ? `<table border="0" cellpadding="0" cellspacing="0" width="560" class="split-table" style="width: 560px;">
         <tr><td align="center" style="width: 560px; padding: 0 0 24px 0;" width="560">
-          <p mc:edit="other_eyebrow" style="margin: 0 0 4px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;" data-color="actEyebrow">More Promotions</p>
-          <p mc:edit="other_headline" style="margin: 0; font-size: 22px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="actHeadline">Other Activities</p>
+          ${opts.showEyebrow !== false ? `<p mc:edit="other_eyebrow" style="margin: 0 0 4px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;" data-color="actEyebrow">More Promotions</p>` : ''}
+          ${opts.showHeadline !== false ? `<p mc:edit="other_headline" style="margin: 0; font-size: 22px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.2;" data-color="actHeadline">Other Activities</p>` : ''}
         </td></tr>
       </table>` : ''}
       <table border="0" cellpadding="0" cellspacing="0" width="560" class="activity-grid" style="width: 560px;">
@@ -1063,7 +1065,7 @@ var COMPONENTS = [
                 <img mc:edit="activity1_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.52.32+1.png" width="174" alt="Campaign" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity1_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Campaign</p>
+                ${opts.showCardLabel !== false ? `<p mc:edit="activity1_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Campaign</p>` : ''}
                 <p mc:edit="activity1_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">Edge AI System</p>
                 <p mc:edit="activity1_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">Get <strong>10% off</strong> on selected Edge AI Systems. Accelerate your AI at the edge deployment today.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
@@ -1081,7 +1083,7 @@ var COMPONENTS = [
                 <img mc:edit="activity2_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.53.07+1.png" width="174" alt="Cyber Sale" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity2_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Limited Time</p>
+                ${opts.showCardLabel !== false ? `<p mc:edit="activity2_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">Limited Time</p>` : ''}
                 <p mc:edit="activity2_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">Cyber Sale</p>
                 <p mc:edit="activity2_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">Exclusive online deals on IoT gateways, sensors &amp; networking gear. Limited stock &mdash; don't miss out.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
@@ -1099,7 +1101,7 @@ var COMPONENTS = [
                 <img mc:edit="activity3_image" src="https://irp.cdn-website.com/56869327/dms3rep/multi/%E6%88%AA%E5%9C%96+2026-03-05+%E4%B8%8A%E5%8D%8811.57.47+1.png" width="174" alt="AMAX Series" class="mobile-img" data-crop="${opts.imgRatio || 'free'}" style="display: block; width: 174px; height: auto;" />
               </td></tr>
               <tr><td align="left" class="card-body" style="width: 176px; padding: 16px 16px 14px 16px;" width="176">
-                <p mc:edit="activity3_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">New Series</p>
+                ${opts.showCardLabel !== false ? `<p mc:edit="activity3_label" style="margin: 0 0 5px 0; font-size: 10px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1; letter-spacing: 2px; text-transform: uppercase;" data-color="actLabel">New Series</p>` : ''}
                 <p mc:edit="activity3_title" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actTitle">AMAX Series</p>
                 <p mc:edit="activity3_desc" style="margin: 0 0 14px 0; font-size: 12px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;" data-color="actDesc">High-performance IIoT computing platforms built for demanding industrial environments.</p>
                 ${opts.showCta !== false ? `<table border="0" cellpadding="0" cellspacing="0">
@@ -1118,9 +1120,9 @@ var COMPONENTS = [
     colorMap: [
       { label: 'Section BG', key: 'actBg', type: 'bg', default: '#f5f7fa' },
       { label: 'Eyebrow', key: 'actEyebrow', type: 'color', default: '#0059ff', optionGate: 'showEyebrow' },
-      { label: 'Headline', key: 'actHeadline', type: 'color', default: '#07071a', optionGate: 'showEyebrow' },
+      { label: 'Headline', key: 'actHeadline', type: 'color', default: '#07071a', optionGate: 'showHeadline' },
       { label: 'Card BG', key: 'actCardBg', type: 'bg', default: '#ffffff' },
-      { label: 'Card Label', key: 'actLabel', type: 'color', default: '#0059ff' },
+      { label: 'Card Label', key: 'actLabel', type: 'color', default: '#0059ff', optionGate: 'showCardLabel' },
       { label: 'Card Title', key: 'actTitle', type: 'color', default: '#07071a' },
       { label: 'Card Desc', key: 'actDesc', type: 'color', default: '#666666' },
       { label: 'CTA BG', key: 'actCtaBg', type: 'bg', default: '#0059ff', optionGate: 'showCta' },
