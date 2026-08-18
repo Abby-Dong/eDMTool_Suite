@@ -5194,8 +5194,10 @@ function _buildTextBlockForItem(item) {
       for (let n = 1; n <= 4; n++) {
         const t1 = _mcText(w, 'svc' + n + '_title');
         const d1 = _mcText(w, 'svc' + n + '_desc');
-        if (!t1 && !d1) continue;
+        const cta = _ctaLine(w, 'svc' + n + '_cta');
+        if (!t1 && !d1 && !cta) continue;
         lines.push('* ' + (t1 || ('Service ' + n)) + (d1 ? (': ' + d1) : ''));
+        _pushIf(lines, cta ? ('  ' + cta) : '');
       }
       break;
     case 'other-activities':
@@ -5282,16 +5284,20 @@ function _buildTextBlockForItem(item) {
       for (let n = 1; n <= 4; n++) {
         const ttl = _mcText(w, 'grid2x2_item' + n + '_title');
         const desc = _mcText(w, 'grid2x2_item' + n + '_desc');
-        if (!ttl && !desc) continue;
+        const cta = _ctaLine(w, 'grid2x2_item' + n + '_cta');
+        if (!ttl && !desc && !cta) continue;
         lines.push('* ' + (ttl || ('Feature ' + n)) + (desc ? (': ' + desc) : ''));
+        _pushIf(lines, cta ? ('  ' + cta) : '');
       }
       break;
     case 'grid-3col-image-text':
       for (let n = 1; n <= 3; n++) {
         const ttl = _mcText(w, 'grid3col_item' + n + '_title');
         const desc = _mcText(w, 'grid3col_item' + n + '_desc');
-        if (!ttl && !desc) continue;
+        const cta = _ctaLine(w, 'grid3col_item' + n + '_cta');
+        if (!ttl && !desc && !cta) continue;
         lines.push('* ' + (ttl || ('Feature ' + n)) + (desc ? (': ' + desc) : ''));
+        _pushIf(lines, cta ? ('  ' + cta) : '');
       }
       break;
     case 'full-width-image': {
