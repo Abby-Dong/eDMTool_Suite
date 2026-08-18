@@ -3198,6 +3198,10 @@ function setupInlineEditing(previewEl, comp, builderItem) {
         if (builderItem) _builderActiveItem = builderItem;
         showImagePopover(el, kb, comp);
       });
+    } else if (tag === 'a' && el.querySelector('img[mc\\:edit]')) {
+      // Image-only link (e.g. Full Width Image): the link is edited from the
+      // image popover's "Link to…" section, so keep the anchor non-editable.
+      el.addEventListener('click', (ev) => { ev.preventDefault(); });
     } else {
       el.setAttribute('contenteditable', 'true');
       el.addEventListener('paste', (ev) => {
@@ -3595,6 +3599,41 @@ function showImagePopover(imgEl, keyBase, comp) {
   const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
   const curSrc = _edits[srcKey] || imgEl.getAttribute('src') || '';
   const curAlt = _edits[altKey] || imgEl.getAttribute('alt') || '';
+
+  // If the image is wrapped in an mc:edit link (e.g. Full Width Image), expose
+  // the whole-image link settings here instead of a separate double-click popover.
+  const linkEl = imgEl.closest('a[mc\\:edit]');
+  let linkKb = null, linkSection = '';
+  if (linkEl) {
+    linkKb = comp.id.replace(/-/g,'_') + '__' + linkEl.getAttribute('mc:edit');
+    const _lv = (suffix, attr) => _edits[linkKb+suffix] !== undefined ? _edits[linkKb+suffix] : (linkEl.getAttribute(attr) || '');
+    const curHref  = _lv('__href', 'href');
+    const curAlias = _lv('__alias', 'alias');
+    const curTitle = _lv('__title', 'title');
+    const curConv  = _edits[linkKb+'__convtrack'] !== undefined ? _edits[linkKb+'__convtrack'] : (linkEl.getAttribute('conversiontracking') || '');
+    linkSection = `
+    <div class="edit-popover-link-section" style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;">
+      <div class="edit-popover-title" style="display:flex;align-items:center;gap:6px;"><span class="mi" style="font-size:15px;">link</span>${t('popover.imageLinkTo')}</div>
+      <div class="edit-popover-row">
+        <label>${t('popover.linkUrl')}</label>
+        <input type="url" id="pop-img-link-href" value="${escAttr(curHref)}" />
+        <div style="font-size:10px;color:#aaa;margin-top:4px;line-height:1.5;">${t('popover.imageLinkHint')}</div>
+      </div>
+      <div class="edit-popover-row">
+        <label>${t('popover.trackingAlias')}</label>
+        <input type="text" id="pop-img-link-alias" value="${escAttr(curAlias)}" placeholder="${t('popover.aliasPlaceholder')}" />
+      </div>
+      <div class="edit-popover-row">
+        <label>${t('popover.linkTitle')}</label>
+        <input type="text" id="pop-img-link-title" value="${escAttr(curTitle)}" placeholder="${t('popover.titlePlaceholder')}" />
+      </div>
+      <div class="edit-popover-row" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <input type="checkbox" id="pop-img-link-conv" ${curConv?'checked':''} style="width:auto;margin:0;" />
+        <label style="margin:0;font-size:11px;color:#555;">${t('popover.conversionTracking')}</label>
+      </div>
+    </div>`;
+  }
+
   pop.innerHTML = `
     <div class="edit-popover-header" onmousedown="startDragPopup(event, 'editPopover')"><div class="edit-popover-drag-handle"></div></div>
     <div class="edit-popover-body">
@@ -3620,17 +3659,19 @@ function showImagePopover(imgEl, keyBase, comp) {
       <input type="text" id="pop-img-alt" value="${escAttr(curAlt)}" />
       <div style="font-size:10px;color:#aaa;margin-top:4px;line-height:1.5;">${t('popover.altHint')}</div>
     </div>
+    ${linkSection}
     <div class="edit-popover-actions">
       <button class="pop-cancel" onclick="hideEditPopover()">${t('popover.cancel')}</button>
-      <button class="pop-save" onclick="saveImagePopover('${srcKey}','${altKey}','${comp.id}')">${t('popover.save')}</button>
+      <button class="pop-save" onclick="saveImagePopover('${srcKey}','${altKey}','${comp.id}',${linkKb ? "'"+linkKb+"'" : 'null'})">${t('popover.save')}</button>
     </div>
     </div>
   `;
   const rect = imgEl.getBoundingClientRect();
+  const popH = linkKb ? 560 : 340;
   let top = rect.bottom + 6;
   let left = rect.left + rect.width / 2 - 160;
-  if (top + 340 > window.innerHeight - 8) top = rect.top - 346;
-  const cpImg = _clampPopoverPos(top, left, 320, 340);
+  if (top + popH > window.innerHeight - 8) top = rect.top - (popH + 6);
+  const cpImg = _clampPopoverPos(top, left, 320, popH);
   pop.style.top = cpImg.top + 'px';
   pop.style.left = cpImg.left + 'px';
   pop.classList.add('visible');
@@ -3905,7 +3946,7 @@ document.addEventListener('mousemove', e => {
 
 document.addEventListener('mouseup', () => { _cropDragging = false; _cropResizing = false; _cropResizeStart = null; });
 
-function saveImagePopover(srcKey, altKey, compId) {
+function saveImagePopover(srcKey, altKey, compId, linkKb) {
   const _edits = _builderActiveItem ? _builderActiveItem.edits : editState;
   _edits[srcKey] = document.getElementById('pop-img-src').value;
   _edits[altKey] = document.getElementById('pop-img-alt').value;
@@ -3915,6 +3956,17 @@ function saveImagePopover(srcKey, altKey, compId) {
   if (previewImg && previewImg.naturalWidth && previewImg.naturalHeight) {
     _edits[srcKey.replace('__src', '__naturalWidth')] = previewImg.naturalWidth;
     _edits[srcKey.replace('__src', '__naturalHeight')] = previewImg.naturalHeight;
+  }
+
+  // Whole-image link (Full Width Image) — save the "Link to…" fields if present.
+  if (linkKb) {
+    const hrefEl = document.getElementById('pop-img-link-href');
+    if (hrefEl) {
+      _edits[linkKb + '__href']      = hrefEl.value;
+      _edits[linkKb + '__alias']     = document.getElementById('pop-img-link-alias').value;
+      _edits[linkKb + '__title']     = document.getElementById('pop-img-link-title').value;
+      _edits[linkKb + '__convtrack'] = document.getElementById('pop-img-link-conv').checked ? 'true' : '';
+    }
   }
   
   hideEditPopover();

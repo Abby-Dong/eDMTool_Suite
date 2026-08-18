@@ -94,6 +94,8 @@ const TRANSLATIONS = {
     'popover.titlePlaceholder': 'Describe this link',
     'popover.includeUnderline': 'Include underline on hyperlink',
     'popover.conversionTracking': 'Conversion Tracking Link',
+    'popover.imageLinkTo': 'Link to … (whole image is clickable)',
+    'popover.imageLinkHint': 'The entire image is clickable and opens this URL.',
     // Color picker
     'colorPicker.pickOther': 'Pick Other Color',
     'colorPicker.brandColors': 'Brand Colors',
@@ -445,6 +447,8 @@ const TRANSLATIONS = {
     'popover.titlePlaceholder': '描述此連結',
     'popover.includeUnderline': '加入超連結底線',
     'popover.conversionTracking': '轉換追蹤連結',
+    'popover.imageLinkTo': '連結至…（整張圖片可點擊）',
+    'popover.imageLinkHint': '整張圖片皆可點擊並開啟此網址。',
     // Color picker
     'colorPicker.pickOther': '選擇其他顏色',
     'colorPicker.brandColors': '品牌色彩',
@@ -796,6 +800,8 @@ const TRANSLATIONS = {
     'popover.titlePlaceholder': '이 링크에 대한 설명',
     'popover.includeUnderline': '하이퍼링크에 밑줄 포함',
     'popover.conversionTracking': '전환 추적 링크',
+    'popover.imageLinkTo': '링크 연결 … (이미지 전체 클릭 가능)',
+    'popover.imageLinkHint': '이미지 전체가 클릭 가능하며 이 URL을 엽니다.',
     // Color picker
     'colorPicker.pickOther': '다른 색상 선택',
     'colorPicker.brandColors': '브랜드 색상',
