@@ -1904,6 +1904,9 @@
           <button class="builder-code-btn" onclick="downloadBuilderHtml()" title="Download HTML" data-i18n-title="builder.downloadHtml">
             <span class="mi" style="margin-right:0">download</span>
           </button>
+          <button class="builder-code-btn" onclick="downloadBuilderSpecJson()" title="Download Spec JSON">
+            <span class="mi" style="margin-right:0">description</span>
+          </button>
         </div>
       </div>
       <div class="builder-canvas-wrap">
@@ -5156,6 +5159,46 @@ function downloadBuilderHtml() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('<span class="mi">download_done</span>' + t('builder.htmlDownloaded'));
+}
+
+function _buildCurrentSpecPayload() {
+  const nameEl = document.getElementById('collabProjectName');
+  const projectName = (nameEl && nameEl.textContent && nameEl.textContent.trim())
+    ? nameEl.textContent.trim()
+    : t('collab.untitledEdm');
+  return {
+    schemaVersion: 1,
+    name: projectName,
+    site: window._currentProjectSite || 'Global',
+    snapshot: {
+      theme: currentBuilderTheme || 'light-blue',
+      builderStack: JSON.parse(JSON.stringify(builderStack || [])),
+      colorState: JSON.parse(JSON.stringify(colorState || {})),
+      _builderUid: _builderUid || 0
+    }
+  };
+}
+
+function downloadBuilderSpecJson() {
+  if (!builderStack.length) {
+    showToast('<span class="mi">info</span>' + t('builder.addFirst'));
+    return;
+  }
+  const payload = _buildCurrentSpecPayload();
+  const safeName = String(payload.name || 'edm-spec')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'edm-spec';
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = safeName + '-spec.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('<span class="mi">check_circle</span>Spec JSON downloaded');
 }
 
 function _richHtmlToText(html) {
