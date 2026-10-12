@@ -1728,6 +1728,7 @@
     </div>
     <div class="rename-modal-actions">
       <button class="rename-cancel" onclick="closeRenameModal()" data-i18n="collab.cancel">Cancel</button>
+      <button class="rename-cancel" id="renameModalExtra" onclick="confirmRenameModalExtra()" style="display:none;">Import Spec</button>
       <button class="rename-confirm" id="renameModalConfirm" onclick="confirmRenameModal()" data-i18n="collab.save">Save</button>
     </div>
   </div>
@@ -6164,27 +6165,6 @@ function renderGallery() {
     return newCard;
   }
 
-  function _buildImportSpecCard() {
-    const importCard = document.createElement('div');
-    importCard.className = 'proj-gallery-card proj-gallery-card-new';
-    importCard.onclick = () => importSpecFromGallery();
-    importCard.innerHTML = `
-      <div class="proj-gallery-card-thumb" style="background:linear-gradient(135deg,#5b6cff 0%,#7b4dff 100%);">
-        <div class="new-card-content">
-          <span class="mi">upload_file</span>
-          <span class="new-card-title">Import Spec</span>
-        </div>
-      </div>
-      <div class="proj-gallery-card-info">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">description</span>JSON</span>
-          <span class="card-name">Create from spec file</span>
-        </div>
-        <span class="mi card-arrow">arrow_forward</span>
-      </div>`;
-    return importCard;
-  }
-
   if (!window.Collab || !Collab.ready()) {
     grid.innerHTML = '';
     const bar = document.getElementById('galleryFolderBar');
@@ -6216,7 +6196,6 @@ function renderGallery() {
       grid.appendChild(_buildCompLibraryCard());
 
       grid.appendChild(_buildCreateProjectCard());
-      grid.appendChild(_buildImportSpecCard());
 
       const folders = (_galleryFoldersState.folders || []).slice().sort((a, b) => a.name.localeCompare(b.name));
       folders.forEach(folder => {
@@ -6269,7 +6248,6 @@ function renderGallery() {
 
     if (_galleryFolderViewId) {
       grid.appendChild(_buildCreateProjectCard());
-      grid.appendChild(_buildImportSpecCard());
     }
 
     const visibleProjects = _galleryFolderViewId
@@ -6384,6 +6362,7 @@ document.addEventListener('click', () => {
 
 // ── Rename / Duplicate modal ──
 var _renameModalCallback = null;
+var _renameModalExtraCallback = null;
 
 function openRenameModal(opts) {
   const overlay = document.getElementById('renameModal');
@@ -6392,6 +6371,7 @@ function openRenameModal(opts) {
   const desc = document.getElementById('renameModalDesc');
   const input = document.getElementById('renameModalInput');
   const confirmBtn = document.getElementById('renameModalConfirm');
+  const extraBtn = document.getElementById('renameModalExtra');
   const siteRow = document.getElementById('renameModalSiteRow');
   const siteSelect = document.getElementById('renameModalSite');
   const folderRow = document.getElementById('renameModalFolderRow');
@@ -6425,6 +6405,16 @@ function openRenameModal(opts) {
   } else if (folderRow) {
     folderRow.style.display = 'none';
   }
+  if (extraBtn) {
+    if (opts.extraActionText && opts.onExtraAction) {
+      extraBtn.textContent = opts.extraActionText;
+      extraBtn.style.display = '';
+      _renameModalExtraCallback = opts.onExtraAction;
+    } else {
+      extraBtn.style.display = 'none';
+      _renameModalExtraCallback = null;
+    }
+  }
   _renameModalCallback = opts.onConfirm || null;
   overlay.classList.add('visible');
   setTimeout(() => { input.focus(); input.select(); }, 150);
@@ -6447,6 +6437,15 @@ function closeRenameModal() {
   const overlay = document.getElementById('renameModal');
   if (overlay) overlay.classList.remove('visible');
   _renameModalCallback = null;
+  _renameModalExtraCallback = null;
+}
+
+function confirmRenameModalExtra() {
+  const siteSelect = document.getElementById('renameModalSite');
+  const site = siteSelect ? siteSelect.value : 'Global';
+  const cb = _renameModalExtraCallback;
+  closeRenameModal();
+  if (cb) cb(site);
 }
 
 function confirmRenameModal() {
@@ -6658,7 +6657,7 @@ function _normalizeImportedSpec(raw, fileName) {
   return { name, site, snapshot };
 }
 
-async function importSpecFromGallery() {
+async function importSpecFromGallery(forcedSite) {
   const picker = document.createElement('input');
   picker.type = 'file';
   picker.accept = '.json,application/json';
@@ -6672,6 +6671,7 @@ async function importSpecFromGallery() {
       const raw = JSON.parse(txt);
       const normalized = _normalizeImportedSpec(raw, file.name);
       const pendingFolderId = _galleryFolderViewId;
+      if (forcedSite) normalized.site = forcedSite;
 
       resetCanvasToBlank();
       enterBuilder();
@@ -6702,6 +6702,10 @@ async function createNewFromGallery() {
     confirmText: t('collab.create'),
     showSite: true,
     siteValue: 'Global',
+    extraActionText: 'Import Spec',
+    onExtraAction: async function(site) {
+      await importSpecFromGallery(site);
+    },
     onConfirm: async function(name, site) {
       resetCanvasToBlank();
       window._currentProjectSite = site || 'Global';
