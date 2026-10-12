@@ -4259,6 +4259,36 @@ let _builderInited = false;
 var builderHistory = [];
 var builderHistoryIdx = -1;
 
+const FOOTER27_DEFAULT_LEGAL_LINKS = [
+  { text: 'Privacy Policy', url: 'https://www.advantech.com/en/legal/privacy' },
+  { text: 'Terms & Conditions', url: 'https://www.iotmart.com/en-en/s/terms-conditions?language=en_US' },
+  { text: 'Shopping FAQ', url: 'https://www.iotmart.com/en-en/s/faq?language=en_US' }
+];
+
+function _cloneFooter27DefaultLegalLinks() {
+  return FOOTER27_DEFAULT_LEGAL_LINKS.map(l => ({ text: l.text, url: l.url }));
+}
+
+function _ensureFooter27Options(opts) {
+  const out = (opts && typeof opts === 'object') ? opts : {};
+  if (!Array.isArray(out.legalLinks)) out.legalLinks = _cloneFooter27DefaultLegalLinks();
+  out.legalLinks = out.legalLinks
+    .filter(l => l && typeof l === 'object')
+    .map(l => ({ text: String(l.text || ''), url: String(l.url || '') }));
+  if (!out.legalLinks.length) out.legalLinks = _cloneFooter27DefaultLegalLinks();
+  if (out.unsubscribeText === undefined || out.unsubscribeText === null || out.unsubscribeText === '') {
+    out.unsubscribeText = 'here';
+  }
+  if (!out.unsubscribeUrl) out.unsubscribeUrl = '%%unsub_center_url%%';
+  if (!out.unsubscribeAlias) out.unsubscribeAlias = 'external_link_unsubscribe_unsubscribe';
+  return out;
+}
+
+function _ensureFooter27ItemOptions(item) {
+  if (!item || item.compId !== 'footer') return;
+  item.options = _ensureFooter27Options(item.options || {});
+}
+
 function showBuilder() {
   document.getElementById('galleryView').classList.add('hidden');
   document.getElementById('compLibraryView').classList.remove('visible');
@@ -4372,6 +4402,7 @@ function addToBuilder(compId, insertIndex) {
     comp.colorMap.forEach(c => { colors[c.key] = colorState[c.key]; });
   }
   const newItem = { uid, compId, edits, options, colors };
+  _ensureFooter27ItemOptions(newItem);
   if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= builderStack.length) {
     builderStack.splice(insertIndex, 0, newItem);
   } else {
@@ -4436,6 +4467,96 @@ function setBuilderOption(uid, key, val) {
   pushBuilderHistory();
   renderBuilderPreview();
   renderBuilderRight();
+}
+
+function _updateFooter27Options(uid, updater) {
+  const item = builderStack.find(i => i.uid === uid);
+  if (!item || item.compId !== 'footer') return;
+  _ensureFooter27ItemOptions(item);
+  updater(item.options);
+  pushBuilderHistory();
+  renderBuilderPreview();
+  renderBuilderRight();
+}
+
+function setFooter27UnsubField(uid, field, value) {
+  _updateFooter27Options(uid, function(opts) {
+    opts[field] = value;
+  });
+}
+
+function setFooter27LegalLinkField(uid, idx, field, value) {
+  _updateFooter27Options(uid, function(opts) {
+    if (!opts.legalLinks[idx]) return;
+    opts.legalLinks[idx][field] = value;
+  });
+}
+
+function addFooter27LegalLink(uid) {
+  _updateFooter27Options(uid, function(opts) {
+    if (opts.legalLinks.length >= 8) return;
+    opts.legalLinks.push({ text: 'New Link', url: '#' });
+  });
+}
+
+function removeFooter27LegalLink(uid, idx) {
+  _updateFooter27Options(uid, function(opts) {
+    if (opts.legalLinks.length <= 1) return;
+    opts.legalLinks.splice(idx, 1);
+  });
+}
+
+function moveFooter27LegalLink(uid, idx, dir) {
+  _updateFooter27Options(uid, function(opts) {
+    const next = idx + dir;
+    if (idx < 0 || next < 0 || idx >= opts.legalLinks.length || next >= opts.legalLinks.length) return;
+    const t = opts.legalLinks[idx];
+    opts.legalLinks[idx] = opts.legalLinks[next];
+    opts.legalLinks[next] = t;
+  });
+}
+
+function _renderFooter27ContentSection(item) {
+  _ensureFooter27ItemOptions(item);
+  const opts = item.options || {};
+  const links = Array.isArray(opts.legalLinks) ? opts.legalLinks : [];
+  let html = '';
+  html += `<div class="sidebar-section" id="sec-bf-${item.uid}">`;
+  html += `<div class="sidebar-section-header" onclick="toggleSection('sec-bf-${item.uid}')">`;
+  html += `<span class="sidebar-section-title">Footer Content</span>`;
+  html += `<span class="mi section-arrow">expand_less</span>`;
+  html += `</div><div class="sidebar-section-body">`;
+  html += `<div class="sidebar-select-ctrl">`;
+  html += `<span class="ctrl-label">Unsubscribe Text</span>`;
+  html += `<input type="text" value="${escAttr(opts.unsubscribeText || '')}" onchange="setFooter27UnsubField('${item.uid}','unsubscribeText',this.value)" style="width:100%;margin-top:6px;padding:8px 10px;border:1px solid #dfe3ea;border-radius:8px;font-size:12px;" />`;
+  html += `</div>`;
+  html += `<div class="sidebar-select-ctrl">`;
+  html += `<span class="ctrl-label">Unsubscribe URL</span>`;
+  html += `<input type="text" value="${escAttr(opts.unsubscribeUrl || '')}" onchange="setFooter27UnsubField('${item.uid}','unsubscribeUrl',this.value)" style="width:100%;margin-top:6px;padding:8px 10px;border:1px solid #dfe3ea;border-radius:8px;font-size:12px;" />`;
+  html += `</div>`;
+  html += `<div class="sidebar-select-ctrl">`;
+  html += `<span class="ctrl-label">Unsubscribe Alias</span>`;
+  html += `<input type="text" value="${escAttr(opts.unsubscribeAlias || '')}" onchange="setFooter27UnsubField('${item.uid}','unsubscribeAlias',this.value)" style="width:100%;margin-top:6px;padding:8px 10px;border:1px solid #dfe3ea;border-radius:8px;font-size:12px;" />`;
+  html += `</div>`;
+  html += `<div class="sidebar-select-ctrl" style="margin-top:10px;">`;
+  html += `<span class="ctrl-label">Legal Links</span>`;
+  links.forEach((link, idx) => {
+    const canUp = idx > 0;
+    const canDown = idx < links.length - 1;
+    html += `<div style="margin-top:8px;padding:8px;border:1px solid #e7eaf0;border-radius:10px;background:#fafbfd;">`;
+    html += `<div style="display:flex;gap:6px;margin-bottom:6px;">`;
+    html += `<button class="select-btn"${canUp ? '' : ' disabled'} onclick="moveFooter27LegalLink('${item.uid}',${idx},-1)">↑</button>`;
+    html += `<button class="select-btn"${canDown ? '' : ' disabled'} onclick="moveFooter27LegalLink('${item.uid}',${idx},1)">↓</button>`;
+    html += `<button class="select-btn"${links.length > 1 ? '' : ' disabled'} onclick="removeFooter27LegalLink('${item.uid}',${idx})">Delete</button>`;
+    html += `</div>`;
+    html += `<input type="text" value="${escAttr(link.text || '')}" placeholder="Link text" onchange="setFooter27LegalLinkField('${item.uid}',${idx},'text',this.value)" style="width:100%;margin-bottom:6px;padding:8px 10px;border:1px solid #dfe3ea;border-radius:8px;font-size:12px;" />`;
+    html += `<input type="text" value="${escAttr(link.url || '')}" placeholder="https://..." onchange="setFooter27LegalLinkField('${item.uid}',${idx},'url',this.value)" style="width:100%;padding:8px 10px;border:1px solid #dfe3ea;border-radius:8px;font-size:12px;" />`;
+    html += `</div>`;
+  });
+  html += `<button class="select-btn"${links.length >= 8 ? ' disabled' : ''} onclick="addFooter27LegalLink('${item.uid}')" style="margin-top:8px;width:100%;">+ Add Legal Link</button>`;
+  html += `</div>`;
+  html += `</div></div>`;
+  return html;
 }
 
 function selectBuilderItem(uid) {
@@ -4685,6 +4806,7 @@ function renderBuilderRight() {
     html += `<span class="mi section-arrow">expand_less</span>`;
     html += `</div><div class="sidebar-section-body">`;
     comp.optionMap.forEach(o => {
+      if (o.hidden) return;
       if (o.optionGate && !opts[o.optionGate]) return;
       if (o.type === 'select') {
         const curVal = opts[o.key] !== undefined ? opts[o.key] : o.default;
@@ -4705,6 +4827,10 @@ function renderBuilderRight() {
       }
     });
     html += `</div></div>`;
+  }
+
+  if (comp.id === 'footer') {
+    html += _renderFooter27ContentSection(item);
   }
 
   // ─── Colors Section ───
@@ -5351,14 +5477,18 @@ function _buildFooterText(item) {
   lines.push('------------------------------------------------');
   lines.push('');
 
-  const unsubHref = _mcHref(w, 'footer_unsubscribe');
-  lines.push('To unsubscribe, click here: ' + (unsubHref || (exportFormat === 'mcae' ? '{{Unsubscribe}}' : '#')));
+  const unsubAnchor = w.querySelector('[mc\\:edit="footer_unsubscribe_link"]');
+  const unsubHref = unsubAnchor ? (unsubAnchor.getAttribute('href') || '') : _mcHref(w, 'footer_unsubscribe');
+  const unsubLabel = unsubAnchor
+    ? (_richHtmlToText(unsubAnchor.innerHTML || unsubAnchor.textContent || '') || 'here')
+    : 'here';
+  lines.push('To unsubscribe, click ' + unsubLabel + ': ' + (unsubHref || (exportFormat === 'mcae' ? '{{Unsubscribe}}' : '#')));
   lines.push('');
   lines.push('Advantech IoTMart');
   lines.push('{{{Organization.Address}}}');
   lines.push('');
 
-  const legalAnchors = w.querySelectorAll('[mc\\:edit="footer_legal_links"] a');
+  const legalAnchors = w.querySelectorAll('[mc\\:edit^="footer_legal_link"], [mc\\:edit="footer_legal_links"] a');
   if (legalAnchors.length) {
     legalAnchors.forEach(a => {
       const label = _richHtmlToText(a.innerHTML || a.textContent || '') || 'Link';
@@ -6013,6 +6143,48 @@ function renderGallery() {
     return libCard;
   }
 
+  function _buildCreateProjectCard() {
+    const newCard = document.createElement('div');
+    newCard.className = 'proj-gallery-card proj-gallery-card-new';
+    newCard.onclick = () => createNewFromGallery();
+    newCard.innerHTML = `
+      <div class="proj-gallery-card-thumb">
+        <div class="new-card-content">
+          <span class="mi">add_circle</span>
+          <span class="new-card-title">${t('projectGallery.createNew')}</span>
+        </div>
+      </div>
+      <div class="proj-gallery-card-info">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">auto_awesome</span>${t('gallery.new')}</span>
+          <span class="card-name">${t('projectGallery.blankEdm')}</span>
+        </div>
+        <span class="mi card-arrow">arrow_forward</span>
+      </div>`;
+    return newCard;
+  }
+
+  function _buildImportSpecCard() {
+    const importCard = document.createElement('div');
+    importCard.className = 'proj-gallery-card proj-gallery-card-new';
+    importCard.onclick = () => importSpecFromGallery();
+    importCard.innerHTML = `
+      <div class="proj-gallery-card-thumb" style="background:linear-gradient(135deg,#5b6cff 0%,#7b4dff 100%);">
+        <div class="new-card-content">
+          <span class="mi">upload_file</span>
+          <span class="new-card-title">Import Spec</span>
+        </div>
+      </div>
+      <div class="proj-gallery-card-info">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">description</span>JSON</span>
+          <span class="card-name">Create from spec file</span>
+        </div>
+        <span class="mi card-arrow">arrow_forward</span>
+      </div>`;
+    return importCard;
+  }
+
   if (!window.Collab || !Collab.ready()) {
     grid.innerHTML = '';
     const bar = document.getElementById('galleryFolderBar');
@@ -6043,25 +6215,8 @@ function renderGallery() {
       // ── Component Library card ──
       grid.appendChild(_buildCompLibraryCard());
 
-      // ── "Create New Project" card ──
-      const newCard = document.createElement('div');
-      newCard.className = 'proj-gallery-card proj-gallery-card-new';
-      newCard.onclick = () => createNewFromGallery();
-      newCard.innerHTML = `
-        <div class="proj-gallery-card-thumb">
-          <div class="new-card-content">
-            <span class="mi">add_circle</span>
-            <span class="new-card-title">${t('projectGallery.createNew')}</span>
-          </div>
-        </div>
-        <div class="proj-gallery-card-info">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="new-card-tag"><span class="mi" style="font-size:12px;margin-right:2px;vertical-align:-2px">auto_awesome</span>${t('gallery.new')}</span>
-            <span class="card-name">${t('projectGallery.blankEdm')}</span>
-          </div>
-          <span class="mi card-arrow">arrow_forward</span>
-        </div>`;
-      grid.appendChild(newCard);
+      grid.appendChild(_buildCreateProjectCard());
+      grid.appendChild(_buildImportSpecCard());
 
       const folders = (_galleryFoldersState.folders || []).slice().sort((a, b) => a.name.localeCompare(b.name));
       folders.forEach(folder => {
@@ -6110,6 +6265,11 @@ function renderGallery() {
         folderCard.appendChild(kebab);
         grid.appendChild(folderCard);
       });
+    }
+
+    if (_galleryFolderViewId) {
+      grid.appendChild(_buildCreateProjectCard());
+      grid.appendChild(_buildImportSpecCard());
     }
 
     const visibleProjects = _galleryFolderViewId
@@ -6445,6 +6605,91 @@ function resetCanvasToBlank() {
   initState();
   builderHistory = [];
   builderHistoryIdx = -1;
+}
+
+function _sanitizeImportedBuilderStack(rawStack) {
+  const allowedComp = new Set(COMPONENTS.map(c => c.id));
+  const out = [];
+  let uidSeed = Date.now();
+  (Array.isArray(rawStack) ? rawStack : []).forEach(raw => {
+    if (!raw || !allowedComp.has(raw.compId)) return;
+    const comp = COMPONENTS.find(c => c.id === raw.compId);
+    const safe = {
+      uid: (typeof raw.uid === 'string' && raw.uid.trim()) ? raw.uid : ('bi_' + (uidSeed++)),
+      compId: raw.compId,
+      edits: (raw.edits && typeof raw.edits === 'object') ? JSON.parse(JSON.stringify(raw.edits)) : {},
+      options: (raw.options && typeof raw.options === 'object') ? JSON.parse(JSON.stringify(raw.options)) : {},
+      colors: (raw.colors && typeof raw.colors === 'object') ? JSON.parse(JSON.stringify(raw.colors)) : {}
+    };
+    if (comp && comp.optionMap) {
+      comp.optionMap.forEach(o => {
+        if (safe.options[o.key] === undefined) safe.options[o.key] = o.default;
+      });
+    }
+    if (comp && comp.colorMap) {
+      comp.colorMap.forEach(c => {
+        if (safe.colors[c.key] === undefined) safe.colors[c.key] = colorState[c.key] || c.default;
+      });
+    }
+    _ensureFooter27ItemOptions(safe);
+    out.push(safe);
+  });
+  return out;
+}
+
+function _normalizeImportedSpec(raw, fileName) {
+  const obj = (raw && typeof raw === 'object') ? raw : {};
+  const payload = (obj.snapshot && typeof obj.snapshot === 'object') ? obj.snapshot : obj;
+  const guessedName = String(fileName || 'Imported Project').replace(/\.json$/i, '');
+  const name = String(obj.name || payload.name || guessedName || t('collab.untitledEdm')).trim() || t('collab.untitledEdm');
+  const site = String(obj.site || payload.site || 'Global');
+  const themeCandidate = String(obj.theme || payload.theme || 'light-blue');
+  const theme = THEMES[themeCandidate] ? themeCandidate : 'light-blue';
+  const builderStack = _sanitizeImportedBuilderStack(payload.builderStack || payload.stack || []);
+  const colorStateIn = (payload.colorState && typeof payload.colorState === 'object') ? payload.colorState : {};
+  const snapshot = {
+    builderStack: builderStack,
+    colorState: JSON.parse(JSON.stringify(colorStateIn)),
+    theme: theme,
+    _builderUid: (typeof payload._builderUid === 'number' && payload._builderUid >= 0)
+      ? payload._builderUid
+      : builderStack.length
+  };
+  return { name, site, snapshot };
+}
+
+async function importSpecFromGallery() {
+  const picker = document.createElement('input');
+  picker.type = 'file';
+  picker.accept = '.json,application/json';
+  picker.style.display = 'none';
+  picker.onchange = async function() {
+    const file = picker.files && picker.files[0];
+    picker.remove();
+    if (!file) return;
+    try {
+      const txt = await file.text();
+      const raw = JSON.parse(txt);
+      const normalized = _normalizeImportedSpec(raw, file.name);
+      const pendingFolderId = _galleryFolderViewId;
+
+      resetCanvasToBlank();
+      enterBuilder();
+      _applyEmbedSnapshot(normalized.snapshot);
+      window._currentProjectSite = normalized.site || 'Global';
+
+      if (window.Collab && Collab.ready()) {
+        const id = await Collab.save(normalized.name, { site: normalized.site });
+        if (id && pendingFolderId) _setProjectFolder(id, pendingFolderId);
+      }
+      showToast('<span class="mi">check_circle</span>Imported spec: ' + escapeHtml(normalized.name));
+    } catch (err) {
+      console.error('Spec import failed:', err);
+      showToast('<span class="mi">error</span>Invalid spec file. Please use JSON format.');
+    }
+  };
+  document.body.appendChild(picker);
+  picker.click();
 }
 
 async function createNewFromGallery() {

@@ -1148,9 +1148,22 @@ var COMPONENTS = [
       { key: 'socialCount', label: 'Social Count', type: 'select', default: '3', optionGate: 'showSocial', choices: [
         { label: '1', value: '1' }, { label: '2', value: '2' }, { label: '3', value: '3' }, { label: '4', value: '4' }, { label: '5', value: '5' }
       ]},
-      { key: 'showLegalLinks', label: 'Legal Links', default: true }
+      { key: 'showLegalLinks', label: 'Legal Links', default: true },
+      { key: 'unsubscribeText', label: 'Unsubscribe Text', type: 'text', default: 'here', hidden: true },
+      { key: 'unsubscribeUrl', label: 'Unsubscribe URL', type: 'text', default: '%%unsub_center_url%%', hidden: true },
+      { key: 'unsubscribeAlias', label: 'Unsubscribe Alias', type: 'text', default: 'external_link_unsubscribe_unsubscribe', hidden: true },
+      { key: 'legalLinks', label: 'Legal Links Data', type: 'json', hidden: true, default: [
+        { text: 'Privacy Policy', url: 'https://www.advantech.com/en/legal/privacy' },
+        { text: 'Terms & Conditions', url: 'https://www.iotmart.com/en-en/s/terms-conditions?language=en_US' },
+        { text: 'Shopping FAQ', url: 'https://www.iotmart.com/en-en/s/faq?language=en_US' }
+      ] }
     ],
     getHtml: (opts = {}) => {
+      const esc = (s) => String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
       const socialCount = parseInt(opts.socialCount) || 3;
       const socialIcons = [
         { name: 'Facebook', url: 'https://www.facebook.com/Advantech.Corp', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-fb.png' },
@@ -1159,11 +1172,28 @@ var COMPONENTS = [
         { name: 'X', url: 'https://x.com/Aboredtech', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-x.png' },
         { name: 'Instagram', url: 'https://www.instagram.com/advantech_corp/', img: 'https://irp.cdn-website.com/56869327/dms3rep/multi/social+media-ig.png' }
       ];
+      const unsubText = String(opts.unsubscribeText || 'here');
+      const unsubUrl = String(opts.unsubscribeUrl || '%%unsub_center_url%%');
+      const unsubAlias = String(opts.unsubscribeAlias || 'external_link_unsubscribe_unsubscribe');
+      const defaultLegalLinks = [
+        { text: 'Privacy Policy', url: 'https://www.advantech.com/en/legal/privacy' },
+        { text: 'Terms & Conditions', url: 'https://www.iotmart.com/en-en/s/terms-conditions?language=en_US' },
+        { text: 'Shopping FAQ', url: 'https://www.iotmart.com/en-en/s/faq?language=en_US' }
+      ];
+      const legalLinks = Array.isArray(opts.legalLinks) && opts.legalLinks.length
+        ? opts.legalLinks.filter(l => l && (l.text || l.url))
+        : defaultLegalLinks;
       let socialHtml = '';
       for (let i = 0; i < socialCount; i++) {
         const s = socialIcons[i];
         socialHtml += `<td style="padding: 0 5px;"><a mc:edit="footer_social${i+1}_link" href="${s.url}" style="text-decoration: none;"><img mc:edit="footer_social${i+1}_img" src="${s.img}" width="24" height="24" alt="${s.name}" data-crop="free" style="display: block; width: 24px; height: 24px;" /></a></td>`;
       }
+      const legalLinksHtml = legalLinks.map((l, idx) => {
+        const txt = esc(l.text || 'Link');
+        const url = esc(l.url || '#');
+        const sep = idx < legalLinks.length - 1 ? '&nbsp;&nbsp;|&nbsp;&nbsp;' : '';
+        return `<a mc:edit="footer_legal_link${idx + 1}" href="${url}" style="text-decoration: none;" data-color="footerLink">${txt}</a>${sep}`;
+      }).join('\n      ');
       return `<table border="0" cellpadding="0" cellspacing="0" width="600" class="split-table"
        style="width: 600px;" data-color="footerBg">
   <tr><td align="center" style="padding: 24px 30px 14px 30px;">
@@ -1183,16 +1213,12 @@ var COMPONENTS = [
   </td></tr>
   <tr><td align="center" style="padding: 0 30px 6px 30px;">
     <p mc:edit="footer_unsubscribe" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4; color: #888888;">
-      To unsubscribe, click <a alias="external_link_unsubscribe_unsubscribe" conversion="false" data-linkto="other" href="%%unsub_center_url%%" style="text-decoration: underline;" data-color="footerLink" title="">here</a>
+      To unsubscribe, click <a mc:edit="footer_unsubscribe_link" alias="${esc(unsubAlias)}" conversion="false" data-linkto="other" href="${esc(unsubUrl)}" style="text-decoration: underline;" data-color="footerLink" title="">${esc(unsubText)}</a>
     </p>
   </td></tr>
   ${opts.showLegalLinks !== false ? `<tr><td align="center" style="padding: 4px 30px 8px 30px;">
     <p mc:edit="footer_legal_links" style="margin: 0; font-size: 11px; font-family: Arial, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; mso-line-height-rule: exactly; line-height: 1.4;">
-      <a href="https://www.advantech.com/en/legal/privacy" style="text-decoration: none;" data-color="footerLink">Privacy Policy</a>
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      <a href="https://www.iotmart.com/en-en/s/terms-conditions?language=en_US" style="text-decoration: none;" data-color="footerLink">Terms &amp; Conditions</a>
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      <a href="https://www.iotmart.com/en-en/s/faq?language=en_US" style="text-decoration: none;" data-color="footerLink">Shopping FAQ</a>
+      ${legalLinksHtml}
     </p>
   </td></tr>` : ''}
   <tr><td align="center" style="padding: 4px 30px 24px 30px;">
